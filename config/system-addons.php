@@ -1,13 +1,13 @@
 <?php return array (
   'admin_panel' => 
   array (
-    'active' => '0',
-    'name' => 'Test User',
-    'identifier' => 'test@gmail.com',
-    'username' => 'test_user',
-    'purchase_key' => 'test_user',
+    'active' => '1',
+    'name' => 'Ahmed	Mansour',
+    'identifier' => 'mahmouddief0@gmail.com',
+    'username' => 'ahmedmansour2196',
+    'purchase_key' => 'c44581ed-6296-4a3f-a65d-e8a4a9fe3b2a',
     'software_id' => 'MzE0NDg1OTc=',
-    'domain' => '6valley-testing.6amdev.xyz',
+    'domain' => 'delta2.test',
     'software_type' => 'product',
     'errors' => 
     array (
