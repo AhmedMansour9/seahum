@@ -84,15 +84,13 @@ class AppServiceProvider extends ServiceProvider
             Config::set('get_theme_routes', $this->getThemeRoutesArray());
 
             try {
-                $hasBusinessSettings = Schema::hasTable('business_settings');
                 $hasPublishingHouses = Cache::remember('_schema_has_publishing_houses', 21600, fn() => Schema::hasTable('publishing_houses'));
                 $hasAuthors = Cache::remember('_schema_has_authors', 21600, fn() => Schema::hasTable('authors'));
 
-                if ($hasBusinessSettings) {
-                    $this->setStorageConnectionEnvironment();
-                    $this->cacheInHouseShopInTemporaryStatus();
+                $this->setStorageConnectionEnvironment();
+                $this->cacheInHouseShopInTemporaryStatus();
 
-                    $web = $this->cacheBusinessSettingsTable();
+                $web = $this->cacheBusinessSettingsTable();
 
                     $firebaseOTPVerification = getWebConfig(name: 'firebase_otp_verification');
                     $firebaseOTPVerificationStatus = (int)($firebaseOTPVerification && $firebaseOTPVerification['status'] && $firebaseOTPVerification['web_api_key']);
@@ -237,8 +235,7 @@ class AppServiceProvider extends ServiceProvider
                     }
                     // Currency
                     Helpers::currency_load();
-                    Schema::defaultStringLength(191);
-                }
+                Schema::defaultStringLength(191);
             } catch (Exception $exception) {
                 report($exception);
             }
