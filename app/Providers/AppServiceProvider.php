@@ -84,7 +84,7 @@ class AppServiceProvider extends ServiceProvider
             Config::set('get_theme_routes', $this->getThemeRoutesArray());
 
             try {
-                $hasBusinessSettings = Cache::remember('_schema_has_business_settings', 21600, fn() => Schema::hasTable('business_settings'));
+                $hasBusinessSettings = Schema::hasTable('business_settings');
                 $hasPublishingHouses = Cache::remember('_schema_has_publishing_houses', 21600, fn() => Schema::hasTable('publishing_houses'));
                 $hasAuthors = Cache::remember('_schema_has_authors', 21600, fn() => Schema::hasTable('authors'));
 
