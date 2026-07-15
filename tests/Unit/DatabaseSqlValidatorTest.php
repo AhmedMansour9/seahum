@@ -63,6 +63,18 @@ class DatabaseSqlValidatorTest extends TestCase
         $this->assertTrue((new DatabaseSqlValidator)->isValid($report));
     }
 
+    public function test_it_accepts_a_full_dump_with_test_data_but_rejects_database_deletion(): void
+    {
+        $validator = new DatabaseSqlValidator;
+
+        $validReport = $validator->validateFullDump($this->write('full.sql', 'CREATE TABLE users (id INT); INSERT INTO users VALUES (1);'));
+        $unsafeReport = $validator->validateFullDump($this->write('unsafe.sql', 'DROP DATABASE demo;'));
+
+        $this->assertTrue($validator->isValidFullDump($validReport));
+        $this->assertNotEmpty($validReport['warnings']);
+        $this->assertFalse($validator->isValidFullDump($unsafeReport));
+    }
+
     private function file(string $name): string
     {
         return $this->directory.'/'.$name;

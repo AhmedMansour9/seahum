@@ -12,6 +12,49 @@ class DatabaseSqlValidator
         ];
     }
 
+    public function validateFullDump(string $path): array
+    {
+        $report = $this->fileReport($path);
+
+        if (! $report['readable']) {
+            return $report;
+        }
+
+        $sql = file_get_contents($path);
+        if ($sql === false) {
+            $report['errors'][] = 'The file could not be read.';
+
+            return $report;
+        }
+
+        foreach ([
+            '/\bDROP\s+DATABASE\b/i' => 'DROP DATABASE statement detected.',
+            '/\bCREATE\s+DATABASE\b/i' => 'CREATE DATABASE statement detected. Export tables and data without database-creation statements.',
+            '/\bUSE\s+`?[A-Za-z0-9_]+`?\s*;/i' => 'USE statement detected. Export without database-selection statements so the configured Laravel database remains the target.',
+            '/\bCREATE\s+USER\b/i' => 'CREATE USER statement detected.',
+            '/\bGRANT\b/i' => 'GRANT statement detected.',
+            '/\bIDENTIFIED\s+BY\b/i' => 'IDENTIFIED BY statement detected.',
+        ] as $pattern => $message) {
+            if ($this->contains($sql, $pattern)) {
+                $report['errors'][] = $message;
+            }
+        }
+
+        $this->addWarningsFor($report, $sql, [
+            '/\bINSERT\s+INTO\b/i' => 'Application data statements detected. Commit this file only when its data is intentionally safe to share.',
+            '/\bPASSWORD\b/i' => 'A password-related SQL statement was detected.',
+            '/\bDEFINER\s*=/i' => 'DEFINER= detected. This may cause permission errors on the target server.',
+            '/\b(?:INSTALL|UNINSTALL)\s+(?:PLUGIN|COMPONENT)\b|\b(?:SHUTDOWN|FLUSH\s+(?:PRIVILEGES|TABLES)|SET\s+GLOBAL|CHANGE\s+(?:MASTER|REPLICATION\s+SOURCE)|RESET\s+(?:MASTER|REPLICA))\b/i' => 'Unexpected server-level command detected.',
+        ]);
+
+        return $report;
+    }
+
+    public function isValidFullDump(array $report): bool
+    {
+        return empty($report['errors']);
+    }
+
     public function validateStructure(string $path): array
     {
         $report = $this->fileReport($path);

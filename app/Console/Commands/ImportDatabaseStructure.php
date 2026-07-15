@@ -12,11 +12,12 @@ class ImportDatabaseStructure extends Command
     protected $signature = 'db:import-structure
         {--structure=database/sql/database-structure.sql : Structure-only SQL file}
         {--migrations=database/sql/migrations-data.sql : Laravel migrations SQL file}
+        {--dump= : Full SQL dump containing both structure and test data}
         {--force : Required in production}
         {--wipe : Permanently delete the target database before importing}
         {--confirm-wipe : Required with --wipe when running non-interactively}';
 
-    protected $description = 'Import a validated MySQL or MariaDB database structure and migration records';
+    protected $description = 'Import a validated MySQL or MariaDB structure, migration records, or full test-data dump';
 
     public function handle(DatabaseSqlValidator $validator): int
     {
@@ -38,17 +39,29 @@ class ImportDatabaseStructure extends Command
             return self::FAILURE;
         }
 
-        $structure = $this->path('structure');
-        $migrations = $this->path('migrations');
-        $report = $validator->validate($structure, $migrations);
-        if (! $validator->isValid($report)) {
-            $this->error('SQL validation failed. Run db:validate-structure for details.');
+        $dump = $this->option('dump') ? $this->path('dump') : null;
+        if ($dump) {
+            $report = $validator->validateFullDump($dump);
+            if (! $validator->isValidFullDump($report)) {
+                $this->error('Full dump validation failed. Run db:validate-structure --dump=... for details.');
 
-            return self::FAILURE;
-        }
+                return self::FAILURE;
+            }
+            foreach ($report['warnings'] as $warning) {
+                $this->warn($warning);
+            }
+        } else {
+            $structure = $this->path('structure');
+            $migrations = $this->path('migrations');
+            $report = $validator->validate($structure, $migrations);
+            if (! $validator->isValid($report)) {
+                $this->error('SQL validation failed. Run db:validate-structure for details.');
 
-        foreach ($report['structure']['warnings'] as $warning) {
-            $this->warn($warning);
+                return self::FAILURE;
+            }
+            foreach ($report['structure']['warnings'] as $warning) {
+                $this->warn($warning);
+            }
         }
 
         try {
@@ -58,10 +71,15 @@ class ImportDatabaseStructure extends Command
                 $this->runMysql($connection, $defaultsFile, $this->wipeSql($connection));
             }
 
-            $this->info('Importing database structure...');
-            $this->runMysql($connection, $defaultsFile, fopen($structure, 'rb'));
-            $this->info('Importing Laravel migration records...');
-            $this->runMysql($connection, $defaultsFile, fopen($migrations, 'rb'));
+            if ($dump) {
+                $this->info('Importing full database dump, including test data...');
+                $this->runMysql($connection, $defaultsFile, fopen($dump, 'rb'));
+            } else {
+                $this->info('Importing database structure...');
+                $this->runMysql($connection, $defaultsFile, fopen($structure, 'rb'));
+                $this->info('Importing Laravel migration records...');
+                $this->runMysql($connection, $defaultsFile, fopen($migrations, 'rb'));
+            }
         } catch (RuntimeException $exception) {
             $this->error($exception->getMessage());
 
@@ -72,7 +90,7 @@ class ImportDatabaseStructure extends Command
             }
         }
 
-        $this->info('Database structure and Laravel migration records were imported successfully.');
+        $this->info($dump ? 'Full database dump was imported successfully.' : 'Database structure and Laravel migration records were imported successfully.');
 
         return self::SUCCESS;
     }
