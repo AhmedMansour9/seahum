@@ -85,7 +85,7 @@ if (!function_exists('getDefaultLanguage')) {
             $data = getWebConfig('language');
             $code = 'en';
             $direction = 'ltr';
-            foreach ($data as $ln) {
+            foreach (is_array($data) ? $data : [] as $ln) {
                 if (array_key_exists('default', $ln) && $ln['default']) {
                     $code = $ln['code'];
                     if (array_key_exists('direction', $ln)) {
@@ -105,7 +105,7 @@ if (!function_exists('getLanguageName')) {
     function getLanguageName(string $key): string
     {
         $values = getWebConfig('language');
-        foreach ($values as $value) {
+        foreach (is_array($values) ? $values : [] as $value) {
             if ($value['code'] == $key) {
                 $key = $value['name'];
             }
