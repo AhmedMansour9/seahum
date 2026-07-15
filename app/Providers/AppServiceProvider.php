@@ -230,16 +230,17 @@ class AppServiceProvider extends ServiceProvider
 
                     // Language
                     $language = getWebConfig(name: 'language') ?? [];
+                    View::share(['web_config' => $web_config, 'language' => $language]);
+
                     if (!App::runningInConsole() && (Request::is('admin') || Request::is('admin/*'))) {
                         $this->adminSidebarLayoutCount();
                     }
                     // Currency
                     Helpers::currency_load();
-                    View::share(['web_config' => $web_config, 'language' => $language]);
                     Schema::defaultStringLength(191);
                 }
             } catch (Exception $exception) {
-
+                report($exception);
             }
 
             try {
