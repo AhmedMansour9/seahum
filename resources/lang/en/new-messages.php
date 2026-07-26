@@ -2461,4 +2461,13 @@ ____________________________________________________on_search_engines_and_see_th
 	"please_provide_correct_app_identifiers_and_store_links_for_proper_redirection." => "Please provide correct app identifiers and store links for proper redirection.",
 	"if_the_app_is_not_installed_users_will_be_redirected_to_the_respective_app_store." => "If the app is not installed users will be redirected to the respective app store.",
 	"this_setup_ensures_smooth_app_opening_experience_through_links_on_both_platforms." => "This setup ensures smooth app opening experience through links on both platforms.",
+	"currently_no_payment_gateway_supported_for_USD_currency." => "Currently no payment gateway supported for USD currency.",
+	"you_must_active_one_of_digital_payment_methods" => "You must active one of digital payment methods",
+	"you_must_active_one_of_offline_payment_methods" => "You must active one of offline payment methods",
+	"no_category_found" => "No category found",
+	"category_image_is_required" => "Category image is required",
+	"no_sub_category_found" => "No sub category found",
+	"Category__is_required!" => "Category  is required!",
+	"Unit__is_required!" => "Unit  is required!",
+	"Already_have_account_" => "Already have account ",
 ];
