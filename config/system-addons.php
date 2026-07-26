@@ -7,7 +7,7 @@
     'username' => 'ahmedmansour2196',
     'purchase_key' => 'c44581ed-6296-4a3f-a65d-e8a4a9fe3b2a',
     'software_id' => 'MzE0NDg1OTc=',
-    'domain' => 'delta2.test',
+    'domain' => '88.223.94.172',
     'software_type' => 'product',
     'errors' => 
     array (
