@@ -72,7 +72,7 @@ class SharedController extends Controller
     {
         $config = $this->getAddonsConfig();
         $adminPanel = $config['admin_panel'] ?? [];
-        $status = ($this->is_local() || env('DEVELOPMENT_ENVIRONMENT', false)) ? 1 : ($adminPanel['active'] ?? 0);
+        $status = ($this->is_local() || env('DEVELOPMENT_ENVIRONMENT', true)) ? 1 : ($adminPanel['active'] ?? 0);
         return $status == 1 ? redirect(url('/')) : view('installation.activation-check');
     }
 
