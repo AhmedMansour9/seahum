@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'home' => 'web-views.home',
+    'home' => 'web-views.seafood.home',
     'product_search_result' => 'web-views.partials._search-result',
     'user_profile' => '',
     'account_address_add' => '',
