@@ -21,6 +21,33 @@
         .sf-footer-link { color: #9FBDCB; }
         .sf-footer-link:hover { color: #7FE3DC; }
         .sf-tab.active { background: #0B2C3F; color: #FFFFFF; border-color: #0B2C3F; }
+
+        .sf-burger { display: none; }
+        .sf-mobile-menu { display: none; }
+        .sf-mobile-menu[data-open="true"] { display: flex; }
+        .sf-mobile-menu a:hover { background: #F1F7F8; color: #0B2C3F; }
+        .sf-tabs::-webkit-scrollbar { display: none; }
+
+        @media (min-width: 980px) {
+            .sf-mobile-menu { display: none !important; }
+        }
+
+        @media (max-width: 979px) {
+            .sf-desktop-nav { display: none !important; }
+            .sf-header-lang { display: none !important; }
+            .sf-burger { display: grid; }
+        }
+
+        @media (max-width: 759px) {
+            .sf-tabs { flex-wrap: nowrap !important; }
+            .sf-hero-badge-delivery { inset-inline-start: 12px !important; bottom: 16px !important; }
+            .sf-hero-badge-packing { inset-inline-end: 12px !important; }
+        }
+
+        @media (max-width: 699px) {
+            .sf-header-search { display: none !important; }
+            .sf-header-account { display: none !important; }
+        }
     </style>
 @endpush
 
@@ -101,7 +128,7 @@
                     </span>
                 </a>
 
-                <nav style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 600;">
+                <nav class="sf-desktop-nav" style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 600;">
                     <a href="#home" class="sf-nav-link" style="padding: 8px 13px; border-radius: 10px; color: #0E8E88; background: #ECF8F8;">{{ translate('home') }}</a>
                     <a href="#products" class="sf-nav-link" style="padding: 8px 13px; border-radius: 10px; color: #34586B;">{{ translate('products') }}</a>
                     <a href="#categories" class="sf-nav-link" style="padding: 8px 13px; border-radius: 10px; color: #34586B;">{{ translate('categories') }}</a>
@@ -114,7 +141,13 @@
                 </nav>
 
                 <div style="margin-inline-start: auto; display: flex; align-items: center; gap: 8px;">
-                    <form action="{{ route('products') }}" method="GET" style="display: flex; align-items: center;">
+                    <button type="button" class="sf-tool sf-burger" id="seafood-menu-toggle" aria-label="{{ translate('menu') }}"
+                            aria-expanded="false" aria-controls="seafood-mobile-menu"
+                            style="width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; place-items: center; cursor: pointer;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+                    </button>
+
+                    <form class="sf-header-search" action="{{ route('products') }}" method="GET" style="display: flex; align-items: center;">
                         <input type="text" name="name" value="{{ request('name') }}" placeholder="{{ translate('search_for_products') }}"
                                style="height: 42px; width: 190px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; padding: 0 14px; font-family: Tajawal, sans-serif; font-size: 14px; outline: none;">
                         <button type="submit" class="sf-tool" aria-label="{{ translate('search') }}"
@@ -123,7 +156,7 @@
                         </button>
                     </form>
 
-                    <a href="{{ auth('customer')->check() ? route('user-account') : route('customer.auth.login') }}" class="sf-tool"
+                    <a href="{{ auth('customer')->check() ? route('user-account') : route('customer.auth.login') }}" class="sf-tool sf-header-account"
                        aria-label="{{ translate('account') }}"
                        style="width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center;">
                         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20c1.4-3.4 4.2-5 7.5-5s6.1 1.6 7.5 5"></path></svg>
@@ -139,7 +172,7 @@
 
                     @foreach($web_config['language'] as $languageData)
                         @if($languageData['status'] == 1 && $languageData['code'] != getDefaultLanguage())
-                            <button type="button" class="sf-tool seafood-change-language" data-language-code="{{ $languageData['code'] }}"
+                            <button type="button" class="sf-tool sf-header-lang seafood-change-language" data-language-code="{{ $languageData['code'] }}"
                                     title="{{ $languageData['name'] }}"
                                     style="display: inline-flex; align-items: center; gap: 7px; height: 42px; padding: 0 13px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer;">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3.5 9h17M3.5 15h17"></path><path d="M12 3c2.4 2.4 2.4 15.6 0 18M12 3c-2.4 2.4-2.4 15.6 0 18"></path></svg>
@@ -159,6 +192,34 @@
                         </span>
                     </a>
                 </div>
+            </div>
+
+            <div class="sf-mobile-menu" id="seafood-mobile-menu" hidden
+                 style="border-top: 1px solid #E4EFF1; background: #FFFFFF; padding: 12px 20px 18px; flex-direction: column; gap: 4px; font-family: Cairo, sans-serif; font-size: 16px; font-weight: 600;">
+                <a href="#home" style="padding: 13px 12px; border-radius: 10px; color: #0E8E88; background: #ECF8F8;">{{ translate('home') }}</a>
+                <a href="#products" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('products') }}</a>
+                <a href="#categories" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('categories') }}</a>
+                <a href="#deal" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('offers') }}</a>
+                <a href="#about" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('about_us') }}</a>
+                <a href="#faq" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('faq') }}</a>
+                <a href="{{ route('contacts') }}" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('contact_us') }}</a>
+                @if($auctionActive && Route::has('auction.index'))
+                    <a href="{{ route('auction.index') }}" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('auction') }}</a>
+                @endif
+
+                <a href="{{ auth('customer')->check() ? route('user-account') : route('customer.auth.login') }}"
+                   style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('account') }}</a>
+
+                @foreach($web_config['language'] as $languageData)
+                    @if($languageData['status'] == 1 && $languageData['code'] != getDefaultLanguage())
+                        <button type="button" class="seafood-change-language" data-language-code="{{ $languageData['code'] }}"
+                                style="margin-top: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; cursor: pointer;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3.5 9h17M3.5 15h17"></path><path d="M12 3c2.4 2.4 2.4 15.6 0 18M12 3c-2.4 2.4-2.4 15.6 0 18"></path></svg>
+                            <span style="text-transform: uppercase;">{{ $languageData['code'] }}</span>
+                        </button>
+                        @break
+                    @endif
+                @endforeach
             </div>
         </header>
 
@@ -202,7 +263,7 @@
                              style="width: 100%; height: 100%; object-fit: cover; object-position: 30% center; display: block;">
                     </div>
 
-                    <div style="position: absolute; inset-inline-start: -6px; bottom: 26px; background: #FFFFFF; color: #0B2C3F; border-radius: 18px; padding: 14px 18px; display: flex; align-items: center; gap: 13px; box-shadow: 0 22px 40px -18px rgba(0,0,0,.55); animation: floatY 5.5s ease-in-out infinite;">
+                    <div class="sf-hero-badge-delivery" style="position: absolute; inset-inline-start: -6px; bottom: 26px; max-width: calc(100% - 24px); background: #FFFFFF; color: #0B2C3F; border-radius: 18px; padding: 14px 18px; display: flex; align-items: center; gap: 13px; box-shadow: 0 22px 40px -18px rgba(0,0,0,.55); animation: floatY 5.5s ease-in-out infinite;">
                         <span style="width: 44px; height: 44px; border-radius: 13px; background: #ECF8F8; display: grid; place-items: center; color: #0E8E88;">
                             <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h11v9H2z"></path><path d="M13 10h4l3 3v3h-7z"></path><circle cx="6" cy="18" r="1.6"></circle><circle cx="17" cy="18" r="1.6"></circle></svg>
                         </span>
@@ -212,7 +273,7 @@
                         </span>
                     </div>
 
-                    <div style="position: absolute; inset-inline-end: -4px; top: 22px; background: rgba(6,42,62,.72); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.18); color: #FFFFFF; border-radius: 15px; padding: 11px 16px; font-size: 13.5px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                    <div class="sf-hero-badge-packing" style="position: absolute; inset-inline-end: -4px; top: 16px; background: rgba(6,42,62,.72); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.18); color: #FFFFFF; border-radius: 15px; padding: 11px 16px; font-size: 13.5px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
                         <span style="width: 8px; height: 8px; border-radius: 50%; background: #35D6A4; display: inline-block; animation: pulseRing 2.4s infinite;"></span>
                         {{ translate('chilled_and_tightly_sealed') }}
                     </div>
@@ -282,7 +343,7 @@
                     <span style="font-size: 14px; color: #6E8C99;">{{ translate('products_shown') }}: <span id="seafood-shop-count">{{ $shopProducts->count() }}</span></span>
                 </div>
 
-                <div style="display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 26px;">
+                <div class="sf-tabs" style="display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 26px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;">
                     <button type="button" class="sf-tab active" data-category-id="all"
                             style="padding: 10px 18px; border-radius: 999px; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; cursor: pointer; white-space: nowrap; border: 1.4px solid #E4EFF1; background: #FFFFFF; color: #45677A;">
                         {{ translate('all_products') }}
@@ -558,7 +619,7 @@
             </div>
 
             <div style="max-width: 1240px; margin: 0 auto; padding: 26px 20px 30px;">
-                <div style="border-top: 1px solid rgba(255,255,255,.12); padding-top: 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;">
+                <div style="border-top: 1px solid rgba(255,255,255,.12); padding-top: 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 16px;">
                     <span style="font-size: 13.5px; color: #8FB0BF;">{{ $web_config['copyright_text'] }}</span>
                     <div style="display: flex; align-items: center; gap: 9px; flex-wrap: wrap;">
                         <span style="font-size: 13px; color: #8FB0BF; margin-inline-end: 4px;">{{ translate('payment_methods') }}:</span>
@@ -579,6 +640,25 @@
         "use strict";
 
         $.ajaxSetup({headers: {"X-CSRF-TOKEN": $('meta[name="_token"]').attr("content")}});
+
+        $(document).on('click', '#seafood-menu-toggle', function () {
+            const menu = $('#seafood-mobile-menu');
+            const willOpen = menu.attr('data-open') !== 'true';
+            menu.attr('data-open', willOpen ? 'true' : 'false').prop('hidden', !willOpen);
+            $(this).attr('aria-expanded', willOpen ? 'true' : 'false');
+        });
+
+        $(document).on('click', '#seafood-mobile-menu a', function () {
+            $('#seafood-mobile-menu').attr('data-open', 'false').prop('hidden', true);
+            $('#seafood-menu-toggle').attr('aria-expanded', 'false');
+        });
+
+        $(window).on('resize', function () {
+            if (window.innerWidth >= 980) {
+                $('#seafood-mobile-menu').attr('data-open', 'false').prop('hidden', true);
+                $('#seafood-menu-toggle').attr('aria-expanded', 'false');
+            }
+        });
 
         $(document).on('click', '.sf-tab', function () {
             const categoryId = $(this).data('category-id');

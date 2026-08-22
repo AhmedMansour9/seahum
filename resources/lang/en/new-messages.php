@@ -2564,4 +2564,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"weight_is_calculated_when_the_order_is_packed_like_any_fish_market_and_the_listed_price_per_kilo_is_final_with_no_extras" => "Weight is calculated when the order is packed for delivery, like any fish market, and the listed price per kilo is final with no extras.",
 	"choose_weight_and_quantity" => "Choose weight and quantity",
 	"select_the_weight_or_number_of_packs_that_suits_your_family_size" => "Select the weight or number of packs that suits your family size.",
+	"menu" => "Menu",
 ];
