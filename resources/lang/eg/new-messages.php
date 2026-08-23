@@ -9244,6 +9244,8 @@ ____________________________________________________on_search_engines_and_see_th
 	"Order_placed_&_Account_Created_Successfully" => "تم تنفيذ الطلب وإنشاء الحساب بنجاح",
 	"an_online_store_for_fresh_fish_and_seafood_daily_catch_chilled_sealed_packing_and_delivery_to_your_door" => "An online store for fresh fish and seafood daily catch chilled sealed packing and delivery to your door",
 	"chilled_and_tightly_sealed" => "مبرّد ومغلّف بإحكام",
+	"full_cold_chain_to_your_door" => "سلسلة تبريد كاملة حتى بابك",
+	"whatsapp" => "واتساب",
 	"we_pick_the_finest_fish_shrimp_and_crab_from_the_boats_every_morning_and_deliver_them_to_you_just_as_they_are_chilled_and_tightly_sealed_the_next_day" => "نختار لك أجود الأسماك والجمبري والكابوريا من مراكب الصيد كل صباح، ونوصلها إليك كما هي طازجة — مبرّدة ومحكمة التغليف في اليوم التالي.",
 	"prices_are_updated_daily_and_weight_is_calculated_when_the_order_is_packed" => "الأسعار محدّثة يوميًا حسب سعر السوق، والوزن يُحسب وقت التجهيز للتوصيل.",
 	"fresh_from_todays_catch_available_while_todays_stock_lasts" => "طازجة من صيد اليوم. العرض متاح حتى نفاد كمية اليوم.",

@@ -23,6 +23,8 @@
         .sf-tab.active { background: #0B2C3F; color: #FFFFFF; border-color: #0B2C3F; }
 
         .sf-burger { display: none; }
+        .sf-mobile-bar { display: none; }
+        .sf-mobile-bar-spacer { display: none; }
         .sf-mobile-menu { display: none; }
         .sf-mobile-menu[data-open="true"] { display: flex; }
         .sf-mobile-menu a:hover { background: #F1F7F8; color: #0B2C3F; }
@@ -36,17 +38,39 @@
             .sf-desktop-nav { display: none !important; }
             .sf-header-lang { display: none !important; }
             .sf-burger { display: grid; }
+            .sf-header-inner { gap: 10px !important; }
+        }
+
+        @media (max-width: 899px) {
+            .sf-topbar-info { display: none !important; }
         }
 
         @media (max-width: 759px) {
             .sf-tabs { flex-wrap: nowrap !important; }
-            .sf-hero-badge-delivery { inset-inline-start: 12px !important; bottom: 16px !important; }
-            .sf-hero-badge-packing { inset-inline-end: 12px !important; }
+            .sf-mobile-bar { display: grid; }
+            .sf-mobile-bar-spacer { display: block; height: 76px; }
         }
 
         @media (max-width: 699px) {
             .sf-header-search { display: none !important; }
             .sf-header-account { display: none !important; }
+            .sf-header-wishlist { display: none !important; }
+        }
+
+        @media (max-width: 559px) {
+            .sf-cart-label { display: none; }
+            .sf-header-cart { padding: 0 12px !important; }
+            .sf-hero-facts { grid-template-columns: 1fr !important; }
+            .sf-ticker-item { padding: 0 18px !important; }
+            .sf-ticker-item strong { font-size: 15px !important; }
+        }
+
+        @media (max-width: 479px) {
+            .sf-gutter { padding-inline: 16px !important; }
+            .sf-header-inner { padding: 10px 16px !important; }
+            .sf-header-tagline { display: none !important; }
+            .sf-hero-inner { padding: 48px 16px 52px !important; }
+            .sf-hero-actions { flex-direction: column; }
         }
     </style>
 @endpush
@@ -95,16 +119,16 @@
         @endif
 
         <div style="background: #062A3E; color: #CFE9EA; font-size: 13.5px; padding: 9px 0;">
-            <div style="max-width: 1240px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px;">
+            <div class="sf-gutter sf-topbar-inner" style="max-width: 1240px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: nowrap; align-items: center; gap: 10px 22px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <span style="width: 7px; height: 7px; border-radius: 50%; background: #17B0A7; display: inline-block; animation: pulseRing 2.4s infinite;"></span>
                     <span style="color: #FFFFFF; font-weight: 500;">{{ translate('next_day_delivery_inside_the_city') }}</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="sf-topbar-info" style="display: flex; align-items: center; gap: 8px;">
                     <span style="opacity: .65;">{{ translate('working_hours') }}:</span>
                     <span>{{ translate('daily_from_6_am_to_11_pm') }}</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="sf-topbar-info" style="display: flex; align-items: center; gap: 8px;">
                     <span style="opacity: .65;">{{ translate('to_order') }}:</span>
                     <span style="direction: ltr; font-weight: 700; letter-spacing: .4px;">{{ $storePhone }}</span>
                 </div>
@@ -117,14 +141,14 @@
         </div>
 
         <header style="position: sticky; top: 0; z-index: 60; background: rgba(255,255,255,.92); backdrop-filter: blur(14px); border-bottom: 1px solid #E4EFF1;">
-            <div style="max-width: 1240px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+            <div class="sf-header-inner" style="max-width: 1240px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
 
                 <a href="{{ route('home') }}" style="display: flex; align-items: center; gap: 11px; flex-shrink: 0;">
                     <img src="{{ getStorageImages(path: $web_config['web_logo'], type: 'logo') }}"
                          alt="{{ $web_config['company_name'] }}" style="height: 44px; width: auto; object-fit: contain;">
                     <span style="display: flex; flex-direction: column; line-height: 1.15;">
                         <strong style="font-family: Cairo, sans-serif; font-size: 21px; font-weight: 800; color: #0B2C3F;">{{ $web_config['company_name'] }}</strong>
-                        <span style="font-size: 11.5px; color: #6E8C99; letter-spacing: .3px;">{{ translate('fresh_fish_and_seafood') }}</span>
+                        <span class="sf-header-tagline" style="font-size: 11.5px; color: #6E8C99; letter-spacing: .3px;">{{ translate('fresh_fish_and_seafood') }}</span>
                     </span>
                 </a>
 
@@ -143,27 +167,27 @@
                 <div style="margin-inline-start: auto; display: flex; align-items: center; gap: 8px;">
                     <button type="button" class="sf-tool sf-burger" id="seafood-menu-toggle" aria-label="{{ translate('menu') }}"
                             aria-expanded="false" aria-controls="seafood-mobile-menu"
-                            style="width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; place-items: center; cursor: pointer;">
+                            style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; place-items: center; cursor: pointer;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
                     </button>
 
                     <form class="sf-header-search" action="{{ route('products') }}" method="GET" style="display: flex; align-items: center;">
                         <input type="text" name="name" value="{{ request('name') }}" placeholder="{{ translate('search_for_products') }}"
-                               style="height: 42px; width: 190px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; padding: 0 14px; font-family: Tajawal, sans-serif; font-size: 14px; outline: none;">
+                               style="height: 44px; width: 190px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; padding: 0 14px; font-family: Tajawal, sans-serif; font-size: 14px; outline: none;">
                         <button type="submit" class="sf-tool" aria-label="{{ translate('search') }}"
-                                style="width: 42px; height: 42px; margin-inline-start: 8px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center; cursor: pointer;">
+                                style="width: 44px; height: 44px; margin-inline-start: 8px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center; cursor: pointer;">
                             <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg>
                         </button>
                     </form>
 
                     <a href="{{ auth('customer')->check() ? route('user-account') : route('customer.auth.login') }}" class="sf-tool sf-header-account"
                        aria-label="{{ translate('account') }}"
-                       style="width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center;">
+                       style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center;">
                         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20c1.4-3.4 4.2-5 7.5-5s6.1 1.6 7.5 5"></path></svg>
                     </a>
 
-                    <a href="{{ route('wishlists') }}" class="sf-tool" aria-label="{{ translate('wishlist') }}"
-                       style="position: relative; width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center;">
+                    <a href="{{ route('wishlists') }}" class="sf-tool sf-header-wishlist" aria-label="{{ translate('wishlist') }}"
+                       style="position: relative; width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center;">
                         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9Z"></path></svg>
                         <span style="position: absolute; top: -6px; inset-inline-start: -6px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 999px; background: #0D3B58; color: #FFFFFF; font-size: 11px; font-weight: 700; display: grid; place-items: center;">
                             {{ session()->has('wish_list') ? count(session('wish_list')) : 0 }}
@@ -174,7 +198,7 @@
                         @if($languageData['status'] == 1 && $languageData['code'] != getDefaultLanguage())
                             <button type="button" class="sf-tool sf-header-lang seafood-change-language" data-language-code="{{ $languageData['code'] }}"
                                     title="{{ $languageData['name'] }}"
-                                    style="display: inline-flex; align-items: center; gap: 7px; height: 42px; padding: 0 13px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer;">
+                                    style="display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 13px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer;">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3.5 9h17M3.5 15h17"></path><path d="M12 3c2.4 2.4 2.4 15.6 0 18M12 3c-2.4 2.4-2.4 15.6 0 18"></path></svg>
                                 <span style="text-transform: uppercase;">{{ $languageData['code'] }}</span>
                             </button>
@@ -183,10 +207,10 @@
                     @endforeach
 
                     <a href="{{ $web_config['guest_checkout_status'] || auth('customer')->check() ? route('shop-cart') : route('customer.auth.login') }}"
-                       class="sf-btn-primary"
-                       style="position: relative; display: inline-flex; align-items: center; gap: 9px; height: 42px; padding: 0 15px; border-radius: 12px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 700; font-size: 14px; box-shadow: 0 8px 18px -8px rgba(23,176,167,.9);">
+                       class="sf-btn-primary sf-header-cart"
+                       style="position: relative; display: inline-flex; align-items: center; gap: 9px; height: 44px; padding: 0 15px; border-radius: 12px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 700; font-size: 14px; box-shadow: 0 8px 18px -8px rgba(23,176,167,.9);">
                         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h2l2.2 10.2a2 2 0 0 0 2 1.6h6.9a2 2 0 0 0 2-1.5L21 8H7"></path><circle cx="10" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle></svg>
-                        <span>{{ translate('cart') }}</span>
+                        <span class="sf-cart-label">{{ translate('cart') }}</span>
                         <span id="seafood-cart-count" style="min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: rgba(255,255,255,.22); display: grid; place-items: center; font-size: 12.5px;">
                             {{ \App\Utils\CartManager::getCartListQuery()->count() }}
                         </span>
@@ -209,6 +233,7 @@
 
                 <a href="{{ auth('customer')->check() ? route('user-account') : route('customer.auth.login') }}"
                    style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('account') }}</a>
+                <a href="{{ route('wishlists') }}" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('wishlist') }}</a>
 
                 @foreach($web_config['language'] as $languageData)
                     @if($languageData['status'] == 1 && $languageData['code'] != getDefaultLanguage())
@@ -220,69 +245,95 @@
                         @break
                     @endif
                 @endforeach
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px;">
+                    <a href="{{ $whatsappLink }}" target="_blank"
+                       style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; border-radius: 12px; background: #0E8E88; color: #FFFFFF; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 700;">{{ translate('whatsapp') }}</a>
+                    <a href="{{ route('contacts') }}"
+                       style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; border-radius: 12px; background: #ECF8F8; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 700;">{{ translate('contact_us') }}</a>
+                </div>
+                <span style="margin-top: 8px; font-size: 13px; color: #6E8C99; text-align: center;">{{ translate('working_hours') }}: {{ translate('daily_from_6_am_to_11_pm') }}</span>
             </div>
         </header>
 
-        <section id="home" style="position: relative; background: linear-gradient(200deg, #062A3E 0%, #0D3B58 52%, #0E6B72 100%); color: #FFFFFF; overflow: hidden;">
-            <div style="position: absolute; inset-inline-end: -140px; top: -120px; width: 460px; height: 460px; border-radius: 50%; background: radial-gradient(circle, rgba(23,176,167,.42), transparent 68%);"></div>
-            <div style="position: absolute; inset-inline-start: -180px; bottom: -200px; width: 520px; height: 520px; border-radius: 50%; background: radial-gradient(circle, rgba(23,176,167,.22), transparent 70%);"></div>
+        <section id="home" style="position: relative; background: #04202F; color: #FFFFFF; overflow: hidden;">
+            <img src="{{ dynamicAsset(path: 'public/assets/front-end/img/seafood/hero-bg.jpg') }}"
+                 alt="{{ translate('fresh_fish_and_seafood') }}"
+                 style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; filter: saturate(1.25) contrast(1.12) brightness(1.04);">
+            <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 46%, rgba(4,26,38,.62) 0%, rgba(4,26,38,.34) 48%, rgba(4,26,38,.1) 100%);"></div>
+            <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 44%, rgba(4,26,38,.5) 0%, transparent 58%); mix-blend-mode: multiply;"></div>
 
-            <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: clamp(40px, 6vw, 78px) 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: clamp(28px, 4vw, 56px); align-items: center;">
-                <div>
+            <div class="sf-hero-inner" style="position: relative; max-width: 1240px; margin: 0 auto; padding: clamp(64px, 9vw, 140px) 20px; display: flex; justify-content: center;">
+                <div style="max-width: 700px; text-align: center; display: flex; flex-direction: column; align-items: center;">
                     <span style="display: inline-flex; align-items: center; gap: 8px; background: rgba(23,176,167,.18); border: 1px solid rgba(127,227,220,.4); color: #9FEEE7; padding: 7px 15px; border-radius: 999px; font-size: 13.5px; font-weight: 700;">
                         <span style="width: 7px; height: 7px; border-radius: 50%; background: #7FE3DC; display: inline-block;"></span>
                         {{ translate('todays_catch_delivered_to_your_door_tomorrow') }}
                     </span>
 
-                    <h1 style="font-family: Cairo, sans-serif; font-weight: 900; font-size: clamp(34px, 5.4vw, 60px); line-height: 1.18; margin: 20px 0 0; letter-spacing: -.5px; text-wrap: balance;">
+                    <h1 style="font-family: Cairo, sans-serif; font-weight: 900; font-size: clamp(29px, 5.4vw, 60px); line-height: 1.2; margin: 18px 0 0; letter-spacing: -.5px; text-wrap: balance;">
                         {{ translate('fresh_from_the_sea') }}<br>
                         <span style="color: #7FE3DC;">{{ translate('to_your_doorstep') }}</span>
                     </h1>
 
-                    <p style="font-size: clamp(15.5px, 1.5vw, 18.5px); line-height: 1.95; color: #C6DDE6; margin: 18px 0 0; max-width: 540px; text-wrap: pretty;">
+                    <p style="font-size: clamp(15.5px, 1.5vw, 18.5px); line-height: 1.95; color: #C6DDE6; margin: 18px auto 0; max-width: 600px; text-wrap: pretty;">
                         {{ translate('we_pick_the_finest_fish_shrimp_and_crab_from_the_boats_every_morning_and_deliver_them_to_you_just_as_they_are_chilled_and_tightly_sealed_the_next_day') }}
                     </p>
 
-                    <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px;">
+                    <div class="sf-hero-actions" style="display: flex; align-self: stretch; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 28px;">
                         <a href="#products" class="sf-btn-primary"
-                           style="display: inline-flex; align-items: center; gap: 9px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 800; font-size: 16px; padding: 15px 30px; border-radius: 14px; box-shadow: 0 16px 32px -14px rgba(23,176,167,1);">
+                           style="display: inline-flex; align-items: center; justify-content: center; gap: 9px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 800; font-size: 16px; padding: 16px 30px; border-radius: 14px; box-shadow: 0 16px 32px -14px rgba(23,176,167,1);">
                             {{ translate('shop_now') }}
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6 8 12l6 6"></path></svg>
                         </a>
                         <a href="#deal" class="sf-btn-ghost"
-                           style="display: inline-flex; align-items: center; gap: 9px; border: 1.5px solid rgba(255,255,255,.32); color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 700; font-size: 16px; padding: 15px 28px; border-radius: 14px;">
+                           style="display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 1.5px solid rgba(255,255,255,.32); color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 700; font-size: 16px; padding: 16px 28px; border-radius: 14px;">
                             {{ translate('see_todays_offers') }}
                         </a>
                     </div>
-                </div>
 
-                <div style="position: relative; min-height: 380px;">
-                    <div style="position: relative; width: 100%; height: clamp(340px, 42vw, 470px); border-radius: 28px; overflow: hidden; box-shadow: 0 40px 70px -30px rgba(0,0,0,.65); border: 1px solid rgba(255,255,255,.14);">
-                        <img src="{{ dynamicAsset(path: 'public/assets/front-end/img/seafood/hero.jpg') }}"
-                             alt="{{ translate('fresh_fish_and_seafood') }}"
-                             style="width: 100%; height: 100%; object-fit: cover; object-position: 30% center; display: block;">
-                    </div>
-
-                    <div class="sf-hero-badge-delivery" style="position: absolute; inset-inline-start: -6px; bottom: 26px; max-width: calc(100% - 24px); background: #FFFFFF; color: #0B2C3F; border-radius: 18px; padding: 14px 18px; display: flex; align-items: center; gap: 13px; box-shadow: 0 22px 40px -18px rgba(0,0,0,.55); animation: floatY 5.5s ease-in-out infinite;">
-                        <span style="width: 44px; height: 44px; border-radius: 13px; background: #ECF8F8; display: grid; place-items: center; color: #0E8E88;">
-                            <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h11v9H2z"></path><path d="M13 10h4l3 3v3h-7z"></path><circle cx="6" cy="18" r="1.6"></circle><circle cx="17" cy="18" r="1.6"></circle></svg>
-                        </span>
-                        <span style="display: flex; flex-direction: column; line-height: 1.35;">
-                            <strong style="font-family: Cairo, sans-serif; font-size: 15.5px;">{{ translate('next_day_delivery') }}</strong>
-                            <span style="font-size: 12.5px; color: #6E8C99;">{{ translate('order_today_receive_tomorrow') }}</span>
-                        </span>
-                    </div>
-
-                    <div class="sf-hero-badge-packing" style="position: absolute; inset-inline-end: -4px; top: 16px; background: rgba(6,42,62,.72); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.18); color: #FFFFFF; border-radius: 15px; padding: 11px 16px; font-size: 13.5px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #35D6A4; display: inline-block; animation: pulseRing 2.4s infinite;"></span>
-                        {{ translate('chilled_and_tightly_sealed') }}
+                    <div class="sf-hero-facts" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 32px; width: 100%;">
+                        <div style="display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.2); border-radius: 16px; padding: 13px 18px; backdrop-filter: blur(8px);">
+                            <span style="flex-shrink: 0; width: 38px; height: 38px; border-radius: 11px; background: rgba(23,176,167,.24); display: grid; place-items: center; color: #7FE3DC;">
+                                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h11v9H2z"></path><path d="M13 10h4l3 3v3h-7z"></path><circle cx="6" cy="18" r="1.6"></circle><circle cx="17" cy="18" r="1.6"></circle></svg>
+                            </span>
+                            <span style="display: flex; flex-direction: column; gap: 2px; line-height: 1.35; text-align: start;">
+                                <strong style="font-family: Cairo, sans-serif; font-size: 15px; color: #FFFFFF;">{{ translate('next_day_delivery') }}</strong>
+                                <span style="font-size: 12.5px; color: #A9C7D3;">{{ translate('order_today_receive_tomorrow') }}</span>
+                            </span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.2); border-radius: 16px; padding: 13px 18px; backdrop-filter: blur(8px);">
+                            <span style="flex-shrink: 0; width: 38px; height: 38px; border-radius: 11px; background: rgba(23,176,167,.24); display: grid; place-items: center; color: #7FE3DC;">
+                                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13a8 8 0 1 1-8-8"></path><path d="M12 5V2"></path><path d="m8.5 12.5 3 2.5 4-5"></path></svg>
+                            </span>
+                            <span style="display: flex; flex-direction: column; gap: 2px; line-height: 1.35; text-align: start;">
+                                <strong style="font-family: Cairo, sans-serif; font-size: 15px; color: #FFFFFF;">{{ translate('chilled_and_tightly_sealed') }}</strong>
+                                <span style="font-size: 12.5px; color: #A9C7D3;">{{ translate('full_cold_chain_to_your_door') }}</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        @if($shopProducts->count() > 0)
+            <div style="background: #17B0A7; color: #FFFFFF; overflow: hidden; padding: 13px 0; position: relative;">
+                <div class="sf-ticker-track" style="display: flex; width: max-content;">
+                    @for($tickerPass = 0; $tickerPass < 2; $tickerPass++)
+                        <div style="display: flex; align-items: center; flex-shrink: 0;">
+                            @foreach($shopProducts as $product)
+                                <div class="sf-ticker-item" style="display: flex; align-items: center; gap: 9px; padding: 0 26px; border-inline-end: 1px solid rgba(255,255,255,.32); white-space: nowrap;">
+                                    <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 800;">{{ Str::limit($product['name'], 28) }}</strong>
+                                    <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 800;">{{ getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'string') }}</strong>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endfor
+                </div>
+            </div>
+        @endif
+
         @if($categories->count() > 0)
-            <section id="categories" style="max-width: 1240px; margin: 0 auto; padding: clamp(34px, 4.5vw, 54px) 20px 0;">
+            <section id="categories" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(30px, 4.5vw, 54px) 20px 0;">
                 <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
                     <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(24px, 3vw, 32px); margin: 0; color: #0B2C3F;">{{ translate('categories') }}</h2>
                     <a href="{{ route('categories') }}" style="font-family: Cairo, sans-serif; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; gap: 7px;">
@@ -316,7 +367,7 @@
         @endif
 
         @if($bestSellProduct->count() > 0)
-            <section id="products" style="max-width: 1240px; margin: 0 auto; padding: clamp(52px, 7vw, 86px) 20px 0;">
+            <section id="products" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(44px, 7vw, 86px) 20px 0;">
                 <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 30px;">
                     <div>
                         <span style="font-size: 13.5px; font-weight: 700; color: #0E8E88; letter-spacing: .6px;">{{ translate('our_customers_picks') }}</span>
@@ -334,7 +385,7 @@
         @endif
 
         @if($shopProducts->count() > 0)
-            <section id="shop" style="max-width: 1240px; margin: 0 auto; padding: clamp(52px, 7vw, 86px) 20px 0;">
+            <section id="shop" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(44px, 7vw, 86px) 20px 0;">
                 <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 22px;">
                     <div>
                         <span style="font-size: 13.5px; font-weight: 700; color: #0E8E88; letter-spacing: .6px;">{{ translate('shop_by_category') }}</span>
@@ -365,7 +416,7 @@
         @endif
 
         @if(isset($dealOfTheDay->product))
-            <section id="deal" style="max-width: 1240px; margin: 0 auto; padding: clamp(52px, 7vw, 86px) 20px 0;">
+            <section id="deal" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(44px, 7vw, 86px) 20px 0;">
                 <div style="position: relative; overflow: hidden; border-radius: 26px; background: linear-gradient(215deg, #0D3B58, #062A3E 55%, #0E6B72); color: #FFFFFF;">
                     <div style="position: absolute; inset-inline-start: -120px; top: -140px; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(23,176,167,.35), transparent 70%);"></div>
                     <div style="position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: stretch;">
@@ -411,8 +462,8 @@
         @endif
 
         <section id="about" style="margin-top: clamp(52px, 7vw, 86px);">
-            <div style="background: #062A3E; padding: clamp(48px, 6.5vw, 84px) 0;">
-                <div style="max-width: 1240px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(30px, 4.5vw, 62px); align-items: start;">
+            <div style="background: #062A3E; padding: clamp(42px, 6.5vw, 84px) 0;">
+                <div class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(30px, 4.5vw, 62px); align-items: start;">
                     <div style="position: relative;">
                         <div style="border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 34px 60px -30px rgba(0,0,0,.7);">
                             <img src="{{ dynamicAsset(path: 'public/assets/front-end/img/seafood/fish-trio.jpg') }}"
@@ -454,7 +505,7 @@
             </div>
         </section>
 
-        <section style="max-width: 1240px; margin: 0 auto; padding: clamp(52px, 7vw, 86px) 20px 0;">
+        <section class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(44px, 7vw, 86px) 20px 0;">
             <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-bottom: 40px;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 11px;">
@@ -490,8 +541,8 @@
             </div>
         </section>
 
-        <section id="faq" style="background: #062A3E; margin-top: clamp(52px, 7vw, 86px); padding: clamp(48px, 6.5vw, 84px) 0;">
-            <div style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
+        <section id="faq" style="background: #062A3E; margin-top: clamp(52px, 7vw, 86px); padding: clamp(42px, 6.5vw, 84px) 0;">
+            <div class="sf-gutter" style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
                 <div style="display: flex; align-items: center; gap: 11px;">
                     <span style="height: 2px; width: 40px; background: #17B0A7; display: inline-block;"></span>
                     <span style="font-size: 13.5px; font-weight: 800; color: #7FE3DC; letter-spacing: .5px;">{{ translate('faq') }}</span>
@@ -522,7 +573,7 @@
             </div>
         </section>
 
-        <section id="whatsapp" style="max-width: 1240px; margin: 0 auto; padding: clamp(52px, 7vw, 86px) 20px 0;">
+        <section id="whatsapp" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(44px, 7vw, 86px) 20px 0;">
             <div style="border-radius: 26px; background: linear-gradient(120deg, #ECF8F8, #E3F2F6); border: 1px solid #CFE9EA; padding: clamp(32px, 4.5vw, 58px); display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; align-items: center;">
                 <div>
                     <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(25px, 3.2vw, 36px); margin: 0 0 12px; color: #0B2C3F; text-wrap: balance;">{{ translate('need_help_choosing_your_order') }}</h2>
@@ -543,7 +594,7 @@
             </div>
         </section>
 
-        <section style="position: relative; overflow: hidden; margin-top: clamp(52px, 7vw, 86px); background: #08222F; padding: clamp(70px, 9vw, 130px) 20px;">
+        <section class="sf-gutter" style="position: relative; overflow: hidden; margin-top: clamp(52px, 7vw, 86px); background: #08222F; padding: clamp(56px, 9vw, 130px) 20px;">
             <div style="position: absolute; inset-inline: 0; bottom: -190px; height: 380px; background: radial-gradient(ellipse at 50% 100%, rgba(23,176,167,.3), transparent 68%); pointer-events: none;"></div>
             <div style="position: relative; max-width: 780px; margin: 0 auto; text-align: center;">
                 <h2 style="font-family: Cairo, sans-serif; font-weight: 900; font-size: clamp(28px, 4.4vw, 50px); line-height: 1.28; margin: 0; color: #FFFFFF; text-wrap: balance;">{{ translate('tomorrow_the_fish_is_on_your_table') }}</h2>
@@ -556,7 +607,7 @@
         </section>
 
         <footer id="contact" style="background: #062A3E; color: #C6DDE6;">
-            <div style="max-width: 1240px; margin: 0 auto; padding: clamp(44px, 6vw, 70px) 20px 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 36px;">
+            <div class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(38px, 6vw, 70px) 20px 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 36px;">
                 <div style="max-width: 330px;">
                     <div style="display: flex; align-items: center; gap: 11px;">
                         <img src="{{ getStorageImages(path: $web_config['footer_logo'], type: 'logo') }}"
@@ -618,7 +669,7 @@
                 </div>
             </div>
 
-            <div style="max-width: 1240px; margin: 0 auto; padding: 26px 20px 30px;">
+            <div class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: 26px 20px 30px;">
                 <div style="border-top: 1px solid rgba(255,255,255,.12); padding-top: 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 16px;">
                     <span style="font-size: 13.5px; color: #8FB0BF;">{{ $web_config['copyright_text'] }}</span>
                     <div style="display: flex; align-items: center; gap: 9px; flex-wrap: wrap;">
@@ -632,6 +683,20 @@
                 </div>
             </div>
         </footer>
+
+        <div class="sf-mobile-bar" style="position: fixed; inset-inline: 0; bottom: 0; z-index: 80; background: rgba(255,255,255,.97); backdrop-filter: blur(14px); border-top: 1px solid #E4EFF1; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); grid-template-columns: 1fr 1fr; gap: 10px; box-shadow: 0 -10px 30px -22px rgba(11,44,63,.9);">
+            <a href="{{ $whatsappLink }}" target="_blank"
+               style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; border-radius: 14px; background: #0E8E88; color: #FFFFFF; font-family: Cairo, sans-serif; font-size: 15.5px; font-weight: 800;">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: #7FE3DC; display: inline-block;"></span>
+                {{ translate('order_via_whatsapp') }}
+            </a>
+            <a href="{{ $web_config['guest_checkout_status'] || auth('customer')->check() ? route('shop-cart') : route('customer.auth.login') }}"
+               style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; border-radius: 14px; background: #ECF8F8; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 15.5px; font-weight: 800;">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h2l2.2 10.2a2 2 0 0 0 2 1.6h6.9a2 2 0 0 0 2-1.5L21 8H7"></path><circle cx="10" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle></svg>
+                {{ translate('cart') }} ({{ \App\Utils\CartManager::getCartListQuery()->count() }})
+            </a>
+        </div>
+        <div class="sf-mobile-bar-spacer"></div>
     </div>
 @endsection
 

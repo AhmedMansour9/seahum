@@ -29,7 +29,10 @@
         a { color: #0E8E88; text-decoration: none; }
         a:hover { color: #0B2C3F; }
         img { max-width: 100%; }
-        @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+        @keyframes marqueeTicker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        @keyframes marqueeTickerRtl { from { transform: translateX(0); } to { transform: translateX(50%); } }
+        .sf-ticker-track { animation: marqueeTicker 38s linear infinite; }
+        [dir="rtl"] .sf-ticker-track { animation-name: marqueeTickerRtl; }
         @keyframes pulseRing {
             0% { box-shadow: 0 0 0 0 rgba(23, 176, 167, .45); }
             70% { box-shadow: 0 0 0 14px rgba(23, 176, 167, 0); }

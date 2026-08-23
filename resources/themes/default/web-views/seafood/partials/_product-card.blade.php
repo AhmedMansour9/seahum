@@ -4,11 +4,11 @@
 
 <article data-category-id="{{ $product['category_id'] }}"
          style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9); transition: transform .28s, box-shadow .28s, border-color .28s;">
-    <div style="position: relative; height: 196px; background: #EAF4F5;">
+    <div style="position: relative; aspect-ratio: 1 / 1; background: #EAF4F5;">
         <a href="{{ route('product', $product['slug']) }}" style="display: block; height: 100%;">
             <img src="{{ getStorageImages(path: $product->thumbnail_full_url, type: 'product') }}"
                  alt="{{ $product['name'] }}" loading="lazy"
-                 style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                 style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;">
         </a>
         <span style="position: absolute; top: 12px; inset-inline-start: 12px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; background: rgba(255,255,255,.94); color: {{ $stockColor }}; box-shadow: 0 6px 16px -8px rgba(11,44,63,.6);">
             <span style="width: 6px; height: 6px; border-radius: 50%; display: inline-block; background: {{ $stockColor }};"></span>
@@ -16,7 +16,7 @@
         </span>
         <button type="button" class="seafood-wishlist-btn" data-product-id="{{ $product['id'] }}"
                 aria-label="{{ translate('add_to_wishlist') }}"
-                style="position: absolute; top: 12px; inset-inline-end: 12px; width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(255,255,255,.92); display: grid; place-items: center; cursor: pointer; transition: transform .2s;">
+                style="position: absolute; top: 7px; inset-inline-end: 7px; width: 44px; height: 44px; border-radius: 50%; border: none; background: rgba(255,255,255,.92); display: grid; place-items: center; cursor: pointer; transition: transform .2s;">
             <svg width="17" height="17" viewBox="0 0 24 24" stroke="#0B2C3F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" fill="none">
                 <path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9Z"></path>
             </svg>
