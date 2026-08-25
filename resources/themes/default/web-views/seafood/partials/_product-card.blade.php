@@ -1,14 +1,15 @@
 @php($hasVariation = !empty(json_decode($product['variation'] ?? '[]', true)) || !empty(json_decode($product['choice_options'] ?? '[]', true)))
 @php($isInStock = $product['product_type'] === 'digital' || $product['current_stock'] > 0)
 @php($stockColor = $isInStock ? '#0E8E88' : '#C9821B')
+@php($thumbnailUrl = getStorageImages(path: $product->thumbnail_full_url, type: 'product'))
 
 <article data-category-id="{{ $product['category_id'] }}"
          style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9); transition: transform .28s, box-shadow .28s, border-color .28s;">
-    <div style="position: relative; aspect-ratio: 1 / 1; background: #EAF4F5;">
-        <a href="{{ route('product', $product['slug']) }}" style="display: block; height: 100%;">
-            <img src="{{ getStorageImages(path: $product->thumbnail_full_url, type: 'product') }}"
+    <div style="position: relative; background: #EAF4F5; overflow: hidden;">
+        <a href="{{ route('product', $product['slug']) }}" style="display: block;">
+            <img src="{{ $thumbnailUrl }}"
                  alt="{{ $product['name'] }}" loading="lazy"
-                 style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;">
+                 style="width: 100%; height: auto; display: block;">
         </a>
         <span style="position: absolute; top: 12px; inset-inline-start: 12px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; background: rgba(255,255,255,.94); color: {{ $stockColor }}; box-shadow: 0 6px 16px -8px rgba(11,44,63,.6);">
             <span style="width: 6px; height: 6px; border-radius: 50%; display: inline-block; background: {{ $stockColor }};"></span>

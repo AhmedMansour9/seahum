@@ -194,7 +194,7 @@ $isExpanded = $totalCartItemProduct > 0;
                                    value="{{usdToDefaultCurrency(amount: $cartItems['total']+($cartItems['totalTax'] ?? 0)-$cartItems['couponDiscount'])}}"
                                    name="paid_amount" {{ $totalCartItemProduct <= 0 ? 'disabled' : '' }}
                                    min="{{ usdToDefaultCurrency(amount: ($cartItems['total'] + ($cartItems['totalTax'] ?? 0) - $cartItems['couponDiscount'])) }}"
-                                   data-currency-position="{{ getWebConfig('currency_symbol_position') }}"
+                                   data-currency-position="left"
                                    data-currency-symbol="{{ getCurrencySymbol() }}">
                         </dd>
                     </div>

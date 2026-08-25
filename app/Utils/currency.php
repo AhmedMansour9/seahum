@@ -223,11 +223,31 @@ if (!function_exists('getCurrencySymbol')) {
         loadCurrency();
         if ($type == 'web' && session()->has('currency_symbol')) {
             $currentSymbol = session('currency_symbol');
+            $currentCode = session('currency_code');
         } else {
             $systemDefaultCurrencyInfo = session('system_default_currency_info');
             $currentSymbol = $systemDefaultCurrencyInfo->symbol;
+            $currentCode = $systemDefaultCurrencyInfo->code;
         }
-        return $currentSymbol;
+        return getLocalizedCurrencySymbol(currencyCode: $currentCode, defaultSymbol: $currentSymbol);
+    }
+}
+
+if (!function_exists('getLocalizedCurrencySymbol')) {
+    /**
+     * Resolves the currency symbol for the active application locale.
+     *
+     * @param string|null $currencyCode
+     * @param string|null $defaultSymbol
+     * @return string
+     */
+    function getLocalizedCurrencySymbol(?string $currencyCode = null, ?string $defaultSymbol = null): string
+    {
+        $localizedSymbols = config('currency_symbols.' . strtoupper($currencyCode ?? ''));
+        if (empty($localizedSymbols)) {
+            return $defaultSymbol ?? '';
+        }
+        return $localizedSymbols[app()->getLocale()] ?? $localizedSymbols['default'] ?? $defaultSymbol ?? '';
     }
 }
 
@@ -241,13 +261,7 @@ if (!function_exists('setCurrencySymbol')) {
     function setCurrencySymbol(string|int|float|null $amount = 0, string $currencyCode = USD, string $type = 'default'): string
     {
         $decimalPointSettings = getWebConfig('decimal_point_settings');
-        $position = getWebConfig('currency_symbol_position');
-        if ($position === 'left') {
-            $string = getCurrencySymbol(currencyCode: $currencyCode, type: $type) . '' . number_format($amount, (!empty($decimalPointSettings) ? $decimalPointSettings : 0));
-        } else {
-            $string = number_format($amount, !empty($decimalPointSettings) ? $decimalPointSettings : 0) . getCurrencySymbol(currencyCode: $currencyCode, type: $type);
-        }
-        return $string;
+        return getCurrencySymbol(currencyCode: $currencyCode, type: $type) . ' ' . number_format($amount, (!empty($decimalPointSettings) ? $decimalPointSettings : 0));
     }
 }
 

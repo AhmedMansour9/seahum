@@ -173,7 +173,7 @@ class ConfigController extends Controller
             'shipping_policy' => null,
             'company_reliability' => getWebConfig(name: 'company_reliability'),
             'currency_list' => $this->cacheCurrencyTable(),
-            'currency_symbol_position' => getWebConfig(name: 'currency_symbol_position') ?? 'right',
+            'currency_symbol_position' => 'left',
             'business_mode' => getWebConfig(name: 'business_mode'),
             'language' => $languageArray,
             'colors' => $this->cacheColorsList(),

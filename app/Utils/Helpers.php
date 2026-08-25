@@ -643,13 +643,7 @@ class Helpers
     public static function set_symbol($amount): string
     {
         $decimal_point_settings = getWebConfig(name: 'decimal_point_settings');
-        $position = getWebConfig(name: 'currency_symbol_position');
-        if (!is_null($position) && $position == 'left') {
-            $string = currency_symbol() . '' . number_format($amount, (!empty($decimal_point_settings) ? $decimal_point_settings : 0));
-        } else {
-            $string = number_format($amount, !empty($decimal_point_settings) ? $decimal_point_settings : 0) . currency_symbol();
-        }
-        return $string;
+        return currency_symbol() . ' ' . number_format($amount, (!empty($decimal_point_settings) ? $decimal_point_settings : 0));
     }
 
     public static function pagination_limit()
@@ -786,11 +780,13 @@ if (!function_exists('currency_symbol')) {
         Helpers::currency_load();
         if (\session()->has('currency_symbol')) {
             $symbol = \session('currency_symbol');
+            $code = \session('currency_code');
         } else {
             $system_default_currency_info = \session('system_default_currency_info');
             $symbol = $system_default_currency_info->symbol;
+            $code = $system_default_currency_info->code;
         }
-        return $symbol;
+        return getLocalizedCurrencySymbol(currencyCode: $code, defaultSymbol: $symbol);
     }
 }
 

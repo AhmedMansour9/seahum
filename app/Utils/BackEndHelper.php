@@ -53,11 +53,7 @@ class BackEndHelper
     public static function set_symbol($amount = 0): string
     {
         $decimal_point_settings = getWebConfig(name: 'decimal_point_settings');
-        $position = getWebConfig(name: 'currency_symbol_position') ?? 'left';
-        if ($position == 'left') {
-            return currency_symbol() . '' . number_format($amount, (!empty($decimal_point_settings) ? $decimal_point_settings: 0));
-        }
-        return number_format($amount, !empty($decimal_point_settings) ? $decimal_point_settings: 0) . currency_symbol();
+        return currency_symbol() . ' ' . number_format($amount, (!empty($decimal_point_settings) ? $decimal_point_settings: 0));
     }
 
     public static function currency_code()
