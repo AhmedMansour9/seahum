@@ -69,7 +69,7 @@ if (!$customerOTPLogin && $customerManualLogin && $customerSocialLogin) {
                                 @include('theme-views.layouts.auth-partials._remember-me', [
                                     'forgotPassword' => true,
                                 ])
-                                @include('theme-views.layouts.auth-partials._recaptcha')
+                                @include('theme-views.layouts.auth-partials._firebase-recaptcha-container')
                                 <div class="d-flex justify-content-center mb-3">
                                     <button type="submit" id="customerLoginBtn"
                                         class="fs-16 btn btn-primary px-5 w-100">
@@ -91,7 +91,7 @@ if (!$customerOTPLogin && $customerManualLogin && $customerSocialLogin) {
                                 @include('theme-views.layouts.auth-partials._remember-me', [
                                     'forgotPassword' => true,
                                 ])
-                                @include('theme-views.layouts.auth-partials._recaptcha')
+                                @include('theme-views.layouts.auth-partials._firebase-recaptcha-container')
                                 <div class="d-flex justify-content-center mb-3">
                                     <button type="submit" id="customerLoginBtn"
                                         class="fs-16 btn btn-primary px-5 w-100">
@@ -111,7 +111,6 @@ if (!$customerOTPLogin && $customerManualLogin && $customerSocialLogin) {
                                 <input type="hidden" name="login_type" value="otp-login">
                                 @include('theme-views.layouts.auth-partials._phone')
                                 @include('theme-views.layouts.auth-partials._firebase-recaptcha-container')
-                                @include('theme-views.layouts.auth-partials._recaptcha')
                                 <div class="d-flex justify-content-center mb-3">
                                     <button type="submit" id="customerOtpLogin"
                                         class="fs-16 btn btn-primary px-5 w-100">
@@ -141,7 +140,7 @@ if (!$customerOTPLogin && $customerManualLogin && $customerSocialLogin) {
                                         @include('theme-views.layouts.auth-partials._phone')
                                     </div>
 
-                                    @include('theme-views.layouts.auth-partials._recaptcha')
+                                    @include('theme-views.layouts.auth-partials._firebase-recaptcha-container')
 
                                     <div class="manual-login-items">
                                         <div class="d-flex justify-content-center mb-3">

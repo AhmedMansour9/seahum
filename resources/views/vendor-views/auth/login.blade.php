@@ -23,7 +23,6 @@
     <link rel="stylesheet" href="{{ dynamicAsset(path: 'public/assets/back-end/vendor/icon-set/style.css') }}">
     <link rel="stylesheet" href="{{ dynamicAsset(path: 'public/assets/back-end/css/theme.minc619.css?v=1.0') }}">
     <link rel="stylesheet" href="{{ dynamicAsset(path: 'public/assets/back-end/css/style.css') }}">
-    <link rel="stylesheet" href="{{ dynamicAsset(path: 'public/assets/backend/libs/google-recaptcha/google-recaptcha-init.css') }}">
 
     @if ($web_config['primary_color'])
         <style>
@@ -123,30 +122,6 @@
                             </div>
                         </div>
 
-
-                        @if(isset($recaptcha) && $recaptcha['status'] == 1)
-                            <div class="dynamic-default-and-recaptcha-section">
-                                <input type="hidden" name="g-recaptcha-response" class="render-grecaptcha-response" data-action="login"
-                                       data-input="#login-default-captcha-section"
-                                       data-default-captcha="#login-default-captcha-section"
-                                >
-
-                                <div class="default-captcha-container d-none" id="login-default-captcha-section"
-                                     data-placeholder="{{ translate('enter_captcha_value') }}"
-                                     data-base-url="{{ route('g-recaptcha-session-store') }}"
-                                     data-session="{{ 'vendorRecaptchaSessionKey' }}"
-                                >
-                                </div>
-                            </div>
-                        @else
-                            <div class="default-captcha-container"
-                                 data-placeholder="{{ translate('enter_captcha_value') }}"
-                                 data-base-url="{{ route('g-recaptcha-session-store') }}"
-                                 data-session="{{ 'vendorRecaptchaSessionKey' }}"
-                            >
-                            </div>
-                        @endif
-
                         <button type="submit" id="vendorLoginBtn" class="btn btn-lg btn-block btn--primary">
                             {{ translate('sign_in') }}
                         </button>
@@ -180,10 +155,7 @@
         </div>
     </main>
 
-    <span id="message-please-check-recaptcha" data-text="{{ translate('please_check_the_recaptcha') }}"></span>
     <span id="message-copied_success" data-text="{{ translate('copied_successfully') }}"></span>
-    <span id="route-get-session-recaptcha-code" data-route="{{ route('get-session-recaptcha-code') }}"
-        data-mode="{{ env('APP_MODE') }}"></span>
 
     <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/vendor.min.js') }}"></script>
     <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/theme.min.js') }}"></script>
@@ -201,13 +173,6 @@
         </script>
     @endif
 
-    @php($recaptcha = getWebConfig(name: 'recaptcha'))
-    <span id="get-google-recaptcha-key"
-          data-value="{{ isset($recaptcha) && $recaptcha['status'] == 1 ? $recaptcha['site_key'] : '' }}"></span>
-    @if (isset($recaptcha) && $recaptcha['status'] == 1)
-        <script src="https://www.google.com/recaptcha/api.js?render={{ $recaptcha['site_key'] }}"></script>
-    @endif
-    <script src="{{ dynamicAsset(path: 'public/assets/backend/libs/google-recaptcha/google-recaptcha-init.js') }}"></script>
 </body>
 
 </html>
