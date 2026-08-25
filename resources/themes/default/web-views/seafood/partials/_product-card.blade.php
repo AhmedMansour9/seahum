@@ -30,8 +30,8 @@
 
         <div style="height: 1px; background: #EDF5F6; margin: 14px 0 13px;"></div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto;">
-            <span style="display: flex; align-items: baseline; gap: 5px; white-space: nowrap;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: auto;">
+            <span style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 5px; min-width: 0;">
                 @if(getProductPriceByType(product: $product, type: 'discount', result: 'value') > 0)
                     <del style="font-size: 13px; color: #7B98A4;">{{ webCurrencyConverter(amount: $product['unit_price']) }}</del>
                 @endif
