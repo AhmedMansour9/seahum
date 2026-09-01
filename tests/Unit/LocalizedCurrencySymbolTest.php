@@ -10,14 +10,14 @@ class LocalizedCurrencySymbolTest extends TestCase
     {
         $this->app->setLocale('eg');
 
-        $this->assertSame('ج.م', getLocalizedCurrencySymbol(currencyCode: 'EGP', defaultSymbol: 'ج.م'));
+        $this->assertSame('جنيه', getLocalizedCurrencySymbol(currencyCode: 'EGP', defaultSymbol: 'جنيه'));
     }
 
     public function test_non_arabic_locale_returns_default_mapped_symbol(): void
     {
         $this->app->setLocale('en');
 
-        $this->assertSame('EGP', getLocalizedCurrencySymbol(currencyCode: 'EGP', defaultSymbol: 'ج.م'));
+        $this->assertSame('EGP', getLocalizedCurrencySymbol(currencyCode: 'EGP', defaultSymbol: 'جنيه'));
     }
 
     public function test_unmapped_currency_falls_back_to_stored_symbol(): void

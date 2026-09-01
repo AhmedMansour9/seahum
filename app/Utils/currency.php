@@ -247,7 +247,18 @@ if (!function_exists('getLocalizedCurrencySymbol')) {
         if (empty($localizedSymbols)) {
             return $defaultSymbol ?? '';
         }
-        return $localizedSymbols[app()->getLocale()] ?? $localizedSymbols['default'] ?? $defaultSymbol ?? '';
+        $sessionLanguage = session('local');
+        $candidateLocales = array_filter(array_unique([
+            $sessionLanguage,
+            $sessionLanguage ? getLanguageCode(country_code: $sessionLanguage) : null,
+            app()->getLocale(),
+        ]));
+        foreach ($candidateLocales as $locale) {
+            if (isset($localizedSymbols[$locale])) {
+                return $localizedSymbols[$locale];
+            }
+        }
+        return $localizedSymbols['default'] ?? $defaultSymbol ?? '';
     }
 }
 

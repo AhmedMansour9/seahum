@@ -338,7 +338,7 @@
                             @foreach($shopProducts as $product)
                                 <div class="sf-ticker-item" style="display: flex; align-items: center; gap: 9px; padding: 0 26px; border-inline-end: 1px solid rgba(255,255,255,.32); white-space: nowrap;">
                                     <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 800;">{{ Str::limit($product['name'], 28) }}</strong>
-                                    <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 800;">{{ getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'string') }}</strong>
+                                    <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 800;">@include('web-views.seafood.partials._price', ['amount' => getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value'), 'symbolSize' => '13px', 'symbolColor' => 'rgba(255,255,255,.78)'])</strong>
                                 </div>
                             @endforeach
                         </div>
@@ -438,13 +438,10 @@
                         <div style="padding: clamp(30px, 4vw, 52px);">
                             <span style="display: inline-block; background: #F2A43A; color: #3A2400; font-family: Cairo, sans-serif; font-weight: 800; font-size: 13px; padding: 6px 14px; border-radius: 999px; white-space: nowrap;">
                                 {{ translate('deal_of_the_day') }}
-                                @if(getProductPriceByType(product: $dealOfTheDay->product, type: 'discount', result: 'value') > 0)
-                                    — {{ translate('save') }} {{ getProductPriceByType(product: $dealOfTheDay->product, type: 'discount', result: 'string') }}
-                                @endif
                             </span>
                             <h2 style="font-family: Cairo, sans-serif; font-weight: 900; font-size: clamp(27px, 3.8vw, 42px); line-height: 1.3; margin: 18px 0 0; text-wrap: balance;">
                                 {{ Str::limit($dealOfTheDay->product['name'], 60) }}<br>
-                                <span style="color: #7FE3DC;">{{ getProductPriceByType(product: $dealOfTheDay->product, type: 'discounted_unit_price', result: 'string') }}</span>
+                                <span style="color: #7FE3DC;">@include('web-views.seafood.partials._price', ['amount' => getProductPriceByType(product: $dealOfTheDay->product, type: 'discounted_unit_price', result: 'value'), 'symbolSize' => '.55em', 'symbolColor' => 'rgba(127,227,220,.8)'])</span>
                             </h2>
                             <p style="color: #C6DDE6; font-size: 16px; line-height: 1.95; margin: 14px 0 0; max-width: 460px;">
                                 {{ translate('fresh_from_todays_catch_available_while_todays_stock_lasts') }}

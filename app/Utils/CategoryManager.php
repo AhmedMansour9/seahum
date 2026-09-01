@@ -178,7 +178,7 @@ class CategoryManager
                     return $query->whereHas('product.flashDealProducts.flashDeal');
                 })
                 ->when($dataForm == 'home_page', function ($query) {
-                    return $query->whereHas('product', function ($query) {
+                    return $query->where('home_status', 1)->whereHas('product', function ($query) {
                         return $query->active();
                     });
                 })

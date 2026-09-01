@@ -33,11 +33,8 @@
 
         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: auto;">
             <span style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 5px; min-width: 0;">
-                @if(getProductPriceByType(product: $product, type: 'discount', result: 'value') > 0)
-                    <del style="font-size: 13px; color: #7B98A4;">{{ webCurrencyConverter(amount: $product['unit_price']) }}</del>
-                @endif
                 <strong style="font-family: Cairo, sans-serif; font-size: 22px; font-weight: 800; color: #0B2C3F; letter-spacing: -.4px;">
-                    {{ getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'string') }}
+                    @include('web-views.seafood.partials._price', ['amount' => getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value')])
                 </strong>
             </span>
 
