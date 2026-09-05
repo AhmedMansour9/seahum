@@ -20,6 +20,7 @@ use App\Models\Seller;
 use App\Models\Review;
 use App\Utils\ProductManager;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,9 @@ class HomeController extends Controller
 {
     use InHouseTrait, EmailTemplateTrait;
     use CacheManagerTrait;
+
+    private const SHOP_PRODUCTS_PER_CATEGORY = 16;
+    private const SHOP_TICKER_PRODUCTS_LIMIT = 12;
 
     public function __construct(
         private readonly Product      $product,
@@ -100,13 +104,34 @@ class HomeController extends Controller
             $auctionProducts->load(['myBid', 'myParticipation']);
         }
 
+        $categoryWiseShopProducts = $this->getCategoryWiseShopProducts(categories: $categories, productsPerCategory: self::SHOP_PRODUCTS_PER_CATEGORY);
+        $shopTabCategories = $categories->whereIn('id', $categoryWiseShopProducts->keys());
+        $shopProducts = $categoryWiseShopProducts->flatten(1);
+        $activeShopCategoryId = $shopTabCategories->first()['id'] ?? null;
+        $tickerProducts = $shopProducts->take(self::SHOP_TICKER_PRODUCTS_LIMIT);
+
         return view(VIEW_FILE_NAMES['home'],
             compact(
                 'flashDeal', 'featuredProductsList', 'topRatedProducts', 'bestSellProduct', 'latestProductsList', 'categories', 'brands',
                 'dealOfTheDay', 'topVendorsList', 'homeCategories', 'bannerTypeMainBanner', 'bannerTypeMainSectionBanner',
-                'current_date', 'recommendedProduct', 'bannerTypeFooterBanner', 'newArrivalProducts', 'clearanceSaleProducts', 'robotsMetaContentData', 'auctionProducts'
+                'current_date', 'recommendedProduct', 'bannerTypeFooterBanner', 'newArrivalProducts', 'clearanceSaleProducts', 'robotsMetaContentData', 'auctionProducts',
+                'shopProducts', 'shopTabCategories', 'activeShopCategoryId', 'tickerProducts'
             )
         );
+    }
+
+    /**
+     * Latest products of every home page category, keyed by category id, capped per category.
+     *
+     * @return Collection<int, Collection<int, Product>>
+     */
+    private function getCategoryWiseShopProducts(Collection $categories, int $productsPerCategory): Collection
+    {
+        return $categories
+            ->mapWithKeys(fn ($category) => [
+                $category['id'] => $category->product->sortByDesc('id')->take($productsPerCategory)->values(),
+            ])
+            ->filter(fn (Collection $products) => $products->isNotEmpty());
     }
 
     public function theme_aster(): View

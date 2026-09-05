@@ -20,7 +20,9 @@
         .sf-social:hover { background: #17B0A7; color: #062A3E; border-color: #17B0A7; transform: translateY(-2px); }
         .sf-footer-link { color: #9FBDCB; }
         .sf-footer-link:hover { color: #7FE3DC; }
-        .sf-tab.active { background: #0B2C3F; color: #FFFFFF; border-color: #0B2C3F; }
+        .sf-tab { padding: 10px 18px; border-radius: 999px; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; cursor: pointer; white-space: nowrap; border: 1.4px solid #E4EFF1; background: #FFFFFF; color: #45677A; transition: background .22s, color .22s, border-color .22s, box-shadow .22s; }
+        .sf-tab:hover { border-color: #17B0A7; color: #0B2C3F; }
+        .sf-tab.active { background: #0B2C3F; color: #FFFFFF; border-color: #17B0A7; box-shadow: 0 8px 20px -12px rgba(11,44,63,.9); }
 
         .sf-burger { display: none; }
         .sf-mobile-bar { display: none; }
@@ -97,8 +99,6 @@
     @php($whatsappLink = $whatsappNumber ? 'https://wa.me/' . $whatsappNumber : route('contacts'))
     @php($flashDealEndDate = $web_config['flash_deals']['end_date'] ?? null)
     @php($shopCategories = $categories->take(6))
-    @php($shopProducts = collect($latestProductsList)->concat(collect($featuredProductsList->items()))->unique('id')->take(12))
-    @php($shopTabCategories = $categories->whereIn('id', $shopProducts->pluck('category_id')->unique()))
     @php($auctionActive = function_exists('getCheckAddonPublishedStatus') && getCheckAddonPublishedStatus(moduleName: 'Auction') && getWebConfig(name: 'auction_feature_status'))
 
     <?php
@@ -335,7 +335,7 @@
                 <div class="sf-ticker-track" style="display: flex; width: max-content;">
                     @for($tickerPass = 0; $tickerPass < 2; $tickerPass++)
                         <div style="display: flex; align-items: center; flex-shrink: 0;">
-                            @foreach($shopProducts as $product)
+                            @foreach($tickerProducts as $product)
                                 <div class="sf-ticker-item" style="display: flex; align-items: center; gap: 9px; padding: 0 26px; border-inline-end: 1px solid rgba(255,255,255,.32); white-space: nowrap;">
                                     <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 800;">{{ Str::limit($product['name'], 28) }}</strong>
                                     <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 800;">@include('web-views.seafood.partials._price', ['amount' => getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value'), 'symbolSize' => '13px', 'symbolColor' => 'rgba(255,255,255,.78)'])</strong>
@@ -406,17 +406,12 @@
                         <span style="font-size: 13.5px; font-weight: 700; color: #0E8E88; letter-spacing: .6px;">{{ translate('shop_by_category') }}</span>
                         <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(26px, 3.4vw, 38px); margin: 8px 0 0; color: #0B2C3F;">{{ translate('all_products') }}</h2>
                     </div>
-                    <span style="font-size: 14px; color: #6E8C99;">{{ translate('products_shown') }}: <span id="seafood-shop-count">{{ $shopProducts->count() }}</span></span>
+                    <span style="font-size: 14px; color: #6E8C99;">{{ translate('products_shown') }}: <span id="seafood-shop-count">{{ $shopProducts->where('category_id', $activeShopCategoryId)->count() }}</span></span>
                 </div>
 
                 <div class="sf-tabs" style="display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 26px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;">
-                    <button type="button" class="sf-tab active" data-category-id="all"
-                            style="padding: 10px 18px; border-radius: 999px; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; cursor: pointer; white-space: nowrap; border: 1.4px solid #E4EFF1; background: #FFFFFF; color: #45677A;">
-                        {{ translate('all_products') }}
-                    </button>
                     @foreach($shopTabCategories as $category)
-                        <button type="button" class="sf-tab" data-category-id="{{ $category['id'] }}"
-                                style="padding: 10px 18px; border-radius: 999px; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; cursor: pointer; white-space: nowrap; border: 1.4px solid #E4EFF1; background: #FFFFFF; color: #45677A;">
+                        <button type="button" class="sf-tab{{ $category['id'] == $activeShopCategoryId ? ' active' : '' }}" data-category-id="{{ $category['id'] }}">
                             {{ Str::limit($category['name'], 20) }}
                         </button>
                     @endforeach
@@ -424,7 +419,7 @@
 
                 <div id="seafood-shop-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px;">
                     @foreach($shopProducts as $product)
-                        @include('web-views.seafood.partials._product-card', ['product' => $product])
+                        @include('web-views.seafood.partials._product-card', ['product' => $product, 'isVisibleCard' => $product['category_id'] == $activeShopCategoryId])
                     @endforeach
                 </div>
             </section>
@@ -744,8 +739,8 @@
 
             const products = $('#seafood-shop-grid > article');
             products.each(function () {
-                const matched = categoryId === 'all' || String($(this).data('category-id')) === String(categoryId);
-                $(this).toggle(matched);
+                const matched = String($(this).data('category-id')) === String(categoryId);
+                $(this).css('display', matched ? 'flex' : 'none');
             });
             $('#seafood-shop-count').text(products.filter(':visible').length);
         });

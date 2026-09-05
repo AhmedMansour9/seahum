@@ -2,9 +2,10 @@
 @php($isInStock = $product['product_type'] === 'digital' || $product['current_stock'] > 0)
 @php($stockColor = $isInStock ? '#0E8E88' : '#C9821B')
 @php($thumbnailUrl = getStorageImages(path: $product->thumbnail_full_url, type: 'product'))
+@php($isVisibleCard = $isVisibleCard ?? true)
 
 <article data-category-id="{{ $product['category_id'] }}"
-         style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9); transition: transform .28s, box-shadow .28s, border-color .28s;">
+         style="display: {{ $isVisibleCard ? 'flex' : 'none' }}; flex-direction: column; background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9); transition: transform .28s, box-shadow .28s, border-color .28s;">
     <div style="position: relative; background: #EAF4F5; overflow: hidden;">
         <a href="{{ route('product', $product['slug']) }}" style="display: block;">
             <img src="{{ $thumbnailUrl }}"

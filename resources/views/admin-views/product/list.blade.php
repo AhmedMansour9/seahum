@@ -117,6 +117,9 @@
                             </thead>
                             <tbody>
                             @foreach ($products as $key => $product)
+                                @php
+                                    $productName = $product->translations->firstWhere('key', 'name')?->value ?: $product['name'];
+                                @endphp
                                 <tr>
                                     <th scope="row">{{ $products->firstItem() + $key }}</th>
                                     <td>
@@ -129,8 +132,8 @@
                                                 <div
                                                     class="d-flex gap-2 align-items-center lh-1 w-max-content text-wrap line-1 max-w-300 min-w-130 text-dark text-hover-primary">
                                                     <div class="media-body text-dark line-1 text-hover-primary"
-                                                         data-bs-toggle="tooltip" title="{{ $product['name'] }}">
-                                                        {{ Str::limit($product['name'], 20) }}
+                                                         data-bs-toggle="tooltip" title="{{ $productName }}">
+                                                        {{ Str::limit($productName, 20) }}
                                                     </div>
                                                     @if ($product?->clearanceSale)
                                                         <span class="text-secondary" data-bs-toggle="tooltip"
@@ -222,8 +225,8 @@
                                                        data-modal-form="#product-status{{ $product['id'] }}-form"
                                                        data-on-image="{{ dynamicAsset(path: 'public/assets/new/back-end/img/modal/product-status-on.png') }}"
                                                        data-off-image="{{ dynamicAsset(path: 'public/assets/new/back-end/img/modal/product-status-off.png') }}"
-                                                       data-on-title="{{ translate('Want_to_Turn_ON') . ' ' . str_replace("'", '`', $product['name']) . ' ' . translate('status') }}"
-                                                       data-off-title="{{ translate('Want_to_Turn_OFF') . ' ' . str_replace("'", '`', $product['name']) . ' ' . translate('status') }}"
+                                                       data-on-title="{{ translate('Want_to_Turn_ON') . ' ' . str_replace("'", '`', $productName) . ' ' . translate('status') }}"
+                                                       data-off-title="{{ translate('Want_to_Turn_OFF') . ' ' . str_replace("'", '`', $productName) . ' ' . translate('status') }}"
                                                        data-on-message="<p>{{ translate('if_enabled_this_product_will_be_available_on_the_website_and_customer_app') }}</p>"
                                                        data-off-message="<p>{{ translate('if_disabled_this_product_will_be_hidden_from_the_website_and_customer_app') }}</p>">
                                                 <span class="switcher_control"></span>
