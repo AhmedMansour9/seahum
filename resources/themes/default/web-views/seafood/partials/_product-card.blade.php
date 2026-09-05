@@ -5,7 +5,7 @@
 @php($isVisibleCard = $isVisibleCard ?? true)
 @php($cartItemKey = $cartItemKey ?? null)
 
-<article data-category-id="{{ $product['category_id'] }}"
+<article class="sf-product-card" data-category-id="{{ $product['category_id'] }}"
          style="display: {{ $isVisibleCard ? 'flex' : 'none' }}; flex-direction: column; background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9); transition: transform .28s, box-shadow .28s, border-color .28s;">
     <div style="position: relative; background: #EAF4F5; overflow: hidden;">
         <a href="{{ route('product', $product['slug']) }}" style="display: block;">
@@ -13,7 +13,7 @@
                  alt="{{ $product['name'] }}" loading="lazy"
                  style="width: 100%; height: auto; display: block;">
         </a>
-        <span style="position: absolute; top: 12px; inset-inline-start: 12px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; background: rgba(255,255,255,.94); color: {{ $stockColor }}; box-shadow: 0 6px 16px -8px rgba(11,44,63,.6);">
+        <span class="sf-product-badge" style="position: absolute; top: 12px; inset-inline-start: 12px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; background: rgba(255,255,255,.94); color: {{ $stockColor }}; box-shadow: 0 6px 16px -8px rgba(11,44,63,.6);">
             <span style="width: 6px; height: 6px; border-radius: 50%; display: inline-block; background: {{ $stockColor }};"></span>
             {{ $isInStock ? translate('in_stock') : translate('out_of_stock') }}
         </span>
@@ -27,22 +27,22 @@
     </div>
 
     <div style="padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1;">
-        <h3 style="font-family: Cairo, sans-serif; font-size: 18px; font-weight: 700; margin: 0; color: #0B2C3F; line-height: 1.5; text-wrap: pretty;">
+        <h3 class="sf-product-title" style="font-family: Cairo, sans-serif; font-size: 18px; font-weight: 700; margin: 0; color: #0B2C3F; line-height: 1.5; text-wrap: pretty;">
             <a href="{{ route('product', $product['slug']) }}" style="color: inherit;">{{ Str::limit($product['name'], 60) }}</a>
         </h3>
 
-        <div style="height: 1px; background: #EDF5F6; margin: 14px 0 13px;"></div>
+        <div class="sf-product-rule" style="height: 1px; background: #EDF5F6; margin: 14px 0 13px;"></div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: auto;">
+        <div class="sf-product-actions" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: auto;">
             <span style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 5px; min-width: 0;">
-                <strong style="font-family: Cairo, sans-serif; font-size: 22px; font-weight: 800; color: #0B2C3F; letter-spacing: -.4px;">
+                <strong class="sf-product-price" style="font-family: Cairo, sans-serif; font-size: 22px; font-weight: 800; color: #0B2C3F; letter-spacing: -.4px;">
                     @include('web-views.seafood.partials._price', ['amount' => getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value')])
                 </strong>
             </span>
 
             @if($hasVariation || !$isInStock)
-                <a href="{{ route('product', $product['slug']) }}"
-                   style="flex-shrink: 0; display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 16px; border-radius: 13px; background: #ECF8F8; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 14px; font-weight: 700; white-space: nowrap;">
+                <a href="{{ route('product', $product['slug']) }}" class="sf-product-action"
+                   style="flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 44px; padding: 0 16px; border-radius: 13px; background: #ECF8F8; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 14px; font-weight: 700; white-space: nowrap;">
                     {{ translate('view_details') }}
                 </a>
             @else

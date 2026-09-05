@@ -61,6 +61,13 @@
         }
 
         @media (max-width: 759px) {
+            .sf-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; }
+            .sf-product-title { font-size: 15px !important; line-height: 1.45 !important; }
+            .sf-product-rule { margin: 10px 0 !important; }
+            .sf-product-price { font-size: 19px !important; }
+            .sf-product-badge { font-size: 10.5px !important; }
+            .sf-product-actions { flex-direction: column !important; align-items: stretch !important; }
+            .sf-product-actions .seafood-cart-toggle, .sf-product-actions .sf-product-action { width: 100%; padding: 0 14px; font-size: 13px; }
             .sf-tabs { flex-wrap: nowrap !important; }
             .sf-mobile-bar { display: grid; }
             .sf-mobile-bar-spacer { display: block; height: calc(70px + env(safe-area-inset-bottom)); }
@@ -398,7 +405,7 @@
                     <span style="font-size: 14px; color: #6E8C99; max-width: 380px; line-height: 1.8;">{{ translate('prices_are_updated_daily_and_weight_is_calculated_when_the_order_is_packed') }}</span>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px;">
+                <div class="sf-product-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px;">
                     @foreach($bestSellProduct->take(4) as $product)
                         @include('web-views.seafood.partials._product-card', ['product' => $product, 'cartItemKey' => $cartItemKeysByProduct[$product['id']] ?? null])
                     @endforeach
@@ -429,7 +436,7 @@
                     @endforeach
                 </div>
 
-                <div id="seafood-shop-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px;">
+                <div id="seafood-shop-grid" class="sf-product-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px;">
                     @php($visibleShopProductsCount = 0)
                     @foreach($shopProducts as $product)
                         @php($isVisibleCard = $product['category_id'] == $activeShopCategoryId && $visibleShopProductsCount < $shopInitialVisibleProducts)
