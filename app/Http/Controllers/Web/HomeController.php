@@ -32,6 +32,7 @@ class HomeController extends Controller
     use CacheManagerTrait;
 
     private const SHOP_PRODUCTS_PER_CATEGORY = 16;
+    private const SHOP_INITIAL_VISIBLE_PRODUCTS = 8;
     private const SHOP_TICKER_PRODUCTS_LIMIT = 12;
 
     public function __construct(
@@ -107,7 +108,10 @@ class HomeController extends Controller
         $categoryWiseShopProducts = $this->getCategoryWiseShopProducts(categories: $categories, productsPerCategory: self::SHOP_PRODUCTS_PER_CATEGORY);
         $shopTabCategories = $categories->whereIn('id', $categoryWiseShopProducts->keys());
         $shopProducts = $categoryWiseShopProducts->flatten(1);
-        $activeShopCategoryId = $shopTabCategories->first()['id'] ?? null;
+        $activeShopCategory = $shopTabCategories->first();
+        $activeShopCategoryId = $activeShopCategory['id'] ?? null;
+        $activeShopCategorySlug = $activeShopCategory['slug'] ?? null;
+        $shopInitialVisibleProducts = self::SHOP_INITIAL_VISIBLE_PRODUCTS;
         $tickerProducts = $shopProducts->take(self::SHOP_TICKER_PRODUCTS_LIMIT);
 
         return view(VIEW_FILE_NAMES['home'],
@@ -115,7 +119,7 @@ class HomeController extends Controller
                 'flashDeal', 'featuredProductsList', 'topRatedProducts', 'bestSellProduct', 'latestProductsList', 'categories', 'brands',
                 'dealOfTheDay', 'topVendorsList', 'homeCategories', 'bannerTypeMainBanner', 'bannerTypeMainSectionBanner',
                 'current_date', 'recommendedProduct', 'bannerTypeFooterBanner', 'newArrivalProducts', 'clearanceSaleProducts', 'robotsMetaContentData', 'auctionProducts',
-                'shopProducts', 'shopTabCategories', 'activeShopCategoryId', 'tickerProducts'
+                'shopProducts', 'shopTabCategories', 'activeShopCategoryId', 'activeShopCategorySlug', 'shopInitialVisibleProducts', 'tickerProducts'
             )
         );
     }

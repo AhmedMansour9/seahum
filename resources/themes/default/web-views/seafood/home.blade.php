@@ -23,6 +23,9 @@
         .sf-tab { padding: 10px 18px; border-radius: 999px; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; cursor: pointer; white-space: nowrap; border: 1.4px solid #E4EFF1; background: #FFFFFF; color: #45677A; transition: background .22s, color .22s, border-color .22s, box-shadow .22s; }
         .sf-tab:hover { border-color: #17B0A7; color: #0B2C3F; }
         .sf-tab.active { background: #0B2C3F; color: #FFFFFF; border-color: #17B0A7; box-shadow: 0 8px 20px -12px rgba(11,44,63,.9); }
+        .sf-see-more { display: inline-flex; text-decoration: none; align-items: center; justify-content: center; gap: 9px; min-height: 52px; padding: 0 34px; border-radius: 14px; border: 1.5px solid #CFE9EA; background: #FFFFFF; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: background .22s, border-color .22s, transform .22s; }
+        .sf-see-more:hover { background: #ECF8F8; border-color: #17B0A7; transform: translateY(-2px); }
+        .sf-see-more-icon { width: 24px; height: 24px; border-radius: 50%; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center; }
 
         .sf-burger { display: none; }
         .sf-mobile-bar { display: none; }
@@ -406,21 +409,38 @@
                         <span style="font-size: 13.5px; font-weight: 700; color: #0E8E88; letter-spacing: .6px;">{{ translate('shop_by_category') }}</span>
                         <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(26px, 3.4vw, 38px); margin: 8px 0 0; color: #0B2C3F;">{{ translate('all_products') }}</h2>
                     </div>
-                    <span style="font-size: 14px; color: #6E8C99;">{{ translate('products_shown') }}: <span id="seafood-shop-count">{{ $shopProducts->where('category_id', $activeShopCategoryId)->count() }}</span></span>
+                    @php($activeShopProductsCount = $shopProducts->where('category_id', $activeShopCategoryId)->count())
+                    <span id="seafood-shop-count" style="font-size: 14px; color: #6E8C99;"
+                          data-showing-label="{{ translate('showing') }}" data-of-label="{{ translate('of') }}" data-products-label="{{ translate('products') }}">
+                        {{ translate('showing') }} {{ min($shopInitialVisibleProducts, $activeShopProductsCount) }} {{ translate('of') }} {{ $activeShopProductsCount }} {{ translate('products') }}
+                    </span>
                 </div>
 
                 <div class="sf-tabs" style="display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 26px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;">
                     @foreach($shopTabCategories as $category)
-                        <button type="button" class="sf-tab{{ $category['id'] == $activeShopCategoryId ? ' active' : '' }}" data-category-id="{{ $category['id'] }}">
+                        <button type="button" class="sf-tab{{ $category['id'] == $activeShopCategoryId ? ' active' : '' }}" data-category-id="{{ $category['id'] }}"
+                                data-category-url="{{ route('category-products', ['slug' => $category['slug']]) }}">
                             {{ Str::limit($category['name'], 20) }}
                         </button>
                     @endforeach
                 </div>
 
                 <div id="seafood-shop-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px;">
+                    @php($visibleShopProductsCount = 0)
                     @foreach($shopProducts as $product)
-                        @include('web-views.seafood.partials._product-card', ['product' => $product, 'isVisibleCard' => $product['category_id'] == $activeShopCategoryId])
+                        @php($isVisibleCard = $product['category_id'] == $activeShopCategoryId && $visibleShopProductsCount < $shopInitialVisibleProducts)
+                        @php($visibleShopProductsCount += $isVisibleCard ? 1 : 0)
+                        @include('web-views.seafood.partials._product-card', ['product' => $product, 'isVisibleCard' => $isVisibleCard])
                     @endforeach
+                </div>
+
+                <div style="display: flex; justify-content: center; margin-top: 32px;">
+                    <a id="seafood-shop-more" class="sf-see-more" href="{{ $activeShopCategorySlug ? route('category-products', ['slug' => $activeShopCategorySlug]) : route('products') }}">
+                        {{ translate('see_more') }}
+                        <span class="sf-see-more-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg>
+                        </span>
+                    </a>
                 </div>
             </section>
         @endif
@@ -730,20 +750,40 @@
                 $('#seafood-mobile-menu').attr('data-open', 'false').prop('hidden', true);
                 $('#seafood-menu-toggle').attr('aria-expanded', 'false');
             }
+            renderSeafoodShopGrid();
         });
+
+        function getSeafoodShopLimit() {
+            return window.innerWidth < 760 ? 4 : {{ $shopInitialVisibleProducts }};
+        }
+
+        function renderSeafoodShopGrid() {
+            const activeTab = $('.sf-tab.active');
+            const categoryId = activeTab.data('category-id');
+            const limit = getSeafoodShopLimit();
+            let matchedCount = 0;
+
+            $('#seafood-shop-grid > article').each(function () {
+                const matched = String($(this).data('category-id')) === String(categoryId);
+                if (matched) {
+                    matchedCount++;
+                }
+                $(this).css('display', matched && matchedCount <= limit ? 'flex' : 'none');
+            });
+
+            const countElement = $('#seafood-shop-count');
+            countElement.text(countElement.data('showing-label') + ' ' + Math.min(limit, matchedCount) + ' ' + countElement.data('of-label') + ' ' + matchedCount + ' ' + countElement.data('products-label'));
+
+            $('#seafood-shop-more').attr('href', activeTab.data('category-url'));
+        }
 
         $(document).on('click', '.sf-tab', function () {
-            const categoryId = $(this).data('category-id');
             $('.sf-tab').removeClass('active');
             $(this).addClass('active');
-
-            const products = $('#seafood-shop-grid > article');
-            products.each(function () {
-                const matched = String($(this).data('category-id')) === String(categoryId);
-                $(this).css('display', matched ? 'flex' : 'none');
-            });
-            $('#seafood-shop-count').text(products.filter(':visible').length);
+            renderSeafoodShopGrid();
         });
+
+        renderSeafoodShopGrid();
 
         $(document).on('click', '.sf-faq-toggle', function () {
             const item = $(this).closest('.sf-faq-item');
