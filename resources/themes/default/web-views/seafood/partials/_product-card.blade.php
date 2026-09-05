@@ -3,6 +3,7 @@
 @php($stockColor = $isInStock ? '#0E8E88' : '#C9821B')
 @php($thumbnailUrl = getStorageImages(path: $product->thumbnail_full_url, type: 'product'))
 @php($isVisibleCard = $isVisibleCard ?? true)
+@php($cartItemKey = $cartItemKey ?? null)
 
 <article data-category-id="{{ $product['category_id'] }}"
          style="display: {{ $isVisibleCard ? 'flex' : 'none' }}; flex-direction: column; background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9); transition: transform .28s, box-shadow .28s, border-color .28s;">
@@ -45,16 +46,17 @@
                     {{ translate('view_details') }}
                 </a>
             @else
-                <button type="button" class="seafood-add-to-cart" data-product-id="{{ $product['id'] }}"
+                <button type="button" class="seafood-cart-toggle{{ $cartItemKey ? ' in-cart' : '' }}" data-product-id="{{ $product['id'] }}"
                         data-quantity="{{ $product['minimum_order_qty'] > 0 ? $product['minimum_order_qty'] : 1 }}"
                         data-product-url="{{ route('product', $product['slug']) }}"
-                        style="flex-shrink: 0; display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 16px; border: none; border-radius: 13px; background: #ECF8F8; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 14px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background .22s, color .22s, transform .22s;">
+                        data-cart-key="{{ $cartItemKey }}"
+                        data-add-label="{{ translate('add_to_cart') }}" data-remove-label="{{ translate('remove_from_cart') }}">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 5h2l2.2 10.2a2 2 0 0 0 2 1.6h6.9a2 2 0 0 0 2-1.5L21 8H7"></path>
                         <circle cx="10" cy="20" r="1.4"></circle>
                         <circle cx="18" cy="20" r="1.4"></circle>
                     </svg>
-                    {{ translate('add_to_cart') }}
+                    <span class="seafood-cart-toggle-label">{{ $cartItemKey ? translate('remove_from_cart') : translate('add_to_cart') }}</span>
                 </button>
             @endif
         </div>

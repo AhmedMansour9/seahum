@@ -2473,6 +2473,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"about_us" => "About us",
 	"account" => "Account",
 	"add_to_cart" => "Add to cart",
+	"remove_from_cart" => "Remove from cart",
 	"add_to_wishlist" => "Add to wishlist",
 	"add_your_address_and_pick_the_delivery_slot_that_suits_you" => "Add your address and pick the delivery slot that suits you.",
 	"all_fish_shrimp_and_crab_come_from_the_same_mornings_catch_imported_items_only_are_chilled_and_clearly_marked_on_the_product_page" => "All fish, shrimp and crab come from the same morning's catch. Imported items only are chilled, and that is clearly marked on the product page.",

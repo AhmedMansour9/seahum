@@ -648,6 +648,7 @@ return [
     'stock_out' => 'غير متوفر',
     'in_stock' => 'متوفر',
     'add_to_cart' => 'أضف إلى السلة',
+    'remove_from_cart' => 'إزالة من السلة',
     'cart_updated' => 'تم تحديث السلة',
     'update_to_cart' => 'تحديث السلة',
     'cart_is_empty' => 'السلة فارغة',

@@ -52,6 +52,7 @@
 @yield('content')
 
 <span id="route-cart-add" data-url="{{ route('cart.add') }}"></span>
+<span id="route-cart-remove" data-url="{{ route('cart.remove') }}"></span>
 <span id="route-store-wishlist" data-url="{{ route('store-wishlist') }}"></span>
 <span id="route-change-language" data-url="{{ route('change-language') }}"></span>
 <span id="is-customer-auth-active" data-value="{{ auth('customer')->check() ? 1 : 0 }}"></span>

@@ -176,6 +176,7 @@ class CartController extends Controller
     public function addToCart(Request $request): JsonResponse|RedirectResponse
     {
         $cart = CartManager::add_to_cart($request);
+        $cart['cart_items_count'] = CartManager::getCartListQuery()->count();
         if ($cart['status'] == 2) {
             $cart['shippingMethodHtmlView'] = view(VIEW_FILE_NAMES['product_shipping_method_modal_view_partials'], [
                 'shipping_method_list' => $cart['shipping_method_list'],
@@ -257,6 +258,7 @@ class CartController extends Controller
             'data' => view(VIEW_FILE_NAMES['products_cart_details_partials'], compact('request'))->render(),
             'message' => translate('Item_has_been_removed_from_cart'),
             'cartList' => $cart,
+            'cart_items_count' => CartManager::getCartListQuery()->count(),
         ]);
     }
 

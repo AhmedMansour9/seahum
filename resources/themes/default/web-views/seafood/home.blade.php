@@ -14,7 +14,10 @@
         .sf-btn-primary:hover { background: #14C6BB; color: #062A3E; transform: translateY(-2px); }
         .sf-btn-ghost { transition: background .22s, border-color .22s, color .22s; }
         .sf-btn-ghost:hover { background: #FFFFFF; color: #0B2C3F; border-color: #FFFFFF; }
-        .seafood-add-to-cart:hover { background: #17B0A7 !important; color: #FFFFFF !important; transform: translateY(-2px); }
+        .seafood-cart-toggle { flex-shrink: 0; display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 16px; border: none; border-radius: 13px; background: #ECF8F8; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 14px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background .22s, color .22s, transform .22s; }
+        .seafood-cart-toggle:hover { background: #17B0A7; color: #FFFFFF; transform: translateY(-2px); }
+        .seafood-cart-toggle.in-cart { background: #0B2C3F; color: #FFFFFF; }
+        .seafood-cart-toggle.in-cart:hover { background: #17B0A7; }
         .seafood-wishlist-btn:hover { transform: scale(1.1); }
         .sf-social { transition: background .22s, color .22s, border-color .22s, transform .22s; }
         .sf-social:hover { background: #17B0A7; color: #062A3E; border-color: #17B0A7; transform: translateY(-2px); }
@@ -102,6 +105,9 @@
     @php($whatsappLink = $whatsappNumber ? 'https://wa.me/' . $whatsappNumber : route('contacts'))
     @php($flashDealEndDate = $web_config['flash_deals']['end_date'] ?? null)
     @php($shopCategories = $categories->take(6))
+    @php($cartItems = \App\Utils\CartManager::getCartListQuery())
+    @php($cartItemsCount = $cartItems->count())
+    @php($cartItemKeysByProduct = $cartItems->pluck('id', 'product_id'))
     @php($auctionActive = function_exists('getCheckAddonPublishedStatus') && getCheckAddonPublishedStatus(moduleName: 'Auction') && getWebConfig(name: 'auction_feature_status'))
 
     <?php
@@ -229,9 +235,7 @@
                        style="position: relative; display: inline-flex; align-items: center; gap: 9px; height: 44px; padding: 0 15px; border-radius: 12px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 700; font-size: 14px; box-shadow: 0 8px 18px -8px rgba(23,176,167,.9);">
                         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h2l2.2 10.2a2 2 0 0 0 2 1.6h6.9a2 2 0 0 0 2-1.5L21 8H7"></path><circle cx="10" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle></svg>
                         <span class="sf-cart-label">{{ translate('cart') }}</span>
-                        <span id="seafood-cart-count" style="min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: rgba(255,255,255,.22); display: grid; place-items: center; font-size: 12.5px;">
-                            {{ \App\Utils\CartManager::getCartListQuery()->count() }}
-                        </span>
+                        <span class="seafood-cart-count" style="min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: rgba(255,255,255,.22); display: grid; place-items: center; font-size: 12.5px;">{{ $cartItemsCount }}</span>
                     </a>
                 </div>
             </div>
@@ -396,7 +400,7 @@
 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px;">
                     @foreach($bestSellProduct->take(4) as $product)
-                        @include('web-views.seafood.partials._product-card', ['product' => $product])
+                        @include('web-views.seafood.partials._product-card', ['product' => $product, 'cartItemKey' => $cartItemKeysByProduct[$product['id']] ?? null])
                     @endforeach
                 </div>
             </section>
@@ -430,7 +434,7 @@
                     @foreach($shopProducts as $product)
                         @php($isVisibleCard = $product['category_id'] == $activeShopCategoryId && $visibleShopProductsCount < $shopInitialVisibleProducts)
                         @php($visibleShopProductsCount += $isVisibleCard ? 1 : 0)
-                        @include('web-views.seafood.partials._product-card', ['product' => $product, 'isVisibleCard' => $isVisibleCard])
+                        @include('web-views.seafood.partials._product-card', ['product' => $product, 'isVisibleCard' => $isVisibleCard, 'cartItemKey' => $cartItemKeysByProduct[$product['id']] ?? null])
                     @endforeach
                 </div>
 
@@ -720,7 +724,7 @@
             <a href="{{ $web_config['guest_checkout_status'] || auth('customer')->check() ? route('shop-cart') : route('customer.auth.login') }}"
                style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; border-radius: 14px; background: #ECF8F8; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 15.5px; font-weight: 800;">
                 <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h2l2.2 10.2a2 2 0 0 0 2 1.6h6.9a2 2 0 0 0 2-1.5L21 8H7"></path><circle cx="10" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle></svg>
-                {{ translate('cart') }} ({{ \App\Utils\CartManager::getCartListQuery()->count() }})
+                {{ translate('cart') }} (<span class="seafood-cart-count">{{ $cartItemsCount }}</span>)
             </a>
         </div>
         <div class="sf-mobile-bar-spacer"></div>
@@ -800,16 +804,45 @@
             }
         });
 
-        $(document).on('click', '.seafood-add-to-cart', function () {
+        function setSeafoodCartToggleState(button, cartKey) {
+            button.data('cart-key', cartKey || '');
+            button.toggleClass('in-cart', !!cartKey);
+            button.find('.seafood-cart-toggle-label').text(cartKey ? button.data('remove-label') : button.data('add-label'));
+        }
+
+        $(document).on('click', '.seafood-cart-toggle', function () {
             const button = $(this);
+            const cartKey = button.data('cart-key');
+
+            if (cartKey) {
+                $.post({
+                    url: $('#route-cart-remove').data('url'),
+                    data: {key: cartKey},
+                    success: function (response) {
+                        toastr.success(response.message);
+                        $('.seafood-cart-count').text(response.cart_items_count);
+                        $('.seafood-cart-toggle').filter(function () {
+                            return String($(this).data('product-id')) === String(button.data('product-id'));
+                        }).each(function () {
+                            setSeafoodCartToggleState($(this), null);
+                        });
+                    }
+                });
+                return;
+            }
+
             $.post({
                 url: $('#route-cart-add').data('url'),
                 data: {id: button.data('product-id'), quantity: button.data('quantity')},
                 success: function (response) {
                     if (response.status === 1) {
                         toastr.success(response.message);
-                        const counter = $('#seafood-cart-count');
-                        counter.text(parseInt(counter.text() || '0') + 1);
+                        $('.seafood-cart-count').text(response.cart_items_count);
+                        $('.seafood-cart-toggle').filter(function () {
+                            return String($(this).data('product-id')) === String(button.data('product-id'));
+                        }).each(function () {
+                            setSeafoodCartToggleState($(this), response.in_cart_key || (response.cart && response.cart.id));
+                        });
                     } else if (response.status === 2) {
                         location.href = button.data('product-url');
                     } else {
