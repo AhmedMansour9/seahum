@@ -85,7 +85,8 @@ class ProductListController extends Controller
             request: $request,
             pageType: $dataForm,
             pageTitle: ucwords(str_replace(['-', '_'], ' ', $category['name'])) . ' ' . translate('products'),
-            metaData: $category?->seo
+            metaData: $category?->seo,
+            category: $category
         );
     }
 
@@ -181,15 +182,15 @@ class ProductListController extends Controller
     }
 
 
-    public function getProductsListPage(object|array $request, string $pageType = 'default', string $offerType = '', string $pageTitle = '', object|array|null $metaData = null)
+    public function getProductsListPage(object|array $request, string $pageType = 'default', string $offerType = '', string $pageTitle = '', object|array|null $metaData = null, ?Category $category = null)
     {
         return match (theme_root_path()) {
-            'default' => self::default_theme(request: $request, pageType: $pageType, pageTitle: $pageTitle, metaData: $metaData),
+            'default' => self::default_theme(request: $request, pageType: $pageType, pageTitle: $pageTitle, metaData: $metaData, category: $category),
             'theme_aster' => self::theme_aster(request: $request, pageType: $pageType, pageTitle: $pageTitle, metaData: $metaData),
         };
     }
 
-    public function default_theme(object|array $request, string $pageType = 'default', string $pageTitle = '', object|array|null $metaData = null): View|JsonResponse|Redirector|RedirectResponse
+    public function default_theme(object|array $request, string $pageType = 'default', string $pageTitle = '', object|array|null $metaData = null, ?Category $category = null): View|JsonResponse|Redirector|RedirectResponse
     {
         if ($request->has('min_price') && $request['min_price'] != '' && $request->has('max_price') && $request['max_price'] != '' && $request['min_price'] > $request['max_price']) {
             if ($request->ajax()) {
@@ -205,23 +206,31 @@ class ProductListController extends Controller
         $categories = CategoryManager::getCategoriesWithCountingAndPriorityWiseSorting();
         $activeBrands = BrandManager::getActiveBrandWithCountingAndPriorityWiseSorting();
 
+        $isCategoryPage = $pageType === 'category' && $category;
+
         $data = self::getProductListRequestData(request: $request);
         $productListData = ProductManager::getProductListData(request: $request);
         $products = $productListData->paginate(20)->appends($data);
 
+        if ($isCategoryPage) {
+            $products->appends(array_filter($request->only(['category_ids', 'sub_category_ids', 'sub_sub_category_ids'])));
+        }
+
         if ($request->ajax()) {
+            $productsGridView = $isCategoryPage ? VIEW_FILE_NAMES['category_products_ajax_partials'] : 'web-views.products._ajax-products';
             return response()->json([
                 'total_product' => $products->total(),
-                'html_products' => view('web-views.products._ajax-products', compact('products'))->render()
+                'html_products' => view($productsGridView, compact('products'))->render()
             ], 200);
         }
 
-        return view(VIEW_FILE_NAMES['products_view_page'], [
+        return view(VIEW_FILE_NAMES[$isCategoryPage ? 'category_products_view_page' : 'products_view_page'], [
             'pageTitleContent' => $pageTitle ?? translate('products'),
             'products' => $products,
             'data' => $data,
             'activeBrands' => $activeBrands,
             'categories' => $categories,
+            'category' => $category,
             'robotsMetaContentData' => $metaData,
         ]);
     }

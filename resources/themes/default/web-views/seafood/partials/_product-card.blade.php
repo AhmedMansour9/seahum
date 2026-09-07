@@ -4,6 +4,15 @@
 @php($thumbnailUrl = getStorageImages(path: $product->thumbnail_full_url, type: 'product'))
 @php($isVisibleCard = $isVisibleCard ?? true)
 @php($cartItemKey = $cartItemKey ?? null)
+@php($mediaRatio = $mediaRatio ?? 'auto')
+@php($showPricingDetails = $showPricingDetails ?? false)
+@php($showRating = $showRating ?? false)
+@php($unitPrice = (float) $product['unit_price'])
+@php($discountedUnitPrice = (float) getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value'))
+@php($hasDiscount = $showPricingDetails && $discountedUnitPrice > 0 && $discountedUnitPrice < $unitPrice)
+@php($discountPercentage = $hasDiscount ? (int) round((($unitPrice - $discountedUnitPrice) / $unitPrice) * 100) : 0)
+@php($averageRating = $showRating ? round((float) ($product['reviews_avg_rating'] ?? 0), 1) : 0)
+@php($reviewsCount = $showRating ? (int) ($product['reviews_count'] ?? 0) : 0)
 
 <article class="sf-product-card" data-category-id="{{ $product['category_id'] }}"
          style="display: {{ $isVisibleCard ? 'flex' : 'none' }}; flex-direction: column; background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9); transition: transform .28s, box-shadow .28s, border-color .28s;">
@@ -11,11 +20,18 @@
         <a href="{{ route('product', $product['slug']) }}" style="display: block;">
             <img src="{{ $thumbnailUrl }}"
                  alt="{{ $product['name'] }}" loading="lazy"
-                 style="width: 100%; height: auto; display: block;">
+                 style="width: 100%; {{ $mediaRatio === 'square' ? 'aspect-ratio: 1 / 1; height: auto; object-fit: cover;' : 'height: auto;' }} display: block;">
         </a>
-        <span class="sf-product-badge" style="position: absolute; top: 12px; inset-inline-start: 12px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; background: rgba(255,255,255,.94); color: {{ $stockColor }}; box-shadow: 0 6px 16px -8px rgba(11,44,63,.6);">
-            <span style="width: 6px; height: 6px; border-radius: 50%; display: inline-block; background: {{ $stockColor }};"></span>
-            {{ $isInStock ? translate('in_stock') : translate('out_of_stock') }}
+        <span class="sf-product-badges" style="position: absolute; top: 12px; inset-inline-start: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;">
+            <span class="sf-product-badge" style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; background: rgba(255,255,255,.94); color: {{ $stockColor }}; box-shadow: 0 6px 16px -8px rgba(11,44,63,.6);">
+                <span style="width: 6px; height: 6px; border-radius: 50%; display: inline-block; background: {{ $stockColor }};"></span>
+                {{ $isInStock ? translate('in_stock') : translate('out_of_stock') }}
+            </span>
+            @if($hasDiscount && $discountPercentage > 0)
+                <span class="sf-product-badge" style="display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; border-radius: 999px; font-family: Cairo, sans-serif; font-size: 11.5px; font-weight: 800; white-space: nowrap; background: #F2A43A; color: #3A2400; box-shadow: 0 6px 16px -8px rgba(11,44,63,.6);">
+                    {{ translate('discount') }} <bdi dir="ltr">{{ $discountPercentage }}%</bdi>
+                </span>
+            @endif
         </span>
         <button type="button" class="seafood-wishlist-btn" data-product-id="{{ $product['id'] }}"
                 aria-label="{{ translate('add_to_wishlist') }}"
@@ -31,13 +47,26 @@
             <a href="{{ route('product', $product['slug']) }}" style="color: inherit;">{{ Str::limit($product['name'], 60) }}</a>
         </h3>
 
+        @if($showRating && $reviewsCount > 0)
+            <span class="sf-product-rating" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 9px; font-size: 13.5px; font-weight: 700; color: #B47B12;">
+                <span aria-hidden="true" style="color: #F2A43A; font-size: 15px; letter-spacing: 1px;">{{ str_repeat('★', (int) round($averageRating)) }}{{ str_repeat('☆', 5 - (int) round($averageRating)) }}</span>
+                <bdi dir="ltr">{{ number_format($averageRating, 1) }}</bdi>
+                <span style="color: #98AEB8; font-weight: 400;">(<bdi dir="ltr">{{ $reviewsCount }}</bdi>)</span>
+            </span>
+        @endif
+
         <div class="sf-product-rule" style="height: 1px; background: #EDF5F6; margin: 14px 0 13px;"></div>
 
         <div class="sf-product-actions" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: auto;">
             <span style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 5px; min-width: 0;">
                 <strong class="sf-product-price" style="font-family: Cairo, sans-serif; font-size: 22px; font-weight: 800; color: #0B2C3F; letter-spacing: -.4px;">
-                    @include('web-views.seafood.partials._price', ['amount' => getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value')])
+                    @include('web-views.seafood.partials._price', ['amount' => $discountedUnitPrice])
                 </strong>
+                @if($hasDiscount)
+                    <span class="sf-product-old-price" style="font-size: 13px; color: #A8B9C1; text-decoration: line-through;">
+                        @include('web-views.seafood.partials._price', ['amount' => $unitPrice, 'symbolSize' => '11px', 'symbolColor' => '#A8B9C1'])
+                    </span>
+                @endif
             </span>
 
             @if($hasVariation || !$isInStock)

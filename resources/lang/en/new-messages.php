@@ -2575,4 +2575,13 @@ ____________________________________________________on_search_engines_and_see_th
 	"System_default_currency_changed_successfully" => "System default currency changed successfully",
 	"discount_can_not_be_more_or_equal_to_the_price" => "Discount can not be more or equal to the price",
 	"The_code_field_is_required." => "The code field is required.",
+	"loading_products" => "Loading products",
+	"reset_filters" => "Reset filters",
+	"search_in_this_category" => "Search in this category",
+	"no_results_found" => "No results found",
+	"no_product_matches_the_selected_filters_try_widening_your_search" => "No product matches the selected filters. Try widening your search.",
+	"there_are_no_products_in_this_category_yet_browse_the_other_categories" => "There are no products in this category yet. Browse the other categories.",
+	"browse_categories" => "Browse categories",
+	"breadcrumb" => "Breadcrumb",
+	"filters" => "Filters",
 ];

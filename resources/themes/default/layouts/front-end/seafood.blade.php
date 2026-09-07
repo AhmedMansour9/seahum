@@ -8,6 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:site_name" content="{{ $web_config['company_name'] }}"/>
 
+    <meta name="google-site-verification" content="{{ getWebConfig('google_search_console_code') }}">
+    <meta name="msvalidate.01" content="{{ getWebConfig('bing_webmaster_code') }}">
+    <meta name="baidu-site-verification" content="{{ getWebConfig('baidu_webmaster_code') }}">
+    <meta name="yandex-verification" content="{{ getWebConfig('yandex_webmaster_code') }}">
+
     <link rel="apple-touch-icon" sizes="180x180" href="{{ $web_config['fav_icon']['path'] }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ $web_config['fav_icon']['path'] }}">
 

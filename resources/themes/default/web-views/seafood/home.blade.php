@@ -2,107 +2,9 @@
 
 @section('title', $web_config['meta_title'])
 
+
 @push('css_or_js')
-    <style>
-        .sf-lift { transition: transform .28s, box-shadow .28s, border-color .28s; }
-        .sf-lift:hover { transform: translateY(-6px); box-shadow: 0 24px 42px -26px rgba(11, 44, 63, .85); border-color: #BEE6E4; }
-        .sf-nav-link { transition: background .2s, color .2s; }
-        .sf-nav-link:hover { background: #F1F7F8; color: #0B2C3F; }
-        .sf-tool { transition: background .2s, border-color .2s; }
-        .sf-tool:hover { background: #ECF8F8; border-color: #BEE6E4; }
-        .sf-btn-primary { transition: background .22s, transform .22s; }
-        .sf-btn-primary:hover { background: #14C6BB; color: #062A3E; transform: translateY(-2px); }
-        .sf-btn-ghost { transition: background .22s, border-color .22s, color .22s; }
-        .sf-btn-ghost:hover { background: #FFFFFF; color: #0B2C3F; border-color: #FFFFFF; }
-        .seafood-cart-toggle { flex-shrink: 0; display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 16px; border: none; border-radius: 13px; background: #ECF8F8; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 14px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background .22s, color .22s, transform .22s; }
-        .seafood-cart-toggle:hover { background: #17B0A7; color: #FFFFFF; transform: translateY(-2px); }
-        .seafood-cart-toggle.in-cart { background: #0B2C3F; color: #FFFFFF; }
-        .seafood-cart-toggle.in-cart:hover { background: #17B0A7; }
-        .seafood-wishlist-btn:hover { transform: scale(1.1); }
-        .sf-social { transition: background .22s, color .22s, border-color .22s, transform .22s; }
-        .sf-social:hover { background: #17B0A7; color: #062A3E; border-color: #17B0A7; transform: translateY(-2px); }
-        .sf-footer-link { color: #9FBDCB; }
-        .sf-footer-link:hover { color: #7FE3DC; }
-        .sf-tab { padding: 10px 18px; border-radius: 999px; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; cursor: pointer; white-space: nowrap; border: 1.4px solid #E4EFF1; background: #FFFFFF; color: #45677A; transition: background .22s, color .22s, border-color .22s, box-shadow .22s; }
-        .sf-tab:hover { border-color: #17B0A7; color: #0B2C3F; }
-        .sf-tab.active { background: #0B2C3F; color: #FFFFFF; border-color: #17B0A7; box-shadow: 0 8px 20px -12px rgba(11,44,63,.9); }
-        .sf-see-more { display: inline-flex; text-decoration: none; align-items: center; justify-content: center; gap: 9px; min-height: 52px; padding: 0 34px; border-radius: 14px; border: 1.5px solid #CFE9EA; background: #FFFFFF; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: background .22s, border-color .22s, transform .22s; }
-        .sf-see-more:hover { background: #ECF8F8; border-color: #17B0A7; transform: translateY(-2px); }
-        .sf-see-more-icon { width: 24px; height: 24px; border-radius: 50%; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center; }
-
-        .sf-burger { display: none; }
-        .sf-mobile-bar { display: none; }
-        .sf-mobile-bar-spacer { display: none; }
-        .sf-mobile-menu { display: none; }
-        .sf-mobile-menu[data-open="true"] { display: flex; }
-        .sf-mobile-menu a:hover { background: #F1F7F8; color: #0B2C3F; }
-        .sf-tabs::-webkit-scrollbar { display: none; }
-
-        @media (min-width: 980px) {
-            .sf-mobile-menu { display: none !important; }
-        }
-
-        @media (max-width: 979px) {
-            .sf-desktop-nav { display: none !important; }
-            .sf-header-lang { display: none !important; }
-            .sf-burger { display: grid; }
-            /* Keep the bar on one row: the brand shrinks, the tools never do. */
-            .sf-header-inner { gap: 10px !important; flex-wrap: nowrap !important; }
-            .sf-header-brand { flex-shrink: 1 !important; overflow: hidden; }
-            .sf-header-brand-text { overflow: hidden; }
-            .sf-header-brand-text > strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-            /* A wide logo (or the 4:1 placeholder) must not eat the store name. */
-            .sf-header-logo { max-width: 120px !important; }
-            .sf-header-search input { width: 150px !important; }
-        }
-
-        @media (max-width: 899px) {
-            .sf-topbar-info { display: none !important; }
-        }
-
-        @media (max-width: 759px) {
-            .sf-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; }
-            .sf-product-title { font-size: 15px !important; line-height: 1.45 !important; }
-            .sf-product-rule { margin: 10px 0 !important; }
-            .sf-product-price { font-size: 19px !important; }
-            .sf-product-badge { font-size: 10.5px !important; }
-            .sf-product-actions { flex-direction: column !important; align-items: stretch !important; }
-            .sf-product-actions .seafood-cart-toggle, .sf-product-actions .sf-product-action { width: 100%; padding: 0 14px; font-size: 13px; }
-            .sf-tabs { flex-wrap: nowrap !important; }
-            .sf-mobile-bar { display: grid; }
-            .sf-mobile-bar-spacer { display: block; height: calc(70px + env(safe-area-inset-bottom)); }
-            /* Comfortable tap targets for the dense text links on touch screens. */
-            .sf-footer-links { gap: 2px !important; }
-            .sf-footer-links a { display: flex; align-items: center; min-height: 44px; }
-            .sf-social { width: 44px !important; height: 44px !important; }
-            .sf-section-link { min-height: 44px; }
-        }
-
-        @media (max-width: 699px) {
-            .sf-header-search { display: none !important; }
-            .sf-header-account { display: none !important; }
-            .sf-header-wishlist { display: none !important; }
-        }
-
-        @media (max-width: 559px) {
-            .sf-topbar-whatsapp { display: none !important; }
-            .sf-cart-label { display: none; }
-            .sf-header-cart { padding: 0 12px !important; }
-            .sf-hero-facts { grid-template-columns: 1fr !important; }
-            .sf-ticker-item { padding: 0 18px !important; }
-            .sf-ticker-item strong { font-size: 15px !important; }
-        }
-
-        @media (max-width: 479px) {
-            .sf-gutter { padding-inline: 16px !important; }
-            .sf-cat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-            .sf-header-inner { padding: 10px 16px !important; }
-            .sf-header-logo { max-width: 72px !important; }
-            .sf-header-tagline { display: none !important; }
-            .sf-hero-inner { padding: 48px 16px 52px !important; }
-            .sf-hero-actions { flex-direction: column; }
-        }
-    </style>
+    @include('web-views.seafood.partials._styles')
 @endpush
 
 @section('content')
@@ -149,141 +51,9 @@
             </div>
         @endif
 
-        <div style="background: #062A3E; color: #CFE9EA; font-size: 13.5px; padding: 9px 0;">
-            <div class="sf-gutter sf-topbar-inner" style="max-width: 1240px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: nowrap; align-items: center; gap: 10px 22px;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="width: 7px; height: 7px; border-radius: 50%; background: #17B0A7; display: inline-block; animation: pulseRing 2.4s infinite;"></span>
-                    <span style="color: #FFFFFF; font-weight: 500;">{{ translate('next_day_delivery_inside_the_city') }}</span>
-                </div>
-                <div class="sf-topbar-info" style="display: flex; align-items: center; gap: 8px;">
-                    <span style="opacity: .65;">{{ translate('working_hours') }}:</span>
-                    <span>{{ translate('daily_from_6_am_to_11_pm') }}</span>
-                </div>
-                <div class="sf-topbar-info" style="display: flex; align-items: center; gap: 8px;">
-                    <span style="opacity: .65;">{{ translate('to_order') }}:</span>
-                    <span style="direction: ltr; font-weight: 700; letter-spacing: .4px;">{{ $storePhone }}</span>
-                </div>
-                <a href="{{ $whatsappLink }}" target="_blank" class="sf-topbar-whatsapp"
-                   style="margin-inline-start: auto; display: inline-flex; align-items: center; gap: 7px; background: rgba(23,176,167,.16); border: 1px solid rgba(23,176,167,.45); color: #7FE3DC; padding: 5px 13px; border-radius: 999px; font-weight: 700; font-size: 13px;">
-                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #35D6A4; display: inline-block;"></span>
-                    {{ translate('order_via_whatsapp') }}
-                </a>
-            </div>
-        </div>
+        @include('web-views.seafood.partials._topbar')
 
-        <header style="position: sticky; top: 0; z-index: 60; background: rgba(255,255,255,.92); backdrop-filter: blur(14px); border-bottom: 1px solid #E4EFF1;">
-            <div class="sf-header-inner" style="max-width: 1240px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
-
-                <a href="{{ route('home') }}" class="sf-header-brand" style="display: flex; align-items: center; gap: 11px; flex-shrink: 0; min-width: 0;">
-                    <img class="sf-header-logo" src="{{ getStorageImages(path: $web_config['web_logo'], type: 'logo') }}"
-                         alt="{{ $web_config['company_name'] }}" style="height: 44px; width: auto; max-width: 180px; object-fit: contain;">
-                    <span class="sf-header-brand-text" style="display: flex; flex-direction: column; line-height: 1.15; min-width: 0;">
-                        <strong style="font-family: Cairo, sans-serif; font-size: 21px; font-weight: 800; color: #0B2C3F;">{{ $web_config['company_name'] }}</strong>
-                        <span class="sf-header-tagline" style="font-size: 11.5px; color: #6E8C99; letter-spacing: .3px;">{{ translate('fresh_fish_and_seafood') }}</span>
-                    </span>
-                </a>
-
-                <nav class="sf-desktop-nav" style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 600;">
-                    <a href="#home" class="sf-nav-link" style="padding: 8px 13px; border-radius: 10px; color: #0E8E88; background: #ECF8F8;">{{ translate('home') }}</a>
-                    <a href="#products" class="sf-nav-link" style="padding: 8px 13px; border-radius: 10px; color: #34586B;">{{ translate('products') }}</a>
-                    <a href="#categories" class="sf-nav-link" style="padding: 8px 13px; border-radius: 10px; color: #34586B;">{{ translate('categories') }}</a>
-                    <a href="#deal" class="sf-nav-link" style="padding: 8px 13px; border-radius: 10px; color: #34586B;">{{ translate('offers') }}</a>
-                    <a href="#about" class="sf-nav-link" style="padding: 8px 13px; border-radius: 10px; color: #34586B;">{{ translate('about_us') }}</a>
-                    <a href="{{ route('contacts') }}" class="sf-nav-link" style="padding: 8px 13px; border-radius: 10px; color: #34586B;">{{ translate('contact_us') }}</a>
-                    @if($auctionActive && Route::has('auction.index'))
-                        <a href="{{ route('auction.index') }}" class="sf-nav-link" style="padding: 8px 13px; border-radius: 10px; color: #34586B;">{{ translate('auction') }}</a>
-                    @endif
-                </nav>
-
-                <div class="sf-header-tools" style="margin-inline-start: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
-                    <button type="button" class="sf-tool sf-burger" id="seafood-menu-toggle" aria-label="{{ translate('menu') }}"
-                            aria-expanded="false" aria-controls="seafood-mobile-menu"
-                            style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; place-items: center; cursor: pointer;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
-                    </button>
-
-                    <form class="sf-header-search" action="{{ route('products') }}" method="GET" style="display: flex; align-items: center;">
-                        <input type="text" name="name" value="{{ request('name') }}" placeholder="{{ translate('search_for_products') }}"
-                               style="height: 44px; width: 190px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; padding: 0 14px; font-family: Tajawal, sans-serif; font-size: 14px; outline: none;">
-                        <button type="submit" class="sf-tool" aria-label="{{ translate('search') }}"
-                                style="width: 44px; height: 44px; margin-inline-start: 8px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center; cursor: pointer;">
-                            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg>
-                        </button>
-                    </form>
-
-                    <a href="{{ auth('customer')->check() ? route('user-account') : route('customer.auth.login') }}" class="sf-tool sf-header-account"
-                       aria-label="{{ translate('account') }}"
-                       style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center;">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20c1.4-3.4 4.2-5 7.5-5s6.1 1.6 7.5 5"></path></svg>
-                    </a>
-
-                    <a href="{{ route('wishlists') }}" class="sf-tool sf-header-wishlist" aria-label="{{ translate('wishlist') }}"
-                       style="position: relative; width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center;">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9Z"></path></svg>
-                        <span style="position: absolute; top: -6px; inset-inline-start: -6px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 999px; background: #0D3B58; color: #FFFFFF; font-size: 11px; font-weight: 700; display: grid; place-items: center;">
-                            {{ session()->has('wish_list') ? count(session('wish_list')) : 0 }}
-                        </span>
-                    </a>
-
-                    @foreach($web_config['language'] as $languageData)
-                        @if($languageData['status'] == 1 && $languageData['code'] != getDefaultLanguage())
-                            <button type="button" class="sf-tool sf-header-lang seafood-change-language" data-language-code="{{ $languageData['code'] }}"
-                                    title="{{ $languageData['name'] }}"
-                                    style="display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 13px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3.5 9h17M3.5 15h17"></path><path d="M12 3c2.4 2.4 2.4 15.6 0 18M12 3c-2.4 2.4-2.4 15.6 0 18"></path></svg>
-                                <span style="text-transform: uppercase;">{{ $languageData['code'] }}</span>
-                            </button>
-                            @break
-                        @endif
-                    @endforeach
-
-                    <a href="{{ $web_config['guest_checkout_status'] || auth('customer')->check() ? route('shop-cart') : route('customer.auth.login') }}"
-                       class="sf-btn-primary sf-header-cart"
-                       style="position: relative; display: inline-flex; align-items: center; gap: 9px; height: 44px; padding: 0 15px; border-radius: 12px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 700; font-size: 14px; box-shadow: 0 8px 18px -8px rgba(23,176,167,.9);">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h2l2.2 10.2a2 2 0 0 0 2 1.6h6.9a2 2 0 0 0 2-1.5L21 8H7"></path><circle cx="10" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle></svg>
-                        <span class="sf-cart-label">{{ translate('cart') }}</span>
-                        <span class="seafood-cart-count" style="min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: rgba(255,255,255,.22); display: grid; place-items: center; font-size: 12.5px;">{{ $cartItemsCount }}</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="sf-mobile-menu" id="seafood-mobile-menu" hidden
-                 style="border-top: 1px solid #E4EFF1; background: #FFFFFF; padding: 12px 20px 18px; flex-direction: column; gap: 4px; font-family: Cairo, sans-serif; font-size: 16px; font-weight: 600;">
-                <a href="#home" style="padding: 13px 12px; border-radius: 10px; color: #0E8E88; background: #ECF8F8;">{{ translate('home') }}</a>
-                <a href="#products" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('products') }}</a>
-                <a href="#categories" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('categories') }}</a>
-                <a href="#deal" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('offers') }}</a>
-                <a href="#about" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('about_us') }}</a>
-                <a href="#faq" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('faq') }}</a>
-                <a href="{{ route('contacts') }}" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('contact_us') }}</a>
-                @if($auctionActive && Route::has('auction.index'))
-                    <a href="{{ route('auction.index') }}" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('auction') }}</a>
-                @endif
-
-                <a href="{{ auth('customer')->check() ? route('user-account') : route('customer.auth.login') }}"
-                   style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('account') }}</a>
-                <a href="{{ route('wishlists') }}" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('wishlist') }}</a>
-
-                @foreach($web_config['language'] as $languageData)
-                    @if($languageData['status'] == 1 && $languageData['code'] != getDefaultLanguage())
-                        <button type="button" class="seafood-change-language" data-language-code="{{ $languageData['code'] }}"
-                                style="margin-top: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; cursor: pointer;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3.5 9h17M3.5 15h17"></path><path d="M12 3c2.4 2.4 2.4 15.6 0 18M12 3c-2.4 2.4-2.4 15.6 0 18"></path></svg>
-                            <span style="text-transform: uppercase;">{{ $languageData['code'] }}</span>
-                        </button>
-                        @break
-                    @endif
-                @endforeach
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px;">
-                    <a href="{{ $whatsappLink }}" target="_blank"
-                       style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; border-radius: 12px; background: #0E8E88; color: #FFFFFF; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 700;">{{ translate('whatsapp') }}</a>
-                    <a href="{{ route('contacts') }}"
-                       style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; border-radius: 12px; background: #ECF8F8; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 700;">{{ translate('contact_us') }}</a>
-                </div>
-                <span style="margin-top: 8px; font-size: 13px; color: #6E8C99; text-align: center;">{{ translate('working_hours') }}: {{ translate('daily_from_6_am_to_11_pm') }}</span>
-            </div>
-        </header>
+        @include('web-views.seafood.partials._header', ['isHomePage' => true, 'activeNavKey' => 'home'])
 
         <section id="home" style="position: relative; background: #04202F; color: #FFFFFF; overflow: hidden;">
             <img src="{{ dynamicAsset(path: 'public/assets/front-end/img/seafood/hero-bg.jpg') }}"
@@ -644,123 +414,19 @@
             </div>
         </section>
 
-        <footer id="contact" style="background: #062A3E; color: #C6DDE6;">
-            <div class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(38px, 6vw, 70px) 20px 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 36px;">
-                <div style="max-width: 330px;">
-                    <div style="display: flex; align-items: center; gap: 11px;">
-                        <img src="{{ getStorageImages(path: $web_config['footer_logo'], type: 'logo') }}"
-                             alt="{{ $web_config['company_name'] }}" style="height: 42px; width: auto; max-width: 150px; object-fit: contain;">
-                        <strong style="font-family: Cairo, sans-serif; font-size: 20px; font-weight: 800; color: #FFFFFF;">{{ $web_config['company_name'] }}</strong>
-                    </div>
-                    <p style="font-size: 14.5px; line-height: 1.95; margin: 16px 0 0; color: #9FBDCB;">
-                        {{ translate('an_online_store_for_fresh_fish_and_seafood_daily_catch_chilled_sealed_packing_and_delivery_to_your_door') }}
-                    </p>
-                    @if($web_config['social_media']->count() > 0)
-                        <div style="display: flex; gap: 10px; margin-top: 22px;">
-                            @foreach($web_config['social_media'] as $socialMedia)
-                                <a href="{{ $socialMedia['link'] }}" target="_blank" class="sf-social"
-                                   aria-label="{{ $socialMedia['name'] }}" title="{{ $socialMedia['name'] }}"
-                                   style="width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.04); display: grid; place-items: center; color: #C6DDE6;">
-                                    <i class="fa fa-{{ $socialMedia['name'] }}"></i>
-                                </a>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
+        @include('web-views.seafood.partials._footer', ['isHomePage' => true])
 
-                <div>
-                    <h4 style="font-family: Cairo, sans-serif; font-size: 16px; font-weight: 700; color: #FFFFFF; margin: 0 0 16px;">{{ translate('quick_links') }}</h4>
-                    <div class="sf-footer-links" style="display: flex; flex-direction: column; gap: 11px; font-size: 14.5px;">
-                        <a href="{{ route('home') }}" class="sf-footer-link">{{ translate('home') }}</a>
-                        <a href="{{ route('products') }}" class="sf-footer-link">{{ translate('products') }}</a>
-                        <a href="{{ route('categories') }}" class="sf-footer-link">{{ translate('categories') }}</a>
-                        <a href="{{ route('discounted-products') }}" class="sf-footer-link">{{ translate('offers') }}</a>
-                        <a href="{{ route('business-page.view', ['slug' => 'about-us']) }}" class="sf-footer-link">{{ translate('about_us') }}</a>
-                        <a href="{{ route('contacts') }}" class="sf-footer-link">{{ translate('contact_us') }}</a>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 style="font-family: Cairo, sans-serif; font-size: 16px; font-weight: 700; color: #FFFFFF; margin: 0 0 16px;">{{ translate('customer_service') }}</h4>
-                    <div class="sf-footer-links" style="display: flex; flex-direction: column; gap: 11px; font-size: 14.5px;">
-                        @foreach($web_config['business_pages']->where('default_status', 1) as $businessPage)
-                            <a href="{{ route('business-page.view', ['slug' => $businessPage['slug']]) }}" class="sf-footer-link">
-                                {{ Str::limit($businessPage['title'], 25) }}
-                            </a>
-                        @endforeach
-                        <a href="#faq" class="sf-footer-link">{{ translate('faq') }}</a>
-                        <a href="{{ route('track-order.index') }}" class="sf-footer-link">{{ translate('track_your_order') }}</a>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 style="font-family: Cairo, sans-serif; font-size: 16px; font-weight: 700; color: #FFFFFF; margin: 0 0 16px;">{{ translate('contact_us') }}</h4>
-                    <div style="display: flex; flex-direction: column; gap: 13px; font-size: 14.5px; color: #9FBDCB; line-height: 1.75;">
-                        <span>{{ getWebConfig(name: 'company_email') }}</span>
-                        <span style="direction: ltr; text-align: start; color: #FFFFFF; font-weight: 700; font-size: 16px;">{{ $storePhone }}</span>
-                        <span>{{ translate('working_hours') }}: {{ translate('daily_from_6_am_to_11_pm') }}</span>
-                        <a href="{{ $whatsappLink }}" target="_blank"
-                           style="display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; background: rgba(23,176,167,.16); border: 1px solid rgba(23,176,167,.4); color: #7FE3DC; padding: 9px 16px; border-radius: 999px; font-weight: 700; font-size: 14px;">
-                            {{ translate('order_via_whatsapp') }}
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: 26px 20px 30px;">
-                <div style="border-top: 1px solid rgba(255,255,255,.12); padding-top: 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 16px;">
-                    <span style="font-size: 13.5px; color: #8FB0BF;">{{ $web_config['copyright_text'] }}</span>
-                    <div style="display: flex; align-items: center; gap: 9px; flex-wrap: wrap;">
-                        <span style="font-size: 13px; color: #8FB0BF; margin-inline-end: 4px;">{{ translate('payment_methods') }}:</span>
-                        @foreach($web_config['payments_list'] as $paymentGateway)
-                            <span style="height: 30px; padding: 0 12px; border-radius: 8px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 600; color: #D8E9EF;">
-                                {{ translate(str_replace('_', ' ', $paymentGateway['key_name'])) }}
-                            </span>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-        <div class="sf-mobile-bar" style="position: fixed; inset-inline: 0; bottom: 0; z-index: 80; background: rgba(255,255,255,.97); backdrop-filter: blur(14px); border-top: 1px solid #E4EFF1; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); grid-template-columns: 1fr 1fr; gap: 10px; box-shadow: 0 -10px 30px -22px rgba(11,44,63,.9);">
-            <a href="{{ $whatsappLink }}" target="_blank"
-               style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; border-radius: 14px; background: #0E8E88; color: #FFFFFF; font-family: Cairo, sans-serif; font-size: 15.5px; font-weight: 800;">
-                <span style="width: 8px; height: 8px; border-radius: 50%; background: #7FE3DC; display: inline-block;"></span>
-                {{ translate('order_via_whatsapp') }}
-            </a>
-            <a href="{{ $web_config['guest_checkout_status'] || auth('customer')->check() ? route('shop-cart') : route('customer.auth.login') }}"
-               style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; border-radius: 14px; background: #ECF8F8; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 15.5px; font-weight: 800;">
-                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h2l2.2 10.2a2 2 0 0 0 2 1.6h6.9a2 2 0 0 0 2-1.5L21 8H7"></path><circle cx="10" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle></svg>
-                {{ translate('cart') }} (<span class="seafood-cart-count">{{ $cartItemsCount }}</span>)
-            </a>
-        </div>
-        <div class="sf-mobile-bar-spacer"></div>
+        @include('web-views.seafood.partials._mobile-bar')
     </div>
 @endsection
 
 @push('script')
+    @include('web-views.seafood.partials._scripts')
+
     <script>
         "use strict";
 
-        $.ajaxSetup({headers: {"X-CSRF-TOKEN": $('meta[name="_token"]').attr("content")}});
-
-        $(document).on('click', '#seafood-menu-toggle', function () {
-            const menu = $('#seafood-mobile-menu');
-            const willOpen = menu.attr('data-open') !== 'true';
-            menu.attr('data-open', willOpen ? 'true' : 'false').prop('hidden', !willOpen);
-            $(this).attr('aria-expanded', willOpen ? 'true' : 'false');
-        });
-
-        $(document).on('click', '#seafood-mobile-menu a', function () {
-            $('#seafood-mobile-menu').attr('data-open', 'false').prop('hidden', true);
-            $('#seafood-menu-toggle').attr('aria-expanded', 'false');
-        });
-
         $(window).on('resize', function () {
-            if (window.innerWidth >= 980) {
-                $('#seafood-mobile-menu').attr('data-open', 'false').prop('hidden', true);
-                $('#seafood-menu-toggle').attr('aria-expanded', 'false');
-            }
             renderSeafoodShopGrid();
         });
 
@@ -809,82 +475,6 @@
                 item.css({'background': 'rgba(255,255,255,.07)', 'border-color': 'rgba(23,176,167,.5)'});
                 item.find('.sf-faq-icon').css('transform', 'rotate(180deg)');
             }
-        });
-
-        function setSeafoodCartToggleState(button, cartKey) {
-            button.data('cart-key', cartKey || '');
-            button.toggleClass('in-cart', !!cartKey);
-            button.find('.seafood-cart-toggle-label').text(cartKey ? button.data('remove-label') : button.data('add-label'));
-        }
-
-        $(document).on('click', '.seafood-cart-toggle', function () {
-            const button = $(this);
-            const cartKey = button.data('cart-key');
-
-            if (cartKey) {
-                $.post({
-                    url: $('#route-cart-remove').data('url'),
-                    data: {key: cartKey},
-                    success: function (response) {
-                        toastr.success(response.message);
-                        $('.seafood-cart-count').text(response.cart_items_count);
-                        $('.seafood-cart-toggle').filter(function () {
-                            return String($(this).data('product-id')) === String(button.data('product-id'));
-                        }).each(function () {
-                            setSeafoodCartToggleState($(this), null);
-                        });
-                    }
-                });
-                return;
-            }
-
-            $.post({
-                url: $('#route-cart-add').data('url'),
-                data: {id: button.data('product-id'), quantity: button.data('quantity')},
-                success: function (response) {
-                    if (response.status === 1) {
-                        toastr.success(response.message);
-                        $('.seafood-cart-count').text(response.cart_items_count);
-                        $('.seafood-cart-toggle').filter(function () {
-                            return String($(this).data('product-id')) === String(button.data('product-id'));
-                        }).each(function () {
-                            setSeafoodCartToggleState($(this), response.in_cart_key || (response.cart && response.cart.id));
-                        });
-                    } else if (response.status === 2) {
-                        location.href = button.data('product-url');
-                    } else {
-                        toastr.warning(response.message);
-                    }
-                }
-            });
-        });
-
-        $(document).on('click', '.seafood-wishlist-btn', function () {
-            if ($('#is-customer-auth-active').data('value') !== 1) {
-                location.href = $('#route-customer-login').data('url');
-                return;
-            }
-            const button = $(this);
-            $.post({
-                url: $('#route-store-wishlist').data('url'),
-                data: {product_id: button.data('product-id')},
-                success: function (response) {
-                    if (response.value === 1) {
-                        button.find('svg').attr('fill', '#E4574F');
-                    }
-                    toastr.success(response.message);
-                }
-            });
-        });
-
-        $(document).on('click', '.seafood-change-language', function () {
-            $.post({
-                url: $('#route-change-language').data('url'),
-                data: {language_code: $(this).data('language-code')},
-                success: function () {
-                    location.reload();
-                }
-            });
         });
 
         const countdownElement = document.getElementById('seafood-countdown');
