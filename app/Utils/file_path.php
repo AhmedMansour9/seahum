@@ -468,7 +468,7 @@ if (!function_exists('getFileUploadMaxSize')) {
     function getFileUploadMaxSize(?string $type = 'image', string $unit = 'mb'): int {
 
         $uploadMaxInMB = (int)(checkServerUploadMaxFileSizeInMB(maxLimit: 1024) / 1024);
-        if (env('APP_MODE', 'dev') === 'demo') {
+        if (config('app.mode') === 'demo') {
             $finalValue = min($uploadMaxInMB, 1);
         } elseif (is_null($type) || $type === 'image') {
             $finalValue = min($uploadMaxInMB, 20);
@@ -537,7 +537,7 @@ if (!function_exists('getDisallowedExtensionsListArray')) {
             ],
         ];
 
-        if (env('APP_MODE') === 'demo') {
+        if (config('app.mode') === 'demo') {
             $groups['archives'][] = 'zip';
         }
 

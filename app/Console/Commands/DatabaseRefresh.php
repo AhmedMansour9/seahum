@@ -60,7 +60,7 @@ class DatabaseRefresh extends Command
 
         Cache::forget('demo_database_refresh');
 
-        if (in_array(request()->ip(), ['127.0.0.1', '::1']) && env('APP_MODE') != 'demo') {
+        if (in_array(request()->ip(), ['127.0.0.1', '::1']) && config('app.mode') != 'demo') {
             Artisan::call('local:database-refresh');
         }
     }

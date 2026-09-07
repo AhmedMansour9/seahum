@@ -144,7 +144,7 @@
 <span id="message-copied_success" data-text="{{ translate('copied_successfully') }}"></span>
 <span id="route-get-session-recaptcha-code"
       data-route="{{ route('get-session-recaptcha-code') }}"
-      data-mode="{{ env('APP_MODE') }}"
+      data-mode="{{ config('app.mode') }}"
 ></span>
 
 <span id="message-copied_success" data-text="{{ translate('copied_successfully') }}"></span>

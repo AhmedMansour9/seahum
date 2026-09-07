@@ -30,7 +30,7 @@ if (!function_exists('translate')) {
 
                 $languageFileContents = "<?php\n\nreturn [\n";
                 foreach ($newMessagesArray as $languageKey => $value) {
-                    $languageFileContents .= "\t\"" . $languageKey . "\" => \"" . $value . "\",\n";
+                    $languageFileContents .= "\t\"" . addcslashes($languageKey, '"\\$') . "\" => \"" . addcslashes($value, '"\\$') . "\",\n";
                 }
                 $languageFileContents .= "];\n";
 

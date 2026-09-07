@@ -74,7 +74,7 @@
 
     {!! getSystemDynamicPartials(type: 'analytics_script') !!}
 
-    @if(env('APP_MODE')=='demo')
+    @if(config('app.mode')=='demo')
         <!-- Google Tag Manager -->
         <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -85,7 +85,7 @@
     @endif
 </head>
 
-<body class="toolbar-enabled {{ env('APP_MODE')=='demo'?'demo':'' }}" id="demo">
+<body class="toolbar-enabled {{ config('app.mode')=='demo'?'demo':'' }}" id="demo">
 
 @include('layouts.front-end.partials._modals')
 
@@ -184,7 +184,7 @@
 
 <span id="route-get-session-recaptcha-code"
       data-route="{{ route('get-session-recaptcha-code') }}"
-      data-mode="{{ env('APP_MODE') }}"
+      data-mode="{{ config('app.mode') }}"
 ></span>
 <span id="password-error-message" data-max-character="{{translate('at_least_8_characters').'.'}}" data-uppercase-character="{{translate('at_least_one_uppercase_letter_').'(A...Z)'.'.'}}" data-lowercase-character="{{translate('at_least_one_lowercase_letter_').'(a...z)'.'.'}}"
       data-number="{{translate('at_least_one_number').'(0...9)'.'.'}}" data-symbol="{{translate('at_least_one_symbol').'(!...%)'.'.'}}"></span>
@@ -404,7 +404,7 @@
         }
     });
 </script>
-@if(env('APP_MODE') == 'demo')
+@if(config('app.mode') == 'demo')
     <script>
         'use strict'
         function checkDemoResetTime() {

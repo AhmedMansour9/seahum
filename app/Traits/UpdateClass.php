@@ -686,7 +686,7 @@ trait UpdateClass
                 ]);
             }
 
-            if (env('APP_ENV') === 'demo') {
+            if (config('app.env') === 'demo') {
                 foreach (\App\Models\Product::where('added_by', 'seller')->get() as $product) {
                     \App\Models\Product::where('added_by', 'seller')->where('id', $product['id'])->update([
                         'shop_id' => \App\Models\Shop::where('seller_id', $product['user_id'])->first()->id ?? $product['shop_id'],

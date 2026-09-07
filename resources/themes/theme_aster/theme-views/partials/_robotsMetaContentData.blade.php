@@ -37,8 +37,8 @@
         <meta name="twitter:description" content="{{ $web_config['meta_description'] }}">
     @endif
 
-    <meta property="og:url" content="{{ env('APP_URL') }}">
-    <meta name="twitter:url" content="{{ env('APP_URL') }}">
+    <meta property="og:url" content="{{ config('app.url') }}">
+    <meta name="twitter:url" content="{{ config('app.url') }}">
 
     @if(isset($robotsMetaContentData) && isset($robotsMetaContentData?->meta_image_full_url) && $robotsMetaContentData?->meta_image_full_url['path'])
         <meta property="og:image" content="{{ $robotsMetaContentData?->meta_image_full_url['path'] }}">

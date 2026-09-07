@@ -42,7 +42,7 @@ class PaymentConfigProvider extends ServiceProvider
                     'client_id' => $paypal['paypal_client_id'], // values : (local | production)
                     'secret' => $paypal['paypal_secret'],
                     'settings' => array(
-                        'mode' => env('PAYPAL_MODE', $paypal_mode), //live||sandbox
+                        'mode' => config('payment_overrides.paypal_mode') ?? $paypal_mode, //live||sandbox
                         'http.ConnectionTimeOut' => 30,
                         'log.LogEnabled' => true,
                         'log.FileName' => storage_path() . '/logs/paypal.log',
@@ -64,8 +64,8 @@ class PaymentConfigProvider extends ServiceProvider
                     $host = true;
                 }
                 $config = array(
-                    'projectPath' => env('PROJECT_PATH'),
-                    'apiDomain' => env("API_DOMAIN_URL", $url),
+                    'projectPath' => config('payment_overrides.sslcommerz_project_path'),
+                    'apiDomain' => config('payment_overrides.sslcommerz_api_domain_url') ?? $url,
                     'apiCredentials' => [
                         'store_id' => $ssl['store_id'],
                         'store_password' => $ssl['store_password'],
@@ -77,7 +77,7 @@ class PaymentConfigProvider extends ServiceProvider
                         'refund_payment' => "/validator/api/merchantTransIDvalidationAPI.php",
                         'refund_status' => "/validator/api/merchantTransIDvalidationAPI.php",
                     ],
-                    'connect_from_localhost' => env("IS_LOCALHOST", $host), // For Sandbox, use "true", For Live, use "false"
+                    'connect_from_localhost' => config('payment_overrides.sslcommerz_is_localhost') ?? $host, // For Sandbox, use "true", For Live, use "false"
                     'success_url' => '/success',
                     'failed_url' => '/fail',
                     'cancel_url' => '/cancel',
@@ -90,8 +90,8 @@ class PaymentConfigProvider extends ServiceProvider
             $razor = json_decode($data['value'], true);
             if ($razor) {
                 $config = array(
-                    'razor_key' => env('RAZOR_KEY', $razor['razor_key']),
-                    'razor_secret' => env('RAZOR_SECRET', $razor['razor_secret'])
+                    'razor_key' => config('payment_overrides.razor_key') ?? $razor['razor_key'],
+                    'razor_secret' => config('payment_overrides.razor_secret') ?? $razor['razor_secret']
                 );
                 Config::set('razor', $config);
             }
@@ -100,10 +100,10 @@ class PaymentConfigProvider extends ServiceProvider
             $paystack = json_decode($data['value'], true);
             if ($paystack) {
                 $config = array(
-                    'publicKey' => env('PAYSTACK_PUBLIC_KEY', $paystack['publicKey']),
-                    'secretKey' => env('PAYSTACK_SECRET_KEY', $paystack['secretKey']),
-                    'paymentUrl' => env('PAYSTACK_PAYMENT_URL', $paystack['paymentUrl']),
-                    'merchantEmail' => env('MERCHANT_EMAIL', $paystack['merchantEmail']),
+                    'publicKey' => config('payment_overrides.paystack_public_key') ?? $paystack['publicKey'],
+                    'secretKey' => config('payment_overrides.paystack_secret_key') ?? $paystack['secretKey'],
+                    'paymentUrl' => config('payment_overrides.paystack_payment_url') ?? $paystack['paymentUrl'],
+                    'merchantEmail' => config('payment_overrides.paystack_merchant_email') ?? $paystack['merchantEmail'],
                 );
                 Config::set('paystack', $config);
             }
@@ -112,9 +112,9 @@ class PaymentConfigProvider extends ServiceProvider
             $flutterwave = json_decode($data['value'], true);
             if ($flutterwave) {
                 $config = array(
-                    'publicKey' => env('FLW_PUBLIC_KEY', $flutterwave['public_key']), // values : (local | production)
-                    'secretKey' => env('FLW_SECRET_KEY', $flutterwave['secret_key']),
-                    'secretHash' => env('FLW_SECRET_HASH', $flutterwave['hash']),
+                    'publicKey' => config('payment_overrides.flutterwave_public_key') ?? $flutterwave['public_key'], // values : (local | production)
+                    'secretKey' => config('payment_overrides.flutterwave_secret_key') ?? $flutterwave['secret_key'],
+                    'secretHash' => config('payment_overrides.flutterwave_secret_hash') ?? $flutterwave['hash'],
                 );
                 Config::set('flutterwave', $config);
             }
@@ -134,13 +134,13 @@ class PaymentConfigProvider extends ServiceProvider
 
                 $config = array(
                     'PAYTM_ENVIRONMENT' => ($mode=='live')?'PROD':'TEST',
-                    'PAYTM_MERCHANT_KEY' => env('PAYTM_MERCHANT_KEY', $paytm['paytm_merchant_key']),
-                    'PAYTM_MERCHANT_MID' => env('PAYTM_MERCHANT_MID', $paytm['paytm_merchant_mid']),
-                    'PAYTM_MERCHANT_WEBSITE' => env('PAYTM_MERCHANT_WEBSITE', $paytm['paytm_merchant_website']),
-                    'PAYTM_REFUND_URL' => env('PAYTM_REFUND_URL', $paytm['paytm_refund_url']),
-                    'PAYTM_STATUS_QUERY_URL' => env('PAYTM_STATUS_QUERY_URL', $PAYTM_STATUS_QUERY_NEW_URL),
-                    'PAYTM_STATUS_QUERY_NEW_URL' => env('PAYTM_STATUS_QUERY_NEW_URL', $PAYTM_STATUS_QUERY_NEW_URL),
-                    'PAYTM_TXN_URL' => env('PAYTM_TXN_URL', $PAYTM_TXN_URL),
+                    'PAYTM_MERCHANT_KEY' => config('payment_overrides.paytm_merchant_key') ?? $paytm['paytm_merchant_key'],
+                    'PAYTM_MERCHANT_MID' => config('payment_overrides.paytm_merchant_mid') ?? $paytm['paytm_merchant_mid'],
+                    'PAYTM_MERCHANT_WEBSITE' => config('payment_overrides.paytm_merchant_website') ?? $paytm['paytm_merchant_website'],
+                    'PAYTM_REFUND_URL' => config('payment_overrides.paytm_refund_url') ?? $paytm['paytm_refund_url'],
+                    'PAYTM_STATUS_QUERY_URL' => config('payment_overrides.paytm_status_query_url') ?? $PAYTM_STATUS_QUERY_NEW_URL,
+                    'PAYTM_STATUS_QUERY_NEW_URL' => config('payment_overrides.paytm_status_query_new_url') ?? $PAYTM_STATUS_QUERY_NEW_URL,
+                    'PAYTM_TXN_URL' => config('payment_overrides.paytm_txn_url') ?? $PAYTM_TXN_URL,
                 );
 
                 Config::set('config_paytm', $config);

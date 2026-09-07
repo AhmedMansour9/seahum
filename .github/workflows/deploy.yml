@@ -1,0 +1,133 @@
+name: Deploy
+
+# ============================================================================
+# DEPLOYMENT BRANCHES — the only section to edit when adding or removing one
+# ============================================================================
+#
+# Every branch deploys with the same secrets (DEPLOY_SSH_HOST, DEPLOY_SSH_USER,
+# DEPLOY_SSH_KEY, DEPLOY_PATH, and optionally DEPLOY_SSH_PORT /
+# DEPLOY_SSH_KNOWN_HOSTS) to the same server and path, so adding a branch means
+# adding one line here and nothing else.
+
+on:
+  push:
+    branches:
+      - dev 
+
+# ============================================================================
+
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
+          SSH_PORT: ${{ secrets.DEPLOY_SSH_PORT }}
+          SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$SSH_KEY" || { echo "::error::DEPLOY_SSH_KEY secret is empty"; exit 1; }
+          test -n "$SSH_HOST" || { echo "::error::DEPLOY_SSH_HOST secret is empty"; exit 1; }
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          if [ -n "$SSH_KNOWN_HOSTS" ]; then
+            printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          else
+            ssh-keyscan -p "${SSH_PORT:-22}" -H "$SSH_HOST" > ~/.ssh/known_hosts 2>/dev/null
+          fi
+          chmod 600 ~/.ssh/known_hosts
+          test -s ~/.ssh/known_hosts || { echo "::error::Could not resolve host key for $SSH_HOST"; exit 1; }
+
+      - name: Deploy
+        env:
+          SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
+          SSH_USER: ${{ secrets.DEPLOY_SSH_USER }}
+          SSH_PORT: ${{ secrets.DEPLOY_SSH_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          DEPLOY_BRANCH: ${{ github.ref_name }}
+          DEPLOY_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          test -n "$DEPLOY_PATH" || { echo "::error::DEPLOY_PATH secret is empty"; exit 1; }
+          test -n "$SSH_USER" || { echo "::error::DEPLOY_SSH_USER secret is empty"; exit 1; }
+
+          # The git operations stay here rather than in deploy/deploy.sh: that
+          # script lives in the working tree the reset rewrites, and bash reads
+          # a script incrementally. deploy/deploy.sh is exec'd afterwards, once
+          # the tree is already at the deployed commit.
+          ssh -i ~/.ssh/deploy_key \
+              -p "${SSH_PORT:-22}" \
+              -o BatchMode=yes \
+              -o ServerAliveInterval=30 \
+              -o ServerAliveCountMax=10 \
+              "$SSH_USER@$SSH_HOST" \
+              "DEPLOY_PATH='$DEPLOY_PATH' DEPLOY_BRANCH='$DEPLOY_BRANCH' DEPLOY_SHA='$DEPLOY_SHA' bash -l -s" <<'REMOTE'
+          set -Eeuo pipefail
+
+          cd "$DEPLOY_PATH"
+          test -d .git || { echo "$DEPLOY_PATH is not a git checkout"; exit 1; }
+
+          # Serialise deployments: a second push must not reset the tree while
+          # composer/migrations from the first one are still running.
+          exec 200>.deploy.lock
+          flock -n 200 || { echo "Another deployment is already running in $DEPLOY_PATH"; exit 1; }
+
+          echo "==> Fetching origin/$DEPLOY_BRANCH"
+          git fetch --prune origin "$DEPLOY_BRANCH"
+
+          echo "==> Resetting working tree to $DEPLOY_BRANCH at $DEPLOY_SHA"
+          # Reset first, then move the branch ref. `checkout -B` refuses to run
+          # when a tracked file has local modifications (a previous failed deploy
+          # can leave storage/framework/maintenance.php modified or deleted), so
+          # resetting first turns the checkout into a ref move that cannot fail.
+          # The target is the pushed commit, not origin/<branch>: two pushes in
+          # quick succession must each deploy the commit their own run was
+          # triggered by. -B also recovers a checkout left detached or sitting on
+          # another branch.
+          git reset --hard "$DEPLOY_SHA"
+          git checkout -B "$DEPLOY_BRANCH" "$DEPLOY_SHA"
+
+          # -fd (no -x) removes stale tracked-file leftovers while keeping every
+          # gitignored server-only path: .env, vendor, node_modules, storage/app,
+          # public/storage, public/themes, Modules/Gateways. The explicit excludes
+          # protect admin-generated content that is not gitignored.
+          git clean -fd -e /public/json -e /resources/lang -e .deploy.lock
+
+          test "$(git rev-parse HEAD)" = "$DEPLOY_SHA" \
+            || { echo "HEAD is $(git rev-parse HEAD), expected $DEPLOY_SHA"; exit 1; }
+
+          exec bash deploy/deploy.sh
+          REMOTE
+
+      - name: Report deployment
+        if: always()
+        env:
+          SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          set -euo pipefail
+          {
+            echo "### Deploy ${{ github.ref_name }} — ${{ job.status }}"
+            echo ""
+            echo "| Field | Value |"
+            echo "| --- | --- |"
+            echo "| Branch | \`${{ github.ref_name }}\` |"
+            echo "| Commit | \`${{ github.sha }}\` |"
+            echo "| Pushed by | ${{ github.actor }} |"
+            echo "| Server | \`${SSH_HOST:-unset}:${DEPLOY_PATH:-unset}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

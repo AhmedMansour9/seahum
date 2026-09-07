@@ -49,7 +49,7 @@
                                         </label>
                                         <input type="text" class="form-control" id="username"
                                                placeholder="{{translate('ex').':'.'2.1'}}"
-                                               value="{{ env('BUYER_USERNAME') }}" name="username" required
+                                               value="{{ config('software.buyer_username') }}" name="username" required
                                                readonly
                                                data-bs-toggle="tooltip"
                                                data-bs-placement="top"
@@ -65,7 +65,7 @@
                                             <span class="text-danger">*</span>
                                         </label>
                                         <input type="text" class="form-control" id="purchase_key"
-                                               value="{{env('PURCHASE_CODE')}}" name="purchase_key" required
+                                               value="{{config('software.purchase_code')}}" name="purchase_key" required
                                                readonly
                                                data-bs-toggle="tooltip"
                                                data-bs-placement="top"

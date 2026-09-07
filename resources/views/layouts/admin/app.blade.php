@@ -22,7 +22,7 @@
     @stack('css_or_js')
 </head>
 
-<body data-bs-theme="light" class="{{ env('APP_MODE') == 'demo' ? 'demo' : '' }} v2-active">
+<body data-bs-theme="light" class="{{ config('app.mode') == 'demo' ? 'demo' : '' }} v2-active">
 <script type="text/javascript">
     localStorage.getItem('aside-mini') === 'true' ? document.body.classList.add('aside-mini') : document.body.classList.remove('aside-mini');
 </script>

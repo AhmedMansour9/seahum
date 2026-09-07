@@ -50,7 +50,7 @@ class SocialLoginServiceProvider extends ServiceProvider
         } catch (Exception $exception) {
         }
         try {
-            if (env('FORCE_HTTPS')) {
+            if (config('software.force_https')) {
                 $googleRedirect = Config::get('services.google.redirect');
                 $facebookRedirect = Config::get('services.facebook.redirect');
 

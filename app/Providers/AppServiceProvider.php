@@ -73,7 +73,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        if (!in_array(request()->ip(), ['127.0.0.1', '::1']) && env('FORCE_HTTPS')) {
+        if (!in_array(request()->ip(), ['127.0.0.1', '::1']) && config('software.force_https')) {
             \URL::forceScheme('https');
         }
         if (!App::runningInConsole()) {

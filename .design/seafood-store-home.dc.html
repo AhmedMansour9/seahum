@@ -252,13 +252,13 @@
             </button>
           </div>
 
-          <div style="padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1;">
+          <div style="padding: {{ cardPad }}; display: flex; flex-direction: column; flex: 1;">
             <h3 style="font-family: Cairo, sans-serif; font-size: {{ cardTitleSize }}; font-weight: 700; margin: 0; color: #0B2C3F; line-height: 1.45; text-wrap: pretty;">{{ p.name }}</h3>
 
             <div style="height: 1px; background: #EDF5F6; margin: {{ cardRule }};"></div>
 
             <div style="display: flex; flex-direction: {{ cardActionDir }}; align-items: {{ cardActionAlign }}; justify-content: space-between; gap: 10px; margin-top: auto;">
-              <span style="direction: ltr; display: flex; align-items: baseline; gap: 5px; white-space: nowrap;">
+              <span style="direction: ltr; display: flex; align-items: baseline; justify-content: flex-end; gap: 5px; white-space: nowrap;">
                 <span style="font-size: 12.5px; font-weight: 600; color: #7B98A4;">جنيه</span>
                 <strong style="font-family: Cairo, sans-serif; font-size: {{ cardPriceSize }}; font-weight: 800; color: #0B2C3F; letter-spacing: -.4px;">{{ p.price }}</strong>
               </span>
@@ -303,13 +303,13 @@
             </button>
           </div>
 
-          <div style="padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1;">
+          <div style="padding: {{ cardPad }}; display: flex; flex-direction: column; flex: 1;">
             <h3 style="font-family: Cairo, sans-serif; font-size: {{ cardTitleSize }}; font-weight: 700; margin: 0; color: #0B2C3F; line-height: 1.45; text-wrap: pretty;">{{ p.name }}</h3>
 
             <div style="height: 1px; background: #EDF5F6; margin: {{ cardRule }};"></div>
 
             <div style="display: flex; flex-direction: {{ cardActionDir }}; align-items: {{ cardActionAlign }}; justify-content: space-between; gap: 10px; margin-top: auto;">
-              <span style="direction: ltr; display: flex; align-items: baseline; gap: 5px; white-space: nowrap;">
+              <span style="direction: ltr; display: flex; align-items: baseline; justify-content: flex-end; gap: 5px; white-space: nowrap;">
                 <span style="font-size: 12.5px; font-weight: 600; color: #7B98A4;">جنيه</span>
                 <strong style="font-family: Cairo, sans-serif; font-size: {{ cardPriceSize }}; font-weight: 800; color: #0B2C3F; letter-spacing: -.4px;">{{ p.price }}</strong>
               </span>
@@ -486,16 +486,16 @@
   </section>
 
   <footer id="contact" style="background: #062A3E; color: #C6DDE6;">
-    <div style="max-width: 1240px; margin: 0 auto; padding: clamp(38px, 6vw, 70px) {{ pageGutter }} 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 36px;">
-      <div style="max-width: 330px;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: clamp(32px, 6vw, 70px) {{ pageGutter }} 0; display: grid; grid-template-columns: {{ footerCols }}; gap: {{ footerGap }};">
+      <div style="max-width: 330px; grid-column: {{ footerBrandSpan }};">
         <div style="display: flex; align-items: center; gap: 11px;">
           <span style="width: 42px; height: 42px; border-radius: 13px; background: linear-gradient(150deg, #0D3B58, #17B0A7); display: grid; place-items: center;">
             <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c2-2.6 4-2.6 6 0s4 2.6 6 0 4-2.6 6 0"></path><path d="M2 9c2-2.6 4-2.6 6 0s4 2.6 6 0 4-2.6 6 0"></path></svg>
           </span>
           <strong style="font-family: Cairo, sans-serif; font-size: 20px; font-weight: 800; color: #FFFFFF;">صيد اليوم</strong>
         </div>
-        <p style="font-size: 14.5px; line-height: 1.95; margin: 16px 0 0; color: #9FBDCB;">متجر متخصص في بيع الأسماك والمأكولات البحرية الطازجة أونلاين. صيد يومي، تغليف مبرّد محكم، وتوصيل لباب منزلك.</p>
-        <div style="display: flex; gap: 10px; margin-top: 22px;">
+        <p style="font-size: 14px; line-height: 1.85; margin: 14px 0 0; color: #9FBDCB;">متجر متخصص في بيع الأسماك والمأكولات البحرية الطازجة أونلاين. صيد يومي، تغليف مبرّد محكم، وتوصيل لباب منزلك.</p>
+        <div style="display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap;">
           <sc-for list="{{ socials }}" as="s" hint-placeholder-count="4">
             <a href="#contact" aria-label="{{ s.name }}" title="{{ s.name }}" style="width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.04); display: grid; place-items: center; color: #C6DDE6; transition: background .22s, color .22s, border-color .22s, transform .22s;" style-hover="background: #17B0A7; color: #062A3E; border-color: #17B0A7; transform: translateY(-2px);">
               <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" dangerouslySetInnerHTML="{{ s.icon }}"></svg>
@@ -505,8 +505,8 @@
       </div>
 
       <div>
-        <h4 style="font-family: Cairo, sans-serif; font-size: 16px; font-weight: 700; color: #FFFFFF; margin: 0 0 16px;">روابط سريعة</h4>
-        <div style="display: flex; flex-direction: column; gap: 11px; font-size: 14.5px;">
+        <h4 style="font-family: Cairo, sans-serif; font-size: 15.5px; font-weight: 700; color: #FFFFFF; margin: 0 0 {{ footerHeadGap }};">روابط سريعة</h4>
+        <div style="display: flex; flex-direction: column; gap: {{ footerLinkGap }}; font-size: 14px;">
           <a href="#home" style="color: #9FBDCB;" style-hover="color: #7FE3DC;">الرئيسية</a>
           <a href="#products" style="color: #9FBDCB;" style-hover="color: #7FE3DC;">المنتجات</a>
           <a href="#categories" style="color: #9FBDCB;" style-hover="color: #7FE3DC;">التصنيفات</a>
@@ -517,8 +517,8 @@
       </div>
 
       <div>
-        <h4 style="font-family: Cairo, sans-serif; font-size: 16px; font-weight: 700; color: #FFFFFF; margin: 0 0 16px;">خدمة العملاء</h4>
-        <div style="display: flex; flex-direction: column; gap: 11px; font-size: 14.5px;">
+        <h4 style="font-family: Cairo, sans-serif; font-size: 15.5px; font-weight: 700; color: #FFFFFF; margin: 0 0 {{ footerHeadGap }};">خدمة العملاء</h4>
+        <div style="display: flex; flex-direction: column; gap: {{ footerLinkGap }}; font-size: 14px;">
           <a href="#contact" style="color: #9FBDCB;" style-hover="color: #7FE3DC;">سياسة التوصيل</a>
           <a href="#contact" style="color: #9FBDCB;" style-hover="color: #7FE3DC;">الاستبدال والاسترجاع</a>
           <a href="#contact" style="color: #9FBDCB;" style-hover="color: #7FE3DC;">الأسئلة الشائعة</a>
@@ -527,25 +527,25 @@
         </div>
       </div>
 
-      <div>
-        <h4 style="font-family: Cairo, sans-serif; font-size: 16px; font-weight: 700; color: #FFFFFF; margin: 0 0 16px;">تواصل معنا</h4>
-        <div style="display: flex; flex-direction: column; gap: 13px; font-size: 14.5px; color: #9FBDCB; line-height: 1.75;">
+      <div style="grid-column: {{ footerBrandSpan }};">
+        <h4 style="font-family: Cairo, sans-serif; font-size: 15.5px; font-weight: 700; color: #FFFFFF; margin: 0 0 {{ footerHeadGap }};">تواصل معنا</h4>
+        <div style="display: flex; flex-direction: column; gap: {{ footerLinkGap }}; font-size: 14px; color: #9FBDCB; line-height: 1.7;">
           <span>سوق السمك — شارع الجيش، القاهرة</span>
-          <span style="direction: ltr; text-align: right; color: #FFFFFF; font-weight: 700; font-size: 16px;">{{ storePhone }}</span>
+          <span style="direction: ltr; align-self: flex-start; color: #FFFFFF; font-weight: 700; font-size: 16px;">{{ storePhone }}</span>
           <span>مواعيد العمل: يوميًا من ٦ صباحًا حتى ١١ مساءً</span>
           <span>الجمعة: من ١ ظهرًا حتى ١١ مساءً</span>
-          <a href="#whatsapp" style="display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; background: rgba(23,176,167,.16); border: 1px solid rgba(23,176,167,.4); color: #7FE3DC; padding: 9px 16px; border-radius: 999px; font-weight: 700; font-size: 14px;" style-hover="background: #17B0A7; color: #062A3E;">اطلب عبر واتساب</a>
+          <a href="#whatsapp" style="display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; background: rgba(23,176,167,.16); border: 1px solid rgba(23,176,167,.4); color: #7FE3DC; min-height: 44px; padding: 10px 18px; border-radius: 999px; font-weight: 700; font-size: 14.5px;" style-hover="background: #17B0A7; color: #062A3E;">اطلب عبر واتساب</a>
         </div>
       </div>
     </div>
 
-    <div style="max-width: 1240px; margin: 0 auto; padding: 26px {{ pageGutter }} 30px;">
-      <div style="border-top: 1px solid rgba(255,255,255,.12); padding-top: 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 16px;">
-        <span style="font-size: 13.5px; color: #8FB0BF;">© ٢٠٢٦ صيد اليوم. جميع الحقوق محفوظة.</span>
-        <div style="display: flex; align-items: center; gap: 9px; flex-wrap: wrap;">
-          <span style="font-size: 13px; color: #8FB0BF; margin-inline-end: 4px;">طرق الدفع:</span>
+    <div style="max-width: 1240px; margin: 0 auto; padding: {{ footerBottomPad }};">
+      <div style="border-top: 1px solid rgba(255,255,255,.12); padding-top: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 16px;">
+        <span style="font-size: 13px; color: #8FB0BF;">© ٢٠٢٦ صيد اليوم. جميع الحقوق محفوظة.</span>
+        <div style="display: flex; align-items: center; gap: 7px; flex-wrap: wrap;">
+          <span style="font-size: 12.5px; color: #8FB0BF; margin-inline-end: 4px;">طرق الدفع:</span>
           <sc-for list="{{ payments }}" as="pay" hint-placeholder-count="4">
-            <span style="height: 30px; padding: 0 12px; border-radius: 8px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 600; color: #D8E9EF;">{{ pay }}</span>
+            <span style="height: 28px; padding: 0 11px; border-radius: 8px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); display: inline-flex; align-items: center; font-size: 12px; font-weight: 600; color: #D8E9EF;">{{ pay }}</span>
           </sc-for>
         </div>
       </div>
@@ -695,6 +695,12 @@ class Component extends DCLogic {
       openCart: () => {},
       navDisplay: this.state.vw >= 980 ? "flex" : "none",
       isMobile: this.state.vw < 760,
+      footerCols: this.state.vw < 760 ? "repeat(2, minmax(0, 1fr))" : "repeat(auto-fit, minmax(220px, 1fr))",
+      footerGap: this.state.vw < 760 ? "26px 18px" : "36px",
+      footerBrandSpan: this.state.vw < 760 ? "1 / -1" : "auto",
+      footerHeadGap: this.state.vw < 760 ? "12px" : "16px",
+      footerLinkGap: this.state.vw < 760 ? "9px" : "11px",
+      footerBottomPad: this.state.vw < 760 ? "22px 16px 26px" : "26px 20px 30px",
       cardCols: this.state.vw < 760 ? "repeat(2, minmax(0, 1fr))" : "repeat(auto-fit, minmax(240px, 1fr))",
       cardGap: this.state.vw < 760 ? "12px" : "20px",
       cardPad: this.state.vw < 760 ? "12px" : "18px",

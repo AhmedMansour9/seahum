@@ -14,6 +14,6 @@
 <span id="route-product-restock-request" data-url="{{ route('cart.product-restock-request') }}"></span>
 <span id="route-get-session-recaptcha-code"
       data-route="{{ route('get-session-recaptcha-code') }}"
-      data-mode="{{ env('APP_MODE') }}"
+      data-mode="{{ config('app.mode') }}"
 ></span>
 <span id="route-pay-offline-method-list" data-url="{{ route('pay-offline-method-list') }}"></span>

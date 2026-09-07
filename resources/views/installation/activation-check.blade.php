@@ -29,7 +29,7 @@
                                         </span>
                                             </label>
                                             <input type="text" id="person_name" class="form-control" name="name"
-                                                   placeholder="Ex: John Doe" value="{{ env('ADMIN_NAME') }}" required>
+                                                   placeholder="Ex: John Doe" value="{{ config('software.admin_name') }}" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -45,7 +45,7 @@
                                         </span>
                                             </label>
                                             <input type="email" id="person_email" class="form-control" name="email"
-                                                   placeholder="{{ 'Ex: your-mail@example.com' }}" value="{{ env('ADMIN_IDENTIFIER') != '' ? base64_decode(env('ADMIN_IDENTIFIER')) : '' }}"
+                                                   placeholder="{{ 'Ex: your-mail@example.com' }}" value="{{ config('software.admin_identifier') != '' ? base64_decode(config('software.admin_identifier')) : '' }}"
                                                    required>
                                         </div>
                                     </div>
@@ -63,7 +63,7 @@
                                                 </span>
                                             </label>
                                             <input type="text" id="username" class="form-control" name="username"
-                                                   value="{{ env('BUYER_USERNAME') }}"
+                                                   value="{{ config('software.buyer_username') }}"
                                                    placeholder="{{ "Ex: John Doe" }}" required>
                                         </div>
                                     </div>
@@ -71,7 +71,7 @@
                                         <div class="from-group">
                                             <label for="purchase_key" class="mb-2">{{ "Purchase Code" }}</label>
                                             <input type="text" id="purchase_key" class="form-control"
-                                                   name="purchase_key" value="{{ env('PURCHASE_CODE') }}"
+                                                   name="purchase_key" value="{{ config('software.purchase_code') }}"
                                                    placeholder="{{ "Ex: 19xxxxxx-ca5c-49c2-83f6-696a738b0000" }}"
                                                    required>
                                         </div>

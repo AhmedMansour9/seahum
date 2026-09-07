@@ -331,13 +331,13 @@
 
     <span id="payment-gateway-published-status" data-status="{{ $paymentGatewayPublishedStatus == 1 }}"></span>
     <span id="route-g-recaptcha-session-store" data-route="{{ route('get-session-recaptcha-code') }}"
-          data-mode="{{ env('APP_MODE') }}"
+          data-mode="{{ config('app.mode') }}"
     ></span>
 
     <span id="message-please-check-recaptcha" data-text="{{ translate('please_check_the_recaptcha') }}"></span>
     <span id="message-copied_success" data-text="{{ translate('copied_successfully') }}"></span>
     <span id="route-get-session-recaptcha-code" data-route="{{ route('get-session-recaptcha-code') }}"
-          data-mode="{{ env('APP_MODE') }}"></span>
+          data-mode="{{ config('app.mode') }}"></span>
 @endsection
 
 @push('script')

@@ -8,6 +8,7 @@ use App\Models\EmailTemplate;
 use App\Models\NotificationMessage;
 use App\Models\ShippingType;
 use App\Models\Shop;
+use App\Utils\EnvironmentManager;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -407,5 +408,7 @@ trait InstallationTrail
         }
 
         file_put_contents($envPath, implode(PHP_EOL, $newLines) . PHP_EOL);
+
+        EnvironmentManager::synchronizeConfig(values: $updates);
     }
 }

@@ -56,7 +56,7 @@ class AddonController extends BaseController
 
     public function upload(AddonRequest $request, AddonService $addonService): JsonResponse|RedirectResponse
     {
-        if (env('APP_MODE', 'dev') == 'demo') {
+        if (config('app.mode') == 'demo') {
             if ($request->ajax()) {
                 return response()->json([
                     'status' => 'error',

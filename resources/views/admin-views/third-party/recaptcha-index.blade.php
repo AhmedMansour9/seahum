@@ -11,7 +11,7 @@
         </div>
         @include('admin-views.third-party._third-party-others-menu')
 
-        <form action="{{ env('APP_MODE') != 'demo' ? route('admin.third-party.captcha') : 'javascript:' }}"
+        <form action="{{ config('app.mode') != 'demo' ? route('admin.third-party.captcha') : 'javascript:' }}"
               method="POST" id="recaptcha-status-form" class="form-advance-validation form-advance-inputs-validation form-advance-file-validation non-ajax-form-validate" novalidate>
             @csrf
             <div class="card mb-3">
@@ -101,7 +101,7 @@
                                     <input type="text" class="form-control" name="site_key"
                                            placeholder="Enter your site key"
                                            data-required-msg="{{translate('site_key_field_is_required')}}"
-                                           value="{{env('APP_MODE')!='demo'?$config['site_key']??"":''}}" required>
+                                           value="{{config('app.mode')!='demo'?$config['site_key']??"":''}}" required>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -115,15 +115,15 @@
                                     <input type="text" class="form-control" name="secret_key"
                                            placeholder="Enter your secret key"
                                            data-required-msg="{{translate('secret_field_is_required')}}"
-                                           value="{{env('APP_MODE')!='demo'?$config['secret_key']??"":''}}" required>
+                                           value="{{config('app.mode')!='demo'?$config['secret_key']??"":''}}" required>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-end flex-wrap gap-3 mt-4">
                         <button type="reset" class="btn btn-secondary w-120 px-4">{{translate('reset')}}</button>
-                        <button type="{{env('APP_MODE')!='demo'?'submit':'button'}}"
-                                class="btn btn-primary w-120 px-4 {{env('APP_MODE')!= 'demo'? '' : 'call-demo-alert'}}"
+                        <button type="{{config('app.mode')!='demo'?'submit':'button'}}"
+                                class="btn btn-primary w-120 px-4 {{config('app.mode')!= 'demo'? '' : 'call-demo-alert'}}"
                         >{{translate('save')}}</button>
                     </div>
                 </div>

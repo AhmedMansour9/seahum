@@ -34,10 +34,10 @@ class NewPaystackController extends Controller
 
         if ($values) {
             $config = array(
-                'publicKey' => env('PAYSTACK_PUBLIC_KEY', $values->public_key),
-                'secretKey' => env('PAYSTACK_SECRET_KEY', $values->secret_key),
-                'paymentUrl' => env('PAYSTACK_PAYMENT_URL', 'https://api.paystack.co'),
-                'merchantEmail' => env('MERCHANT_EMAIL', $values->merchant_email),
+                'publicKey' => config('payment_overrides.paystack_public_key') ?? $values->public_key,
+                'secretKey' => config('payment_overrides.paystack_secret_key') ?? $values->secret_key,
+                'paymentUrl' => config('payment_overrides.paystack_payment_url') ?? 'https://api.paystack.co',
+                'merchantEmail' => config('payment_overrides.paystack_merchant_email') ?? $values->merchant_email,
             );
             Config::set('paystack', $config);
         }

@@ -206,7 +206,7 @@
                         @endif
                     </div>
 
-                    @if (env('APP_MODE') == 'demo')
+                    @if (config('app.mode') == 'demo')
                         <div class="card-footer">
                             <div class="row">
                                 <div class="col-10">
@@ -255,7 +255,7 @@
     <span id="message-please-check-recaptcha" data-text="{{ translate('please_check_the_recaptcha') }}"></span>
     <span id="message-copied_success" data-text="{{ translate('copied_successfully') }}"></span>
     <span id="route-get-session-recaptcha-code" data-route="{{ route('get-session-recaptcha-code') }}"
-        data-mode="{{ env('APP_MODE') }}"></span>
+        data-mode="{{ config('app.mode') }}"></span>
     <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/vendor.min.js') }}"></script>
     <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/theme.min.js') }}"></script>
     <script src="{{ dynamicAsset(path: 'public/assets/backend/vendor/js/auth.js') }}"></script>

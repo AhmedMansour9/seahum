@@ -194,7 +194,7 @@ class BusinessSettingsController extends BaseController
 
     public function updateSystemMode(Request $request): RedirectResponse|JsonResponse
     {
-        if (env('APP_MODE') == 'demo') {
+        if (config('app.mode') == 'demo') {
             if ($request->ajax()) {
                 return response()->json([
                     'message' => translate('you_can_not_update_this_on_demo_mode'),
@@ -323,7 +323,7 @@ class BusinessSettingsController extends BaseController
 
     public function updateAppDeepLink(DeepLinkRequest $request): RedirectResponse
     {
-        if (env('APP_MODE') == 'demo') {
+        if (config('app.mode') == 'demo') {
             ToastMagic::error(translate('you_can_not_update_this_on_demo_mode'));
             return back();
         }

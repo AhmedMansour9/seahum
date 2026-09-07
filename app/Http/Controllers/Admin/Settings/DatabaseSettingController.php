@@ -61,7 +61,7 @@ class DatabaseSettingController extends BaseController
 
     public function delete(Request $request): RedirectResponse
     {
-        if (env('APP_MODE', 'dev') == 'demo') {
+        if (config('app.mode') == 'demo') {
             ToastMagic::error(translate('Uploading_ZIP_files_is_currently_unavailable_in_demo_mode'));
             return back();
         }

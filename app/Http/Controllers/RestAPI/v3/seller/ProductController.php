@@ -808,7 +808,7 @@ class ProductController extends Controller
             } elseif ($request['preview_file'] instanceof \Illuminate\Http\UploadedFile) {
                 $extension = strtolower($request['preview_file']->getClientOriginalExtension());
             }
-            if (in_array($extension, $disallowedExtensions) &&  env('APP_MODE', 'dev') == 'demo') {
+            if (in_array($extension, $disallowedExtensions) &&  config('app.mode') == 'demo') {
                 $validator->after(function ($validator) {
                     $validator->errors()->add('files', translate('Uploading_ZIP_files_is_currently_unavailable_in_demo_mode') . '!');
                 });
@@ -834,7 +834,7 @@ class ProductController extends Controller
                         } elseif ($fileItem instanceof \Illuminate\Http\UploadedFile) {
                             $extension = strtolower($fileItem->getClientOriginalExtension());
                         }
-                        if (in_array($extension, $disallowedExtensions) &&  env('APP_MODE', 'dev') == 'demo') {
+                        if (in_array($extension, $disallowedExtensions) &&  config('app.mode') == 'demo') {
                             $validator->after(function ($validator) {
                                 $validator->errors()->add('digital_files', translate('Uploading_ZIP_files_is_currently_unavailable_in_demo_mode') . '!');
                             });
@@ -907,7 +907,7 @@ class ProductController extends Controller
             } elseif ($request['digital_file_ready'] instanceof \Illuminate\Http\UploadedFile) {
                 $digitalFileExtension = strtolower($request['digital_file_ready']->getClientOriginalExtension());
             }
-            if (in_array($digitalFileExtension, $disallowedExtensions) && env('APP_MODE', 'dev') == 'demo') {
+            if (in_array($digitalFileExtension, $disallowedExtensions) && config('app.mode') == 'demo') {
                 $validator->after(function ($validator) {
                     $validator->errors()->add('files', translate('Uploading_ZIP_files_is_currently_unavailable_in_demo_mode') . '!');
                 });
@@ -1225,7 +1225,7 @@ class ProductController extends Controller
                 $extension = strtolower($request['preview_file']->getClientOriginalExtension());
             }
 
-            if (in_array($extension, $disallowedExtensions) && env('APP_MODE', 'dev') == 'demo') {
+            if (in_array($extension, $disallowedExtensions) && config('app.mode') == 'demo') {
                 $validator->after(function ($validator) {
                     $validator->errors()->add('files', translate('Uploading_ZIP_files_is_currently_unavailable_in_demo_mode') . '!');
                 });
@@ -1253,7 +1253,7 @@ class ProductController extends Controller
                         } elseif ($fileItem instanceof \Illuminate\Http\UploadedFile) {
                             $extension = strtolower($fileItem->getClientOriginalExtension());
                         }
-                        if (in_array($extension, $disallowedExtensions) && env('APP_MODE', 'dev') == 'demo') {
+                        if (in_array($extension, $disallowedExtensions) && config('app.mode') == 'demo') {
                             $validator->after(function ($validator) {
                                 $validator->errors()->add('digital_files', translate('Uploading_ZIP_files_is_currently_unavailable_in_demo_mode') . '!');
                             });
@@ -1379,7 +1379,7 @@ class ProductController extends Controller
                     $digitalFileExtension = strtolower($request['digital_file_ready']->getClientOriginalExtension());
                 }
 
-                if (in_array($digitalFileExtension, $disallowedExtensions) && env('APP_MODE', 'dev') == 'demo') {
+                if (in_array($digitalFileExtension, $disallowedExtensions) && config('app.mode') == 'demo') {
                     $validator->after(function ($validator) {
                         $validator->errors()->add('files', translate('Uploading_ZIP_files_is_currently_unavailable_in_demo_mode') . '!');
                     });

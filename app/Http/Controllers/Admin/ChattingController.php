@@ -191,7 +191,7 @@ class ChattingController extends BaseController
             foreach ($request->file('file') as $file) {
                 $extension = strtolower($file->getClientOriginalExtension());
                 if (in_array($extension, getDisallowedExtensionsListArray())) {
-                    if (env('APP_MODE', 'dev') == 'demo') {
+                    if (config('app.mode') == 'demo') {
                         return response()->json([
                             'status' => 'error',
                             'message' => translate('Uploading_ZIP_files_is_currently_unavailable_in_demo_mode')

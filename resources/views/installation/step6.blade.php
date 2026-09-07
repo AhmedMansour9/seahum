@@ -22,10 +22,10 @@
 
             <div class="text-center">
                 @php($adminLoginUrl = getWebConfig(name: 'admin_login_url'))
-                <a href="{{ env('APP_URL') }}" target="_blank" class="btn btn-secondary px-sm-5">
+                <a href="{{ config('app.url') }}" target="_blank" class="btn btn-secondary px-sm-5">
                     Landing Page
                 </a>
-                <a href="{{ env('APP_URL') }}/login/{{$adminLoginUrl}}" target="_blank" class="btn btn-dark px-sm-5">
+                <a href="{{ config('app.url') }}/login/{{$adminLoginUrl}}" target="_blank" class="btn btn-dark px-sm-5">
                     Admin Panel
                 </a>
             </div>

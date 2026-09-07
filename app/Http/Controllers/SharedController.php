@@ -39,7 +39,7 @@ class SharedController extends Controller
 
     public function getSessionRecaptchaCode(Request $request): JsonResponse
     {
-        if (env('APP_MODE') == 'dev' && session()->has($request['sessionKey'])) {
+        if (config('app.mode') == 'dev' && session()->has($request['sessionKey'])) {
             $code = session($request['sessionKey']);
         }
         return response()->json(['code' => $code ?? '']);
@@ -72,7 +72,7 @@ class SharedController extends Controller
     {
         $config = $this->getAddonsConfig();
         $adminPanel = $config['admin_panel'] ?? [];
-        $status = ($this->is_local() || env('DEVELOPMENT_ENVIRONMENT', true)) ? 1 : ($adminPanel['active'] ?? 0);
+        $status = ($this->is_local() || config('software.development_environment')) ? 1 : ($adminPanel['active'] ?? 0);
         return $status == 1 ? redirect(url('/')) : view('installation.activation-check');
     }
 

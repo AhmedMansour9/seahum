@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Utils\EnvironmentManager;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -55,7 +56,7 @@ trait ActivationClass
     public function getRequestConfig(string|null $username = null, string|null $purchaseKey = null, string|null $softwareId = null, string|null $softwareType = null, string|null $name = null, string|null $identifier = null): array
     {
         $isLocal = false;
-        if ($this->is_local() || env('DEVELOPMENT_ENVIRONMENT', true) || env('APP_MODE') == 'demo') {
+        if ($this->is_local() || config('software.development_environment') || config('app.mode') == 'demo') {
             $isLocal = true;
         }
 
@@ -69,8 +70,8 @@ trait ActivationClass
                     base64_decode('c29mdHdhcmVfaWQ=') => base64_decode($softwareId ?? SOFTWARE_ID),
                     base64_decode('ZG9tYWlu') => $this->getDomain(),
                     base64_decode('c29mdHdhcmVfdHlwZQ==') => $softwareType,
-                    base64_decode('bmFtZQ==') => $name ?? env('ADMIN_NAME', ''),
-                    base64_decode('ZW1haWw=') => $identifier ?? base64_decode(env('ADMIN_IDENTIFIER', '')),
+                    base64_decode('bmFtZQ==') => $name ?? config('software.admin_name'),
+                    base64_decode('ZW1haWw=') => $identifier ?? base64_decode(config('software.admin_identifier')),
                 ])->json();
                 $activeStatus = $response['active'] ?? base64_encode(1);
                 if (!base64_decode($activeStatus) && !empty($response['errors'])) {
@@ -96,7 +97,7 @@ trait ActivationClass
 
     public function checkActivationCache(string|null $app)
     {
-        if ($this->is_local() || is_null($app) || env('DEVELOPMENT_ENVIRONMENT', true) || env('APP_MODE') == 'demo') {
+        if ($this->is_local() || is_null($app) || config('software.development_environment') || config('app.mode') == 'demo') {
             return true;
         }
 
@@ -161,6 +162,8 @@ trait ActivationClass
         }
         $cleanedContent = implode(PHP_EOL, $cleanedLines) . PHP_EOL;
         file_put_contents($envPath, $cleanedContent);
+        EnvironmentManager::forgetCachedConfig();
+
         return true;
     }
 }

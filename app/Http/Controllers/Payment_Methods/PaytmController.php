@@ -43,13 +43,13 @@ class PaytmController extends Controller
             }
             $config = array(
                 'PAYTM_ENVIRONMENT' => ($config->mode == 'test') ? 'TEST' : 'PROD',
-                'PAYTM_MERCHANT_KEY' => env('PAYTM_MERCHANT_KEY', $this->config_values->merchant_key),
-                'PAYTM_MERCHANT_MID' => env('PAYTM_MERCHANT_MID', $this->config_values->merchant_id),
-                'PAYTM_MERCHANT_WEBSITE' => env('PAYTM_MERCHANT_WEBSITE', $this->config_values->merchant_website_link),
-                'PAYTM_REFUND_URL' => env('PAYTM_REFUND_URL', $this->config_values->refund_url ?? ''),
-                'PAYTM_STATUS_QUERY_URL' => env('PAYTM_STATUS_QUERY_URL', $PAYTM_STATUS_QUERY_NEW_URL),
-                'PAYTM_STATUS_QUERY_NEW_URL' => env('PAYTM_STATUS_QUERY_NEW_URL', $PAYTM_STATUS_QUERY_NEW_URL),
-                'PAYTM_TXN_URL' => env('PAYTM_TXN_URL', $PAYTM_TXN_URL),
+                'PAYTM_MERCHANT_KEY' => config('payment_overrides.paytm_merchant_key') ?? $this->config_values->merchant_key,
+                'PAYTM_MERCHANT_MID' => config('payment_overrides.paytm_merchant_mid') ?? $this->config_values->merchant_id,
+                'PAYTM_MERCHANT_WEBSITE' => config('payment_overrides.paytm_merchant_website') ?? $this->config_values->merchant_website_link,
+                'PAYTM_REFUND_URL' => config('payment_overrides.paytm_refund_url') ?? $this->config_values->refund_url ?? '',
+                'PAYTM_STATUS_QUERY_URL' => config('payment_overrides.paytm_status_query_url') ?? $PAYTM_STATUS_QUERY_NEW_URL,
+                'PAYTM_STATUS_QUERY_NEW_URL' => config('payment_overrides.paytm_status_query_new_url') ?? $PAYTM_STATUS_QUERY_NEW_URL,
+                'PAYTM_TXN_URL' => config('payment_overrides.paytm_txn_url') ?? $PAYTM_TXN_URL,
             );
 
             //config_paytm

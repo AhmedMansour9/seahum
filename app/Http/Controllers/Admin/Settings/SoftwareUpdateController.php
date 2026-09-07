@@ -35,7 +35,7 @@ class SoftwareUpdateController extends Controller
 
     public function update(SoftwareUpdateRequest $request): RedirectResponse|JsonResponse
     {
-        if (env('APP_MODE', 'dev') == 'demo') {
+        if (config('app.mode') == 'demo') {
             return response()->json([
                 'status' => false,
                 'message' => translate('Uploading_ZIP_files_is_currently_unavailable_in_demo_mode')
@@ -84,7 +84,7 @@ class SoftwareUpdateController extends Controller
                     if (preg_match("/const\s+SOFTWARE_VERSION\s*=\s*['\"]?([\d\.]+)['\"]?/", $zip->getFromIndex($i), $matches)) {
                         $matchesResult = ['SOFTWARE_VERSION' => $matches[1]];
                     }
-                    if (isset($matchesResult['SOFTWARE_VERSION']) && $matchesResult['SOFTWARE_VERSION'] > env('SOFTWARE_VERSION')) {
+                    if (isset($matchesResult['SOFTWARE_VERSION']) && $matchesResult['SOFTWARE_VERSION'] > config('software.version')) {
                         $execute = 1;
                     }
                 }

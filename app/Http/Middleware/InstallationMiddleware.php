@@ -16,10 +16,10 @@ class InstallationMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (session()->has('purchase_key') == false && env('PURCHASE_CODE') == null) {
+        if (session()->has('purchase_key') == false && config('software.purchase_code') == null) {
             session()->flash('error', base64_decode('SW52YWxpZCBwdXJjaGFzZSBjb2RlIGZvciB0aGlzIHNvZnR3YXJlLg=='));
             return redirect('step2');
-        }elseif(env('PURCHASE_CODE') != null){
+        }elseif(config('software.purchase_code') != null){
             return $next($request);
         }
 

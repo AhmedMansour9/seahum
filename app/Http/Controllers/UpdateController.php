@@ -64,7 +64,7 @@ class UpdateController extends Controller
             Artisan::call('optimize:clear');
             $this->getProcessAllVersionsUpdates();
             $this->cleanupEnvFileContext();
-            return redirect(env('APP_URL'));
+            return redirect(config('app.url'));
         }
 
         if (!empty($response['errors'])) {

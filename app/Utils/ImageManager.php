@@ -23,7 +23,7 @@ class ImageManager
                 $imageName = Carbon::now()->toDateString() . "-" . uniqid() . "." . $image->getClientOriginalExtension();
                 Storage::disk($storage)->put($dir . $imageName, file_get_contents($image));
             } else {
-                if (in_array(request()->ip(), ['127.0.0.1', '::1']) && !(imagetypes() & IMG_WEBP) || env('APP_DEBUG') && !(imagetypes() & IMG_WEBP)) {
+                if (in_array(request()->ip(), ['127.0.0.1', '::1']) && !(imagetypes() & IMG_WEBP) || config('app.debug') && !(imagetypes() & IMG_WEBP)) {
                     $format = 'png';
                 }
                 $imageWebp = Image::make($image)->encode($format, 85);

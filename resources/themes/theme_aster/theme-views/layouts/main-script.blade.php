@@ -53,7 +53,7 @@ data-value="{{ isset($recaptcha) && $recaptcha['status'] == 1 ? $recaptcha['site
     const iconPath = "{{ dynamicAsset(path: 'public/assets/new/back-end/img/icons/file.svg') }}";
 </script>
 
-@if(env('APP_MODE') == 'demo')
+@if(config('app.mode') == 'demo')
     <script>
         'use strict'
         function checkDemoResetTime() {

@@ -7,7 +7,7 @@
 @endphp
 
 @php($direction = session('direction'))
-@if (env('APP_MODE')=='demo')
+@if (config('app.mode')=='demo')
     <div class="__announcement-bar" style="background-image: url({{ dynamicAsset(path: 'public/assets/website-top-header.png') }})">
         <div class="container">
             <div class="wrapper">
