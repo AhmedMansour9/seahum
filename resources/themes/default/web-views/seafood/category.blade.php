@@ -38,6 +38,7 @@
         .sf-range::-moz-range-thumb { pointer-events: auto; width: 22px; height: 22px; border-radius: 50%; background: #FFFFFF; border: 2px solid #17B0A7; cursor: pointer; }
         .sf-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(23,176,167,.25); }
         .sf-page-link:hover { border-color: #17B0A7 !important; background: #ECF8F8 !important; color: #0B2C3F !important; }
+
         .sf-help-card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 28px 20px; background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9); }
         .sf-help-icon { width: 60px; height: 60px; border-radius: 20px; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center; }
         .sf-help-title { font-family: Cairo, sans-serif; font-size: 17px; font-weight: 700; color: #0B2C3F; margin-top: 6px; }
@@ -54,6 +55,15 @@
         .sf-skeleton-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 11px; }
         .sf-skeleton-action { height: 44px; border-radius: 13px; background: #F4FAFB; display: block; }
         @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+        /* The old price widens the price group; above the mobile breakpoint the
+           card is wide enough to keep it on one row with the CTA, as on the home page. */
+        @media (min-width: 760px) {
+            .sf-product-actions { flex-wrap: nowrap !important; gap: 8px !important; }
+            .sf-product-actions > span:first-child { flex: 1 1 auto; min-width: 0; }
+            .sf-product-price, .sf-product-old-price { white-space: nowrap; }
+            .sf-product-actions .seafood-cart-toggle, .sf-product-actions .sf-product-action { flex-shrink: 0; padding: 0 13px; gap: 6px; }
+        }
 
         @media (min-width: 980px) {
             .sf-filter-panel { position: sticky; top: 92px; max-height: calc(100vh - 112px); overflow-y: auto; }
