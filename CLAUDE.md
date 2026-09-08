@@ -5,6 +5,7 @@
 @.claude/rules/response-style.md
 @.claude/rules/coding-standards.md
 @.claude/rules/auction-ui.md
+@.claude/rules/browser-verification.md
 
 ## Commands
 
