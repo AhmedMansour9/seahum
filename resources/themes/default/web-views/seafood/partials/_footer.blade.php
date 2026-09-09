@@ -16,7 +16,7 @@
                         {{ translate('an_online_store_for_fresh_fish_and_seafood_daily_catch_chilled_sealed_packing_and_delivery_to_your_door') }}
                     </p>
                     @if($web_config['social_media']->count() > 0)
-                        <div style="display: flex; gap: 10px; margin-top: 22px;">
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px;">
                             @foreach($web_config['social_media'] as $socialMedia)
                                 <a href="{{ $socialMedia['link'] }}" target="_blank" class="sf-social"
                                    aria-label="{{ $socialMedia['name'] }}" title="{{ $socialMedia['name'] }}"

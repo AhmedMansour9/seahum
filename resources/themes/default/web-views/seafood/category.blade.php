@@ -79,7 +79,13 @@
                 box-shadow: 0 -22px 40px -18px rgba(0,0,0,.55);
                 padding: 0 20px calc(20px + env(safe-area-inset-bottom));
                 transform: translateY(100%); transition: transform .3s ease;
+                overscroll-behavior: contain;
             }
+            /* The sheet covers the listing; the page behind it must not scroll away. */
+            body.sf-filter-sheet-open { position: fixed; inset-inline: 0; width: 100%; overflow: hidden; }
+            .sf-category-caret { width: 44px; height: 44px; }
+            .sf-category-link--sub { min-height: 44px; }
+            .sf-search-submit { width: 44px !important; height: 44px !important; inset-inline-end: 2px !important; }
             .sf-filter-panel[data-open="true"] { transform: translateY(0); }
             .sf-filter-sheet-head { display: block; position: sticky; top: 0; background: #FFFFFF; padding: 14px 0 12px; z-index: 2; }
             .sf-filter-card { border: none; border-radius: 0; padding: 18px 0; border-bottom: 1px solid #EDF5F6; }
@@ -454,17 +460,40 @@
 
         $(document).on('input', '#min_price, #max_price', syncSeafoodPriceRange);
 
+        let seafoodScrollPositionBeforeSheet = 0;
+
+        function lockSeafoodPageScroll() {
+            seafoodScrollPositionBeforeSheet = window.scrollY;
+            $('body').addClass('sf-filter-sheet-open').css('top', (-seafoodScrollPositionBeforeSheet) + 'px');
+        }
+
+        function unlockSeafoodPageScroll() {
+            if (!$('body').hasClass('sf-filter-sheet-open')) {
+                return;
+            }
+            $('body').removeClass('sf-filter-sheet-open').css('top', '');
+            window.scrollTo(0, seafoodScrollPositionBeforeSheet);
+        }
+
         function openSeafoodFilterSheet() {
             $('#seafood-filter-panel').attr('data-open', 'true');
             $('#seafood-filter-backdrop').attr('data-open', 'true');
             $('#seafood-filter-toggle').attr('aria-expanded', 'true');
+            lockSeafoodPageScroll();
         }
 
         function closeSeafoodFilterSheet() {
             $('#seafood-filter-panel').attr('data-open', 'false');
             $('#seafood-filter-backdrop').attr('data-open', 'false');
             $('#seafood-filter-toggle').attr('aria-expanded', 'false');
+            unlockSeafoodPageScroll();
         }
+
+        $(window).on('resize', function () {
+            if (window.innerWidth >= 980) {
+                closeSeafoodFilterSheet();
+            }
+        });
 
         $(document).on('input keyup search', '.sf-brand-search', function () {
             const searchTerm = this.value.toLowerCase().trim();
