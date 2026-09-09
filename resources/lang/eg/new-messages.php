@@ -9275,4 +9275,11 @@ ____________________________________________________on_search_engines_and_see_th
 	"Discounted_Products" => "Discounted Products",
 	"filters" => "الفلاتر",
 	"Latest_Products" => "Latest Products",
+	"categories_found" => "فئة",
+	"search_categories" => "ابحث في الفئات",
+	"no_category_matches_this_name_try_a_shorter_word" => "لا توجد فئة بهذا الاسم. جرّب كلمة أقصر.",
+	"categories_will_appear_here_once_they_are_added" => "ستظهر الفئات هنا بمجرد إضافتها.",
+	"show_all_categories" => "عرض كل الفئات",
+	"back_to_home" => "العودة للرئيسية",
+	"there_is_no_category" => "لا توجد فئات",
 ];

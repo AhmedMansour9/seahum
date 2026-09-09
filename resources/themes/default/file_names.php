@@ -49,6 +49,7 @@ return [
     'order_complete' => 'web-views.checkout.complete',
     'products_mobile_nav_partials' => 'layouts.front-end.partials._cart',
     'products_view_page' => 'web-views.products.view',
+    'all_categories_page' => 'web-views.seafood.categories',
     'category_products_view_page' => 'web-views.seafood.category',
     'category_products_ajax_partials' => 'web-views.seafood.partials._product-grid',
     'products__ajax_partials' => 'web-views.products._ajax-products',

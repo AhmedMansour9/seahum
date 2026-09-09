@@ -18,7 +18,7 @@ class SeafoodCategoryViewTest extends TestCase
     {
         $viewFileNames = include base_path(self::THEME_PATH.'/file_names.php');
 
-        foreach (['category_products_view_page', 'category_products_ajax_partials'] as $viewKey) {
+        foreach (['all_categories_page', 'category_products_view_page', 'category_products_ajax_partials'] as $viewKey) {
             $this->assertArrayHasKey($viewKey, $viewFileNames, "file_names.php is missing the '{$viewKey}' entry.");
             $this->assertFileExists($this->templatePath($viewFileNames[$viewKey]));
         }
@@ -41,7 +41,7 @@ class SeafoodCategoryViewTest extends TestCase
     {
         $sharedPartials = ['_styles', '_topbar', '_header', '_footer', '_mobile-bar', '_scripts'];
 
-        foreach (['home', 'category'] as $page) {
+        foreach (['home', 'category', 'categories'] as $page) {
             $pageContents = file_get_contents($this->templatePath('web-views.seafood.'.$page));
 
             foreach ($sharedPartials as $partial) {
@@ -98,7 +98,7 @@ class SeafoodCategoryViewTest extends TestCase
         $categoryPage = file_get_contents($this->templatePath('web-views.seafood.category'));
         $categoryTouchBlock = $this->mediaBlock($categoryPage, 'max-width: 979px');
 
-        $this->assertStringContainsString('.sf-search-submit { width: 44px !important; height: 44px !important;', $categoryTouchBlock);
+        $this->assertStringContainsString('.sf-search-submit { width: 44px !important; height: 44px !important;', $touchBlock);
         $this->assertStringContainsString('.sf-category-link--sub { min-height: 44px; }', $categoryTouchBlock);
     }
 

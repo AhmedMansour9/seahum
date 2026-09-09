@@ -1,4 +1,16 @@
     <style>
+        .sf-filter-field { width: 100%; height: 48px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; padding: 0 14px; font-family: Tajawal, sans-serif; font-size: 15px; outline: none; transition: border-color .2s, box-shadow .2s; }
+        .sf-filter-field:focus { border: 1.5px solid #17B0A7; box-shadow: 0 0 0 3px rgba(23,176,167,.22); }
+        .sf-filter-field::placeholder { color: #7B98A4; }
+        .sf-search-wrap { position: relative; display: flex; align-items: center; }
+        .sf-search-submit { position: absolute; inset-inline-end: 6px; width: 36px; height: 36px; border-radius: 10px; border: none; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center; cursor: pointer; transition: background .2s, color .2s; }
+        .sf-search-submit:hover { background: #17B0A7; color: #FFFFFF; }
+        .sf-cat-card-title { overflow-wrap: anywhere; }
+        .sf-help-card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 28px 20px; background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9); }
+        .sf-help-icon { width: 60px; height: 60px; border-radius: 20px; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center; }
+        .sf-help-title { font-family: Cairo, sans-serif; font-size: 17px; font-weight: 700; color: #0B2C3F; margin-top: 6px; }
+        .sf-help-text { font-size: 14px; line-height: 1.8; color: #6E8C99; }
+
         .sf-lift { transition: transform .28s, box-shadow .28s, border-color .28s; }
         .sf-lift:hover { transform: translateY(-6px); box-shadow: 0 24px 42px -26px rgba(11, 44, 63, .85); border-color: #BEE6E4; }
         .sf-nav-link { transition: background .2s, color .2s; }
@@ -38,6 +50,7 @@
         }
 
         @media (max-width: 979px) {
+            .sf-search-submit { width: 44px !important; height: 44px !important; inset-inline-end: 2px !important; }
             .sf-desktop-nav { display: none !important; }
             .sf-header-lang { display: none !important; }
             .sf-burger { display: grid; }
@@ -56,6 +69,11 @@
         }
 
         @media (max-width: 759px) {
+            .sf-help-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; }
+            .sf-help-card { padding: 20px 14px; }
+            .sf-help-text { display: none; }
+            .sf-search-wrap { flex: 1 1 100%; }
+            .sf-search-field { width: 100% !important; }
             .sf-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; }
             .sf-product-title { font-size: 15px !important; line-height: 1.45 !important; }
             .sf-product-rule { margin: 10px 0 !important; }

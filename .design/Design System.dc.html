@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; }
+  body { direction: rtl; font-family: Tajawal, "Segoe UI", sans-serif; background: #F4FAFB; color: #0B2C3F; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  a { color: #0E8E88; text-decoration: none; }
+  a:hover { color: #0B2C3F; }
+  @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(23,176,167,.45); } 70% { box-shadow: 0 0 0 14px rgba(23,176,167,0); } 100% { box-shadow: 0 0 0 0 rgba(23,176,167,0); } }
+  @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</helmet>
+
+<div dir="rtl" style="font-family: Tajawal, sans-serif; background: #F4FAFB; min-height: 100vh;">
+
+  <header style="background: linear-gradient(200deg, #062A3E 0%, #0D3B58 55%, #0E6B72 100%); color: #FFFFFF; padding: clamp(40px, 6vw, 76px) clamp(16px, 4vw, 40px);">
+    <div style="max-width: 1180px; margin: 0 auto;">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <span style="width: 44px; height: 44px; border-radius: 14px; background: rgba(23,176,167,.22); border: 1px solid rgba(127,227,220,.4); display: grid; place-items: center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7FE3DC" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c2-2.6 4-2.6 6 0s4 2.6 6 0 4-2.6 6 0"></path><path d="M2 9c2-2.6 4-2.6 6 0s4 2.6 6 0 4-2.6 6 0"></path></svg>
+        </span>
+        <span style="font-size: 13.5px; font-weight: 800; color: #7FE3DC; letter-spacing: .5px;">صيد اليوم — نظام التصميم</span>
+      </div>
+      <h1 style="font-family: Cairo, sans-serif; font-weight: 900; font-size: clamp(30px, 5vw, 54px); line-height: 1.2; margin: 20px 0 0; letter-spacing: -.5px;">Design System</h1>
+      <p style="font-size: clamp(15px, 1.6vw, 18px); line-height: 1.9; color: #C6DDE6; margin: 16px 0 0; max-width: 640px; text-wrap: pretty;">نظام مستخرج بالكامل من الصفحة الرئيسية — نفس الألوان والخطوط والمسافات والمكونات، مُوحَّدة في توكنز دلالية جاهزة للاستخدام في كل صفحات الموقع. لا هوية جديدة، ولا إعادة تصميم.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px;">
+        <sc-for list="{{ navChips }}" as="c" hint-placeholder-count="8">
+          <a href="{{ c.href }}" style="display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: 999px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); color: #FFFFFF; font-family: Cairo, sans-serif; font-size: 14px; font-weight: 700; transition: background .2s, color .2s, border-color .2s;" style-hover="background: #17B0A7; color: #062A3E; border-color: #17B0A7;">{{ c.label }}</a>
+        </sc-for>
+      </div>
+    </div>
+  </header>
+
+  <main style="max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px) 90px;">
+
+    <section id="foundations" style="padding-top: clamp(44px, 6vw, 76px);">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <span style="height: 2px; width: 40px; background: #17B0A7; display: inline-block;"></span>
+        <span style="font-size: 13px; font-weight: 800; color: #0E8E88; letter-spacing: .5px;">Foundations</span>
+      </div>
+      <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(24px, 3.2vw, 34px); margin: 12px 0 0; color: #0B2C3F;">الأساسيات</h2>
+      <p style="font-size: 15.5px; line-height: 1.9; color: #55747F; margin: 12px 0 0; max-width: 640px;">كل قيمة هنا مأخوذة حرفيًا من الصفحة الرئيسية. الاسم الدلالي هو المرجع في التطبيق، والقيمة السداسية تفصيل تنفيذي.</p>
+
+      <h3 style="font-family: Cairo, sans-serif; font-size: 20px; font-weight: 800; margin: 40px 0 4px; color: #0B2C3F;">١. الألوان — Color Tokens</h3>
+      <p style="font-size: 14.5px; color: #6E8C99; margin: 0 0 22px;">استخدم الاسم الدلالي دائمًا؛ لا تكتب قيمة سداسية مباشرة في أي مكوّن.</p>
+
+      <sc-for list="{{ colorGroups }}" as="g" hint-placeholder-count="5">
+        <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px; margin-bottom: 16px; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9);">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px;">
+            <h4 style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 700; margin: 0; color: #0B2C3F;">{{ g.title }}</h4>
+            <span style="font-size: 13px; color: #6E8C99;">{{ g.note }}</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px;">
+            <sc-for list="{{ g.tokens }}" as="t" hint-placeholder-count="4">
+              <div style="border: 1px solid #E4EFF1; border-radius: 14px; overflow: hidden; background: #FFFFFF;">
+                <div style="height: 68px; background: {{ t.hex }}; border-bottom: 1px solid #E4EFF1;"></div>
+                <div style="padding: 11px 13px 13px; display: flex; flex-direction: column; gap: 5px;">
+                  <strong style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; font-weight: 500; color: #0B2C3F; direction: ltr; text-align: left;">{{ t.name }}</strong>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #7B98A4; direction: ltr; text-align: left;">{{ t.hex }}</span>
+                  <span style="font-size: 12px; color: #6E8C99; line-height: 1.6;">{{ t.use }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+
+      <h3 style="font-family: Cairo, sans-serif; font-size: 20px; font-weight: 800; margin: 40px 0 4px; color: #0B2C3F;">٢. الطباعة — Typography</h3>
+      <p style="font-size: 14.5px; color: #6E8C99; margin: 0 0 22px;">Cairo للعناوين والأزرار والأرقام البارزة، Tajawal للنصوص الجارية. للإنجليزية: نفس العائلتين تدعمان اللاتيني، وبديل النظام Helvetica / system-ui.</p>
+
+      <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9);">
+        <sc-for list="{{ typeScale }}" as="t" hint-placeholder-count="12">
+          <div style="display: grid; grid-template-columns: {{ typeCols }}; gap: 8px 20px; align-items: center; padding: 18px 22px; border-bottom: 1px solid #EDF5F6;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; font-weight: 500; color: #0E8E88; direction: ltr; text-align: left;">{{ t.token }}</span>
+            <span style="font-family: {{ t.family }}; font-size: {{ t.size }}; font-weight: {{ t.weight }}; line-height: {{ t.lh }}; letter-spacing: {{ t.ls }}; color: #0B2C3F; padding-block: 8px; overflow: visible; min-width: 0; text-wrap: pretty;">{{ t.sample }}</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #7B98A4; direction: ltr; text-align: left; line-height: 1.7;">{{ t.spec }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <h3 style="font-family: Cairo, sans-serif; font-size: 20px; font-weight: 800; margin: 40px 0 4px; color: #0B2C3F;">٣. المسافات — Spacing Scale</h3>
+      <p style="font-size: 14.5px; color: #6E8C99; margin: 0 0 22px;">مقياس بأساس ٤. تم توحيد القيم الفردية في الصفحة الرئيسية (٩، ١١، ١٣، ١٨، ٢٢، ٢٦) إلى أقرب درجة دون تغيير الإحساس البصري.</p>
+
+      <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9);">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <sc-for list="{{ spacing }}" as="s" hint-placeholder-count="10">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; font-weight: 500; color: #0E8E88; width: 84px; flex-shrink: 0; direction: ltr; text-align: left;">{{ s.token }}</span>
+              <span style="height: 18px; border-radius: 5px; background: #17B0A7; width: {{ s.px }}; flex-shrink: 0;"></span>
+              <span style="font-size: 13px; color: #6E8C99; line-height: 1.6;">{{ s.use }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 16px;">
+        <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px;">
+          <h4 style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 700; margin: 0 0 16px; color: #0B2C3F;">٤. الزوايا — Radius</h4>
+          <div style="display: flex; flex-wrap: wrap; gap: 14px;">
+            <sc-for list="{{ radii }}" as="r" hint-placeholder-count="6">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <span style="width: 62px; height: 52px; background: #ECF8F8; border: 1.5px solid #BEE6E4; border-radius: {{ r.px }}; display: block;"></span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #0E8E88; direction: ltr;">{{ r.token }}</span>
+                <span style="font-size: 11px; color: #7B98A4;">{{ r.use }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <p style="font-size: 13.5px; color: #6E8C99; line-height: 1.8; margin: 18px 0 0;">سُمك الحدود: <strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">1px</strong> افتراضي، <strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">1.5px</strong> للأزرار الثانوية والحالة المختارة، <strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">2px</strong> لحلقة التركيز ودوائر الخطوات.</p>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px;">
+          <h4 style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 700; margin: 0 0 16px; color: #0B2C3F;">٥. الظلال — Elevation</h4>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <sc-for list="{{ shadows }}" as="sh" hint-placeholder-count="4">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <span style="width: 62px; height: 46px; flex-shrink: 0; background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 14px; box-shadow: {{ sh.css }}; display: block;"></span>
+                <span style="display: flex; flex-direction: column; gap: 3px;">
+                  <strong style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: #0E8E88; direction: ltr; text-align: left;">{{ sh.token }}</strong>
+                  <span style="font-size: 12.5px; color: #6E8C99; line-height: 1.6;">{{ sh.use }}</span>
+                </span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-family: Cairo, sans-serif; font-size: 20px; font-weight: 800; margin: 40px 0 4px; color: #0B2C3F;">٦. الشبكة والتخطيط — Grid &amp; Layout</h3>
+      <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; overflow: hidden; margin-top: 20px; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9);">
+        <sc-for list="{{ layoutRules }}" as="l" hint-placeholder-count="8">
+          <div style="display: grid; grid-template-columns: {{ ruleCols }}; gap: 6px 20px; padding: 16px 22px; border-bottom: 1px solid #EDF5F6;">
+            <strong style="font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; color: #0B2C3F;">{{ l.name }}</strong>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #0E8E88; unicode-bidi: plaintext; line-height: 1.7;">{{ l.value }}</span>
+            <span style="font-size: 13px; color: #6E8C99; line-height: 1.7;">{{ l.note }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <h3 style="font-family: Cairo, sans-serif; font-size: 20px; font-weight: 800; margin: 40px 0 4px; color: #0B2C3F;">٧. الأيقونات والصور — Icons &amp; Media</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 20px;">
+        <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px;">
+          <h4 style="font-family: Cairo, sans-serif; font-size: 16px; font-weight: 700; margin: 0 0 16px; color: #0B2C3F;">مقاسات الأيقونات</h4>
+          <div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-end;">
+            <sc-for list="{{ iconSizes }}" as="i" hint-placeholder-count="4">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <span style="color: #0E8E88; display: grid; place-items: center;">
+                  <svg width="{{ i.px }}" height="{{ i.px }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg>
+                </span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #0E8E88; direction: ltr;">{{ i.token }}</span>
+                <span style="font-size: 11px; color: #7B98A4;">{{ i.use }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <p style="font-size: 13.5px; color: #6E8C99; line-height: 1.8; margin: 18px 0 0;">كل الأيقونات خطية على شبكة 24، بسُمك <strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">1.8–2</strong> ونهايات دائرية، و<strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">currentColor</strong> دائمًا — لا أيقونات مصمتة إلا لأيقونات التواصل الاجتماعي.</p>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px;">
+          <h4 style="font-family: Cairo, sans-serif; font-size: 16px; font-weight: 700; margin: 0 0 16px; color: #0B2C3F;">نسب الصور</h4>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <sc-for list="{{ ratios }}" as="r" hint-placeholder-count="3">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <span style="width: 74px; flex-shrink: 0; aspect-ratio: {{ r.ratio }}; background: repeating-linear-gradient(135deg, #EAF4F5 0 7px, #F4FAFB 7px 14px); border: 1px solid #E4EFF1; border-radius: 10px; display: block;"></span>
+                <span style="display: flex; flex-direction: column; gap: 3px;">
+                  <strong style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: #0E8E88; direction: ltr; text-align: left;">{{ r.token }}</strong>
+                  <span style="font-size: 12.5px; color: #6E8C99; line-height: 1.6;">{{ r.use }}</span>
+                </span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="buttons" style="padding-top: clamp(44px, 6vw, 76px);">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <span style="height: 2px; width: 40px; background: #17B0A7; display: inline-block;"></span>
+        <span style="font-size: 13px; font-weight: 800; color: #0E8E88; letter-spacing: .5px;">Buttons</span>
+      </div>
+      <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(24px, 3.2vw, 34px); margin: 12px 0 0; color: #0B2C3F;">الأزرار</h2>
+      <p style="font-size: 15.5px; line-height: 1.9; color: #55747F; margin: 12px 0 26px; max-width: 640px;">خمس متغيّرات، ارتفاع أدنى ٤٤px في كل الأحجام، وخط Cairo بوزن ٧٠٠–٨٠٠. الحالات موثّقة بصريًا بالأسفل.</p>
+
+      <sc-for list="{{ buttonVariants }}" as="b" hint-placeholder-count="5">
+        <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px; margin-bottom: 16px; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9);">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
+            <h4 style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; margin: 0; color: #0B2C3F; direction: ltr;">{{ b.token }}</h4>
+            <span style="font-size: 13px; color: #6E8C99;">{{ b.note }}</span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 14px;">
+            <sc-for list="{{ b.states }}" as="st" hint-placeholder-count="5">
+              <div style="display: flex; flex-direction: column; gap: 9px; align-items: flex-start;">
+                <span style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: {{ st.pad }}; border-radius: 14px; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 800; white-space: nowrap; background: {{ st.bg }}; color: {{ st.fg }}; border: {{ st.border }}; box-shadow: {{ st.shadow }}; opacity: {{ st.opacity }};">{{ st.label }}</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr; text-align: left;">{{ st.state }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+
+      <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9);">
+        <h4 style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; margin: 0 0 20px; color: #0B2C3F; direction: ltr;">Button / Icon</h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 14px;">
+          <sc-for list="{{ iconButtons }}" as="ib" hint-placeholder-count="4">
+            <div style="display: flex; flex-direction: column; gap: 9px; align-items: flex-start;">
+              <span style="width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: {{ ib.bg }}; color: {{ ib.fg }}; border: {{ ib.border }};">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h2l2.2 10.2a2 2 0 0 0 2 1.6h6.9a2 2 0 0 0 2-1.5L21 8H7"></path><circle cx="10" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle></svg>
+              </span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr; text-align: left;">{{ ib.state }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <p style="font-size: 13.5px; color: #6E8C99; line-height: 1.8; margin: 20px 0 0;">كل زر أيقونة يحمل <strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">aria-label</strong> عربيًا، ومساحة اللمس لا تقل عن ٤٤×٤٤ حتى لو كانت الأيقونة ١٩px.</p>
+      </div>
+    </section>
+
+    <section id="forms" style="padding-top: clamp(44px, 6vw, 76px);">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <span style="height: 2px; width: 40px; background: #17B0A7; display: inline-block;"></span>
+        <span style="font-size: 13px; font-weight: 800; color: #0E8E88; letter-spacing: .5px;">Forms</span>
+      </div>
+      <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(24px, 3.2vw, 34px); margin: 12px 0 0; color: #0B2C3F;">الحقول والنماذج</h2>
+      <p style="font-size: 15.5px; line-height: 1.9; color: #55747F; margin: 12px 0 26px; max-width: 640px;">الصفحة الرئيسية لا تحتوي نماذج، لذا بُنيت هذه المكونات على نفس لغة الأزرار والبطاقات: حدود <strong>Border/Default</strong>، زوايا <strong>radius-md</strong>، وحلقة تركيز تركوازية.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(268px, 1fr)); gap: 16px;">
+        <sc-for list="{{ inputStates }}" as="f" hint-placeholder-count="5">
+          <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 20px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #7B98A4; direction: ltr; display: block; text-align: left;">{{ f.token }}</span>
+            <label style="display: block; font-family: Cairo, sans-serif; font-size: 13.5px; font-weight: 700; color: #0B2C3F; margin: 14px 0 8px;">{{ f.label }}</label>
+            <div style="display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; border-radius: 12px; background: {{ f.bg }}; border: {{ f.border }}; box-shadow: {{ f.ring }};">
+              <span style="color: {{ f.iconColor }}; display: grid; place-items: center; flex-shrink: 0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg>
+              </span>
+              <span style="font-size: 15px; color: {{ f.textColor }}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ f.value }}</span>
+            </div>
+            <span style="display: block; font-size: 12.5px; line-height: 1.7; color: {{ f.hintColor }}; margin-top: 8px;">{{ f.hint }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px; margin-top: 16px;">
+        <h4 style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; margin: 0 0 22px; color: #0B2C3F; direction: ltr;">Controls / Checkbox · Radio · Toggle</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 22px;">
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <span style="font-size: 13px; font-weight: 700; color: #6E8C99;">Checkbox</span>
+            <sc-for list="{{ checkStates }}" as="c" hint-placeholder-count="3">
+              <span style="display: flex; align-items: center; gap: 11px; min-height: 44px;">
+                <span style="width: 22px; height: 22px; border-radius: 7px; flex-shrink: 0; display: grid; place-items: center; background: {{ c.bg }}; border: {{ c.border }}; opacity: {{ c.opacity }};">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="{{ c.tick }}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"></path></svg>
+                </span>
+                <span style="font-size: 14.5px; color: #34586B;">{{ c.label }}</span>
+              </span>
+            </sc-for>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <span style="font-size: 13px; font-weight: 700; color: #6E8C99;">Radio</span>
+            <sc-for list="{{ radioStates }}" as="r" hint-placeholder-count="3">
+              <span style="display: flex; align-items: center; gap: 11px; min-height: 44px;">
+                <span style="width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; background: #FFFFFF; border: {{ r.border }}; opacity: {{ r.opacity }};">
+                  <span style="width: 10px; height: 10px; border-radius: 50%; background: {{ r.dot }}; display: block;"></span>
+                </span>
+                <span style="font-size: 14.5px; color: #34586B;">{{ r.label }}</span>
+              </span>
+            </sc-for>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <span style="font-size: 13px; font-weight: 700; color: #6E8C99;">Toggle</span>
+            <sc-for list="{{ toggleStates }}" as="t" hint-placeholder-count="3">
+              <span style="display: flex; align-items: center; gap: 11px; min-height: 44px;">
+                <span style="width: 46px; height: 26px; border-radius: 999px; flex-shrink: 0; display: flex; align-items: center; padding: 3px; background: {{ t.track }}; justify-content: {{ t.justify }}; opacity: {{ t.opacity }};">
+                  <span style="width: 20px; height: 20px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 2px 6px rgba(11,44,63,.3); display: block;"></span>
+                </span>
+                <span style="font-size: 14.5px; color: #34586B;">{{ t.label }}</span>
+              </span>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cards" style="padding-top: clamp(44px, 6vw, 76px);">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <span style="height: 2px; width: 40px; background: #17B0A7; display: inline-block;"></span>
+        <span style="font-size: 13px; font-weight: 800; color: #0E8E88; letter-spacing: .5px;">Cards</span>
+      </div>
+      <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(24px, 3.2vw, 34px); margin: 12px 0 0; color: #0B2C3F;">البطاقات</h2>
+      <p style="font-size: 15.5px; line-height: 1.9; color: #55747F; margin: 12px 0 26px; max-width: 640px;">ترتيب المعلومات ثابت في بطاقة المنتج: الشارات ← الاسم ← فاصل ← السعر + الإجراء. لا يتغيّر هذا الترتيب بين الديسكتوب والموبايل، يتغيّر المقياس فقط.</p>
+
+      <h4 style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; margin: 0 0 16px; color: #0B2C3F; direction: ltr;">Product Card / Default · Hover · Out of stock · Loading</h4>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(238px, 1fr)); gap: 20px;">
+        <sc-for list="{{ productCards }}" as="p" hint-placeholder-count="4">
+          <article style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid {{ p.borderColor }}; border-radius: 20px; overflow: hidden; box-shadow: {{ p.shadow }}; transform: {{ p.transform }};">
+            <div style="position: relative; aspect-ratio: 1 / 1; background: {{ p.mediaBg }};">
+              <sc-if value="{{ p.skeleton }}" hint-placeholder-val="{{ false }}">
+                <span style="position: absolute; inset: 0; background: linear-gradient(90deg, #EAF4F5 25%, #F4FAFB 50%, #EAF4F5 75%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; display: block;"></span>
+              </sc-if>
+              <sc-if value="{{ p.showMedia }}" hint-placeholder-val="{{ true }}">
+                <span style="position: absolute; inset: 0; background: repeating-linear-gradient(135deg, #EAF4F5 0 10px, #F1F7F8 10px 20px); display: grid; place-items: center;">
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr;">product 1:1</span>
+                </span>
+              </sc-if>
+              <sc-if value="{{ p.showFav }}" hint-placeholder-val="{{ true }}">
+                <span style="position: absolute; top: 7px; inset-inline-end: 7px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.92); display: grid; place-items: center;">
+                  <svg width="17" height="17" viewBox="0 0 24 24" stroke="#0B2C3F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" fill="{{ p.favFill }}"><path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9Z"></path></svg>
+                </span>
+              </sc-if>
+            </div>
+            <div style="padding: 18px; display: flex; flex-direction: column; flex: 1;">
+              <sc-if value="{{ p.showBadges }}" hint-placeholder-val="{{ true }}">
+                <span style="width: max-content; display: flex; flex-wrap: wrap; align-items: center; gap: 6px;">
+                  <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; font-family: Cairo, sans-serif; font-size: 11.5px; font-weight: 700; white-space: nowrap; background: {{ p.stockBg }}; color: {{ p.stockColor }};">
+                    <span style="width: 6px; height: 6px; border-radius: 50%; display: inline-block; background: {{ p.stockColor }};"></span>
+                    {{ p.stock }}
+                  </span>
+                </span>
+              </sc-if>
+              <sc-if value="{{ p.skeleton }}" hint-placeholder-val="{{ false }}">
+                <span style="height: 16px; width: 70%; border-radius: 6px; background: #EDF5F6; display: block; margin-bottom: 10px;"></span>
+              </sc-if>
+              <h3 style="font-family: Cairo, sans-serif; font-size: 18px; font-weight: 700; margin: 14px 0 0; color: {{ p.titleColor }}; line-height: 1.45;">{{ p.name }}</h3>
+              <span style="height: 1px; background: #EDF5F6; margin: 14px 0 13px; display: block;"></span>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto;">
+                <span style="direction: ltr; display: flex; align-items: baseline; justify-content: flex-end; gap: 5px; white-space: nowrap;">
+                  <span style="font-size: 12.5px; font-weight: 600; color: #7B98A4;">جنيه</span>
+                  <strong style="font-family: Cairo, sans-serif; font-size: 24px; font-weight: 800; color: {{ p.priceColor }}; letter-spacing: -.4px;">{{ p.price }}</strong>
+                </span>
+                <span style="flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 44px; padding: 0 14px; border-radius: 13px; background: {{ p.btnBg }}; color: {{ p.btnFg }}; font-family: Cairo, sans-serif; font-size: 14px; font-weight: 700; white-space: nowrap;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h2l2.2 10.2a2 2 0 0 0 2 1.6h6.9a2 2 0 0 0 2-1.5L21 8H7"></path><circle cx="10" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle></svg>
+                  {{ p.btnLabel }}
+                </span>
+              </div>
+            </div>
+            <span style="display: block; padding: 10px 18px; background: #F4FAFB; border-top: 1px solid #EDF5F6; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr; text-align: left;">{{ p.token }}</span>
+          </article>
+        </sc-for>
+      </div>
+
+      <h4 style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; margin: 34px 0 16px; color: #0B2C3F; direction: ltr;">Category Card · Promotional Card · Feature Card · Step Card</h4>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(238px, 1fr)); gap: 20px;">
+        <div style="border-radius: 20px; overflow: hidden; background: #FFFFFF; border: 1px solid #E4EFF1; box-shadow: 0 10px 26px -22px rgba(11,44,63,.9);">
+          <div style="height: 116px; background: repeating-linear-gradient(135deg, #EAF4F5 0 10px, #F1F7F8 10px 20px); display: grid; place-items: center;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr;">category 166×116</span>
+          </div>
+          <div style="padding: 11px 14px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+            <span style="display: flex; flex-direction: column; line-height: 1.4;">
+              <strong style="font-family: Cairo, sans-serif; font-size: 15.5px; color: #0B2C3F;">أسماك طازجة</strong>
+              <span style="font-size: 12px; color: #6E8C99;">٣٢ منتجًا</span>
+            </span>
+            <span style="width: 30px; height: 30px; border-radius: 10px; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center; flex-shrink: 0;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6 8 12l6 6"></path></svg>
+            </span>
+          </div>
+          <span style="display: block; padding: 10px 14px; background: #F4FAFB; border-top: 1px solid #EDF5F6; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr; text-align: left;">Category Card / Default</span>
+        </div>
+
+        <div style="border-radius: 20px; overflow: hidden; background: linear-gradient(215deg, #0D3B58, #062A3E 55%, #0E6B72); color: #FFFFFF;">
+          <div style="padding: 22px;">
+            <span style="display: inline-block; background: #F2A43A; color: #3A2400; font-family: Cairo, sans-serif; font-weight: 800; font-size: 12px; padding: 5px 12px; border-radius: 999px; white-space: nowrap;">عرض اليوم — خصم ٢٥٪</span>
+            <h3 style="font-family: Cairo, sans-serif; font-weight: 900; font-size: 21px; line-height: 1.35; margin: 14px 0 0;">باقة العائلة الكبيرة</h3>
+            <p style="font-size: 14px; color: #C6DDE6; line-height: 1.85; margin: 8px 0 0;">٣ كجم مشكّل يكفي ٥–٦ أشخاص.</p>
+            <span style="display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 22px; margin-top: 18px; border-radius: 14px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 800;">اطلب العرض</span>
+          </div>
+          <span style="display: block; padding: 10px 22px; background: rgba(255,255,255,.06); border-top: 1px solid rgba(255,255,255,.12); font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #9FBDCB; direction: ltr; text-align: left;">Promotional Card / OnDark</span>
+        </div>
+
+        <div style="border-radius: 20px; overflow: hidden; background: #FFFFFF; border: 1px solid #E4EFF1;">
+          <div style="padding: 24px 22px;">
+            <span style="width: 52px; height: 52px; border-radius: 16px; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13a8 8 0 1 1-8-8"></path><path d="M12 5V2"></path><path d="m8.5 12.5 3 2.5 4-5"></path></svg>
+            </span>
+            <h3 style="font-family: Cairo, sans-serif; font-size: 18px; font-weight: 700; margin: 16px 0 8px; color: #0B2C3F;">ميزان أمين</h3>
+            <p style="font-size: 14.5px; color: #6E8C99; line-height: 1.85; margin: 0;">الوزن يُحسب أمامك والسعر المعلن هو النهائي.</p>
+          </div>
+          <span style="display: block; padding: 10px 22px; background: #F4FAFB; border-top: 1px solid #EDF5F6; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr; text-align: left;">Feature Card / Default</span>
+        </div>
+
+        <div style="border-radius: 20px; overflow: hidden; background: #FFFFFF; border: 1px solid #E4EFF1;">
+          <div style="padding: 24px 22px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px;">
+            <span style="width: 56px; height: 56px; border-radius: 50%; background: #FFFFFF; border: 2px solid #17B0A7; color: #0B2C3F; display: grid; place-items: center; font-family: Cairo, sans-serif; font-size: 20px; font-weight: 800; box-shadow: 0 10px 24px -14px rgba(23,176,167,.9);">٢</span>
+            <span style="display: flex; flex-direction: column; gap: 7px;">
+              <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 700; color: #0B2C3F;">حدّد الوزن والكمية</strong>
+              <span style="font-size: 14.5px; color: #6E8C99; line-height: 1.8;">اختر الوزن المناسب لعدد أفراد أسرتك.</span>
+            </span>
+          </div>
+          <span style="display: block; padding: 10px 22px; background: #F4FAFB; border-top: 1px solid #EDF5F6; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr; text-align: left;">Step Card / Default</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="badges" style="padding-top: clamp(44px, 6vw, 76px);">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <span style="height: 2px; width: 40px; background: #17B0A7; display: inline-block;"></span>
+        <span style="font-size: 13px; font-weight: 800; color: #0E8E88; letter-spacing: .5px;">Badges · Tags · Price</span>
+      </div>
+      <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(24px, 3.2vw, 34px); margin: 12px 0 0; color: #0B2C3F;">الشارات والأسعار</h2>
+      <p style="font-size: 15.5px; line-height: 1.9; color: #55747F; margin: 12px 0 26px; max-width: 640px;">كل شارة على سطر واحد دائمًا (<strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">white-space: nowrap</strong>) وبزوايا كاملة، ولا تتجاوز شارتان في البطاقة الواحدة.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+        <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px;">
+          <h4 style="font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; font-weight: 500; margin: 0 0 18px; color: #0B2C3F; direction: ltr;">Badge / variants</h4>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <sc-for list="{{ badges }}" as="b" hint-placeholder-count="6">
+              <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; font-family: Cairo, sans-serif; font-size: 11.5px; font-weight: {{ b.weight }}; white-space: nowrap; background: {{ b.bg }}; color: {{ b.fg }}; border: {{ b.border }};">
+                <sc-if value="{{ b.dot }}" hint-placeholder-val="{{ false }}">
+                  <span style="width: 6px; height: 6px; border-radius: 50%; background: {{ b.fg }}; display: inline-block;"></span>
+                </sc-if>
+                {{ b.label }}
+              </span>
+            </sc-for>
+          </div>
+          <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 7px;">
+            <sc-for list="{{ badgeTokens }}" as="bt" hint-placeholder-count="6">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #7B98A4; direction: ltr; text-align: left;">{{ bt }}</span>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px;">
+          <h4 style="font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; font-weight: 500; margin: 0 0 18px; color: #0B2C3F; direction: ltr;">Price / Rating</h4>
+          <div style="display: flex; flex-direction: column; gap: 18px;">
+            <span style="direction: ltr; display: flex; align-items: baseline; justify-content: flex-end; gap: 6px;">
+              <span style="font-size: 12.5px; font-weight: 600; color: #7B98A4;">جنيه</span>
+              <strong style="font-family: Cairo, sans-serif; font-size: 26px; font-weight: 800; color: #0B2C3F; letter-spacing: -.4px;">٣٢٠</strong>
+            </span>
+            <span style="direction: ltr; display: flex; align-items: baseline; justify-content: flex-end; gap: 8px;">
+              <span style="font-size: 13px; color: #A8B9C1; text-decoration: line-through;">٣٨٠</span>
+              <span style="font-size: 12.5px; font-weight: 600; color: #7B98A4;">جنيه</span>
+              <strong style="font-family: Cairo, sans-serif; font-size: 26px; font-weight: 800; color: #0B2C3F; letter-spacing: -.4px;">٣٢٠</strong>
+            </span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 700; color: #B47B12;">
+              <span style="color: #F2A43A; font-size: 15px;">★★★★★</span>
+              <span>٤.٩</span>
+              <span style="color: #98AEB8; font-weight: 400;">(٢١٤ تقييمًا)</span>
+            </span>
+            <p style="font-size: 13px; color: #6E8C99; line-height: 1.8; margin: 0;">العملة دائمًا <strong>يسار</strong> الرقم مع <strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">direction: ltr</strong> على المجموعة، والأرقام عربية-هندية عبر <strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">toLocaleString("ar-EG")</strong>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="navigation" style="padding-top: clamp(44px, 6vw, 76px);">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <span style="height: 2px; width: 40px; background: #17B0A7; display: inline-block;"></span>
+        <span style="font-size: 13px; font-weight: 800; color: #0E8E88; letter-spacing: .5px;">Navigation</span>
+      </div>
+      <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(24px, 3.2vw, 34px); margin: 12px 0 0; color: #0B2C3F;">التنقل</h2>
+      <p style="font-size: 15.5px; line-height: 1.9; color: #55747F; margin: 12px 0 26px; max-width: 640px;">قائمة أفقية فوق ٩٨٠px، ودرج منسدل تحتها، مع شريط إجراءات سفلي ثابت تحت ٧٦٠px.</p>
+
+      <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px; margin-bottom: 16px;">
+        <h4 style="font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; font-weight: 500; margin: 0 0 18px; color: #0B2C3F; direction: ltr;">Nav Link / Default · Hover · Active</h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <sc-for list="{{ navStates }}" as="n" hint-placeholder-count="3">
+            <span style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 10px; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 600; background: {{ n.bg }}; color: {{ n.fg }};">{{ n.label }}</span>
+          </sc-for>
+        </div>
+
+        <h4 style="font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; font-weight: 500; margin: 28px 0 18px; color: #0B2C3F; direction: ltr;">Tabs / Scrollable — Default · Selected</h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 9px;">
+          <sc-for list="{{ tabStates }}" as="t" hint-placeholder-count="4">
+            <button type="button" onClick="{{ t.onPick }}" style="min-height: 44px; padding: 0 18px; border-radius: 999px; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; cursor: pointer; white-space: nowrap; border: 1.4px solid {{ t.bd }}; background: {{ t.bg }}; color: {{ t.fg }};">{{ t.label }}</button>
+          </sc-for>
+        </div>
+        <p style="font-size: 13px; color: #6E8C99; line-height: 1.8; margin: 16px 0 0;">تحت ٧٦٠px يصبح الصف <strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">nowrap</strong> + <strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">overflow-x: auto</strong> — لا يُقص اسم تبويب أبدًا.</p>
+
+        <h4 style="font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; font-weight: 500; margin: 28px 0 18px; color: #0B2C3F; direction: ltr;">Breadcrumb / RTL</h4>
+        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 14px;">
+          <a href="#navigation" style="color: #0E8E88;">الرئيسية</a>
+          <span style="color: #A8B9C1; display: grid; place-items: center;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6 8 12l6 6"></path></svg>
+          </span>
+          <a href="#navigation" style="color: #0E8E88;">التصنيفات</a>
+          <span style="color: #A8B9C1; display: grid; place-items: center;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6 8 12l6 6"></path></svg>
+          </span>
+          <span style="color: #6E8C99;">أسماك طازجة</span>
+        </div>
+        <p style="font-size: 13px; color: #6E8C99; line-height: 1.8; margin: 14px 0 0;">في RTL يشير السهم <strong>يسارًا</strong>؛ عند التحويل إلى LTR اعكس مسار السهم (<strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">m10 6 6 6-6 6</strong>) — لا تعتمد على <strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">transform: scaleX(-1)</strong>.</p>
+
+        <h4 style="font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; font-weight: 500; margin: 28px 0 18px; color: #0B2C3F; direction: ltr;">Pagination / RTL</h4>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <sc-for list="{{ pages }}" as="pg" hint-placeholder-count="6">
+            <button type="button" onClick="{{ pg.onPick }}" style="min-width: 44px; min-height: 44px; padding: 0 10px; border-radius: 12px; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; cursor: pointer; border: 1px solid {{ pg.bd }}; background: {{ pg.bg }}; color: {{ pg.fg }};">{{ pg.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+        <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; overflow: hidden;">
+          <div style="padding: 14px 18px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #E4EFF1;">
+            <span style="width: 40px; height: 40px; border-radius: 13px; background: linear-gradient(150deg, #0D3B58, #17B0A7); display: grid; place-items: center; flex-shrink: 0;">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c2-2.6 4-2.6 6 0s4 2.6 6 0 4-2.6 6 0"></path><path d="M2 9c2-2.6 4-2.6 6 0s4 2.6 6 0 4-2.6 6 0"></path></svg>
+            </span>
+            <strong style="font-family: Cairo, sans-serif; font-size: 18px; font-weight: 800; color: #0B2C3F;">صيد اليوم</strong>
+            <span style="margin-inline-start: auto; display: flex; gap: 8px;">
+              <span style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4EFF1; display: grid; place-items: center; color: #0B2C3F;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+              </span>
+              <span style="min-width: 44px; height: 44px; padding: 0 12px; border-radius: 12px; background: #17B0A7; color: #FFFFFF; display: grid; place-items: center;">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h2l2.2 10.2a2 2 0 0 0 2 1.6h6.9a2 2 0 0 0 2-1.5L21 8H7"></path><circle cx="10" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle></svg>
+              </span>
+            </span>
+          </div>
+          <div style="padding: 12px 18px 16px; display: flex; flex-direction: column; gap: 2px;">
+            <span style="display: flex; align-items: center; min-height: 44px; padding: 0 12px; border-radius: 10px; background: #ECF8F8; color: #0E8E88; font-family: Cairo, sans-serif; font-size: 16px; font-weight: 600;">الرئيسية</span>
+            <span style="display: flex; align-items: center; min-height: 44px; padding: 0 12px; border-radius: 10px; color: #34586B; font-family: Cairo, sans-serif; font-size: 16px; font-weight: 600;">المنتجات</span>
+            <span style="display: flex; align-items: center; min-height: 44px; padding: 0 12px; border-radius: 10px; color: #34586B; font-family: Cairo, sans-serif; font-size: 16px; font-weight: 600;">التصنيفات</span>
+          </div>
+          <span style="display: block; padding: 10px 18px; background: #F4FAFB; border-top: 1px solid #EDF5F6; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr; text-align: left;">Header / Mobile + Drawer</span>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; overflow: hidden;">
+          <div style="padding: 22px;">
+            <span style="display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF;">
+              <span style="color: #7B98A4; display: grid; place-items: center; flex-shrink: 0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg>
+              </span>
+              <span style="font-size: 15px; color: #7B98A4;">ابحث عن سمك، جمبري، كابوريا…</span>
+            </span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px;">
+              <span style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; border-radius: 14px; background: #0E8E88; color: #FFFFFF; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 800;">اطلب عبر واتساب</span>
+              <span style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; border-radius: 14px; background: #ECF8F8; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 800;">السلة (٣)</span>
+            </div>
+            <p style="font-size: 13px; color: #6E8C99; line-height: 1.8; margin: 16px 0 0;">شريط الإجراءات السفلي يحترم <strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">env(safe-area-inset-bottom)</strong> ويقابله فاصل بارتفاع ٧٦px حتى لا يغطي الفوتر.</p>
+          </div>
+          <span style="display: block; padding: 10px 22px; background: #F4FAFB; border-top: 1px solid #EDF5F6; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr; text-align: left;">Search Bar · Sticky Bottom Action</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="feedback" style="padding-top: clamp(44px, 6vw, 76px);">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <span style="height: 2px; width: 40px; background: #17B0A7; display: inline-block;"></span>
+        <span style="font-size: 13px; font-weight: 800; color: #0E8E88; letter-spacing: .5px;">Feedback · Overlays</span>
+      </div>
+      <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(24px, 3.2vw, 34px); margin: 12px 0 0; color: #0B2C3F;">حالات النظام والطبقات</h2>
+      <p style="font-size: 15.5px; line-height: 1.9; color: #55747F; margin: 12px 0 26px; max-width: 640px;">التنبيهات والحالات الفارغة والتحميل — كلها مبنية على نفس التوكنز، دون ألوان جديدة.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(268px, 1fr)); gap: 16px;">
+        <sc-for list="{{ alerts }}" as="a" hint-placeholder-count="4">
+          <div style="border-radius: 16px; padding: 18px; background: {{ a.bg }}; border: 1px solid {{ a.bd }}; display: flex; gap: 13px;">
+            <span style="width: 36px; height: 36px; border-radius: 11px; flex-shrink: 0; display: grid; place-items: center; background: {{ a.iconBg }}; color: {{ a.fg }};">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" dangerouslySetInnerHTML="{{ a.icon }}"></svg>
+            </span>
+            <span style="display: flex; flex-direction: column; gap: 5px;">
+              <strong style="font-family: Cairo, sans-serif; font-size: 15px; font-weight: 700; color: {{ a.fg }};">{{ a.title }}</strong>
+              <span style="font-size: 13.5px; color: #55747F; line-height: 1.75;">{{ a.text }}</span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr; text-align: left; margin-top: 4px;">{{ a.token }}</span>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(268px, 1fr)); gap: 16px; margin-top: 16px;">
+        <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 30px 22px; text-align: center;">
+          <span style="width: 60px; height: 60px; border-radius: 20px; background: #ECF8F8; color: #0E8E88; display: inline-grid; place-items: center;">
+            <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg>
+          </span>
+          <h4 style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 700; margin: 16px 0 8px; color: #0B2C3F;">لا توجد نتائج</h4>
+          <p style="font-size: 14px; color: #6E8C99; line-height: 1.8; margin: 0 0 18px;">لم نجد منتجًا بهذا الاسم. جرّب كلمة أقصر أو تصفّح التصنيفات.</p>
+          <span style="display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 24px; border-radius: 14px; border: 1.5px solid #CFE9EA; background: #FFFFFF; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700;">تصفّح التصنيفات</span>
+          <span style="display: block; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr; margin-top: 18px;">Empty State / No Results</span>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 30px 22px; text-align: center;">
+          <span style="width: 60px; height: 60px; border-radius: 20px; background: #FDF3E3; color: #C9821B; display: inline-grid; place-items: center;">
+            <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5a17 17 0 0 1 20 0"></path><path d="M5.5 12.5a12 12 0 0 1 13 0"></path><path d="M9 16.5a7 7 0 0 1 6 0"></path><circle cx="12" cy="20" r="1"></circle></svg>
+          </span>
+          <h4 style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 700; margin: 16px 0 8px; color: #0B2C3F;">لا يوجد اتصال</h4>
+          <p style="font-size: 14px; color: #6E8C99; line-height: 1.8; margin: 0 0 18px;">تأكد من اتصالك بالإنترنت ثم أعد المحاولة.</p>
+          <span style="display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 24px; border-radius: 14px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 800;">إعادة المحاولة</span>
+          <span style="display: block; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr; margin-top: 18px;">Empty State / No Internet</span>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px;">
+          <h4 style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; margin: 0 0 18px; color: #0B2C3F; direction: ltr;">Loading / Spinner · Skeleton</h4>
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+            <span style="width: 26px; height: 26px; border-radius: 50%; border: 3px solid #ECF8F8; border-top-color: #17B0A7; animation: spin .9s linear infinite; display: block;"></span>
+            <span style="font-size: 14px; color: #6E8C99;">جارٍ تحميل المنتجات…</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 9px;">
+            <span style="height: 14px; width: 100%; border-radius: 6px; background: linear-gradient(90deg, #EDF5F6 25%, #F8FCFC 50%, #EDF5F6 75%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; display: block;"></span>
+            <span style="height: 14px; width: 78%; border-radius: 6px; background: linear-gradient(90deg, #EDF5F6 25%, #F8FCFC 50%, #EDF5F6 75%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; display: block;"></span>
+            <span style="height: 14px; width: 52%; border-radius: 6px; background: linear-gradient(90deg, #EDF5F6 25%, #F8FCFC 50%, #EDF5F6 75%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; display: block;"></span>
+          </div>
+          <p style="font-size: 13px; color: #6E8C99; line-height: 1.8; margin: 18px 0 0;">استخدم Skeleton للبطاقات والقوائم، والـSpinner للإجراءات القصيرة داخل الأزرار فقط.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 16px;">
+        <div style="background: #062A3E; border-radius: 20px; padding: 22px; display: flex; align-items: center; justify-content: center; min-height: 260px;">
+          <div style="width: 100%; max-width: 320px; background: #FFFFFF; border-radius: 20px; overflow: hidden; box-shadow: 0 22px 40px -18px rgba(0,0,0,.55);">
+            <div style="padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #EDF5F6;">
+              <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 800; color: #0B2C3F;">تأكيد الطلب</strong>
+              <span style="width: 36px; height: 36px; border-radius: 50%; background: #F4FAFB; color: #0B2C3F; display: grid; place-items: center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+              </span>
+            </div>
+            <div style="padding: 18px 20px;">
+              <p style="font-size: 14.5px; color: #55747F; line-height: 1.85; margin: 0 0 18px;">سيتم توصيل طلبك تاني يوم بين ١٠ ص و٦ م. نراجع معك العنوان على واتساب.</p>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <span style="display: inline-flex; align-items: center; justify-content: center; min-height: 46px; border-radius: 13px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 800;">تأكيد</span>
+                <span style="display: inline-flex; align-items: center; justify-content: center; min-height: 46px; border-radius: 13px; border: 1.5px solid #CFE9EA; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700;">رجوع</span>
+              </div>
+            </div>
+            <span style="display: block; padding: 10px 20px; background: #F4FAFB; border-top: 1px solid #EDF5F6; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr; text-align: left;">Modal / Desktop</span>
+          </div>
+        </div>
+
+        <div style="background: #062A3E; border-radius: 20px; padding: 22px 22px 0; display: flex; align-items: flex-end; justify-content: center; min-height: 260px;">
+          <div style="width: 100%; max-width: 340px; background: #FFFFFF; border-radius: 24px 24px 0 0; overflow: hidden; box-shadow: 0 -22px 40px -18px rgba(0,0,0,.55);">
+            <div style="padding: 14px 0 0; display: grid; place-items: center;">
+              <span style="width: 44px; height: 4px; border-radius: 999px; background: #E4EFF1; display: block;"></span>
+            </div>
+            <div style="padding: 16px 20px 20px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px;">
+                <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 800; color: #0B2C3F;">الفلاتر</strong>
+                <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; background: #ECF8F8; color: #0E8E88; font-family: Cairo, sans-serif; font-size: 11.5px; font-weight: 700;">٢ مفعّلة</span>
+              </div>
+              <span style="display: block; font-family: Cairo, sans-serif; font-size: 13.5px; font-weight: 700; color: #0B2C3F; margin-bottom: 12px;">نطاق السعر</span>
+              <span style="position: relative; display: block; height: 6px; border-radius: 999px; background: #EDF5F6; margin: 0 10px 22px;">
+                <span style="position: absolute; inset-inline: 22% 12%; top: 0; bottom: 0; border-radius: 999px; background: #17B0A7; display: block;"></span>
+                <span style="position: absolute; inset-inline-end: 10%; top: -8px; width: 22px; height: 22px; border-radius: 50%; background: #FFFFFF; border: 2px solid #17B0A7; display: block;"></span>
+                <span style="position: absolute; inset-inline-start: 20%; top: -8px; width: 22px; height: 22px; border-radius: 50%; background: #FFFFFF; border: 2px solid #17B0A7; display: block;"></span>
+              </span>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <span style="display: inline-flex; align-items: center; justify-content: center; min-height: 48px; border-radius: 13px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 800;">تطبيق</span>
+                <span style="display: inline-flex; align-items: center; justify-content: center; min-height: 48px; border-radius: 13px; border: 1.5px solid #CFE9EA; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 700;">إعادة ضبط</span>
+              </div>
+            </div>
+            <span style="display: block; padding: 10px 20px; background: #F4FAFB; border-top: 1px solid #EDF5F6; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr; text-align: left;">Bottom Sheet / Filters · Price Slider</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px; margin-top: 16px;">
+        <h4 style="font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; font-weight: 500; margin: 0 0 20px; color: #0B2C3F; direction: ltr;">Accordion / Collapsed · Expanded · Tooltip</h4>
+        <div style="display: flex; flex-direction: column; gap: 12px; max-width: 620px;">
+          <sc-for list="{{ faqDemo }}" as="q" hint-placeholder-count="2">
+            <div style="border-radius: 16px; overflow: hidden; background: {{ q.bg }}; border: 1px solid {{ q.bd }};">
+              <button type="button" onClick="{{ q.onToggle }}" style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 14px; background: transparent; border: none; padding: 18px 20px; min-height: 44px; cursor: pointer; text-align: right; font-family: Cairo, sans-serif; font-size: 16px; font-weight: 700; color: #0B2C3F;">
+                <span>{{ q.question }}</span>
+                <span style="flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center; transform: {{ q.rotate }};">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+                </span>
+              </button>
+              <sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}">
+                <p style="margin: 0; padding: 0 20px 20px; font-size: 14.5px; line-height: 1.9; color: #55747F;">{{ q.answer }}</p>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top: 24px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <span style="position: relative; display: inline-flex;">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4EFF1; color: #0B2C3F;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 16v-4"></path><path d="M12 8.5h.01"></path></svg>
+            </span>
+          </span>
+          <span style="display: inline-flex; align-items: center; padding: 8px 13px; border-radius: 10px; background: #0B2C3F; color: #FFFFFF; font-size: 13px; line-height: 1.6; max-width: 260px;">الوزن يُحسب وقت التجهيز للتوصيل.</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7B98A4; direction: ltr;">Tooltip / Dark</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="responsive" style="padding-top: clamp(44px, 6vw, 76px);">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <span style="height: 2px; width: 40px; background: #17B0A7; display: inline-block;"></span>
+        <span style="font-size: 13px; font-weight: 800; color: #0E8E88; letter-spacing: .5px;">Responsive · RTL / LTR</span>
+      </div>
+      <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(24px, 3.2vw, 34px); margin: 12px 0 0; color: #0B2C3F;">قواعد التجاوب والاتجاه</h2>
+      <p style="font-size: 15.5px; line-height: 1.9; color: #55747F; margin: 12px 0 26px; max-width: 640px;">العرض الحالي للمعاينة: <strong style="font-family: 'IBM Plex Mono', monospace; direction: ltr;">{{ vwLabel }}</strong> — الفئة النشطة: <strong>{{ breakpointLabel }}</strong>.</p>
+
+      <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9);">
+        <div style="display: grid; grid-template-columns: {{ respCols }}; gap: 6px 20px; padding: 16px 22px; background: #F4FAFB; border-bottom: 1px solid #E4EFF1;">
+          <strong style="font-family: Cairo, sans-serif; font-size: 13.5px; color: #0B2C3F;">العنصر</strong>
+          <strong style="font-family: Cairo, sans-serif; font-size: 13.5px; color: #0B2C3F;">موبايل &lt; 760</strong>
+          <strong style="font-family: Cairo, sans-serif; font-size: 13.5px; color: #0B2C3F;">تابلت 760–979</strong>
+          <strong style="font-family: Cairo, sans-serif; font-size: 13.5px; color: #0B2C3F;">ديسكتوب ≥ 980</strong>
+        </div>
+        <sc-for list="{{ respRules }}" as="r" hint-placeholder-count="9">
+          <div style="display: grid; grid-template-columns: {{ respCols }}; gap: 6px 20px; padding: 15px 22px; border-bottom: 1px solid #EDF5F6;">
+            <strong style="font-family: Cairo, sans-serif; font-size: 14px; font-weight: 700; color: #0B2C3F;">{{ r.item }}</strong>
+            <span style="font-size: 13.5px; color: #55747F; line-height: 1.7;">{{ r.mobile }}</span>
+            <span style="font-size: 13.5px; color: #55747F; line-height: 1.7;">{{ r.tablet }}</span>
+            <span style="font-size: 13.5px; color: #55747F; line-height: 1.7;">{{ r.desktop }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px; margin-top: 16px;">
+        <h4 style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 700; margin: 0 0 18px; color: #0B2C3F;">قواعد RTL / LTR</h4>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <sc-for list="{{ dirRules }}" as="d" hint-placeholder-count="8">
+            <div style="display: flex; gap: 13px; align-items: flex-start;">
+              <span style="width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center; font-family: Cairo, sans-serif; font-size: 13px; font-weight: 800;">{{ d.num }}</span>
+              <span style="display: flex; flex-direction: column; gap: 4px;">
+                <strong style="font-family: Cairo, sans-serif; font-size: 15px; font-weight: 700; color: #0B2C3F;">{{ d.title }}</strong>
+                <span style="font-size: 14px; color: #55747F; line-height: 1.8;">{{ d.text }}</span>
+              </span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section id="summary" style="padding-top: clamp(44px, 6vw, 76px);">
+      <div style="border-radius: 26px; background: linear-gradient(215deg, #0D3B58, #062A3E 55%, #0E6B72); color: #FFFFFF; padding: clamp(28px, 4vw, 46px);">
+        <h2 style="font-family: Cairo, sans-serif; font-weight: 900; font-size: clamp(23px, 3vw, 32px); margin: 0 0 8px;">ملخّص التنفيذ</h2>
+        <p style="font-size: 15px; color: #C6DDE6; line-height: 1.9; margin: 0 0 28px; max-width: 620px;">ما استُخرج، وما وُحِّد، وما تبقّى للمراحل القادمة.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+          <sc-for list="{{ summary }}" as="s" hint-placeholder-count="4">
+            <div style="background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: 18px; padding: 20px;">
+              <strong style="font-family: Cairo, sans-serif; font-size: 16px; font-weight: 800; color: #7FE3DC; display: block; margin-bottom: 14px;">{{ s.title }}</strong>
+              <div style="display: flex; flex-direction: column; gap: 9px;">
+                <sc-for list="{{ s.items }}" as="it" hint-placeholder-count="5">
+                  <span style="display: flex; gap: 9px; font-size: 13.5px; color: #C6DDE6; line-height: 1.7;">
+                    <span style="width: 5px; height: 5px; border-radius: 50%; background: #17B0A7; flex-shrink: 0; margin-top: 7px; display: block;"></span>
+                    <span>{{ it }}</span>
+                  </span>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { vw: 1280, faq: 0, tab: 0, drawer: false, modal: false, page: 2 };
+
+  componentDidMount() {
+    this._r = () => { const w = window.innerWidth; if (w !== this.state.vw) this.setState({ vw: w }); };
+    window.addEventListener("resize", this._r);
+    this._r();
+  }
+  componentWillUnmount() { window.removeEventListener("resize", this._r); }
+
+  renderVals() {
+    const narrow = this.state.vw < 760;
+
+    const colorGroups = [
+      {
+        title: "الأساسي — Primary (كحلي بحري)",
+        note: "الهوية، الأسطح الداكنة، النصوص الرئيسية",
+        tokens: [
+          { name: "Primary / 900", hex: "#062A3E", use: "الشريط العلوي، الفوتر، أقسام داكنة" },
+          { name: "Primary / 700", hex: "#0B2C3F", use: "نص العناوين، أيقونات الهيدر" },
+          { name: "Primary / 500", hex: "#0D3B58", use: "شارة الأكثر مبيعًا، تدرّجات الهيرو" },
+          { name: "Primary / 300", hex: "#34586B", use: "روابط التنقل غير النشطة" }
+        ]
+      },
+      {
+        title: "الثانوي — Secondary (تركواز)",
+        note: "الإجراءات، التأكيد، الحالة النشطة",
+        tokens: [
+          { name: "Secondary / 600", hex: "#0E8E88", use: "الروابط، النص التأكيدي، hover الزر الرئيسي" },
+          { name: "Secondary / 500", hex: "#17B0A7", use: "الزر الرئيسي، شريط الأسعار، الحد النشط" },
+          { name: "Secondary / 400", hex: "#14C6BB", use: "hover على الخلفيات الداكنة" },
+          { name: "Secondary / 200", hex: "#7FE3DC", use: "نص ثانوي على أسطح داكنة" },
+          { name: "Secondary / 100", hex: "#BEE6E4", use: "حدود hover على البطاقات" },
+          { name: "Secondary / 50", hex: "#ECF8F8", use: "خلفية الأزرار الخفيفة والشارات" }
+        ]
+      },
+      {
+        title: "المحيّدات والأسطح — Neutral & Surface",
+        note: "الخلفيات، الحدود، النصوص",
+        tokens: [
+          { name: "Background / Page", hex: "#FFFFFF", use: "خلفية الصفحة الأساسية" },
+          { name: "Background / Muted", hex: "#F4FAFB", use: "أقسام متبادلة، خلفية الحقول المعطّلة" },
+          { name: "Background / Media", hex: "#EAF4F5", use: "حاوية صور المنتجات قبل التحميل" },
+          { name: "Border / Default", hex: "#E4EFF1", use: "حدود البطاقات والحقول والأزرار" },
+          { name: "Border / Subtle", hex: "#EDF5F6", use: "الفواصل الداخلية في البطاقات" },
+          { name: "Border / Strong", hex: "#CFE9EA", use: "الأزرار الثانوية، إطار CTA" },
+          { name: "Text / Primary", hex: "#0B2C3F", use: "العناوين والأسعار" },
+          { name: "Text / Secondary", hex: "#55747F", use: "نص الأقسام التفسيري" },
+          { name: "Text / Muted", hex: "#6E8C99", use: "الوصف الثانوي والتسميات" },
+          { name: "Text / Placeholder", hex: "#7B98A4", use: "الوحدات، النص النائب" },
+          { name: "Text / OnDark", hex: "#C6DDE6", use: "النص الجاري على الكحلي" },
+          { name: "Text / OnDarkMuted", hex: "#9FBDCB", use: "روابط الفوتر" }
+        ]
+      },
+      {
+        title: "الحالات — Status",
+        note: "التوفر، التحذير، الخطأ، النجاح",
+        tokens: [
+          { name: "Status / Success", hex: "#0E8E88", use: "متوفر، تأكيد الطلب" },
+          { name: "Status / SuccessBg", hex: "#ECF8F8", use: "خلفية شارة متوفر" },
+          { name: "Status / SuccessDot", hex: "#35D6A4", use: "نقطة حياة على الأسطح الداكنة" },
+          { name: "Status / Warning", hex: "#C9821B", use: "كمية محدودة" },
+          { name: "Status / WarningBg", hex: "#FDF3E3", use: "خلفية شارة كمية محدودة" },
+          { name: "Status / Error", hex: "#E4574F", use: "المفضلة المفعّلة، أخطاء الحقول" }
+        ]
+      },
+      {
+        title: "الترويج — Promotional",
+        note: "الخصومات والعروض فقط",
+        tokens: [
+          { name: "Promo / Accent", hex: "#F2A43A", use: "شارة الخصم، شارة عرض اليوم" },
+          { name: "Promo / OnAccent", hex: "#3A2400", use: "نص داخل شارة الخصم" },
+          { name: "Promo / StrikeText", hex: "#A8B9C1", use: "السعر القديم المشطوب" }
+        ]
+      }
+    ];
+
+    const typeScale = [
+      { token: "H1 / Display", family: "Cairo, sans-serif", size: "44px", weight: "900", lh: "1.18", ls: "-.5px", sample: "طازج من البحر", spec: "Cairo 900 · clamp(29–60) · 1.18 · -0.5" },
+      { token: "H2 / Section", family: "Cairo, sans-serif", size: "32px", weight: "800", lh: "1.3", ls: "0", sample: "الأكثر مبيعًا هذا الأسبوع", spec: "Cairo 800 · clamp(24–38) · 1.3" },
+      { token: "H3 / Subsection", family: "Cairo, sans-serif", size: "20px", weight: "800", lh: "1.4", ls: "0", sample: "طريقة الطلب في ٤ خطوات", spec: "Cairo 800 · 20 · 1.4" },
+      { token: "H4 / Card Title", family: "Cairo, sans-serif", size: "18px", weight: "700", lh: "1.45", ls: "0", sample: "دنيس طازج", spec: "Cairo 700 · 18 (mobile 15) · 1.45" },
+      { token: "H5 / Group", family: "Cairo, sans-serif", size: "16px", weight: "700", lh: "1.5", ls: "0", sample: "روابط سريعة", spec: "Cairo 700 · 15.5–16 · 1.5" },
+      { token: "H6 / Eyebrow", family: "Cairo, sans-serif", size: "13.5px", weight: "800", lh: "1.5", ls: ".5px", sample: "تسوّق حسب التصنيف", spec: "Cairo 800 · 13.5 · +0.5" },
+      { token: "Price / Large", family: "Cairo, sans-serif", size: "24px", weight: "800", lh: "1.2", ls: "-.4px", sample: "٣٢٠", spec: "Cairo 800 · 24 (mobile 19) · -0.4" },
+      { token: "Body / Large", family: "Tajawal, sans-serif", size: "18px", weight: "400", lh: "1.9", ls: "0", sample: "نختار لك أجود الأسماك كل صباح.", spec: "Tajawal 400 · clamp(15.5–18.5) · 1.9" },
+      { token: "Body / Base", family: "Tajawal, sans-serif", size: "15px", weight: "400", lh: "1.9", ls: "0", sample: "الأسعار محدّثة يوميًا حسب سعر السوق.", spec: "Tajawal 400 · 15 · 1.9" },
+      { token: "Body / Small", family: "Tajawal, sans-serif", size: "13px", weight: "400", lh: "1.75", ls: "0", sample: "اطلب اليوم واستلم غدًا", spec: "Tajawal 400 · 13 · 1.75" },
+      { token: "Label / Strong", family: "Cairo, sans-serif", size: "14px", weight: "700", lh: "1.5", ls: "0", sample: "أضف إلى السلة", spec: "Cairo 700 · 14–15 · 1.5" },
+      { token: "Caption / Badge", family: "Cairo, sans-serif", size: "11.5px", weight: "700", lh: "1.4", ls: "0", sample: "الأكثر مبيعًا", spec: "Cairo 700 · 10.5–11.5 · 1.4" }
+    ];
+
+    const spacing = [
+      { token: "space-1 / 4", px: "4px", use: "فجوة النقطة داخل الشارة" },
+      { token: "space-2 / 8", px: "8px", use: "فجوة الأيقونة والنص، صفوف الهيدر" },
+      { token: "space-3 / 12", px: "12px", use: "فجوة البطاقات على الموبايل، أزرار متجاورة" },
+      { token: "space-4 / 16", px: "16px", use: "هامش الصفحة على الموبايل، حشو البطاقة المضغوطة" },
+      { token: "space-5 / 20", px: "20px", use: "هامش الصفحة على الديسكتوب، فجوة الشبكة" },
+      { token: "space-6 / 24", px: "24px", use: "حشو البطاقة، فواصل داخلية" },
+      { token: "space-8 / 32", px: "32px", use: "المسافة أسفل ترويسة القسم" },
+      { token: "space-10 / 40", px: "40px", use: "فجوة أعمدة الفوتر" },
+      { token: "space-12 / 48", px: "48px", use: "حد أدنى للمسافة الرأسية بين الأقسام (موبايل)" },
+      { token: "space-16 / 64", px: "64px", use: "المسافة الرأسية بين الأقسام (ديسكتوب)" }
+    ];
+
+    const radii = [
+      { token: "radius-sm / 8", px: "8px", use: "شارات الدفع" },
+      { token: "radius-md / 12", px: "12px", use: "أزرار أيقونة، حقول" },
+      { token: "radius-lg / 14", px: "14px", use: "الأزرار الرئيسية" },
+      { token: "radius-xl / 20", px: "20px", use: "البطاقات" },
+      { token: "radius-2xl / 26", px: "26px", use: "بانرات العروض" },
+      { token: "radius-full", px: "999px", use: "الشارات والتابات" }
+    ];
+
+    const shadows = [
+      { token: "shadow-card", css: "0 10px 26px -24px rgba(11,44,63,.9)", use: "البطاقات في حالتها الافتراضية" },
+      { token: "shadow-card-hover", css: "0 26px 46px -28px rgba(11,44,63,.8)", use: "البطاقة عند hover مع رفع 5px" },
+      { token: "shadow-cta", css: "0 16px 32px -14px rgba(23,176,167,1)", use: "الزر الرئيسي التركوازي" },
+      { token: "shadow-overlay", css: "0 22px 40px -18px rgba(0,0,0,.55)", use: "العناصر العائمة والمودالات" }
+    ];
+
+    const layoutRules = [
+      { name: "عرض الحاوية", value: "max-width: 1240px", note: "محاذاة وسطية لكل الأقسام" },
+      { name: "هامش الصفحة", value: "16px below 480 · 20px from 480", note: "لا يُستخدم هامش ثابت أبدًا" },
+      { name: "المسافة الرأسية", value: "clamp(44px, 7vw, 86px)", note: "بين الأقسام؛ العروض والفوتر أعلى" },
+      { name: "شبكة المنتجات", value: "2 cols below 760 · auto-fit minmax(240px, 1fr)", note: "لا عمود واحد — البطاقة مضغوطة على الموبايل" },
+      { name: "شبكة التصنيفات", value: "auto-fit minmax(166px, 1fr) · gap 14", note: "٦ بطاقات تتوزع تلقائيًا" },
+      { name: "شبكة الفوتر", value: "2 cols below 760 · auto-fit minmax(220px, 1fr)", note: "العلامة والتواصل يمتدان 1 / -1" },
+      { name: "نقاط التحول", value: "480 · 560 · 760 · 980 · 1180", note: "480 هوامش · 760 موبايل/تابلت · 980 القائمة" },
+      { name: "منطقة الأمان", value: "env(safe-area-inset-bottom)", note: "شريط الإجراءات السفلي على الموبايل" }
+    ];
+
+    const iconSizes = [
+      { token: "icon-sm / 14", px: "14", use: "داخل الشارات" },
+      { token: "icon-md / 18", px: "18", use: "داخل الأزرار" },
+      { token: "icon-lg / 21", px: "21", use: "أزرار الهيدر" },
+      { token: "icon-xl / 24", px: "24", use: "الشعار وأيقونات الميزات" }
+    ];
+
+    const ratios = [
+      { token: "ratio-square / 1:1", ratio: "1 / 1", use: "صور المنتجات — إلزامي، الصورة تملأ البطاقة" },
+      { token: "ratio-category", ratio: "166 / 116", use: "بطاقة التصنيف (ارتفاع ثابت 116px)" },
+      { token: "ratio-banner / 5:4", ratio: "5 / 4", use: "بانر العروض والصور البارزة" }
+    ];
+
+    const mkStates = (base) => base;
+
+    const buttonVariants = [
+      {
+        token: "Button / Primary",
+        note: "الإجراء الرئيسي — واحد فقط في كل شاشة",
+        states: [
+          { state: "Default", label: "تسوّق الآن", bg: "#17B0A7", fg: "#FFFFFF", border: "none", shadow: "0 16px 32px -14px rgba(23,176,167,1)", opacity: "1", pad: "0 30px" },
+          { state: "Hover", label: "تسوّق الآن", bg: "#14C6BB", fg: "#062A3E", border: "none", shadow: "0 20px 36px -14px rgba(23,176,167,1)", opacity: "1", pad: "0 30px" },
+          { state: "Focus", label: "تسوّق الآن", bg: "#17B0A7", fg: "#FFFFFF", border: "none", shadow: "0 0 0 3px #FFFFFF, 0 0 0 5px #0E8E88", opacity: "1", pad: "0 30px" },
+          { state: "Active", label: "تسوّق الآن", bg: "#0E8E88", fg: "#FFFFFF", border: "none", shadow: "none", opacity: "1", pad: "0 30px" },
+          { state: "Disabled", label: "تسوّق الآن", bg: "#BEE6E4", fg: "#FFFFFF", border: "none", shadow: "none", opacity: ".7", pad: "0 30px" }
+        ]
+      },
+      {
+        token: "Button / Secondary",
+        note: "بديل مساند — حدود 1.5px",
+        states: [
+          { state: "Default", label: "عرض المزيد", bg: "#FFFFFF", fg: "#0B2C3F", border: "1.5px solid #CFE9EA", shadow: "none", opacity: "1", pad: "0 30px" },
+          { state: "Hover", label: "عرض المزيد", bg: "#ECF8F8", fg: "#0B2C3F", border: "1.5px solid #17B0A7", shadow: "none", opacity: "1", pad: "0 30px" },
+          { state: "Focus", label: "عرض المزيد", bg: "#FFFFFF", fg: "#0B2C3F", border: "1.5px solid #17B0A7", shadow: "0 0 0 3px rgba(23,176,167,.25)", opacity: "1", pad: "0 30px" },
+          { state: "Disabled", label: "عرض المزيد", bg: "#F4FAFB", fg: "#A8B9C1", border: "1.5px solid #E4EFF1", shadow: "none", opacity: "1", pad: "0 30px" }
+        ]
+      },
+      {
+        token: "Button / Tertiary",
+        note: "خفيف داخل البطاقات — إضافة للسلة",
+        states: [
+          { state: "Default", label: "أضف إلى السلة", bg: "#ECF8F8", fg: "#0B2C3F", border: "none", shadow: "none", opacity: "1", pad: "0 16px" },
+          { state: "Hover", label: "أضف إلى السلة", bg: "#17B0A7", fg: "#FFFFFF", border: "none", shadow: "none", opacity: "1", pad: "0 16px" },
+          { state: "Loading", label: "جارٍ الإضافة…", bg: "#ECF8F8", fg: "#7B98A4", border: "none", shadow: "none", opacity: "1", pad: "0 16px" },
+          { state: "Success", label: "تمت الإضافة ✓", bg: "#0E8E88", fg: "#FFFFFF", border: "none", shadow: "none", opacity: "1", pad: "0 16px" },
+          { state: "Disabled", label: "غير متوفر", bg: "#F4FAFB", fg: "#A8B9C1", border: "none", shadow: "none", opacity: "1", pad: "0 16px" }
+        ]
+      },
+      {
+        token: "Button / OnDark",
+        note: "على الأسطح الكحلية — الهيرو والفوتر",
+        states: [
+          { state: "Default", label: "شاهد عروض اليوم", bg: "rgba(255,255,255,.06)", fg: "#FFFFFF", border: "1.5px solid rgba(255,255,255,.32)", shadow: "none", opacity: "1", pad: "0 28px" },
+          { state: "Hover", label: "شاهد عروض اليوم", bg: "#FFFFFF", fg: "#0B2C3F", border: "1.5px solid #FFFFFF", shadow: "none", opacity: "1", pad: "0 28px" },
+          { state: "Focus", label: "شاهد عروض اليوم", bg: "rgba(255,255,255,.06)", fg: "#FFFFFF", border: "1.5px solid #7FE3DC", shadow: "0 0 0 3px rgba(127,227,220,.3)", opacity: "1", pad: "0 28px" }
+        ]
+      },
+      {
+        token: "Button / Text",
+        note: "روابط الإجراءات داخل ترويسات الأقسام",
+        states: [
+          { state: "Default", label: "عرض كل التصنيفات", bg: "transparent", fg: "#0E8E88", border: "none", shadow: "none", opacity: "1", pad: "0 6px" },
+          { state: "Hover", label: "عرض كل التصنيفات", bg: "transparent", fg: "#0B2C3F", border: "none", shadow: "none", opacity: "1", pad: "0 6px" },
+          { state: "Disabled", label: "عرض كل التصنيفات", bg: "transparent", fg: "#A8B9C1", border: "none", shadow: "none", opacity: "1", pad: "0 6px" }
+        ]
+      }
+    ];
+
+    const iconButtons = [
+      { state: "Default", bg: "#FFFFFF", fg: "#0B2C3F", border: "1px solid #E4EFF1" },
+      { state: "Hover", bg: "#ECF8F8", fg: "#0B2C3F", border: "1px solid #BEE6E4" },
+      { state: "Selected", bg: "#17B0A7", fg: "#FFFFFF", border: "1px solid #17B0A7" },
+      { state: "Disabled", bg: "#F4FAFB", fg: "#A8B9C1", border: "1px solid #E4EFF1" }
+    ];
+
+    const inputStates = [
+      { token: "Input / Default", label: "ابحث عن منتج", value: "اكتب اسم السمكة…", bg: "#FFFFFF", border: "1px solid #E4EFF1", ring: "none", textColor: "#7B98A4", iconColor: "#7B98A4", hint: "نص مساعد اختياري تحت الحقل.", hintColor: "#6E8C99" },
+      { token: "Input / Focus", label: "ابحث عن منتج", value: "دنيس", bg: "#FFFFFF", border: "1.5px solid #17B0A7", ring: "0 0 0 3px rgba(23,176,167,.22)", textColor: "#0B2C3F", iconColor: "#0E8E88", hint: "حلقة تركيز تركوازية بسُمك 3px.", hintColor: "#0E8E88" },
+      { token: "Input / Filled", label: "ابحث عن منتج", value: "جمبري جامبو", bg: "#FFFFFF", border: "1px solid #CFE9EA", ring: "none", textColor: "#0B2C3F", iconColor: "#0B2C3F", hint: "قيمة مُدخلة وصالحة.", hintColor: "#6E8C99" },
+      { token: "Input / Error", label: "رقم الهاتف", value: "0100 2", bg: "#FFFFFF", border: "1.5px solid #E4574F", ring: "0 0 0 3px rgba(228,87,79,.16)", textColor: "#0B2C3F", iconColor: "#E4574F", hint: "الرقم غير مكتمل — ١١ رقمًا مطلوبة.", hintColor: "#E4574F" },
+      { token: "Input / Disabled", label: "المنطقة", value: "غير متاح حاليًا", bg: "#F4FAFB", border: "1px solid #E4EFF1", ring: "none", textColor: "#A8B9C1", iconColor: "#A8B9C1", hint: "الحقل معطّل ولا يستقبل تركيزًا.", hintColor: "#A8B9C1" }
+    ];
+
+    const checkStates = [
+      { label: "متوفر فقط", bg: "#FFFFFF", border: "1.5px solid #E4EFF1", tick: "transparent", opacity: "1" },
+      { label: "عليه خصم", bg: "#17B0A7", border: "1.5px solid #17B0A7", tick: "#FFFFFF", opacity: "1" },
+      { label: "معطّل", bg: "#F4FAFB", border: "1.5px solid #E4EFF1", tick: "transparent", opacity: ".6" }
+    ];
+
+    const radioStates = [
+      { label: "الدفع عند الاستلام", border: "1.5px solid #E4EFF1", dot: "transparent", opacity: "1" },
+      { label: "بطاقة ائتمانية", border: "1.5px solid #17B0A7", dot: "#17B0A7", opacity: "1" },
+      { label: "غير متاح", border: "1.5px solid #E4EFF1", dot: "transparent", opacity: ".6" }
+    ];
+
+    const toggleStates = [
+      { label: "إشعارات العروض", track: "#E4EFF1", justify: "flex-start", opacity: "1" },
+      { label: "توصيل مبرّد", track: "#17B0A7", justify: "flex-end", opacity: "1" },
+      { label: "معطّل", track: "#E4EFF1", justify: "flex-start", opacity: ".55" }
+    ];
+
+    const productCards = [
+      { token: "Product Card / Default", name: "دنيس طازج", price: "٣٢٠", stock: "متوفر", stockBg: "#ECF8F8", stockColor: "#0E8E88", borderColor: "#E4EFF1", shadow: "0 10px 26px -24px rgba(11,44,63,.9)", transform: "none", mediaBg: "#EAF4F5", showMedia: true, skeleton: false, showFav: true, showBadges: true, favFill: "none", titleColor: "#0B2C3F", priceColor: "#0B2C3F", btnBg: "#ECF8F8", btnFg: "#0B2C3F", btnLabel: "أضف إلى السلة" },
+      { token: "Product Card / Hover", name: "جمبري جامبو", price: "٤٨٠", stock: "متوفر", stockBg: "#ECF8F8", stockColor: "#0E8E88", borderColor: "#BEE6E4", shadow: "0 26px 46px -28px rgba(11,44,63,.8)", transform: "translateY(-5px)", mediaBg: "#EAF4F5", showMedia: true, skeleton: false, showFav: true, showBadges: true, favFill: "#E4574F", titleColor: "#0B2C3F", priceColor: "#0B2C3F", btnBg: "#17B0A7", btnFg: "#FFFFFF", btnLabel: "أضف إلى السلة" },
+      { token: "Product Card / Disabled", name: "كابوريا بلدي", price: "٢٦٥", stock: "كمية محدودة", stockBg: "#FDF3E3", stockColor: "#C9821B", borderColor: "#E4EFF1", shadow: "none", transform: "none", mediaBg: "#F4FAFB", showMedia: true, skeleton: false, showFav: true, showBadges: true, favFill: "none", titleColor: "#7B98A4", priceColor: "#7B98A4", btnBg: "#F4FAFB", btnFg: "#A8B9C1", btnLabel: "غير متوفر" },
+      { token: "Product Card / Skeleton", name: "", price: "—", stock: "", stockBg: "transparent", stockColor: "transparent", borderColor: "#E4EFF1", shadow: "none", transform: "none", mediaBg: "#EAF4F5", showMedia: false, skeleton: true, showFav: false, showBadges: false, favFill: "none", titleColor: "#EDF5F6", priceColor: "#EDF5F6", btnBg: "#F4FAFB", btnFg: "#EDF5F6", btnLabel: "—" }
+    ];
+
+    const badges = [
+      { label: "متوفر", bg: "#ECF8F8", fg: "#0E8E88", border: "none", weight: "700", dot: true },
+      { label: "كمية محدودة", bg: "#FDF3E3", fg: "#C9821B", border: "none", weight: "700", dot: true },
+      { label: "الأكثر مبيعًا", bg: "#0D3B58", fg: "#FFFFFF", border: "none", weight: "700", dot: false },
+      { label: "خصم ٢٥٪", bg: "#F2A43A", fg: "#3A2400", border: "none", weight: "800", dot: false },
+      { label: "توصيل تاني يوم", bg: "#FFFFFF", fg: "#0E8E88", border: "1px solid #CFE9EA", weight: "700", dot: false },
+      { label: "نفدت الكمية", bg: "#F4FAFB", fg: "#A8B9C1", border: "1px solid #E4EFF1", weight: "700", dot: true }
+    ];
+
+    const badgeTokens = [
+      "Badge / Success",
+      "Badge / Warning",
+      "Badge / Primary",
+      "Badge / Promo (Discount)",
+      "Tag / Outline",
+      "Badge / Disabled"
+    ];
+
+    const navStates = [
+      { label: "المنتجات", bg: "transparent", fg: "#34586B" },
+      { label: "التصنيفات", bg: "#F1F7F8", fg: "#0B2C3F" },
+      { label: "الرئيسية", bg: "#ECF8F8", fg: "#0E8E88" }
+    ];
+
+    const tabLabels = ["كل المنتجات", "أسماك طازجة", "جمبري", "كابوريا"];
+    const tabStates = tabLabels.map((label, i) => {
+      const on = this.state.tab === i;
+      return {
+        label,
+        bg: on ? "#0B2C3F" : "#FFFFFF",
+        fg: on ? "#FFFFFF" : "#45677A",
+        bd: on ? "#0B2C3F" : "#E4EFF1",
+        onPick: () => this.setState({ tab: i })
+      };
+    });
+
+    const pages = [
+      { key: "prev", label: "السابق" }, { key: 1, label: "١" }, { key: 2, label: "٢" },
+      { key: 3, label: "٣" }, { key: 4, label: "٤" }, { key: "next", label: "التالي" }
+    ].map(p => {
+      const on = p.key === this.state.page;
+      return {
+        label: p.label,
+        bg: on ? "#17B0A7" : "#FFFFFF",
+        fg: on ? "#FFFFFF" : "#45677A",
+        bd: on ? "#17B0A7" : "#E4EFF1",
+        onPick: () => { if (typeof p.key === "number") this.setState({ page: p.key }); }
+      };
+    });
+
+    const alerts = [
+      { token: "Alert / Success", title: "تم إضافة المنتج", text: "دنيس طازج ١ كجم أُضيف إلى سلتك.", bg: "#ECF8F8", bd: "#BEE6E4", iconBg: "#D8F1F0", fg: "#0E8E88", icon: { __html: '<path d="m5 12.5 4.5 4.5L19 7"/>' } },
+      { token: "Alert / Warning", title: "كمية محدودة", text: "بقي ٣ كجم فقط من هذا الصنف اليوم.", bg: "#FDF3E3", bd: "#F2D9A9", iconBg: "#FAE7C4", fg: "#C9821B", icon: { __html: '<path d="M12 8v5"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9"/>' } },
+      { token: "Alert / Error", title: "تعذّر إتمام الطلب", text: "راجع بيانات الدفع ثم أعد المحاولة.", bg: "#FDECEB", bd: "#F5C6C3", iconBg: "#FADAD8", fg: "#E4574F", icon: { __html: '<path d="M6 6l12 12M18 6 6 18"/>' } },
+      { token: "Alert / Info", title: "مواعيد التوصيل", text: "الطلبات بعد ٤ عصرًا تُجهَّز في اليوم التالي.", bg: "#F4FAFB", bd: "#CFE9EA", iconBg: "#E7F3F4", fg: "#0D3B58", icon: { __html: '<circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8.5h.01"/>' } }
+    ];
+
+    const faqDemo = [
+      ["السمك طازج ولا مجمد؟", "كل الأسماك والجمبري والكابوريا طازجة من صيد نفس الصباح. الأصناف المستوردة فقط تكون مبرّدة ومكتوب ذلك في صفحة المنتج."],
+      ["الطلب بيوصل إمتى؟", "التوصيل تاني يوم داخل القاهرة والجيزة، ونتواصل معك على واتساب لتحديد الفترة."]
+    ].map((f, i) => {
+      const open = this.state.faq === i;
+      return {
+        question: f[0], answer: f[1], open,
+        bg: open ? "#F4FAFB" : "#FFFFFF",
+        bd: open ? "#BEE6E4" : "#E4EFF1",
+        rotate: open ? "rotate(180deg)" : "rotate(0deg)",
+        onToggle: () => this.setState(s => ({ faq: s.faq === i ? -1 : i }))
+      };
+    });
+
+    const respRules = [
+      { item: "هامش الصفحة", mobile: "16px", tablet: "20px", desktop: "20px + حاوية 1240" },
+      { item: "المسافة بين الأقسام", mobile: "44px", tablet: "≈62px (7vw)", desktop: "86px" },
+      { item: "الهيدر", mobile: "شعار + برجر + سلة، حشو 10/16", tablet: "تُضاف أيقونات البحث والحساب", desktop: "قائمة أفقية كاملة + اللغة" },
+      { item: "شبكة المنتجات", mobile: "عمودان مضغوطان", tablet: "auto-fit 240px", desktop: "auto-fit 240px (٤ أعمدة)" },
+      { item: "بطاقة المنتج", mobile: "حشو 12، عنوان 15، سعر 19، زر بعرض كامل", tablet: "حشو 18، عنوان 18", desktop: "حشو 18، سعر 24، السعر والزر في صف" },
+      { item: "الهيرو", mobile: "حشو 48/16، أزرار عمودية بعرض كامل", tablet: "أزرار في صف", desktop: "حشو حتى 140، عنوان حتى 60" },
+      { item: "التابات", mobile: "صف قابل للتمرير أفقيًا", tablet: "wrap", desktop: "wrap" },
+      { item: "الفوتر", mobile: "عمودان + العلامة والتواصل 1 / -1", tablet: "auto-fit 220px", desktop: "٤ أعمدة" },
+      { item: "الإجراءات الأساسية", mobile: "شريط سفلي ثابت + فاصل 76px", tablet: "داخل الهيدر", desktop: "داخل الهيدر" }
+    ];
+
+    const dirRules = [
+      { num: "١", title: "الاتجاه على الجذر فقط", text: "dir=\"rtl\" أو dir=\"ltr\" على الحاوية الأعلى؛ لا اتجاه على المكونات الفردية." },
+      { num: "٢", title: "خصائص منطقية دائمًا", text: "inset-inline-start / end وpadding-inline وmargin-inline-start بدل left/right — كل التخطيط ينعكس تلقائيًا." },
+      { num: "٣", title: "الأسهم تُستبدل لا تُقلب", text: "سهم \"التالي\" في RTL يشير يسارًا وفي LTR يمينًا: بدّل مسار الـSVG، ولا تستخدم scaleX(-1) لأنه يقلب الظلال والنهايات." },
+      { num: "٤", title: "الأرقام والعملة", text: "مجموعة السعر تأخذ direction: ltr مع justify-content: flex-end حتى تبقى العملة يسار الرقم في الاتجاهين." },
+      { num: "٥", title: "الهاتف والبريد", text: "direction: ltr مع align-self: flex-start — لا text-align: right (يكسر المحاذاة في LTR)." },
+      { num: "٦", title: "لا تفترض طول النص", text: "الإنجليزية أطول بنحو ٣٠٪؛ استخدم min-width: 0 وtext-wrap: pretty ولا ترتفعات ثابتة على أي صندوق نصّي." },
+      { num: "٧", title: "الخطوط", text: "Cairo وTajawal تدعمان اللاتيني؛ في LTR يبقى نفس الوزن والمقياس مع letter-spacing: 0 للعناوين." },
+      { num: "٨", title: "الحقول والقوائم", text: "text-align: start، والأيقونة قبل النص في التدفق (تنعكس تلقائيًا)، وسهم الـselect يستخدم inset-inline-end." }
+    ];
+
+    const summary = [
+      {
+        title: "التوكنز المستخرجة",
+        items: [
+          "٣١ توكن لون في ٥ مجموعات دلالية (Primary, Secondary, Neutral/Surface, Status, Promo)",
+          "١٢ نمط طباعة على عائلتين: Cairo وTajawal",
+          "١٠ درجات مسافات بأساس ٤",
+          "٦ درجات زوايا + ٣ سُمكات حدود",
+          "٤ مستويات ظل، ٤ مقاسات أيقونات، ٣ نسب صور"
+        ]
+      },
+      {
+        title: "ما تم توحيده",
+        items: [
+          "المسافات ٩/١١/١٣/١٨/٢٢/٢٦ → ٨/١٢/١٦/٢٠/٢٤",
+          "ارتفاعات ٤٢px للأزرار والأيقونات → ٤٤px (حد اللمس)",
+          "أحجام نص ١٤.٥/١٥.٥ المتقاربة → Body 15 و Body Small 13",
+          "زوايا ١٣/١٤/١٥/١٦ → radius-md 12 و radius-lg 14",
+          "حاوية صور المنتجات → نسبة ١:١ إلزامية بدل ارتفاع ١٩٦px"
+        ]
+      },
+      {
+        title: "مكونات جاهزة",
+        items: [
+          "الأزرار: Primary, Secondary, Tertiary, OnDark, Text, Icon",
+          "البطاقات: Product, Category, Promotional, Feature, Step",
+          "الشارات: Success, Warning, Primary, Promo, Tag, Disabled + Price + Rating",
+          "التنقل: Header, Desktop Nav, Drawer, Tabs, Breadcrumb, Pagination, Search Bar, Sticky Bottom Action, Footer",
+          "الحالات: Alerts ×٤, Empty ×٢, Loading, Skeleton, Modal, Bottom Sheet, Accordion, Tooltip",
+          "النماذج: Input ×٥ حالات, Checkbox, Radio, Toggle, Price Slider"
+        ]
+      },
+      {
+        title: "يحتاج إضافة لاحقًا",
+        items: [
+          "Select / Dropdown بقائمة منسدلة فعلية (غير موجود في الرئيسية)",
+          "Textarea وحقول الطلب الكاملة — تُبنى مع صفحة إتمام الشراء",
+          "Toast مؤقت بحركة دخول/خروج (الحالي ثابت)",
+          "Stepper الكمية (+/−) لصفحة المنتج",
+          "جدول تفاصيل الطلب بمعالجة Mobile Card",
+          "حالة صورة فاشلة التحميل بأيقونة بديلة داخل حاوية ١:١"
+        ]
+      }
+    ];
+
+    return {
+      narrow,
+      typeCols: narrow ? "1fr" : "180px 1fr 230px",
+      ruleCols: narrow ? "1fr" : "170px 260px 1fr",
+      respCols: narrow ? "1fr" : "150px repeat(3, 1fr)",
+      vwLabel: this.state.vw + "px",
+      breakpointLabel: this.state.vw < 760 ? "موبايل" : (this.state.vw < 980 ? "تابلت" : "ديسكتوب"),
+      productCards, badges, badgeTokens, navStates, tabStates, pages,
+      alerts, faqDemo, respRules, dirRules, summary,
+      navChips: [
+        { label: "الأساسيات", href: "#foundations" },
+        { label: "الأزرار", href: "#buttons" },
+        { label: "النماذج", href: "#forms" },
+        { label: "البطاقات", href: "#cards" },
+        { label: "الشارات", href: "#badges" },
+        { label: "التنقل", href: "#navigation" },
+        { label: "التغذية الراجعة", href: "#feedback" },
+        { label: "التجاوب و RTL", href: "#responsive" }
+      ],
+      colorGroups, typeScale, spacing, radii, shadows, layoutRules, iconSizes, ratios,
+      buttonVariants, iconButtons, inputStates, checkStates, radioStates, toggleStates
+    };
+  }
+}
+
+</script>
+</body>
+</html>

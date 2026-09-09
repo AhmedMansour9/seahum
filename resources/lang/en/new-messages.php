@@ -2584,4 +2584,12 @@ ____________________________________________________on_search_engines_and_see_th
 	"browse_categories" => "Browse categories",
 	"breadcrumb" => "Breadcrumb",
 	"filters" => "Filters",
+	"all_categories" => "All categories",
+	"categories_found" => "categories found",
+	"search_categories" => "Search categories",
+	"there_is_no_category" => "There is no category",
+	"no_category_matches_this_name_try_a_shorter_word" => "No category matches this name. Try a shorter word.",
+	"categories_will_appear_here_once_they_are_added" => "Categories will appear here once they are added.",
+	"show_all_categories" => "Show all categories",
+	"back_to_home" => "Back to home",
 ];

@@ -6,9 +6,6 @@
     @include('web-views.seafood.partials._styles')
 
     <style>
-        .sf-filter-field { width: 100%; height: 48px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; padding: 0 14px; font-family: Tajawal, sans-serif; font-size: 15px; outline: none; transition: border-color .2s, box-shadow .2s; }
-        .sf-filter-field:focus { border: 1.5px solid #17B0A7; box-shadow: 0 0 0 3px rgba(23,176,167,.22); }
-        .sf-filter-field::placeholder { color: #7B98A4; }
         .sf-filter-group-title { display: block; font-family: Cairo, sans-serif; font-size: 13.5px; font-weight: 700; color: #0B2C3F; margin-bottom: 12px; }
         .sf-filter-card { background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 22px; }
         .sf-filter-nav-link { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: 10px; font-family: Cairo, sans-serif; font-size: 15px; font-weight: 600; color: #34586B; transition: background .2s, color .2s; }
@@ -39,10 +36,6 @@
         .sf-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(23,176,167,.25); }
         .sf-page-link:hover { border-color: #17B0A7 !important; background: #ECF8F8 !important; color: #0B2C3F !important; }
 
-        .sf-help-card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 28px 20px; background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; box-shadow: 0 10px 26px -24px rgba(11,44,63,.9); }
-        .sf-help-icon { width: 60px; height: 60px; border-radius: 20px; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center; }
-        .sf-help-title { font-family: Cairo, sans-serif; font-size: 17px; font-weight: 700; color: #0B2C3F; margin-top: 6px; }
-        .sf-help-text { font-size: 14px; line-height: 1.8; color: #6E8C99; }
         .sf-icon-button { width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center; cursor: pointer; transition: background .2s, border-color .2s; }
         .sf-icon-button:hover { background: #ECF8F8; border-color: #BEE6E4; }
         .sf-filter-toggle { display: none; }
@@ -85,7 +78,6 @@
             body.sf-filter-sheet-open { position: fixed; inset-inline: 0; width: 100%; overflow: hidden; }
             .sf-category-caret { width: 44px; height: 44px; }
             .sf-category-link--sub { min-height: 44px; }
-            .sf-search-submit { width: 44px !important; height: 44px !important; inset-inline-end: 2px !important; }
             .sf-filter-panel[data-open="true"] { transform: translateY(0); }
             .sf-filter-sheet-head { display: block; position: sticky; top: 0; background: #FFFFFF; padding: 14px 0 12px; z-index: 2; }
             .sf-filter-card { border: none; border-radius: 0; padding: 18px 0; border-bottom: 1px solid #EDF5F6; }
@@ -93,13 +85,8 @@
         }
 
         @media (max-width: 759px) {
-            .sf-help-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; }
-            .sf-help-card { padding: 20px 14px; }
-            .sf-help-text { display: none; }
             .sf-listing-toolbar { flex-direction: column !important; align-items: stretch !important; }
             .sf-listing-toolbar-actions { width: 100%; }
-            .sf-search-wrap { flex: 1 1 100%; }
-            .sf-search-field { width: 100% !important; }
             .sf-sort-field, .sf-data-from-field { flex: 1 1 auto; min-width: 0; }
             .sf-sort-field select, .sf-data-from-field select { min-width: 0 !important; flex: 1; }
             .sf-filter-toggle { flex: 0 0 auto; }
@@ -145,13 +132,12 @@
                         </div>
 
                         <div class="sf-listing-toolbar-actions" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                            <span class="sf-search-wrap" style="position: relative; display: flex; align-items: center;">
+                            <span class="sf-search-wrap">
                                 <input type="search" class="sf-filter-field sf-search-field" name="product_name" autocomplete="off"
                                        value="{{ request('product_name') }}"
                                        placeholder="{{ translate('search_in_this_category') }}"
                                        style="width: 240px; padding-inline-end: 46px;">
-                                <button type="button" class="sf-search-submit" aria-label="{{ translate('search') }}"
-                                        style="position: absolute; inset-inline-end: 6px; width: 36px; height: 36px; border-radius: 10px; border: none; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center; cursor: pointer;">
+                                <button type="button" class="sf-search-submit" aria-label="{{ translate('search') }}">
                                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg>
                                 </button>
                             </span>
