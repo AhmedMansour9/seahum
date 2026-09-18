@@ -99,8 +99,8 @@
                 <label class="sf-form-label" for="password">{{ translate('new_password') }}</label>
                 <span class="sf-input-group">
                     <input class="sf-filter-field" id="password" name="password" type="password"
-                           autocomplete="new-password"
-                           placeholder="{{ translate('minimum_8_characters_long') }}">
+                           autocomplete="new-password" minlength="6"
+                           placeholder="{{ translate('minimum_6_characters_long') }}">
                     <button type="button" class="sf-input-action sf-password-toggle" data-target="password"
                             aria-pressed="false" aria-label="{{ translate('show_password') }}">
                         <svg class="sf-eye" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
@@ -113,8 +113,8 @@
                 <label class="sf-form-label" for="confirm_password">{{ translate('confirm_password') }}</label>
                 <span class="sf-input-group">
                     <input class="sf-filter-field" id="confirm_password" name="confirm_password" type="password"
-                           autocomplete="new-password"
-                           placeholder="{{ translate('minimum_8_characters_long') }}">
+                           autocomplete="new-password" minlength="6"
+                           placeholder="{{ translate('minimum_6_characters_long') }}">
                     <button type="button" class="sf-input-action sf-password-toggle" data-target="confirm_password"
                             aria-pressed="false" aria-label="{{ translate('show_password') }}">
                         <svg class="sf-eye" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>

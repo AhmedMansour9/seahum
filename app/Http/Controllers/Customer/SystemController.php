@@ -518,9 +518,9 @@ class SystemController extends Controller
                     'errors' => translate('The_password_and_confirm_password_must_match')
                 ], 403);
             }
-            if (strlen($request['customer_password']) < 7 || strlen($request['customer_confirm_password']) < 7) {
+            if (strlen($request['customer_password']) < 6 || strlen($request['customer_confirm_password']) < 6) {
                 return response()->json([
-                    'errors' => translate('The_password_must_be_at_least_8_characters')
+                    'errors' => translate('password_must_be_at_least_6_characters')
                 ], 403);
             }
             if ($request['shipping']) {

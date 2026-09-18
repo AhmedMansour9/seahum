@@ -185,14 +185,15 @@ class UserProfileController extends Controller
 
     public function address_store(Request $request): RedirectResponse
     {
+        $zip_restrict_status = getWebConfig(name: 'delivery_zip_code_area_restriction');
         $request->validate([
             'name' => 'required',
             'phone' => 'required|max:20',
             'city' => 'required',
-            'zip' => 'required',
-            'country' => 'required',
+            'zip' => $zip_restrict_status ? 'required' : 'nullable|max:10',
             'address' => 'required',
         ]);
+        $request->merge(['country' => $this->getDefaultCountryName()]);
 
         $numericPhoneValue = preg_replace('/[^0-9]/', '', $request['phone']);
         $numericLength = strlen($numericPhoneValue);
@@ -206,7 +207,6 @@ class UserProfileController extends Controller
         }
 
         $country_restrict_status = getWebConfig(name: 'delivery_country_restriction');
-        $zip_restrict_status = getWebConfig(name: 'delivery_zip_code_area_restriction');
 
         $country_exist = self::delivery_country_exist_check($request->country);
         $zipcode_exist = self::delivery_zipcode_exist_check($request->zip);
@@ -273,14 +273,15 @@ class UserProfileController extends Controller
 
     public function address_update(Request $request): RedirectResponse
     {
+        $zip_restrict_status = getWebConfig(name: 'delivery_zip_code_area_restriction');
         $request->validate([
             'name' => 'required',
             'phone' => 'required|max:20',
             'city' => 'required',
-            'zip' => 'required',
-            'country' => 'required',
+            'zip' => $zip_restrict_status ? 'required' : 'nullable|max:10',
             'address' => 'required',
         ]);
+        $request->merge(['country' => $this->getDefaultCountryName()]);
 
         $numericPhoneValue = preg_replace('/[^0-9]/', '', $request['phone']);
         $numericLength = strlen($numericPhoneValue);
@@ -294,7 +295,6 @@ class UserProfileController extends Controller
         }
 
         $country_restrict_status = getWebConfig(name: 'delivery_country_restriction');
-        $zip_restrict_status = getWebConfig(name: 'delivery_zip_code_area_restriction');
 
         $country_exist = self::delivery_country_exist_check($request->country);
         $zipcode_exist = self::delivery_zipcode_exist_check($request->zip);

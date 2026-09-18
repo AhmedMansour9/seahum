@@ -12,7 +12,6 @@ use App\Http\Requests\Vendor\PasswordResetRequest;
 use App\Http\Requests\Vendor\VendorPasswordRequest;
 use App\Services\FirebaseService;
 use App\Services\PasswordResetService;
-use App\Services\RecaptchaService;
 use App\Traits\EmailTemplateTrait;
 use App\Traits\SmsGateway;
 use App\Utils\SMSModule;
@@ -73,17 +72,6 @@ class ForgotPasswordController extends BaseController
     {
         session()->put(SessionKey::FORGOT_PASSWORD_IDENTIFY, $request['identity']);
         $verificationBy = getWebConfig('vendor_forgot_password_method') ?? 'phone';
-
-        $result = RecaptchaService::verificationStatus(request: $request, session: 'default_recaptcha_id_vendor_forgot_password', action: 'vendor_forgot_password', firebase: true);
-        if ($result && !$result['status']) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'error' => $result['message'],
-                ]);
-            }
-            ToastMagic::error($result['message']);
-            return back();
-        }
 
         if ($verificationBy == 'email') {
             $vendor = $this->vendorRepo->getFirstWhere(['identity' => $request['identity']]);

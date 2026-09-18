@@ -2,9 +2,9 @@
 
 namespace App;
 
-use App\Models\ShippingAddress;
 use App\Models\Order;
 use App\Models\ProductCompare;
+use App\Models\ShippingAddress;
 use App\Models\Wishlist;
 use App\Traits\StorageTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,9 +15,7 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, StorageTrait;
-
-    public mixed $email;
+    use HasApiTokens, Notifiable, StorageTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -27,7 +25,7 @@ class User extends Authenticatable
     protected $fillable = [
         'f_name', 'l_name', 'name', 'email', 'password', 'country_code', 'phone', 'image', 'login_medium',
         'is_active', 'social_id', 'is_phone_verified', 'temporary_token', 'referral_code', 'referred_by',
-        'street_address', 'country', 'city', 'zip'
+        'street_address', 'country', 'city', 'zip',
     ];
 
     /**
@@ -89,10 +87,12 @@ class User extends Authenticatable
                 }
             }
         }
+
         return $this->storageLink('profile', $value, 'public');
     }
 
     protected $with = ['storage'];
+
     protected $appends = ['image_full_url'];
 
     protected static function boot(): void
@@ -113,5 +113,4 @@ class User extends Authenticatable
             }
         });
     }
-
 }

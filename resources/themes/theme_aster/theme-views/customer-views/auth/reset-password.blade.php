@@ -28,9 +28,9 @@
                                 <div class="mb-4">
                                     <label for="password2">{{ translate('password') }}</label>
                                     <div class="input-inner-end-ele">
-                                        <input type="password" id="password2" name="password" min="8"
+                                        <input type="password" id="password2" name="password" minlength="6"
                                                class="form-control"
-                                               placeholder="{{ translate('minimum_8_characters_long') }}" required>
+                                               placeholder="{{ translate('minimum_6_characters_long') }}" required>
                                         <i class="bi bi-eye-slash-fill togglePassword"></i>
                                     </div>
                                 </div>
@@ -38,8 +38,8 @@
                                     <label for="confirm_password2">{{ translate('confirm_password') }}</label>
                                     <div class="input-inner-end-ele">
                                         <input type="password" id="confirm_password2" class="form-control"
-                                               name="confirm_password" min="8"
-                                               placeholder="{{ translate('minimum_8_characters_long') }}" required>
+                                               name="confirm_password" minlength="6"
+                                               placeholder="{{ translate('minimum_6_characters_long') }}" required>
                                         <i class="bi bi-eye-slash-fill togglePassword"></i>
                                     </div>
                                 </div>

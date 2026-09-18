@@ -104,6 +104,13 @@ trait CommonTrait
         return in_array($input_country, $data);
     }
 
+    public function getDefaultCountryName(): string
+    {
+        $systemCountryCode = getWebConfig(name: 'country_code') ?? 'EG';
+
+        return collect(COUNTRIES)->firstWhere('code', strtoupper($systemCountryCode))['name'] ?? 'Egypt';
+    }
+
     public function delivery_zipcode_exist_check($input_zip): bool
     {
         return in_array($input_zip, DeliveryZipCode::pluck('zipcode')->toArray());

@@ -85,27 +85,10 @@
                                         @endforeach
                                     </select>
                                 @else
-                                    <input class="form-control" type="text" id="zip_code" name="zip" value="{{$shippingAddress->zip}}" required>
+                                    <input class="form-control" type="text" id="zip_code" name="zip" value="{{$shippingAddress->zip}}">
                                 @endif
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="city">{{translate('country')}}</label>
-                                <select name="country" class="form-control selectpicker" data-live-search="true" id="" required>
-                                    @if($country_restrict_status)
-                                        @foreach($delivery_countries as $country)
-                                            <option value="{{$country['name']}}" {{ $country['name'] == $shippingAddress->country? 'selected' : ''}}>{{$country['name']}}</option>
-                                        @endforeach
-                                    @else
-                                        @foreach(COUNTRIES as $country)
-                                            <option value="{{ $country['name'] }}" {{ $shippingAddress->country == $country['name']? 'selected' : '' }}>{{ $country['name'] }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-
                         <div class="form-row">
                             <div class=" col-md-12">
                                 <div class="form-group mb-1">

@@ -67,7 +67,7 @@
                                     <div class="input-inner-end-ele">
                                         <input type="password" id="password-{{ $randomLabelId }}" name="password"
                                                class="form-control"
-                                               placeholder="{{ translate('minimum_8_characters_long') }}"
+                                               placeholder="{{ translate('minimum_6_characters_long') }}"
                                                autocomplete="off" required/>
                                         <i class="bi bi-eye-slash-fill togglePassword"></i>
                                     </div>
@@ -82,7 +82,7 @@
                                     <div class="input-inner-end-ele">
                                         <input type="password" id="confirm_password-{{ $randomLabelId }}"
                                                class="form-control" name="con_password"
-                                               placeholder="{{ translate('minimum_8_characters_long') }}"
+                                               placeholder="{{ translate('minimum_6_characters_long') }}"
                                                autocomplete="off" required/>
                                         <i class="bi bi-eye-slash-fill togglePassword"></i>
                                     </div>

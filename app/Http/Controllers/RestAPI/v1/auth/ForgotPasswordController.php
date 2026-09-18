@@ -175,7 +175,7 @@ class ForgotPasswordController extends Controller
         $validator = Validator::make($request->all(), [
             'identity' => 'required',
             'otp' => 'required',
-            'password' => 'required|same:confirm_password|min:8',
+            'password' => 'required|same:confirm_password|min:6',
         ]);
 
         if ($validator->fails()) {

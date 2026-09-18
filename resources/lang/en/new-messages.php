@@ -2633,4 +2633,13 @@ ____________________________________________________on_search_engines_and_see_th
 	"Subject_is_Empty" => "Subject is Empty",
 	"Message_is_Empty" => "Message is Empty",
 	"Your_Message_Send_Successfully" => "Your Message Send Successfully",
+	"there_is_no_FAQs" => "There is no FAQs",
+	"forgot_password_question" => "Forgot password?",
+	"create_your_account" => "Create your account",
+	"ex_first_name" => "Ex: Mahmoud",
+	"ex_family_name" => "Ex: Ahmed",
+	"already_have_an_account_question" => "Already have an account?",
+	"forgot_your_password_question" => "Forgot your password?",
+	"minimum_6_characters_long" => "Minimum 6 characters long",
+	"password_must_be_at_least_6_characters" => "Password must be at least 6 characters",
 ];

@@ -45,6 +45,7 @@ class CustomerProfileUpdateRequest extends FormRequest
                 maxSize: getFileUploadMaxSize(unit: 'kb'),
                 isDisallowed: true
             ),
+            'password' => 'nullable|min:6',
         ];
     }
 
@@ -57,7 +58,8 @@ class CustomerProfileUpdateRequest extends FormRequest
             'phone.unique' => translate('phone_number_already_has_been_taken'),
             'phone.max' => translate('The_phone_number_may_not_be_greater_than_20_characters'),
             'image.mimes' => translate('The_image_type_must_be') . '.jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff,.webp',
-            'image.max' => translate('The_image_may_not_be_greater_than_2_MB')
+            'image.max' => translate('The_image_may_not_be_greater_than_2_MB'),
+            'password.min' => translate('password_must_be_at_least_6_characters'),
         ];
     }
 

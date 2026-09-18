@@ -27,8 +27,8 @@
                         <span style="width: 60px; height: 60px; border-radius: 20px; background: #ECF8F8; color: #0E8E88; display: inline-grid; place-items: center;">
                             <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20c1.4-3.4 4.2-5 7.5-5s6.1 1.6 7.5 5"></path></svg>
                         </span>
-                        <h1 style="font-family: Cairo, sans-serif; font-size: clamp(21px, 3vw, 26px); font-weight: 800; line-height: 1.35; margin: 14px 0 6px; color: #0B2C3F; text-wrap: pretty;">{{ translate('create_your_account') }}</h1>
-                        <p style="font-size: 14.5px; line-height: 1.8; color: #6E8C99; margin: 0 auto; max-width: 460px;">{{ translate('sign_up_to_track_your_orders_and_check_out_faster') }}</p>
+                        <h1 style="font-family: Cairo, sans-serif; font-size: clamp(21px, 3vw, 26px); font-weight: 800; line-height: 1.35; margin: 14px 0 6px; color: #0B2C3F; text-align: center !important;">{{ translate('create_your_account') }}</h1>
+                        <p style="font-size: 14.5px; line-height: 1.8; color: #6E8C99; margin: 0 auto; max-width: 460px; text-align: center !important;">{{ translate('sign_up_to_track_your_orders_and_check_out_faster') }}</p>
                     </header>
 
                     <form id="customer-register-form" action="{{ route('customer.auth.sign-up') }}" method="post" novalidate>
@@ -41,7 +41,7 @@
                                 </label>
                                 <input class="sf-filter-field" id="register-f-name" type="text" name="f_name"
                                        value="{{ old('f_name') }}" autocomplete="given-name"
-                                       placeholder="{{ translate('Ex') }}: {{ translate('Jhone') }}" required>
+                                       placeholder="{{ translate('ex_first_name') }}" required>
                             </div>
 
                             <div>
@@ -50,7 +50,7 @@
                                 </label>
                                 <input class="sf-filter-field" id="register-l-name" type="text" name="l_name"
                                        value="{{ old('l_name') }}" autocomplete="family-name"
-                                       placeholder="{{ translate('ex') }}: {{ translate('Doe') }}" required>
+                                       placeholder="{{ translate('ex_family_name') }}" required>
                             </div>
 
                             <div>
@@ -67,7 +67,7 @@
                                     {{ translate('phone_number') }}<span class="sf-required">*</span>
                                 </label>
                                 <input class="sf-filter-field phone-input-with-country-picker" id="register-phone"
-                                       type="tel" name="phone" value="{{ old('phone') }}"
+                                       type="tel" name="phone" value="{{ old('phone') }}" data-locked-country="eg"
                                        placeholder="{{ translate('enter_phone_number') }}" required>
                             </div>
 
@@ -77,8 +77,8 @@
                                 </label>
                                 <span class="sf-input-group">
                                     <input class="sf-filter-field" id="si-password" type="password" name="password"
-                                           autocomplete="new-password"
-                                           placeholder="{{ translate('minimum_8_characters_long') }}" required>
+                                           autocomplete="new-password" minlength="6"
+                                           placeholder="{{ translate('minimum_6_characters_long') }}" required>
                                     <button type="button" class="sf-input-action sf-password-toggle" data-target="si-password"
                                             aria-pressed="false" aria-label="{{ translate('show_password') }}">
                                         <svg class="sf-eye" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
@@ -93,8 +93,8 @@
                                 </label>
                                 <span class="sf-input-group">
                                     <input class="sf-filter-field" id="si-confirm-password" type="password" name="con_password"
-                                           autocomplete="new-password"
-                                           placeholder="{{ translate('minimum_8_characters_long') }}" required>
+                                           autocomplete="new-password" minlength="6"
+                                           placeholder="{{ translate('minimum_6_characters_long') }}" required>
                                     <button type="button" class="sf-input-action sf-password-toggle" data-target="si-confirm-password"
                                             aria-pressed="false" aria-label="{{ translate('show_password') }}">
                                         <svg class="sf-eye" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
@@ -161,8 +161,8 @@
                         </div>
                     @endif
 
-                    <p style="text-align: center; font-size: 14.5px; color: #6E8C99; margin: 26px 0 0;">
-                        {{ translate('Already_have_account ') }}?
+                    <p style="text-align: center !important; font-size: 14.5px; color: #6E8C99; margin: 26px 0 0;">
+                        {{ translate('already_have_an_account_question') }}
                         <a class="sf-text-link" href="{{ route('customer.auth.login') }}">{{ translate('sign_in') }}</a>
                     </p>
                 </div>

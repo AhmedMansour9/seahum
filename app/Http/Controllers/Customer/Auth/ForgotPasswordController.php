@@ -16,7 +16,6 @@ use App\Utils\CustomerManager;
 use App\Services\FirebaseService;
 use Illuminate\Http\JsonResponse;
 use App\Events\PasswordResetEvent;
-use App\Services\RecaptchaService;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\View\View;
@@ -54,17 +53,6 @@ class ForgotPasswordController extends Controller
         $request->validate([
             'identity' => 'required',
         ]);
-
-        $result = RecaptchaService::verificationStatus(request: $request, session: 'default_recaptcha_id_customer_auth', action: "customer_auth", firebase: true);
-        if ($result && !$result['status']) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'error' => $result['message'],
-                ]);
-            }
-            Toastr::error($result['message']);
-            return back();
-        }
 
         $customer = $this->customerRepo->getByIdentity(filters: ['phone' => $request['identity']]);
         if (!$customer) {
@@ -148,18 +136,6 @@ class ForgotPasswordController extends Controller
 
     public function resendPhoneOTPRequest(Request $request): JsonResponse|RedirectResponse
     {
-        $result = RecaptchaService::verificationStatus(request: $request, session: 'default_recaptcha_id_customer_auth', action: "customer_auth", firebase: true);
-        if ($result && !$result['status']) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'error' => $result['message'],
-                ]);
-            }
-
-            Toastr::error($result['message']);
-            return back();
-        }
-
         $customer = $this->customerRepo->getByIdentity(filters: ['identity' => base64_decode($request['identity'])]);
         if ($customer) {
             $tokenInfo = $this->phoneOrEmailVerificationRepo->getFirstWhere(params: ['phone_or_email' => $customer['phone']]);
@@ -298,12 +274,16 @@ class ForgotPasswordController extends Controller
     public function resetPasswordSubmit(Request $request): View|Redirector|RedirectResponse
     {
         $validator = Validator::make($request->all(), [
-            'password' => 'required|same:confirm_password',
+            'password' => 'required|min:6|same:confirm_password',
+        ], [
+            'password.required' => translate('password_is_required'),
+            'password.min' => translate('password_must_be_at_least_6_characters'),
+            'password.same' => translate('password_mismatch'),
         ]);
 
         $token = $request['reset_token'];
         if ($validator->fails()) {
-            Toastr::error(translate('password_mismatch'));
+            Toastr::error($validator->errors()->first());
             return view(VIEW_FILE_NAMES['reset_password'], compact('token'));
         }
 
@@ -335,18 +315,6 @@ class ForgotPasswordController extends Controller
             }
             Toastr::error(translate('The_token_field_is_required'));
             return redirect()->back();
-        }
-
-        $result = RecaptchaService::verificationStatus(request: $request, session: 'default_recaptcha_id_customer_auth', action: "customer_auth", firebase: true);
-        if ($result && !$result['status']) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'error' => $result['message'],
-                ]);
-            }
-
-            Toastr::error($result['message']);
-            return back();
         }
 
         $firebaseOTPVerification = getWebConfig(name: 'firebase_otp_verification') ?? [];

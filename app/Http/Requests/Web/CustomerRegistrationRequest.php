@@ -25,8 +25,7 @@ class CustomerRegistrationRequest extends FormRequest
             'f_name' => 'required',
             'email' => 'required|email|unique:users',
             'phone' => 'required|unique:users|max:20',
-            'password' => 'required|same:con_password',
-
+            'password' => 'required|min:6|same:con_password',
         ];
     }
 
@@ -38,6 +37,7 @@ class CustomerRegistrationRequest extends FormRequest
             'phone.required' => translate('phone_number_is_required'),
             'phone.unique' => translate('phone_number_already_has_been_taken'),
             'phone.max' => translate('The_phone_number_may_not_be_greater_than_20_characters'),
+            'password.min' => translate('password_must_be_at_least_6_characters'),
         ];
     }
 

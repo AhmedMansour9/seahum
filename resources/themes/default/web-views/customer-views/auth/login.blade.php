@@ -113,7 +113,7 @@
                                                 <span class="sf-check-label">{{ translate('remember_me') }}</span>
                                             </label>
                                             <a class="sf-text-link" style="font-size: 14px;" href="{{ route('customer.auth.recover-password') }}">
-                                                {{ translate('forgot_password') }}?
+                                                {{ translate('forgot_password_question') }}
                                             </a>
                                         </div>
                                     </div>

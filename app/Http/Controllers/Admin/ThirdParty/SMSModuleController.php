@@ -7,7 +7,6 @@ use App\Enums\GlobalConstant;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Admin\SMSModuleUpdateRequest;
 use App\Services\FirebaseService;
-use App\Services\RecaptchaService;
 use App\Services\SettingService;
 use App\Utils\SMSModule;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
@@ -82,12 +81,6 @@ class SMSModuleController extends BaseController
 
     public function sendSMS(Request $request): RedirectResponse
     {
-        $result = RecaptchaService::verificationStatus(request: $request, session: 'smsTestRecaptchaSessionKey', action: "login", firebase: true);
-        if ($result && !$result['status']) {
-            ToastMagic::error($result['message']);
-            return back();
-        }
-
         $status = 'error';
         $phoneNumber = $request['phone'];
         $firebaseOTPVerification = getWebConfig(name: 'firebase_otp_verification') ?? [];

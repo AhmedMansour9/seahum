@@ -11,7 +11,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\CustomerRegistrationRequest;
 use App\Models\PhoneOrEmailVerification;
 use App\Services\FirebaseService;
-use App\Services\RecaptchaService;
 use App\Services\ReferByEarnCustomerService;
 use App\Services\Web\CustomerAuthService;
 use App\Traits\EmailTemplateTrait;
@@ -213,19 +212,6 @@ class RegisterController extends Controller
         Validator::make($request->all(), [
             'token' => 'required',
         ]);
-
-        $result = RecaptchaService::verificationStatus(request: $request, session: 'default_recaptcha_id_customer_auth', action: 'customer_auth', firebase: true);
-        if ($result && ! $result['status']) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'error' => $result['message'],
-                ]);
-            }
-
-            Toastr::error($result['message']);
-
-            return back();
-        }
 
         $maxOTPHit = getWebConfig(name: 'maximum_otp_hit') ?? 5;
         $maxOTPHitTime = getWebConfig(name: 'otp_resend_time') ?? 60; // seconds
@@ -492,19 +478,6 @@ class RegisterController extends Controller
 
     public function resendOTPToCustomer(Request $request): JsonResponse|RedirectResponse
     {
-        $result = RecaptchaService::verificationStatus(request: $request, session: 'default_recaptcha_id_customer_auth', action: 'customer_auth', firebase: true);
-        if ($result && ! $result['status']) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'error' => $result['message'],
-                ]);
-            }
-
-            Toastr::error($result['message']);
-
-            return back();
-        }
-
         $maxOTPHit = getWebConfig(name: 'maximum_otp_hit') ?? 5;
         $maxOTPHitTime = getWebConfig(name: 'otp_resend_time') ?? 60; // seconds
         $tempBlockTime = getWebConfig(name: 'temporary_block_time') ?? 600; // seconds

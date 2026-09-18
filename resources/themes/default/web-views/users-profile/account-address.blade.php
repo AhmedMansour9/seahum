@@ -57,10 +57,12 @@
                             <span class="sf-meta-label">{{ translate('city') }}</span>
                             <span class="sf-meta-value">{{ $shippingAddress['city'] }}</span>
                         </span>
-                        <span class="sf-meta-item">
-                            <span class="sf-meta-label">{{ translate('zip_code') }}</span>
-                            <span class="sf-meta-value"><bdi dir="ltr">{{ $shippingAddress['zip'] }}</bdi></span>
-                        </span>
+                        @if($shippingAddress['zip'])
+                            <span class="sf-meta-item">
+                                <span class="sf-meta-label">{{ translate('zip_code') }}</span>
+                                <span class="sf-meta-value"><bdi dir="ltr">{{ $shippingAddress['zip'] }}</bdi></span>
+                            </span>
+                        @endif
                         <span class="sf-meta-item">
                             <span class="sf-meta-label">{{ translate('country') }}</span>
                             <span class="sf-meta-value">{{ $shippingAddress['country'] }}</span>
@@ -140,7 +142,7 @@
 
                     <div>
                         <label class="sf-form-label" for="zip">
-                            {{ translate('zip_code') }}<span class="sf-required">*</span>
+                            {{ translate('zip_code') }}@if($zip_restrict_status)<span class="sf-required">*</span>@endif
                         </label>
                         @if($zip_restrict_status)
                             <select name="zip" id="zip" class="sf-filter-field" required>
@@ -150,19 +152,8 @@
                             </select>
                         @else
                             <input class="sf-filter-field" type="text" id="zip" name="zip"
-                                   placeholder="{{ translate('zip_code') }}" required>
+                                   placeholder="{{ translate('zip_code') }}">
                         @endif
-                    </div>
-
-                    <div class="sf-form-full">
-                        <label class="sf-form-label" for="country">
-                            {{ translate('country') }}<span class="sf-required">*</span>
-                        </label>
-                        <select name="country" id="country" class="sf-filter-field" required>
-                            @foreach($countries as $country)
-                                <option value="{{ $country['name'] }}">{{ $country['name'] }}</option>
-                            @endforeach
-                        </select>
                     </div>
 
                     <div class="sf-form-full">

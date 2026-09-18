@@ -81,14 +81,21 @@ class SeafoodAuthAndPageViewTest extends TestCase
         $this->assertStringContainsString('id="inputChecked"', $registerPage);
     }
 
-    public function test_recover_password_keeps_the_server_verified_captcha_branches(): void
+    public function test_recover_password_keeps_the_identity_field_and_firebase_container(): void
     {
         $recoverPage = file_get_contents($this->templatePath('web-views.customer-views.auth.recover-password'));
 
         $this->assertStringContainsString('name="identity"', $recoverPage);
-        $this->assertStringContainsString('generate-firebase-auth-recaptcha', $recoverPage);
-        $this->assertStringContainsString('render-grecaptcha-response', $recoverPage);
-        $this->assertStringContainsString('default-captcha-container', $recoverPage);
+        $this->assertStringContainsString('_firebase-recaptcha-container', $recoverPage);
+    }
+
+    public function test_recover_password_questions_do_not_append_a_second_question_mark(): void
+    {
+        $recoverPage = file_get_contents($this->templatePath('web-views.customer-views.auth.recover-password'));
+
+        $this->assertDoesNotMatchRegularExpression("/translate\('[^']*'\)\s*\}\}\s*\?/", $recoverPage);
+        $this->assertStringContainsString("translate('forgot_your_password_question')", $recoverPage);
+        $this->assertStringContainsString("translate('already_have_an_account_question')", $recoverPage);
     }
 
     /**
@@ -137,6 +144,50 @@ class SeafoodAuthAndPageViewTest extends TestCase
 
         $this->assertStringNotContainsString('default_captcha_value_contact', $webController);
         $this->assertStringNotContainsString('RecaptchaService', $webController);
+    }
+
+    /**
+     * No page asks for a captcha any more, so no controller may verify one:
+     * RecaptchaService compares the posted value against the session and would
+     * reject every submission once the input is gone. Only the invisible
+     * Firebase container stays, because Firebase phone OTP needs its token.
+     */
+    public function test_pages_and_controllers_drop_the_captcha_together(): void
+    {
+        $captchaFreeViews = [
+            'resources/themes/default/web-views/customer-views/auth/_otp-update-info.blade.php',
+            'resources/themes/default/web-views/customer-views/auth/_otp-login-verify.blade.php',
+            'resources/themes/default/web-views/customer-views/auth/verify.blade.php',
+            'resources/themes/default/web-views/customer-views/auth/recover-password.blade.php',
+            'resources/themes/theme_aster/theme-views/customer-views/auth/_otp-update-info.blade.php',
+            'resources/themes/theme_aster/theme-views/customer-views/auth/_otp-login-verify.blade.php',
+            'resources/themes/theme_aster/theme-views/customer-views/auth/verify.blade.php',
+            'resources/themes/theme_aster/theme-views/customer-views/auth/recover-password.blade.php',
+            'resources/themes/theme_aster/theme-views/pages/contact-us.blade.php',
+            'resources/views/vendor-views/auth/forgot-password/index.blade.php',
+            'resources/views/admin-views/third-party/sms-index.blade.php',
+        ];
+
+        foreach ($captchaFreeViews as $viewPath) {
+            $viewContents = file_get_contents(base_path($viewPath));
+
+            foreach (['default-captcha-container', 'render-grecaptcha-response', 'default_captcha_value', 'recaptcha/api.js'] as $captchaMarker) {
+                $this->assertStringNotContainsString($captchaMarker, $viewContents, "{$viewPath} still ships '{$captchaMarker}'.");
+            }
+        }
+
+        $formControllers = [
+            'app/Http/Controllers/Admin/ThirdParty/SMSModuleController.php',
+            'app/Http/Controllers/Customer/Auth/CustomerAuthController.php',
+            'app/Http/Controllers/Customer/Auth/ForgotPasswordController.php',
+            'app/Http/Controllers/Customer/Auth/RegisterController.php',
+            'app/Http/Controllers/Customer/Auth/SocialAuthController.php',
+            'app/Http/Controllers/Vendor/Auth/ForgotPasswordController.php',
+        ];
+
+        foreach ($formControllers as $controllerPath) {
+            $this->assertStringNotContainsString('RecaptchaService', file_get_contents(base_path($controllerPath)), "{$controllerPath} still verifies a captcha.");
+        }
     }
 
     public function test_contact_form_keeps_every_field_the_backend_stores(): void

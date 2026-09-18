@@ -9,7 +9,7 @@
     </div>
     @if(isset($forgotPassword) && $forgotPassword)
         <a class="font-size-sm text-primary text-underline" href="{{route('customer.auth.recover-password')}}">
-            {{ translate('forgot_password') }}?
+            {{ translate('forgot_password_question') }}
         </a>
     @endif
 </div>
