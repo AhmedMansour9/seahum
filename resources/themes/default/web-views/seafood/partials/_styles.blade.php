@@ -438,6 +438,7 @@
         @media (max-width: 699px) {
             .sf-header-search { display: none !important; }
             .sf-header-account { display: none !important; }
+            .sf-header-logout { display: none !important; }
             .sf-header-wishlist { display: none !important; }
         }
 

@@ -53,6 +53,14 @@
                         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20c1.4-3.4 4.2-5 7.5-5s6.1 1.6 7.5 5"></path></svg>
                     </a>
 
+                    @if(auth('customer')->check())
+                        <a href="{{ route('customer.auth.logout') }}" class="sf-tool sf-header-logout"
+                           aria-label="{{ translate('logout') }}" title="{{ translate('logout') }}"
+                           style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center;">
+                            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"></path><path d="M10 16l-4-4 4-4M6 12h9"></path></svg>
+                        </a>
+                    @endif
+
                     <a href="{{ route('wishlists') }}" class="sf-tool sf-header-wishlist" aria-label="{{ translate('wishlist') }}"
                        style="position: relative; width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center;">
                         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9Z"></path></svg>
@@ -66,7 +74,8 @@
                             <button type="button" class="sf-tool sf-header-lang seafood-change-language" data-language-code="{{ $languageData['code'] }}"
                                     title="{{ $languageData['name'] }}"
                                     style="display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 13px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3.5 9h17M3.5 15h17"></path><path d="M12 3c2.4 2.4 2.4 15.6 0 18M12 3c-2.4 2.4-2.4 15.6 0 18"></path></svg>
+                                <img src="{{ theme_asset(path: 'public/assets/front-end/img/flags/'.strtolower(\Illuminate\Support\Str::before($languageData['code'], '-')).'.png') }}"
+                                     alt="{{ $languageData['name'] }}" width="22" height="16" style="width: 22px; height: 16px; object-fit: cover; border-radius: 3px; box-shadow: 0 0 0 1px #E4EFF1;">
                                 <span style="text-transform: uppercase;">{{ $languageData['code'] }}</span>
                             </button>
                             @break
@@ -99,12 +108,16 @@
                 <a href="{{ auth('customer')->check() ? route('user-account') : route('customer.auth.login') }}"
                    style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('account') }}</a>
                 <a href="{{ route('wishlists') }}" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('wishlist') }}</a>
+                @if(auth('customer')->check())
+                    <a href="{{ route('customer.auth.logout') }}" style="padding: 13px 12px; border-radius: 10px; color: #34586B;">{{ translate('logout') }}</a>
+                @endif
 
                 @foreach($web_config['language'] as $languageData)
                     @if($languageData['status'] == 1 && $languageData['code'] != getDefaultLanguage())
                         <button type="button" class="seafood-change-language" data-language-code="{{ $languageData['code'] }}"
                                 style="margin-top: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; cursor: pointer;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3.5 9h17M3.5 15h17"></path><path d="M12 3c2.4 2.4 2.4 15.6 0 18M12 3c-2.4 2.4-2.4 15.6 0 18"></path></svg>
+                            <img src="{{ theme_asset(path: 'public/assets/front-end/img/flags/'.strtolower(\Illuminate\Support\Str::before($languageData['code'], '-')).'.png') }}"
+                                 alt="{{ $languageData['name'] }}" width="22" height="16" style="width: 22px; height: 16px; object-fit: cover; border-radius: 3px; box-shadow: 0 0 0 1px #E4EFF1;">
                             <span style="text-transform: uppercase;">{{ $languageData['code'] }}</span>
                         </button>
                         @break

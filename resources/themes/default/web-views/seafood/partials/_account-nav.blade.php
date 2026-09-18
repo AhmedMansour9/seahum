@@ -120,6 +120,11 @@
             </a>
         @endforeach
 
+        <a href="{{ route('customer.auth.logout') }}" class="sf-account-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"></path><path d="M10 16l-4-4 4-4M6 12h9"></path></svg>
+            <span class="sf-account-link-label">{{ translate('logout') }}</span>
+        </a>
+
         <a href="javascript:" class="sf-account-link sf-account-link-danger customer-account-delete-by-route"
            data-route="{{ route('account-delete', [auth('customer')->id()]) }}"
            data-message="{{ translate('want_to_delete_this_account') }}?">

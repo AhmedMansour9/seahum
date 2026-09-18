@@ -227,6 +227,30 @@ class SeafoodAuthAndPageViewTest extends TestCase
         $this->assertStringContainsString('web-views.seafood.partials._phone-input-scripts', $contactPage);
     }
 
+    /**
+     * The seafood chrome replaced the legacy header dropdown that carried the
+     * only logout link, so customers had no way to sign out.
+     */
+    public function test_signed_in_customers_can_reach_logout_from_the_account_nav_and_mobile_menu(): void
+    {
+        $accountNav = file_get_contents($this->templatePath('web-views.seafood.partials._account-nav'));
+        $header = file_get_contents($this->templatePath('web-views.seafood.partials._header'));
+
+        $this->assertStringContainsString("route('customer.auth.logout')", $accountNav);
+        $this->assertMatchesRegularExpression("/@if\(auth\('customer'\)->check\(\)\)\s*<a href=\"\{\{ route\('customer.auth.logout'\) \}\}\"/", $header);
+        $this->assertMatchesRegularExpression("/@if\(auth\('customer'\)->check\(\)\)\s*<a href=\"\{\{ route\('customer.auth.logout'\) \}\}\" class=\"sf-tool sf-header-logout\"/", $header);
+        $this->assertStringContainsString('.sf-header-logout { display: none !important; }', file_get_contents($this->templatePath('web-views.seafood.partials._styles')));
+    }
+
+    public function test_header_language_switchers_show_the_target_language_flag(): void
+    {
+        $header = file_get_contents($this->templatePath('web-views.seafood.partials._header'));
+
+        $this->assertSame(2, substr_count($header, "img/flags/'.strtolower(\\Illuminate\\Support\\Str::before(\$languageData['code'], '-')).'.png'"));
+        $this->assertFileExists(public_path('assets/front-end/img/flags/eg.png'));
+        $this->assertFileExists(public_path('assets/front-end/img/flags/en.png'));
+    }
+
     private function templatePath(string $viewName): string
     {
         return base_path(self::THEME_PATH.'/'.str_replace('.', '/', $viewName).'.blade.php');

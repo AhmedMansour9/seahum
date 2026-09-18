@@ -2642,4 +2642,6 @@ ____________________________________________________on_search_engines_and_see_th
 	"forgot_your_password_question" => "Forgot your password?",
 	"minimum_6_characters_long" => "Minimum 6 characters long",
 	"password_must_be_at_least_6_characters" => "Password must be at least 6 characters",
+	"logout" => "Logout",
+	"you_do_not_have_any" => "You do not have any",
 ];
