@@ -6,9 +6,6 @@
     @include('web-views.seafood.partials._styles')
 
     <style>
-        .sf-crumb-link { color: #6E8C99; }
-        .sf-crumb-link:hover { color: #0E8E88; }
-
         @media (max-width: 759px) {
             .sf-page-head { flex-direction: column !important; align-items: stretch !important; }
             .sf-page-head-search { width: 100% !important; }
@@ -37,12 +34,9 @@
         <main>
             <section class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(24px, 3.5vw, 36px) 20px clamp(44px, 7vw, 86px);">
 
-                <nav aria-label="{{ translate('breadcrumb') }}"
-                     style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 13.5px; color: #6E8C99; margin-bottom: 18px;">
-                    <a href="{{ route('home') }}" class="sf-crumb-link">{{ translate('home') }}</a>
-                    <span aria-hidden="true" style="color: #A8B9C1;">/</span>
-                    <span style="font-family: Cairo, sans-serif; font-weight: 700; color: #0B2C3F;">{{ translate('all_categories') }}</span>
-                </nav>
+                @include('web-views.seafood.partials._breadcrumb', [
+                    'breadcrumbItems' => [['label' => translate('all_categories')]],
+                ])
 
                 <form method="GET" action="{{ route('categories') }}" class="sf-page-head"
                       style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding: 16px 18px; background: #F4FAFB; border: 1px solid #E4EFF1; border-radius: 16px;">

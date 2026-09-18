@@ -28,18 +28,18 @@ return [
     'tracking-page' => 'web-views.order.tracking-page',
     'track_order' => 'web-views.order.tracking',
     'account_compare_list' => '',
-    'account_wishlist_partials' => 'web-views.partials._wish-list-data',
+    'account_wishlist_partials' => 'web-views.seafood.partials._wish-list-data',
     'seller_registration' => 'web-views.seller-view.auth.register',
     'all_stores_page' => 'web-views.seller-view.sellers',
     'customer_auth_verify' => 'web-views.customer-views.auth.verify',
     'customer_auth_verify_otp_login' => 'web-views.customer-views.auth._otp-login-verify',
     'customer_auth_verify_otp_update_info' => 'web-views.customer-views.auth._otp-update-info',
     'customer_auth_verify_firebase_auth_verify' => 'web-views.customer-views.auth._firebase-login-verify',
-    'products_details' => 'web-views.products.details',
+    'products_details' => 'web-views.seafood.product',
     'products_cart_partials' => 'layouts.front-end.partials._cart',
     'products_floating_nav_partials' => '',
     'products_cart_details_partials' => 'web-views.cart._cart-details',
-    'product_reviews_partials' => 'web-views.partials._product-reviews',
+    'product_reviews_partials' => 'web-views.seafood.partials._product-reviews',
     'product_quick_view_partials' => 'web-views.partials._quick-view-data',
     'product_shipping_method_modal_view_partials' => 'layouts.front-end.partials.modal._buy-now-data',
     'modal_for_social_media_user_view' => 'layouts.front-end.partials.modal._social-media-user-modal',
@@ -80,7 +80,6 @@ return [
     'frontend_popular_blogs_view' => 'web-views.blogs.index-popular',
     'blog_seo_meta_content_partials' => 'web-views.partials._blogSEOMetaContentData',
 
-
     'frontend_auction_homepage' => 'auction.web-views.auction',
     'frontend_auction_product_list' => 'auction.web-views.product._list',
     'frontend_auction_product_details' => 'auction.web-views.product._product-details',
@@ -89,7 +88,7 @@ return [
 
     'frontend_auction_product_cart_option_container' => 'auction.web-views.product.details._product-cart-option-container',
     'frontend_auction_place_bid_modal_content' => 'auction.web-views.product.details._place-bid-modal-content',
-    'frontend_auction_claim_checkout'          => 'auction.web-views.product.details._claim-checkout',
+    'frontend_auction_claim_checkout' => 'auction.web-views.product.details._claim-checkout',
     'auction_pay_offline_method_list_partials' => 'auction.web-views.partials._pay-offline-method-list-field',
 
     'frontend_auction_bid_list_page' => 'auction.web-views.user-profile._bid-list-page',
@@ -106,7 +105,6 @@ return [
     'frontend_auction_recreate_product' => 'auction.web-views.user-profile._auction-recreate-product',
     'frontend_profile_auction_list' => 'auction.web-views.user-profile._auction-list',
     'frontend_profile_auction_pending_list' => 'auction.web-views.user-profile._pending-list',
-
 
     'frontend_auction_sales_report' => 'auction.web-views.user-profile._sale-reports',
     'frontend_auction_transaction_history' => 'auction.web-views.user-profile._transaction-history',

@@ -160,6 +160,9 @@ class CartController extends Controller
             'unit_price' => webCurrencyConverter($price), //fashion theme
             'total_unit_price' => webCurrencyConverter($unit_price), //fashion theme
             'discounted_unit_price' => webCurrencyConverter($discountedUnitPrice), //fashion theme
+            'price_digits' => number_format(webCurrencyConverterOnlyDigit(amount: $price * $requestQuantity), getWebConfig('decimal_point_settings') ?? 2),
+            'total_unit_price_digits' => number_format(webCurrencyConverterOnlyDigit(amount: $unit_price), getWebConfig('decimal_point_settings') ?? 2),
+            'discounted_unit_price_digits' => number_format(webCurrencyConverterOnlyDigit(amount: $discountedUnitPrice), getWebConfig('decimal_point_settings') ?? 2),
             'color_name' => $color_name,
             'stock_limit' => $stock_limit,
 

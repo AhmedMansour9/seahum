@@ -248,8 +248,11 @@ function initializeIntlTelInput() {
     const defaultCountry = defaultCountryCodeElement?.dataset?.value?.toLowerCase() || "bd";
 
     inputs.forEach(input => {
+        const lockedCountry = input.dataset.lockedCountry?.toLowerCase();
         const iti = window.intlTelInput(input, {
-            initialCountry: defaultCountry,
+            initialCountry: lockedCountry || defaultCountry,
+            allowDropdown: !lockedCountry,
+            onlyCountries: lockedCountry ? [lockedCountry] : [],
             autoInsertDialCode: false,
             nationalMode: false,
             formatOnDisplay: false,

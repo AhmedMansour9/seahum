@@ -7,6 +7,7 @@
 @php($mediaRatio = $mediaRatio ?? 'auto')
 @php($showPricingDetails = $showPricingDetails ?? false)
 @php($showRating = $showRating ?? false)
+@php($isWishlisted = $isWishlisted ?? false)
 @php($unitPrice = (float) $product['unit_price'])
 @php($discountedUnitPrice = (float) getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value'))
 @php($hasDiscount = $showPricingDetails && $discountedUnitPrice > 0 && $discountedUnitPrice < $unitPrice)
@@ -33,10 +34,11 @@
                 </span>
             @endif
         </span>
-        <button type="button" class="seafood-wishlist-btn" data-product-id="{{ $product['id'] }}"
-                aria-label="{{ translate('add_to_wishlist') }}"
+        <button type="button" class="{{ $isWishlisted ? 'function-remove-wishList' : 'seafood-wishlist-btn' }}"
+                data-product-id="{{ $product['id'] }}" data-id="{{ $product['id'] }}"
+                aria-label="{{ $isWishlisted ? translate('remove_from_wishlist') : translate('add_to_wishlist') }}"
                 style="position: absolute; top: 7px; inset-inline-end: 7px; width: 44px; height: 44px; border-radius: 50%; border: none; background: rgba(255,255,255,.92); display: grid; place-items: center; cursor: pointer; transition: transform .2s;">
-            <svg width="17" height="17" viewBox="0 0 24 24" stroke="#0B2C3F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" fill="none">
+            <svg width="17" height="17" viewBox="0 0 24 24" stroke="{{ $isWishlisted ? '#E4574F' : '#0B2C3F' }}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" fill="{{ $isWishlisted ? '#E4574F' : 'none' }}">
                 <path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9Z"></path>
             </svg>
         </button>
@@ -59,7 +61,7 @@
 
         <div class="sf-product-actions" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: auto;">
             <span style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 5px; min-width: 0;">
-                <strong class="sf-product-price" style="font-family: Cairo, sans-serif; font-size: 22px; font-weight: 800; color: #0B2C3F; letter-spacing: -.4px;">
+                <strong class="sf-product-price" style="font-family: Cairo, sans-serif; font-size: 22px; font-weight: 800; color: #0E8E88; letter-spacing: -.4px;">
                     @include('web-views.seafood.partials._price', ['amount' => $discountedUnitPrice])
                 </strong>
                 @if($hasDiscount)

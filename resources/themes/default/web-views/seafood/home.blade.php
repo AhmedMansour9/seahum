@@ -149,7 +149,7 @@
             </section>
         @endif
 
-        @if($bestSellProduct->count() > 0)
+        @if($customersPicksProducts->count() > 0)
             <section id="products" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(44px, 7vw, 86px) 20px 0;">
                 <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 30px;">
                     <div>
@@ -160,7 +160,7 @@
                 </div>
 
                 <div class="sf-product-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px;">
-                    @foreach($bestSellProduct->take(4) as $product)
+                    @foreach($customersPicksProducts->take(4) as $product)
                         @include('web-views.seafood.partials._product-card', ['product' => $product, 'cartItemKey' => $cartItemKeysByProduct[$product['id']] ?? null])
                     @endforeach
                 </div>
@@ -410,18 +410,12 @@
     <script>
         "use strict";
 
-        $(window).on('resize', function () {
-            renderSeafoodShopGrid();
-        });
-
-        function getSeafoodShopLimit() {
-            return window.innerWidth < 760 ? 4 : {{ $shopInitialVisibleProducts }};
-        }
+        const seafoodShopLimit = {{ $shopInitialVisibleProducts }};
 
         function renderSeafoodShopGrid() {
             const activeTab = $('.sf-tab.active');
             const categoryId = activeTab.data('category-id');
-            const limit = getSeafoodShopLimit();
+            const limit = seafoodShopLimit;
             let matchedCount = 0;
 
             $('#seafood-shop-grid > article').each(function () {

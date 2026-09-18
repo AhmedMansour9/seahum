@@ -69,7 +69,7 @@
                                                                     class="btn btn--download d-flex justify-content-center align-items-center"
                                                                     href="{{ $attachment['path'] ?? '' }}"
                                                                     download>
-                                                                    <i class="tio-download-to"></i>
+                                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-3.6-3.6M12 15l3.6-3.6"></path><path d="M5 19h14"></path></svg>
                                                                 </a>
                                                             </div>
                                                         </div>
@@ -95,8 +95,7 @@
                                                 @php($downloadPath = $attachment['path'])
                                                 <div
                                                     class="position-relative align-items-center img_row{{$secondIndex}} {{$secondIndex > 3 ? 'd-none' : 'd-flex'}}">
-                                                        <a data-toggle="modal"
-                                                           data-target="#imgViewModal{{ $message->id }}"
+                                                        <a data-sf-modal-open="imgViewModal{{ $message->id }}"
                                                            data-type="video"
                                                            href="javascript:"
                                                            download
@@ -113,7 +112,7 @@
                                                                 </video>
                                                                 <button type="button"
                                                                         class="btn video-play-btn text-primary rounded-circle bg-white p-1 d-flex justify-content-center align-items-center">
-                                                                    <i class="tio-play"></i>
+                                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"></path></svg>
                                                                 </button>
                                                             @else
                                                                 <img class="img-fit aspect-1 w-60px" alt=""
@@ -130,18 +129,18 @@
                                                 </div>
                                             @endforeach
                                         </div>
-                                        <div class="modal fade imgViewModal" id="imgViewModal{{ $message->id }}"
+                                        <div class="sf-modal imgViewModal" hidden id="imgViewModal{{ $message->id }}"
                                              tabindex="-1"
                                              aria-labelledby="imgViewModal{{ $message->id }}Label" role="dialog"
                                              aria-modal="true">
-                                            <div class="modal-dialog modal-lg modal-dialog-centered">
-                                                <div class="modal-content bg-transparent border-0">
-                                                    <div class="modal-body pt-0">
-                                                        <div class="imgView-slider owl-theme owl-carousel"
+                                            <div class="sf-modal-dialog" style="max-width: 720px; background: transparent; box-shadow: none;">
+                                                <div>
+                                                    <div class="sf-modal-body">
+                                                        <div class="imgView-slider sf-lightbox-strip"
                                                              dir="ltr">
                                                             @foreach($otherFiles as $file)
                                                                 @php($extension = strrchr($file['key'],'.'))
-                                                                <div class="imgView-item">
+                                                                <div class="imgView-item sf-lightbox-item">
                                                                     <div
                                                                         class="d-flex justify-content-between align-items-end">
                                                                         <a href="{{ in_array($extension, GlobalConstant::VIDEO_EXTENSION) ? ($file['path'] ?? '') :  getStorageImages(path: $file, type: 'backend-basic') }}"
@@ -150,16 +149,16 @@
                                                                             <div
                                                                                 class="btn btn--download d-flex justify-content-center align-items-center"
                                                                             >
-                                                                            <i class="tio-download-to"></i>
+                                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-3.6-3.6M12 15l3.6-3.6"></path><path d="M5 19h14"></path></svg>
                                                                             </div>
                                                                             <h6 class="text-white text-underline mb-0">
-                                                                                Download {{ in_array($extension, GlobalConstant::VIDEO_EXTENSION) ? 'Video' : 'Image' }}</h6>
+                                                                                {{ in_array($extension, GlobalConstant::VIDEO_EXTENSION) ? translate('download_video') : translate('download_image') }}</h6>
                                                                         </a>
                                                                         <button type="button"
                                                                                 class="btn btn-close p-1 border-0"
-                                                                                data-dismiss="modal"
+                                                                                data-sf-modal-close
                                                                                 aria-label="Close">
-                                                                            <i class="tio-clear mt-0"></i>
+                                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"></path></svg>
                                                                         </button>
                                                                     </div>
                                                                     <div class="image-wrapper">
@@ -200,18 +199,6 @@
                                                                 </div>
                                                             @endforeach
                                                         </div>
-                                                        <div
-                                                            class="imgView-slider_buttons d-flex justify-content-center"
-                                                            dir="ltr">
-                                                            <button type="button"
-                                                                    class="btn owl-btn imgView-owl-prev">
-                                                                <i class="tio-chevron-left"></i>
-                                                            </button>
-                                                            <button type="button"
-                                                                    class="btn owl-btn imgView-owl-next">
-                                                                <i class="tio-chevron-right"></i>
-                                                            </button>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -219,7 +206,7 @@
                                         <a download
                                            href="{{ $isSingleDownload && $singleFilePath ? $singleFilePath : 'javascript:' }}"
                                            class="btn btn--download d-flex justify-content-center align-items-center flex-shrink-0 {{ count($otherFiles) > 1 ? 'zip-download' : '' }}">
-                                            <i class="tio-download-to"></i>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-3.6-3.6M12 15l3.6-3.6"></path><path d="M5 19h14"></path></svg>
                                         </a>
                                     </div>
                                 </div>
@@ -277,7 +264,7 @@
                                                                 class="btn btn--download d-flex justify-content-center align-items-center"
                                                                 href="{{ $attachment['path'] ?? '' }}"
                                                                 download>
-                                                                <i class="tio-download-to"></i>
+                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-3.6-3.6M12 15l3.6-3.6"></path><path d="M5 19h14"></path></svg>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -300,15 +287,14 @@
                                     <a download
                                        href="{{ $isSingleDownload && $singleFilePath ? $singleFilePath : 'javascript:' }}"
                                        class="btn btn--download d-flex justify-content-center align-items-center flex-shrink-0 {{ count($otherFiles) > 1 ? 'zip-download' : '' }}">
-                                       <i class="tio-download-to"></i>
+                                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-3.6-3.6M12 15l3.6-3.6"></path><path d="M5 19h14"></path></svg>
                                     </a>
                                     <div class="row g-1 gap-2 flex-wrap pt-1 justify-content-end  max-w-150px zip-images">
                                         @foreach ($otherFiles as $secondIndex => $attachment)
                                             @php($extension = strrchr($attachment['key'],'.'))
                                             <div
                                                 class="position-relative img_row{{$secondIndex}} {{$secondIndex > 3 ? 'd-none' : 'd-flex'}}">
-                                                <a data-toggle="modal"
-                                                   data-target="#imgViewModal{{ $message->id }}"
+                                                <a data-sf-modal-open="imgViewModal{{ $message->id }}"
                                                    data-type="{{ in_array($extension, GlobalConstant::VIDEO_EXTENSION) ? 'video' : 'image' }}"
                                                    href="javascript:"
                                                    download
@@ -326,7 +312,7 @@
                                                         </video>
                                                         <button type="button"
                                                                 class="btn video-play-btn text-primary rounded-circle bg-white p-1 d-flex justify-content-center align-items-center">
-                                                            <i class="tio-play"></i>
+                                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"></path></svg>
                                                         </button>
                                                     @else
                                                         <img class="img-fit aspect-1 w-60px" alt=""
@@ -344,18 +330,18 @@
                                             </div>
                                         @endforeach
                                     </div>
-                                    <div class="modal fade imgViewModal" id="imgViewModal{{ $message->id }}"
+                                    <div class="sf-modal imgViewModal" hidden id="imgViewModal{{ $message->id }}"
                                          tabindex="-1"
                                          aria-labelledby="imgViewModal{{ $message->id }}Label" role="dialog"
                                          aria-modal="true">
-                                        <div class="modal-dialog modal-lg modal-dialog-centered">
-                                            <div class="modal-content bg-transparent border-0">
-                                                <div class="modal-body pt-0">
-                                                    <div class="imgView-slider owl-theme owl-carousel"
+                                        <div class="sf-modal-dialog" style="max-width: 720px; background: transparent; box-shadow: none;">
+                                            <div>
+                                                <div class="sf-modal-body">
+                                                    <div class="imgView-slider sf-lightbox-strip"
                                                          dir="ltr">
                                                         @foreach($otherFiles as $file)
                                                             @php($extension = strrchr($file['key'],'.'))
-                                                            <div class="imgView-item">
+                                                            <div class="imgView-item sf-lightbox-item">
                                                                 <div
                                                                     class="d-flex justify-content-between align-items-end">
                                                                     <a href="{{ in_array($extension, GlobalConstant::VIDEO_EXTENSION) ? ($file['path'] ?? '') :  getStorageImages(path: $file, type: 'backend-basic') }}"
@@ -364,16 +350,16 @@
                                                                         <div
                                                                             class="btn btn--download d-flex justify-content-center align-items-center"
                                                                         >
-                                                                        <i class="tio-download-to"></i>
+                                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-3.6-3.6M12 15l3.6-3.6"></path><path d="M5 19h14"></path></svg>
                                                                         </div>
                                                                         <h6 class="text-white text-underline mb-0">
-                                                                            Download {{ in_array($extension, GlobalConstant::VIDEO_EXTENSION) ? 'Video' : 'Image' }}</h6>
+                                                                            {{ in_array($extension, GlobalConstant::VIDEO_EXTENSION) ? translate('download_video') : translate('download_image') }}</h6>
                                                                     </a>
                                                                     <button type="button"
                                                                             class="btn btn-close p-1 border-0"
-                                                                            data-dismiss="modal"
+                                                                            data-sf-modal-close
                                                                             aria-label="Close">
-                                                                        <i class="tio-clear mt-0"></i>
+                                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"></path></svg>
                                                                     </button>
                                                                 </div>
                                                                 <div class="image-wrapper">
@@ -414,20 +400,8 @@
                                                             </div>
                                                         @endforeach
                                                     </div>
-                                                    <div
-                                                        class="imgView-slider_buttons d-flex justify-content-center"
-                                                        dir="ltr">
-                                                        <button type="button"
-                                                                class="btn owl-btn imgView-owl-prev">
-                                                            <i class="tio-chevron-left"></i>
-                                                        </button>
-                                                        <button type="button"
-                                                                class="btn owl-btn imgView-owl-next">
-                                                            <i class="tio-chevron-right"></i>
-                                                        </button>
                                                     </div>
                                                 </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

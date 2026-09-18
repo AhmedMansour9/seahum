@@ -2,12 +2,6 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Traits\CacheManagerTrait;
-use App\Traits\EmailTemplateTrait;
-use App\Traits\InHouseTrait;
-use App\Utils\BrandManager;
-use App\Utils\CategoryManager;
-use App\Utils\Helpers;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Models\Category;
@@ -16,8 +10,14 @@ use App\Models\DealOfTheDay;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
-use App\Models\Seller;
 use App\Models\Review;
+use App\Models\RobotsMetaContent;
+use App\Models\Seller;
+use App\Traits\CacheManagerTrait;
+use App\Traits\EmailTemplateTrait;
+use App\Traits\InHouseTrait;
+use App\Utils\CategoryManager;
+use App\Utils\Helpers;
 use App\Utils\ProductManager;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -25,33 +25,34 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Modules\Auction\app\Enums\AuctionStatus;
+use Modules\Auction\app\Models\AuctionProduct;
 
 class HomeController extends Controller
 {
-    use InHouseTrait, EmailTemplateTrait;
     use CacheManagerTrait;
+    use EmailTemplateTrait, InHouseTrait;
 
     private const SHOP_PRODUCTS_PER_CATEGORY = 16;
-    private const SHOP_INITIAL_VISIBLE_PRODUCTS = 8;
+
+    private const SHOP_INITIAL_VISIBLE_PRODUCTS = 16;
+
     private const SHOP_TICKER_PRODUCTS_LIMIT = 12;
 
     public function __construct(
-        private readonly Product      $product,
-        private readonly Order        $order,
-        private readonly OrderDetail  $orderDetails,
-        private readonly Category     $category,
-        private readonly Seller       $seller,
-        private readonly Review       $review,
+        private readonly Product $product,
+        private readonly Order $order,
+        private readonly OrderDetail $orderDetails,
+        private readonly Category $category,
+        private readonly Seller $seller,
+        private readonly Review $review,
         private readonly DealOfTheDay $dealOfTheDay,
-        private readonly Banner       $banner,
-    )
-    {
-    }
-
+        private readonly Banner $banner,
+    ) {}
 
     public function index(): View
     {
         $themeName = theme_root_path();
+
         return match ($themeName) {
             'default' => self::default_theme(),
             'theme_aster' => self::theme_aster(),
@@ -87,6 +88,8 @@ class HomeController extends Controller
             return $query->active();
         }]), dataLimit: 8);
 
+        $customersPicksProducts = $featuredProductsList->count() > 0 ? $featuredProductsList : $bestSellProduct;
+
         $dealOfTheDay = DealOfTheDay::with(['product' => function ($query) {
             return $query->active()->with(['clearanceSale' => function ($query) {
                 return $query->active();
@@ -98,7 +101,7 @@ class HomeController extends Controller
             ->where('deal_of_the_days.status', 1)
             ->first();
 
-        $robotsMetaContentData = \App\Models\RobotsMetaContent::where('page_name', 'default')->first();
+        $robotsMetaContentData = RobotsMetaContent::where('page_name', 'default')->first();
 
         $auctionProducts = getWebConfig(name: 'auction_feature_status') ? $this->getHomePageAuctionProductsList() : null;
         if ($auctionProducts && auth('customer')->check()) {
@@ -119,7 +122,7 @@ class HomeController extends Controller
                 'flashDeal', 'featuredProductsList', 'topRatedProducts', 'bestSellProduct', 'latestProductsList', 'categories', 'brands',
                 'dealOfTheDay', 'topVendorsList', 'homeCategories', 'bannerTypeMainBanner', 'bannerTypeMainSectionBanner',
                 'current_date', 'recommendedProduct', 'bannerTypeFooterBanner', 'newArrivalProducts', 'clearanceSaleProducts', 'robotsMetaContentData', 'auctionProducts',
-                'shopProducts', 'shopTabCategories', 'activeShopCategoryId', 'activeShopCategorySlug', 'shopInitialVisibleProducts', 'tickerProducts'
+                'shopProducts', 'shopTabCategories', 'activeShopCategoryId', 'activeShopCategorySlug', 'shopInitialVisibleProducts', 'tickerProducts', 'customersPicksProducts'
             )
         );
     }
@@ -174,6 +177,7 @@ class HomeController extends Controller
                 $sub_category->subCategoryProduct_count = $sub_category->subCategoryProduct->count();
                 unset($sub_category->subCategoryProduct);
             });
+
             return $category;
         });
         $findWhatYouNeedCategories = $findWhatYouNeedCategoriesData->toArray();
@@ -194,8 +198,8 @@ class HomeController extends Controller
         $category_slider = array_chunk($final_category, 4);
 
         $featuredProductsList = $this->product->active()->with(['seller.shop', 'shop', 'flashDealProducts.flashDeal', 'clearanceSale' => function ($query) {
-                return $query->active();
-            }])
+            return $query->active();
+        }])
             ->where('featured', 1)
             ->withCount(['orderDetails']);
         $featuredProductsList = ProductManager::getPriorityWiseFeaturedProductsQuery(query: $featuredProductsList, dataLimit: 10);
@@ -214,6 +218,7 @@ class HomeController extends Controller
             }
             $product['flash_deal_status'] = $flashDealStatus;
             $product['flash_deal_end_date'] = $flash_deal_end_date;
+
             return $product;
         });
         $bestSellProduct = Product::active()->with([
@@ -248,6 +253,7 @@ class HomeController extends Controller
             }
             $product['flash_deal_status'] = $flashDealStatus;
             $product['flash_deal_end_date'] = $flashDealEndDate;
+
             return $product;
         });
 
@@ -263,6 +269,7 @@ class HomeController extends Controller
                         if ($category) {
                             $detail['category_id'] = $category;
                         }
+
                         return $detail;
                     });
                     try {
@@ -283,7 +290,7 @@ class HomeController extends Controller
                 }
                 $ids = array_unique($orderCategories);
 
-                $justForYouProducts = $this->product->active()->with(['reviews' => fn($q) => $q->active()])
+                $justForYouProducts = $this->product->active()->with(['reviews' => fn ($q) => $q->active()])
                     ->where(function ($query) use ($ids) {
                         foreach ($ids as $id) {
                             $query->orWhere('category_ids', 'like', "%{$id}%");
@@ -291,7 +298,7 @@ class HomeController extends Controller
                     })->inRandomOrder()->take(8)->get()->each(function ($product) {
                         $product->reviews_count = $product->reviews->count();
                         $product->average_rating = $product->reviews->avg('rating');
-                        $product->total_rating   = $product->reviews->sum('rating');
+                        $product->total_rating = $product->reviews->sum('rating');
                     });
             }
         }
@@ -345,7 +352,7 @@ class HomeController extends Controller
         $bannerTypeFooterBanner = $bannerTypeFooterBanner ? array_slice($bannerTypeFooterBanner, 0, 2) : [];
 
         $decimal_point = getWebConfig(name: 'decimal_point_settings');
-        $decimal_point_settings = !empty($decimal_point) ? $decimal_point : 0;
+        $decimal_point_settings = ! empty($decimal_point) ? $decimal_point : 0;
         $user = Helpers::getCustomerInformation();
 
         $order_again = $user != 'offline' ?
@@ -366,7 +373,7 @@ class HomeController extends Controller
             }
         }
 
-        $robotsMetaContentData = \App\Models\RobotsMetaContent::where('page_name', 'default')->first();
+        $robotsMetaContentData = RobotsMetaContent::where('page_name', 'default')->first();
         $auctionProducts = getWebConfig(name: 'auction_feature_status') ? $this->getHomePageAuctionProductsList() : null;
         if ($auctionProducts && auth('customer')->check()) {
             $auctionProducts->load(['myBid', 'myParticipation']);
@@ -384,16 +391,16 @@ class HomeController extends Controller
 
     public function getHomePageAuctionProductsList()
     {
-        if (!getCheckAddonPublishedStatus(moduleName: 'Auction')) {
+        if (! getCheckAddonPublishedStatus(moduleName: 'Auction')) {
             return null;
         }
+
         return Cache::remember(CACHE_HOME_PAGE_AUCTION_PRODUCTS_LIST, CACHE_FOR_3_HOURS, function () {
-            return \Modules\Auction\app\Models\AuctionProduct::active()
+            return AuctionProduct::active()
                 ->whereAuctionCurrentStatus([AuctionStatus::LIVE, AuctionStatus::UPCOMING])
                 ->orderByDesc('id')
                 ->take(8)
                 ->get();
         });
     }
-
 }

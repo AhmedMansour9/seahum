@@ -18,7 +18,7 @@ class SeafoodCategoryViewTest extends TestCase
     {
         $viewFileNames = include base_path(self::THEME_PATH.'/file_names.php');
 
-        foreach (['all_categories_page', 'category_products_view_page', 'category_products_ajax_partials'] as $viewKey) {
+        foreach (['all_categories_page', 'category_products_view_page', 'category_products_ajax_partials', 'products_details', 'product_reviews_partials'] as $viewKey) {
             $this->assertArrayHasKey($viewKey, $viewFileNames, "file_names.php is missing the '{$viewKey}' entry.");
             $this->assertFileExists($this->templatePath($viewFileNames[$viewKey]));
         }
@@ -41,16 +41,94 @@ class SeafoodCategoryViewTest extends TestCase
     {
         $sharedPartials = ['_styles', '_topbar', '_header', '_footer', '_mobile-bar', '_scripts'];
 
-        foreach (['home', 'category', 'categories'] as $page) {
+        foreach (['home', 'category', 'categories', 'product'] as $page) {
             $pageContents = file_get_contents($this->templatePath('web-views.seafood.'.$page));
 
             foreach ($sharedPartials as $partial) {
+                /* The product page carries its own sticky buy bar, so a second fixed bottom bar would overlap it. */
+                if ($page === 'product' && $partial === '_mobile-bar') {
+                    $this->assertStringNotContainsString('web-views.seafood.partials._mobile-bar', $pageContents);
+                    $this->assertStringContainsString('sf-sticky-buy', $pageContents);
+
+                    continue;
+                }
+
                 $this->assertStringContainsString(
                     "web-views.seafood.partials.{$partial}",
                     $pageContents,
                     "The seafood {$page} page no longer includes the shared '{$partial}' partial."
                 );
             }
+        }
+    }
+
+    public function test_product_page_keeps_the_cart_javascript_hooks(): void
+    {
+        $productPage = file_get_contents($this->templatePath('web-views.seafood.product'))
+            .file_get_contents($this->templatePath('web-views.seafood.partials._product-buy-box'));
+
+        foreach ([
+            'add-to-cart-details-form',
+            'product-details-cart-qty',
+            'product-generated-variation-code',
+            'product-exist-in-cart-list',
+            'product-add-to-cart-button',
+            'product-buy-now-button',
+            'product-restock-request-button',
+            'product-add-and-buy-section',
+            'discounted-unit-price',
+            'product-details-chosen-price-amount',
+            'route-cart-variant-price',
+            'route-cart-updateQuantity-guest',
+            'route-product-restock-request',
+        ] as $hook) {
+            $this->assertStringContainsString($hook, $productPage, "The product page lost the '{$hook}' cart hook.");
+        }
+    }
+
+    public function test_product_gallery_leads_with_the_main_image_and_always_shows_the_thumbnail_strip(): void
+    {
+        $gallery = file_get_contents($this->templatePath('web-views.seafood.partials._product-gallery'));
+
+        $this->assertStringContainsString("collect([['url' => getStorageImages(path: \$product->thumbnail_full_url", $gallery);
+        $this->assertStringContainsString("src=\"{{ \$gallerySlides[0]['url'] }}\"", $gallery);
+        $this->assertStringNotContainsString('@if(count($galleryImages)', $gallery);
+    }
+
+    public function test_product_buy_box_price_uses_the_home_card_price_markup_and_keeps_it_on_variant_change(): void
+    {
+        $buyBox = file_get_contents($this->templatePath('web-views.seafood.partials._product-buy-box'));
+        $productScripts = file_get_contents($this->templatePath('web-views.seafood.partials._product-scripts'));
+        $cartController = file_get_contents(app_path('Http/Controllers/Web/CartController.php'));
+
+        $productPage = file_get_contents($this->templatePath('web-views.seafood.product'));
+
+        $this->assertSame(3, substr_count($buyBox, "@include('web-views.seafood.partials._price'"));
+        $this->assertStringContainsString("@include('web-views.seafood.partials._price', ['amount' => \$initialProductConfig['total_quantity_price']", $productPage);
+
+        foreach ([$buyBox, $productPage] as $template) {
+            $this->assertStringNotContainsString('webCurrencyConverter(', $template, 'Prices must use the localized _price partial, not the unlocalized currency string.');
+        }
+        $this->assertStringContainsString('class="sf-price-amount"', file_get_contents($this->templatePath('web-views.seafood.partials._price')));
+
+        $productCard = file_get_contents($this->templatePath('web-views.seafood.partials._product-card'));
+        $this->assertMatchesRegularExpression('/class="sf-product-price" style="[^"]*color: #0E8E88;/', $productCard);
+        $this->assertSame(2, preg_match_all('/class="(?:discounted-unit-price|product-details-chosen-price-amount)" style="[^"]*color: #0E8E88;/', $buyBox));
+        $this->assertMatchesRegularExpression('/class="product-details-chosen-price-amount" style="[^"]*color: #0E8E88;/', $productPage);
+
+        foreach (['price_digits', 'discounted_unit_price_digits', 'total_unit_price_digits'] as $responseKey) {
+            $this->assertStringContainsString("response?.{$responseKey}", $productScripts);
+            $this->assertStringContainsString("'{$responseKey}' =>", $cartController);
+        }
+    }
+
+    public function test_product_page_omits_the_share_links_reliability_cards_and_more_from_seller_section(): void
+    {
+        $productPage = file_get_contents($this->templatePath('web-views.seafood.product'))
+            .file_get_contents($this->templatePath('web-views.seafood.partials._product-buy-box'));
+
+        foreach (['sf-social-share', 'company_reliability', 'more_from_this_seller'] as $removedMarker) {
+            $this->assertStringNotContainsString($removedMarker, $productPage);
         }
     }
 

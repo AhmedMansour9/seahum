@@ -1,99 +1,71 @@
-@extends('layouts.front-end.app')
+@extends('layouts.front-end.seafood')
 
-@section('title',translate('FAQ'))
+@section('title', translate('FAQ'))
+
+@push('css_or_js')
+    @include('web-views.seafood.partials._styles')
+@endpush
 
 @section('content')
-    <div class="__inline-60">
-        <div class="container rtl">
-            <div class="row">
-                <div class="col-md-12 sidebar_heading text-center mb-2">
-                    <h1 class="text-center pt-4 fs-24 font-semi-bold text-capitalize">{{ translate('frequently_asked_question') }}</h1>
+    <div style="background: #FFFFFF;">
+
+        @include('web-views.seafood.partials._topbar')
+
+        @include('web-views.seafood.partials._header', ['activeNavKey' => 'page'])
+
+        <main>
+            <section class="sf-gutter" style="max-width: 900px; margin: 0 auto; padding: clamp(24px, 3.5vw, 36px) 20px clamp(44px, 7vw, 86px);">
+
+                @include('web-views.seafood.partials._breadcrumb', [
+                    'breadcrumbItems' => [['label' => translate('FAQ')]],
+                ])
+
+                <div style="text-align: center; margin-bottom: clamp(24px, 4vw, 38px);">
+                    <span style="display: inline-flex; align-items: center; gap: 9px; padding: 7px 14px; border-radius: 999px; background: #ECF8F8; border: 1px solid #BEE6E4; color: #0E8E88; font-family: Cairo, sans-serif; font-size: 12.5px; font-weight: 700;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9.6 9.4a2.5 2.5 0 0 1 4.8.8c0 1.7-2.4 2-2.4 3.4"></path><path d="M12 17.2h.01"></path></svg>
+                        {{ translate('FAQ') }}
+                    </span>
+                    <h1 style="font-family: Cairo, sans-serif; font-size: clamp(24px, 4vw, 36px); font-weight: 800; line-height: 1.3; margin: 14px 0 0; color: #0B2C3F; overflow-wrap: anywhere; text-wrap: pretty;">
+                        {{ translate('frequently_asked_question') }}
+                    </h1>
                 </div>
-            </div>
-            <hr>
-        </div>
 
-        <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl">
-            <div class="row">
-
-                @php $length=count($helps); @endphp
                 @if(count($helps) > 0)
-                    @php if($length%2!=0){$first=($length+1)/2;}else{$first=$length/2;}@endphp
-                    <div class="col-lg-2"></div>
-                    <section class="col-lg-10 mt-3">
-                        <section class="container pt-4 pb-5 ">
-                            <div class="row pt-4">
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled">
-                                        @for($i=0;$i<$first;$i++)
-                                            <div id="accordion">
-                                                <div class="row mb-0 text-black">
-                                                    <div class="col-1 mt-3">
-                                                        <i class="czi-book text-muted mr-2"></i>
-                                                    </div>
-                                                    <div class="col-11">
-                                                        <button class="btnF btn-link collapsed text-align-direction" data-toggle="collapse"
-                                                                data-target="#collapseTwo{{ $helps[$i]['id'] }}"
-                                                                aria-expanded="false" aria-controls="collapseTwo">
-                                                            <span class="d-flex align-items-center border-bottom pb-3 mb-3">{{ $helps[$i]['question'] }}</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div id="collapseTwo{{ $helps[$i]['id'] }}" class="collapse"
-                                                     aria-labelledby="headingTwo" data-parent="#accordion">
-                                                    <div class="card-body">
-                                                        {{ $helps[$i]['answer'] }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endfor
-                                    </ul>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled">
-                                        @for($i=$first; $i<$length; $i++)
-                                            <div id="accordion">
-                                                <div class="row mb-0 text-black">
-                                                    <div class="col-1 mt-3">
-                                                        <i class="czi-book text-muted mr-2"></i>
-                                                    </div>
-                                                    <div class="col-11">
-                                                        <button class="btnF btn-link collapsed text-align-direction" data-toggle="collapse"
-                                                                data-target="#collapseTwo{{ $helps[$i]['id'] }}"
-                                                                aria-expanded="false" aria-controls="collapseTwo">
-                                                            <span class="d-flex align-items-center border-bottom pb-3 mb-3">{{ $helps[$i]['question'] }}</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div id="collapseTwo{{ $helps[$i]['id'] }}" class="collapse"
-                                                     aria-labelledby="headingTwo" data-parent="#accordion">
-                                                    <div class="card-body">
-                                                        {{ $helps[$i]['answer'] }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endfor
-                                    </ul>
-                                </div>
-
-                            </div>
-                        </section>
-                    </section>
-                @else
-                    <div class="col-12">
-                        <div class="d-flex justify-content-center align-items-center pt-4">
-                            <div class="d-flex flex-column justify-content-center align-items-center gap-3">
-                                <img src="{{ dynamicStorage(path: 'public/assets/front-end/img/empty-icons/empty-faqs.svg') }}"
-                                     alt="{{ translate('brand') }}" class="img-fluid" width="100">
-                                <h5 class="text-muted fs-14 font-semi-bold text-center">{{ translate('there_is_no_FAQs') }}</h5>
-                            </div>
-                        </div>
+                    <div class="sf-accordion">
+                        @foreach($helps as $help)
+                            <details class="sf-accordion-item" name="sf-faq">
+                                <summary>
+                                    <span class="sf-accordion-q">{{ $help['question'] }}</span>
+                                    <span class="sf-accordion-caret" aria-hidden="true">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+                                    </span>
+                                </summary>
+                                <div class="sf-accordion-body">{{ $help['answer'] }}</div>
+                            </details>
+                        @endforeach
                     </div>
+                @else
+                    @include('web-views.seafood.partials._empty-state', [
+                        'emptyStateIcon' => '<circle cx="12" cy="12" r="9"></circle><path d="M9.6 9.4a2.5 2.5 0 0 1 4.8.8c0 1.7-2.4 2-2.4 3.4"></path><path d="M12 17.2h.01"></path>',
+                        'emptyStateTitle' => translate('there_is_no_FAQs'),
+                        'emptyStateText' => translate('answers_to_common_questions_will_appear_here'),
+                        'emptyStateActionUrl' => route('home'),
+                        'emptyStateActionLabel' => translate('back_to_home'),
+                    ])
                 @endif
-            </div>
+            </section>
+        </main>
+
+        <div style="background: #F4FAFB; border-top: 1px solid #E4EFF1; padding-top: clamp(44px, 7vw, 76px);">
+            @include('web-views.seafood.partials._help-links')
         </div>
+
+        @include('web-views.seafood.partials._footer')
+
+        @include('web-views.seafood.partials._mobile-bar')
     </div>
 @endsection
 
-
+@push('script')
+    @include('web-views.seafood.partials._scripts')
+@endpush
