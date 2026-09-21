@@ -1,204 +1,76 @@
-@extends('layouts.front-end.app')
+@extends('web-views.seafood.order-details-layout')
 
-@section('title', translate('order_Details'))
+@section('order_content')
+    @php
+        $reviewedDetails = $order->details->filter(fn ($detail) => isset($detail->reviewData));
+    @endphp
 
-@section('content')
+    @forelse($reviewedDetails as $reviewedDetail)
+        @php
+            $reviewedProduct = $reviewedDetail?->product;
+            $productReview = $reviewedDetail->reviewData;
+            $reviewReply = $productReview->reply;
+        @endphp
 
-    <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl __inline-47 text-start">
-        <div class="row g-3">
-            @include('web-views.partials._profile-aside')
-            <section class="col-lg-9">
-
-                @include('web-views.users-profile.account-details.partial')
-
-                <div class="bg-sm-white mt-3">
-                    <div class="p-sm-3 d-flex flex-column gap-3 pb-md-5">
-                        @php($review_count = 0)
-                        @foreach ($order->details as $order_details)
-                            @isset($order_details->reviewData)
-                                @php($review_count++)
-                                <div class="border rounded bg-white p-3">
-                                    <div class="media gap-3">
-                                        <div class="position-relative">
-                                            <img class="d-block review-item-img get-view-by-onclick border rounded"
-                                                 data-link="{{ $order_details?->product?->slug ? route('product', $order_details?->product?->slug) : 'javascript:' }}"
-                                                 src="{{ getStorageImages(path:$order_details?->productAllStatus?->thumbnail_full_url, type: 'product') }}"
-                                                 alt="{{ translate('product') }}" width="100">
-
-                                            @if($order_details?->product?->discount > 0)
-                                                <span class="price-discount badge badge-primary position-absolute top-1 left-1">
-                                                    @if ($order_details?->product?->discount_type == 'percent')
-                                                        {{round($order_details?->product->discount)}}%
-                                                    @elseif($order_details?->product?->discount_type =='flat')
-                                                        {{ webCurrencyConverter(amount: $order_details?->product?->discount) }}
-                                                    @endif
-                                                </span>
-                                            @endif
-                                        </div>
-                                        <div class="media-body">
-                                            <div>
-                                                <a href="{{ $order_details?->product?->slug ? route('product', $order_details?->product?->slug) : 'javascript:' }}">
-                                                    <h6 class="mb-1 review-item-title text-capitalize">
-                                                        {{ $order_details?->product?->name ? Str::limit($order_details?->product?->name, 40) : translate('Product_not_found') }}
-                                                    </h6>
-                                                </a>
-                                            </div>
-                                            @if($order_details->variant)
-                                                <div>
-                                                    <small class="text-muted">
-                                                        {{translate('variant')}} : {{$order_details->variant}}
-                                                    </small>
-                                                </div>
-                                            @endif
-
-                                            <div class="d-flex justify-content-end justify-content-sm-start mt-2">
-                                                <button type="button" class="btn btn-sm rounded btn-warning"
-                                                        data-toggle="modal"
-                                                        data-target="#submitReviewModal{{$order_details->id}}">
-                                                    <i class="tio-star-half"></i>
-                                                    {{translate('update_review')}}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    @include('layouts.front-end.partials.modal._review',['id'=>$order_details->id,'order_details'=>$order_details])
-
-                                    <div class="mt-4">
-                                        <div class="d-flex justify-content-between gap-2 mb-3">
-                                            <h6 class="d-flex gap-2 mb-0 review-item-title text-capitalize">
-                                                    <span>
-                                                        <i class="tio-star-half text-warning"></i>
-                                                    </span>
-                                                {{translate('my_review')}}
-                                            </h6>
-                                            <div  class="text-muted fs-12">{{ $order_details->reviewData->created_at ? $order_details->reviewData->created_at->format("d M Y h:i:s A") : ($order_details->reviewData->updated_at->format("d M Y h:i:s A")) }}</div>
-                                        </div>
-                                        <p class="fs-12">{{ $order_details->reviewData?->comment ?? ''}}</p>
-                                        @if ($order_details->reviewData && isset($order_details->reviewData->attachment) && $order_details->reviewData->attachment != [])
-                                            @if(($order_details->reviewData->attachment) != [])
-                                                <div class="mt-3">
-                                                    <div class="d-flex gap-2 flex-wrap">
-                                                        @foreach ($order_details->reviewData->attachment_full_url as $key => $photo)
-                                                            <a data-lightbox="mygallery" class="aspect-1"
-                                                               href="{{ getStorageImages(path: $photo, type: 'product') }}">
-                                                                <img class="border rounded border-primary-light object-cover aspect-1"
-                                                                     src="{{ getStorageImages(path: $photo, type: 'product') }}"
-                                                                     alt="{{ translate('product') }}" width="50">
-                                                            </a>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        @endif
-                                    </div>
-
-                                    @if($order_details->reviewData && $order_details->reviewData->reply)
-                                        <div class="pl-md-4 mt-3">
-                                            <div class="review-reply rounded bg-E9F3FF80 p-3 ml-md-4 before-border-left">
-                                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <img src="{{theme_asset('public/assets/front-end/img/seller-reply-icon.png')}}" alt="">
-                                                        <h6 class="font-bold fs-14 m-0">
-                                                            {{ translate('Reply_by_Seller') }}
-                                                        </h6>
-                                                    </div>
-                                                    <span class="opacity-50 fs-12">
-                                                        {{ isset($order_details->reviewData->reply->created_at) ? $order_details->reviewData->reply->created_at->format('M-d-Y') : '' }}
-                                                    </span>
-                                                </div>
-                                                <p class="fs-14">
-                                                    {!! $order_details->reviewData->reply->reply_text !!}
-                                                </p>
-
-                                                <div class="d-flex flex-wrap gap-2 mt-3">
-                                                    @if (isset($order_details->reviewData->reply->attachment) && !empty(json_decode($order_details->reviewData->reply->attachment)))
-                                                        @foreach ($productReview->reply->attachment_full_url as $key => $photo)
-                                                            <img data-link="{{ getStorageImages(path: $photo, type: 'product')}}"
-                                                                 class="cz-image-zoom __img-70 rounded border show-instant-image"
-                                                                 src="{{ getStorageImages(path: $photo, type: 'product') }}"
-                                                                 alt="{{ translate('product') }}">
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-
-                                </div>
-                            @endisset
-                        @endforeach
-                        @if ($review_count == 0)
-                            <div class="text-center pt-5 text-capitalize">
-                                <img class="mb-3" src="{{dynamicAsset(path: 'public/assets/front-end/img/icons/empty-review.svg')}}"
-                                     alt="">
-                                <p class="opacity-60 mt-3 text-capitalize">{{translate('no_review_found')}}!</p>
-                            </div>
+        <section class="sf-panel">
+            <article class="sf-row-card" style="border: none; padding: 0;">
+                <a class="sf-row-media" @if($reviewedProduct?->slug) href="{{ route('product', $reviewedProduct->slug) }}" @endif>
+                    <img src="{{ getStorageImages(path: $reviewedDetail?->productAllStatus?->thumbnail_full_url, type: 'product') }}" alt="" loading="lazy">
+                </a>
+                <div class="sf-row-body">
+                    <h2 class="sf-row-title">{{ $reviewedProduct?->name ? Str::limit($reviewedProduct->name, 60) : translate('Product_not_found') }}</h2>
+                    <div class="sf-row-meta">
+                        @if($reviewedDetail->variant)
+                            <span>{{ translate('variant') }}: <bdi>{{ $reviewedDetail->variant }}</bdi></span>
                         @endif
+                        @include('web-views.seafood.partials._star-rating-display', ['displayRating' => $productReview->rating])
+                        <span><bdi dir="ltr">{{ ($productReview->created_at ?? $productReview->updated_at)->format('d M Y, h:i A') }}</bdi></span>
                     </div>
                 </div>
-            </section>
-        </div>
-    </div>
+                @if(isset($reviewedDetail->product) && $order->order_status == 'delivered')
+                    <div class="sf-row-actions">
+                        <button type="button" class="sf-btn-sm" data-sf-modal-open="submitReviewModal{{ $reviewedDetail->id }}">{{ translate('update_review') }}</button>
+                    </div>
+                @endif
+            </article>
+
+            @if($productReview->comment)
+                <p class="sf-step-text" style="margin: 14px 0 0;">{{ $productReview->comment }}</p>
+            @endif
+
+            @if(!empty($productReview->attachment) && count($productReview->attachment_full_url ?? []) > 0)
+                <div class="sf-bubble-media" style="margin-top: 12px;">
+                    @foreach($productReview->attachment_full_url as $reviewPhoto)
+                        <a href="{{ getStorageImages(path: $reviewPhoto, type: 'product') }}" target="_blank" rel="noopener">
+                            <img src="{{ getStorageImages(path: $reviewPhoto, type: 'product') }}" alt="{{ translate('review') }}" loading="lazy">
+                        </a>
+                    @endforeach
+                </div>
+            @endif
+
+            @if($reviewReply)
+                <div class="sf-review-reply">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+                        <strong style="font-family: Cairo, sans-serif; color: #0B2C3F;">{{ translate('Reply_by_Seller') }}</strong>
+                        <span class="sf-row-meta"><bdi dir="ltr">{{ $reviewReply->created_at?->format('M d, Y') }}</bdi></span>
+                    </div>
+                    <div class="sf-step-text" style="margin-top: 8px;">{!! $reviewReply->reply_text !!}</div>
+                    @if(!empty(json_decode($reviewReply->attachment ?? '[]')))
+                        <div class="sf-bubble-media" style="margin-top: 10px;">
+                            @foreach($reviewReply->attachment_full_url as $replyPhoto)
+                                <a href="{{ getStorageImages(path: $replyPhoto, type: 'product') }}" target="_blank" rel="noopener">
+                                    <img src="{{ getStorageImages(path: $replyPhoto, type: 'product') }}" alt="{{ translate('reply') }}" loading="lazy">
+                                </a>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+            @endif
+        </section>
+    @empty
+        @include('web-views.seafood.partials._empty-state', [
+            'emptyStateIcon' => '<path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.6 9.7l5.8-.8z"></path>',
+            'emptyStateTitle' => translate('no_review_found').'!',
+        ])
+    @endforelse
 @endsection
-
-@push('script')
-    <script src="{{theme_asset(path: 'public/assets/front-end/js/spartan-multi-image-picker.js') }}"></script>
-    <script type="text/javascript">
-
-        let reviewSelectedFiles = [];
-        $(document).on('ready', () => {
-            $(".reviewFilesValue").on('change', function () {
-                for (let i = 0; i < this.files.length; ++i) {
-                    reviewSelectedFiles.push(this.files[i]);
-                }
-                let pre_container = $(this).closest('.upload_images_area');
-                reviewFilesValueDisplaySelectedFiles(pre_container);
-            });
-
-            function reviewFilesValueDisplaySelectedFiles(pre_container = null) {
-                let container;
-                if (pre_container == null) {
-                    container = document.getElementsByClassName("selected-files-container");
-                } else {
-                    container = pre_container.find('.selected-files-container');
-                }
-                container.innerHTML = "";
-                reviewSelectedFiles.forEach((file, index) => {
-                    const input = document.createElement("input");
-                    input.type = "file";
-                    input.name = `fileUpload[${index}]`;
-                    input.classList.add(`image_index${index}`);
-                    input.hidden = true;
-                    container.append(input);
-                    const blob = new Blob([file], {type: file.type});
-                    const file_obj = new File([file], file.name);
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(file_obj);
-                    input.files = dataTransfer.files;
-                });
-
-                pre_container.find(".filearray").empty();
-                for (let i = 0; i < reviewSelectedFiles.length; ++i) {
-                    let fileReader = new FileReader();
-                    let uploadDiv = jQuery.parseHTML("<div class='upload_img_box'><span class='img-clear'><i class='tio-clear'></i></span><img src='' alt=''></div>");
-
-                    fileReader.onload = function () {
-                        let imageData = this.result;
-                        $(uploadDiv).find('img').attr('src', imageData);
-                    };
-
-                    fileReader.readAsDataURL(reviewSelectedFiles[i]);
-                    pre_container.find(".filearray").append(uploadDiv);
-                    $(uploadDiv).find('.img-clear').on('click', function () {
-                        $(this).closest('.upload_img_box').remove();
-                        reviewSelectedFiles.splice(i, 1);
-                        $('.image_index' + i).remove();
-                    });
-                }
-            }
-        });
-    </script>
-
-@endpush
-

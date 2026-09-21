@@ -17,6 +17,8 @@ class SeafoodCustomerLoginViewTest extends TestCase
 
     private const AUTH_SCRIPTS_TEMPLATE = 'resources/themes/default/web-views/seafood/partials/_auth-scripts.blade.php';
 
+    private const SHARED_SCRIPTS_TEMPLATE = 'resources/themes/default/web-views/seafood/partials/_scripts.blade.php';
+
     public function test_login_page_renders_through_the_seafood_layout_and_its_shared_partials(): void
     {
         $loginPage = file_get_contents(base_path(self::LOGIN_TEMPLATE));
@@ -59,12 +61,15 @@ class SeafoodCustomerLoginViewTest extends TestCase
             '.customer-centralize-login-form',
             'seafoodAuthResponseManager',
             'setSeafoodLoginMethod',
-            '.sf-password-toggle',
             '.otp-login-btn',
             '.manual-login-btn',
         ] as $behaviour) {
             $this->assertStringContainsString($behaviour, $authScripts, "The seafood auth scripts lost '{$behaviour}'.");
         }
+
+        $sharedScripts = file_get_contents(base_path(self::SHARED_SCRIPTS_TEMPLATE));
+
+        $this->assertStringContainsString('.sf-password-toggle', $sharedScripts, 'The password reveal handler lives in the shared seafood scripts partial.');
     }
 
     public function test_login_template_compiles_to_valid_php(): void

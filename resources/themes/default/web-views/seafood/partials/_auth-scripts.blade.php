@@ -104,4 +104,105 @@
             },
         });
     });
+    /* ---- One-time code boxes ---- */
+    function syncSeafoodOtpValue(group) {
+        const digits = group.find('.sf-otp-field').map(function () { return this.value; }).get().join('');
+        group.nextAll('.sf-otp-value').first().val(digits);
+    }
+
+    $(document).on('input', '.sf-otp-field', function () {
+        this.value = this.value.replace(/[^0-9]/g, '').slice(-1);
+        if (this.value) {
+            $(this).next('.sf-otp-field').trigger('focus');
+        }
+        syncSeafoodOtpValue($(this).closest('.sf-otp'));
+    });
+
+    $(document).on('keydown', '.sf-otp-field', function (event) {
+        if (event.key === 'Backspace' && !this.value) {
+            $(this).prev('.sf-otp-field').val('').trigger('focus');
+            syncSeafoodOtpValue($(this).closest('.sf-otp'));
+        } else if (event.key === 'ArrowLeft') {
+            $(this).prev('.sf-otp-field').trigger('focus');
+        } else if (event.key === 'ArrowRight') {
+            $(this).next('.sf-otp-field').trigger('focus');
+        }
+    });
+
+    $(document).on('paste', '.sf-otp-field', function (event) {
+        const pasted = (event.originalEvent.clipboardData.getData('text') || '').replace(/[^0-9]/g, '').slice(0, 6);
+        if (!pasted) {
+            return;
+        }
+        event.preventDefault();
+        const fields = $(this).closest('.sf-otp').find('.sf-otp-field');
+        pasted.split('').forEach((digit, index) => fields.eq(index).val(digit));
+        fields.eq(Math.min(pasted.length, 5)).trigger('focus');
+        syncSeafoodOtpValue($(this).closest('.sf-otp'));
+    });
+
+    let seafoodOtpCountdownTimer = null;
+
+    function startSeafoodOtpCountdown(seconds) {
+        const countdown = $('.sf-otp-countdown');
+        clearInterval(seafoodOtpCountdownTimer);
+        let remaining = parseInt(seconds, 10) || 0;
+
+        const render = () => {
+            countdown.find('.sf-otp-countdown-value').text(Math.floor(remaining / 60) + ':' + String(remaining % 60).padStart(2, '0'));
+            $('.resend-otp-button').prop('disabled', remaining > 0);
+            countdown.prop('hidden', remaining <= 0);
+        };
+
+        render();
+        seafoodOtpCountdownTimer = setInterval(() => {
+            remaining = Math.max(0, remaining - 1);
+            render();
+            if (remaining === 0) {
+                clearInterval(seafoodOtpCountdownTimer);
+            }
+        }, 1000);
+    }
+
+    if ($('.sf-otp-countdown').length) {
+        startSeafoodOtpCountdown($('.sf-otp-countdown').data('second'));
+        $('.sf-otp-field').first().trigger('focus');
+    }
+
+    /* Verify and resend share one form; each button points it at its own route before submitting. */
+    $(document).on('click', '[data-form-action]', function () {
+        const form = $(this).closest('form');
+        const otpValue = form.find('.sf-otp-value');
+        if ($(this).data('requires-code') && otpValue.length && otpValue.val().length < 6) {
+            form.find('.sf-otp-field').addClass('is-invalid');
+            toastr.error(@json(translate('please_enter_the_full_code')));
+            return;
+        }
+        if (!$(this).data('requires-code')) {
+            otpValue.prop('required', false);
+        }
+        form.attr('action', $(this).data('form-action'))[0].submit();
+    });
+
+    $(document).on('click', '.sf-otp-resend-ajax', function () {
+        const button = $(this);
+        $('.sf-otp-field').val('');
+        $('.sf-otp-value').val('');
+        $.post({
+            url: button.data('url'),
+            data: {identity: button.data('identity')},
+            dataType: 'json',
+            beforeSend: () => button.prop('disabled', true),
+            success: function (response) {
+                if (response.status == 1) {
+                    toastr.success(response.message);
+                    startSeafoodOtpCountdown(response.new_time);
+                } else {
+                    toastr.error(response.message);
+                    button.prop('disabled', false);
+                }
+            },
+            error: () => button.prop('disabled', false),
+        });
+    });
 </script>

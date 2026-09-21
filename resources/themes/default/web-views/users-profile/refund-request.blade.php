@@ -1,150 +1,58 @@
-@extends('layouts.front-end.app')
+@extends('layouts.front-end.seafood-account')
 
-@section('title',translate('refund_request'))
+@section('title', translate('refund_request'))
 
-@push('css_or_js')
-    <link href="{{theme_asset(path: 'public/assets/back-end/css/tags-input.min.css')}}" rel="stylesheet">
-    <link href="{{ theme_asset(path: 'public/assets/select2/css/select2.min.css')}}" rel="stylesheet">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endpush
+@section('page_title', translate('refund_request'))
 
-@section('content')
-    <div class="container rtl text-align-direction">
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-9 sidebar_heading">
-                <h1 class="h3  mb-0 float-start headerTitle">
-                    {{translate('refund_request')}}
-                </h1>
-            </div>
-        </div>
-    </div>
-
-    <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl text-align-direction">
-        <div class="row g-3">
-
-            @include('web-views.partials._profile-aside')
-
-            @php($product = App\Models\Product::find($order_details->product_id))
-            @php($order = App\Models\Order::find($order_details->order_id))
-            <section class="col-lg-9 col-md-8">
-                <div class="card box-shadow-sm">
-                    <div class="overflow-auto">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-3 col-sm-2">
-                                        <img class="d-block"
-                                             src="{{ getStorageImages(path: $product->thumbnail_full_url, type: 'product') }}"
-                                             alt="{{ translate('product') }}" width="60">
-                                    </div>
-                                    <div class="col-9 col-sm-7 text-left">
-                                        <p>{{$product['name']}}</p>
-                                        <span>{{translate('variant')}} : </span>
-                                        {{$order_details->variant}}
-                                    </div>
-                                    <div class="col-4 col-sm-3 text-left d-flex flex-column pl-0 mt-2 mt-sm-0 pl-sm-5">
-                                        <span>{{translate('QTY')}} : {{$order_details->qty}}</span>
-                                        <span>{{translate('price')}} : {{ webCurrencyConverter(amount: $order_details->price) }}</span>
-                                        <span>{{translate('discount')}} : {{ webCurrencyConverter(amount: $order_details->discount) }}</span>
-                                        <span>{{translate('tax')}} : {{ webCurrencyConverter(amount: $order_details->tax) }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        @php($refundDetailsSummery = \App\Utils\OrderManager::getRefundDetailsForSingleOrderDetails(orderDetailsId: $order_details['id']))
-
-                        <div class="card mt-2">
-                            <div class="card-body">
-                                <div class="row text-center">
-                                    <span class="col-sm-2">
-                                        {{ translate('subtotal')}}: {{ webCurrencyConverter(amount: $refundDetailsSummery['sub_total']) }}
-                                    </span>
-                                    <span class="col-sm-5">
-                                        {{ translate('Coupon_Discount')}}: {{ webCurrencyConverter(amount: $refundDetailsSummery['coupon_discount']) }}
-                                    </span>
-                                    <span class="col-sm-5">
-                                        {{ translate('Referral_Discount')}}: {{ webCurrencyConverter(amount: $refundDetailsSummery['referral_discount']) }}
-                                    </span>
-                                    <span class="col-sm-5">
-                                        {{ translate('Total_Refundable_Amount')}}: {{ webCurrencyConverter(amount: $refundDetailsSummery['total_refundable_amount']) }}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card mt-2">
-                            <div class="card-body">
-                                <div class="row">
-                                    <form action="{{ route('refund-store') }}" method="post"
-                                          enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="hidden" name="order_details_id" value="{{ $order_details->id }}">
-                                        <input type="hidden" name="amount" value="{{ $refundDetailsSummery['total_refundable_amount'] }}">
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <label class="input-label"
-                                                       for="name">{{translate('refund_reason')}}</label>
-                                                <textarea class="form-control" name="refund_reason" cols="120"
-                                                          required>{{old('details')}}</textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1">{{translate('attachment')}}</label>
-                                                <div class="row coba"></div>
-                                            </div>
-
-                                        </div>
-                                        <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
-
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
+@section('page_actions')
+    <a href="{{ route('account-order-details', ['id' => $order_details->order_id]) }}" class="sf-btn-sm">{{ translate('back_to_order') }}</a>
 @endsection
 
-@push('script')
-    <script src="{{theme_asset(path: 'public/assets/front-end/js/spartan-multi-image-picker.js')}}"></script>
-    <script type="text/javascript">
-        "use strict";
+@section('account_content')
+    @php
+        $refundProduct = \App\Models\Product::find($order_details->product_id);
+        $refundSummary = \App\Utils\OrderManager::getRefundDetailsForSingleOrderDetails(orderDetailsId: $order_details['id']);
+    @endphp
 
-        $(function () {
-            $(".coba").spartanMultiImagePicker({
-                fieldName: 'images[]',
-                maxCount: 5,
-                rowHeight: '150px',
-                groupClassName: 'col-md-4',
-                maxFileSize: '',
-                placeholderImage: {
-                    image: '{{theme_asset(path: 'public/assets/front-end/img/image-place-holder.png')}}',
-                    width: '100%'
-                },
-                dropFileLabel: "{{translate('drop_here')}}",
-                onAddRow: function (index, file) {
-                },
-                onRenderedPreview: function (index) {
-                },
-                onRemoveRow: function (index) {
-                },
-                onExtensionErr: function (index, file) {
-                    toastr.error('{{translate('input_png_or_jpg')}}', {
-                        CloseButton: true,
-                        ProgressBar: true
-                    });
-                },
-                onSizeErr: function (index, file) {
-                    toastr.error('{{translate('file_size_too_big')}}', {
-                        CloseButton: true,
-                        ProgressBar: true
-                    });
-                }
-            });
-        });
-    </script>
-@endpush
+    <article class="sf-row-card">
+        <span class="sf-row-media">
+            <img src="{{ getStorageImages(path: $refundProduct?->thumbnail_full_url, type: 'product') }}" alt="">
+        </span>
+        <div class="sf-row-body">
+            <h2 class="sf-row-title">{{ $refundProduct['name'] ?? translate('product_not_found') }}</h2>
+            <div class="sf-row-meta">
+                @if($order_details->variant)
+                    <span>{{ translate('variant') }}: <bdi>{{ $order_details->variant }}</bdi></span>
+                @endif
+                <span>{{ translate('QTY') }}: <bdi dir="ltr">{{ $order_details->qty }}</bdi></span>
+                <span>{{ translate('price') }}: @include('web-views.seafood.partials._price', ['amount' => $order_details->price])</span>
+                <span>{{ translate('discount') }}: @include('web-views.seafood.partials._price', ['amount' => $order_details->discount])</span>
+                <span>{{ translate('tax') }}: @include('web-views.seafood.partials._price', ['amount' => $order_details->tax])</span>
+            </div>
+        </div>
+    </article>
+
+    <div class="sf-panel" style="margin-top: 16px;">
+        <h2 class="sf-panel-title">{{ translate('refund_summary') }}</h2>
+        <dl class="sf-summary-rows">
+            <div class="sf-summary-row"><dt>{{ translate('subtotal') }}</dt><dd>@include('web-views.seafood.partials._price', ['amount' => $refundSummary['sub_total']])</dd></div>
+            <div class="sf-summary-row"><dt>{{ translate('Coupon_Discount') }}</dt><dd class="is-negative">− @include('web-views.seafood.partials._price', ['amount' => $refundSummary['coupon_discount']])</dd></div>
+            <div class="sf-summary-row"><dt>{{ translate('Referral_Discount') }}</dt><dd class="is-negative">− @include('web-views.seafood.partials._price', ['amount' => $refundSummary['referral_discount']])</dd></div>
+            <div class="sf-summary-row is-total"><dt>{{ translate('Total_Refundable_Amount') }}</dt><dd class="sf-summary-total">@include('web-views.seafood.partials._price', ['amount' => $refundSummary['total_refundable_amount'], 'symbolSize' => '14px'])</dd></div>
+        </dl>
+    </div>
+
+    <form class="sf-panel" action="{{ route('refund-store') }}" method="post" enctype="multipart/form-data" style="margin-top: 16px;">
+        @csrf
+        <input type="hidden" name="order_details_id" value="{{ $order_details->id }}">
+        <input type="hidden" name="amount" value="{{ $refundSummary['total_refundable_amount'] }}">
+
+        <label class="sf-form-label" for="refund_reason">{{ translate('refund_reason') }} <span class="sf-required">*</span></label>
+        <textarea class="sf-filter-field" id="refund_reason" name="refund_reason" required style="min-height: 130px;">{{ old('refund_reason') }}</textarea>
+
+        <span class="sf-form-label" style="margin-top: 18px;">{{ translate('attachment') }}</span>
+        @include('web-views.seafood.partials._image-picker', ['pickerName' => 'images[]', 'pickerId' => 'refund-images'])
+
+        <button type="submit" class="sf-btn-block" style="margin-top: 22px;">{{ translate('submit') }}</button>
+    </form>
+@endsection

@@ -1,141 +1,51 @@
-@extends('layouts.front-end.app')
+@extends('web-views.seafood.auth-layout')
 
 @section('title', translate('verify'))
-@section('content')
-    <div class="container py-4 py-lg-5 my-4 __inline-8">
-        <div class="row justify-content-center">
-            <div class="col-lg-4 col-md-6">
-                <div class="card py-2 mt-4">
-                    @if ($userVerify == 0)
-                        <form class="card-body  otp-form" method="post" id="customer-otp-login-form"
-                            @if (isset($otpFromType) && base64_decode($otpFromType) == 'social-login-verify')
-                                action="{{ route('customer.auth.login.social.verify-account') }}"
-                                data-verify="{{ route('customer.auth.login.social.verify-account') }}"
-                                data-resend="{{ route('customer.auth.resend_otp') }}"
-                            @elseif(isset($otpFromType) && base64_decode($otpFromType) == 'password-reset')
-                                action="{{ route('customer.auth.verify-recover-password') }}"
-                                data-verify="{{ route('customer.auth.verify-recover-password') }}"
-                                data-resend="{{ route('customer.auth.resend-otp-reset-password') }}"
-                            @else
-                                action="{{ route('customer.auth.login.verify-account.submit') }}"
-                                data-verify="{{ route('customer.auth.login.verify-account.submit') }}"
-                                data-resend="{{ route('customer.auth.resend_otp') }}" @endif>
-                            @csrf
-                            <div class="form-group">
-                                <div class="text-center">
-                                    <img src="{{ dynamicAsset('public/assets/front-end/img/icons/otp-login-icon.svg') }}"
-                                        width="50" height="50" alt="" class="mb-4">
-                                </div>
-                                <div class="resend_otp_custom text-center {{ $getTimeInSecond <= 0 ? 'd--none' : '' }}">
-                                    <p class="text-primary mb-2 ">{{ translate('resend_code_within') }}</p>
-                                    <h6 class="text-primary mb-5 verifyTimer">
-                                        <span class="verifyCounter" data-second="{{ number_format($getTimeInSecond, 0) }}"></span>
-                                    </h6>
-                                </div>
 
-                                <div class="text-center mb-4 pb-2 fs-13 max-w-320 mx-auto text-body">
-                                    {{ translate('we_have_sent_a_verification_code_to') }}
-                                    <?php
-                                    $identityString = base64_decode($identity);
-                                    $identityString = '******' . substr($identityString, -4);
-                                    ?>
-                                    {{ $identityString }}
-                                </div>
+@section('auth_heading', $userVerify == 0 ? translate('OTP_verification') : translate('verification_Successfully_Done!'))
 
-                                <div
-                                    class="d-flex gap-2 gap-sm-3 align-items-end justify-content-center forget-password-otp mb-4">
-                                    <input class="otp-field" type="text" name="opt-field[]" maxlength="1"
-                                        autocomplete="off">
-                                    <input class="otp-field" type="text" name="opt-field[]" maxlength="1"
-                                        autocomplete="off">
-                                    <input class="otp-field" type="text" name="opt-field[]" maxlength="1"
-                                        autocomplete="off">
-                                    <input class="otp-field" type="text" name="opt-field[]" maxlength="1"
-                                        autocomplete="off">
-                                    <input class="otp-field" type="text" name="opt-field[]" maxlength="1"
-                                        autocomplete="off">
-                                    <input class="otp-field" type="text" name="opt-field[]" maxlength="1"
-                                        autocomplete="off">
-                                </div>
-                                <input class="otp-value" type="hidden" name="token">
-                            </div>
-                            <input type="hidden" name="identity" value="{{ $identity }}">
-                            <input type="hidden" name="type" value="{{ request('type') }}">
-
-                            @include('web-views.customer-views.auth.partials._firebase-recaptcha-container')
-
-                            <div class="d-flex gap-2 justify-content-between align-items-center mt-3">
-                                <button class="btn btn--primary w-100 submitOTpVerifyForm" type="submit">
-                                    {{ translate('verify') }}
-                                </button>
-
-                                <button class="btn btn--primary w-100 resend-otp-button resendVerifyForm" type="button">
-                                    {{ translate('Resend_OTP') }}
-                                </button>
-                            </div>
-                        </form>
-                    @else
-                        <div class=" p-5">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="text-center">
-                                        <i class="fa fa-check-circle __text-100px __color-0f9d58"></i>
-                                    </div>
-
-                                    <span class="font-weight-bold d-block mt-4 __text-17px text-center">
-                                        {{ translate('hello') }}, {{ $user->f_name }}
-                                    </span>
-                                    <h5 class="font-black __text-20px text-center my-2">
-                                        {{ translate('verification_Successfully_Done!') }}!
-                                    </h5>
-                                </div>
-                            </div>
-
-                            <div class="text-center mt-4">
-                                <a href="{{ route('customer.auth.login') }}" class="btn btn-sm btn--primary">
-                                    {{ translate('sign_in') }}
-                                </a>
-                            </div>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
+@section('auth_icon')
+    @if($userVerify == 0)
+        <rect x="6" y="2.5" width="12" height="19" rx="2.5"></rect><path d="M10 18.5h4"></path>
+    @else
+        <circle cx="12" cy="12" r="9"></circle><path d="m8.2 12.4 2.6 2.6 5-5.4"></path>
+    @endif
 @endsection
 
-@push('script')
-    <script>
-        $(document).ready(function() {
-            $(".otp-form .otp-value").focus();
-            let otp_fields = $(".otp-form .otp-field"),
-                otp_value_field = $(".otp-form .otp-value");
-            otp_fields
-                .on("input", function(e) {
-                    $(this).val($(this).val().replace(/[^0-9]/g, ""));
-                    let opt_value = "";
-                    otp_fields.each(function() {
-                        let field_value = $(this).val();
-                        if (field_value != "") opt_value += field_value;
-                    });
-                    otp_value_field.val(opt_value);
-                })
-                .on("keyup", function(e) {
-                    let key = e.keyCode || e.charCode;
-                    if (key == 8 || key == 46 || key == 37 || key == 40) {
-                        $(this).prev().focus();
-                    } else if (key == 38 || key == 39 || $(this).val() != "") {
-                        $(this).next().focus();
-                    }
-                })
-                .on("paste", function(e) {
-                    let paste_data = e.originalEvent.clipboardData.getData("text");
-                    let paste_data_splitted = paste_data.split("");
-                    $.each(paste_data_splitted, function(index, value) {
-                        otp_fields.eq(index).val(value);
-                    });
-                });
-        });
-    </script>
-    <script src="{{ theme_asset(path: 'public/assets/front-end/js/verify-otp.js') }}"></script>
-@endpush
+@section('auth_intro')
+    @if($userVerify == 0)
+        {{ translate('we_have_sent_a_verification_code_to') }} <bdi dir="ltr">******{{ substr(base64_decode($identity), -4) }}</bdi>
+    @else
+        {{ translate('hello') }}, {{ $user->f_name }}
+    @endif
+@endsection
+
+@section('auth_content')
+    @if($userVerify == 0)
+        @php
+            $otpFlow = isset($otpFromType) ? base64_decode($otpFromType) : null;
+            [$otpVerifyRoute, $otpResendRoute] = match ($otpFlow) {
+                'social-login-verify' => [route('customer.auth.login.social.verify-account'), route('customer.auth.resend_otp')],
+                'password-reset' => [route('customer.auth.verify-recover-password'), route('customer.auth.resend-otp-reset-password')],
+                default => [route('customer.auth.login.verify-account.submit'), route('customer.auth.resend_otp')],
+            };
+        @endphp
+
+        <form method="post" id="customer-otp-login-form" action="{{ $otpVerifyRoute }}">
+            @csrf
+            <input type="hidden" name="identity" value="{{ $identity }}">
+            <input type="hidden" name="type" value="{{ request('type') }}">
+
+            @include('web-views.seafood.partials._otp-input', ['otpFieldName' => 'token', 'otpCountdownSeconds' => $getTimeInSecond])
+
+            @include('web-views.customer-views.auth.partials._firebase-recaptcha-container')
+
+            <div class="sf-otp-actions">
+                <button class="sf-btn-block" type="button" data-form-action="{{ $otpVerifyRoute }}" data-requires-code="1">{{ translate('verify') }}</button>
+                <button class="sf-btn-outline resend-otp-button" type="button" data-form-action="{{ $otpResendRoute }}">{{ translate('resend_OTP') }}</button>
+            </div>
+        </form>
+    @else
+        <a href="{{ route('customer.auth.login') }}" class="sf-btn-block">{{ translate('sign_in') }}</a>
+    @endif
+@endsection

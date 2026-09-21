@@ -1,255 +1,107 @@
-@extends('layouts.front-end.app')
+@extends('layouts.front-end.seafood-account')
 
 @section('title', translate('my_Address'))
 
+@section('page_title', translate('Update_Addresses'))
+
 @push('css_or_js')
-    <link rel="stylesheet" href="{{ theme_asset(path: 'public/assets/front-end/vendor/nouislider/distribute/nouislider.min.css')}}"/>
-    <link rel="stylesheet" href="{{ theme_asset(path: 'public/assets/front-end/css/bootstrap-select.min.css') }}">
-    <link rel="stylesheet" href="{{ theme_asset(path: 'public/assets/front-end/css/address.css') }}">
     <link rel="stylesheet" href="{{ theme_asset(path: 'public/assets/front-end/plugin/intl-tel-input/css/intlTelInput.css') }}">
+    @include('web-views.seafood.partials._phone-input-styles')
 @endpush
 
-@section('content')
-<div class="container py-4 rtl __account-address text-align-direction">
+@section('page_actions')
+    <a href="{{ route('account-address') }}" class="sf-btn-sm">{{ translate('back') }}</a>
+@endsection
 
-    <div class="row g-3">
-        @include('web-views.partials._profile-aside')
-        <section class="col-lg-9 col-md-8">
+@section('account_content')
+    @php($currentAddressType = Str::lower($shippingAddress->address_type))
 
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="font-bold m-0 fs-16">{{translate('Update_Addresses')}}</h5>
-                    <form action="{{route('address-update')}}" method="post">
-                        @csrf
-                        <div class="row pb-1">
-                            <div class="col-md-6">
-                                <input type="hidden" name="id" value="{{$shippingAddress->id}}">
-                                <ul class="donate-now d-flex gap-2">
-                                    <li class="address_type_li">
-                                        <input type="radio" class="address_type" id="a25" name="address_type" value="permanent"
-                                            {{ Str::lower($shippingAddress->address_type) == 'permanent' ? 'checked' : ''}} />
-                                        <label for="a25" class="component">{{translate('permanent')}}</label>
-                                    </li>
-                                    <li class="address_type_li">
-                                        <input type="radio" class="address_type" id="a50" name="address_type" value="home"
-                                            {{ Str::lower($shippingAddress->address_type) == 'home' ? 'checked' : ''}} />
-                                        <label for="a50" class="component">{{translate('home')}}</label>
-                                    </li>
-                                    <li class="address_type_li">
-                                        <input type="radio" class="address_type" id="a75" name="address_type" value="office"
-                                            {{ Str::lower($shippingAddress->address_type) == 'office' ? 'checked' : ''}}/>
-                                        <label for="a75" class="component">{{translate('office')}}</label>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <input type="hidden" id="is_billing" value="{{$shippingAddress->is_billing}}">
-                                <ul class="donate-now d-flex gap-2">
-                                    <li class="address_type_bl">
-                                        <input type="radio" class="bill_type" id="b25" name="is_billing" value="0"  {{ $shippingAddress->is_billing == '0' ? 'checked' : ''}} />
-                                        <label for="b25" class="component">{{translate('shipping')}}</label>
-                                    </li>
-                                    <li class="address_type_bl">
-                                        <input type="radio" class="bill_type" id="b50" name="is_billing" value="1" {{ $shippingAddress->is_billing == '1' ? 'checked' : ''}} />
-                                        <label for="b50" class="component">{{translate('billing')}}</label>
-                                    </li>
+    <form class="sf-panel sf-address-form" action="{{ route('address-update') }}" method="post">
+        @csrf
+        <input type="hidden" name="id" value="{{ $shippingAddress->id }}">
 
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="person_name">{{translate('contact_person_name')}}</label>
-                                <input class="form-control" type="text" id="person_name"
-                                    name="name"
-                                    value="{{$shippingAddress->contact_person_name}}"
-                                    required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="own_phone">{{ translate('phone') }}</label>
-                                <input class="form-control" type="tel" name="phone" id="own_phone" value="{{ $shippingAddress->phone }}" required="required">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="city">{{translate('city')}}</label>
-
-                                <input class="form-control" type="text" id="city" name="city" value="{{$shippingAddress->city}}" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="zip_code">{{translate('zip_code')}}</label>
-                                @if($zip_restrict_status)
-                                    <select name="zip" class="form-control selectpicker" data-live-search="true" id="" required>
-                                        @foreach($delivery_zipcodes as $zip)
-                                            <option value="{{ $zip->zipcode }}" {{ $zip->zipcode == $shippingAddress->zip? 'selected' : ''}}>{{ $zip->zipcode }}</option>
-                                        @endforeach
-                                    </select>
-                                @else
-                                    <input class="form-control" type="text" id="zip_code" name="zip" value="{{$shippingAddress->zip}}">
-                                @endif
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class=" col-md-12">
-                                <div class="form-group mb-1">
-                                    <label for="own_address">{{translate('address')}}</label>
-                                    <textarea class="form-control" id="address"
-                                              type="text"  name="address" required>{{$shippingAddress->address}}</textarea>
-                                    <span class="fs-14 text-danger font-semi-bold opacity-0 map-address-alert">
-                                        {{ translate('note') }}: {{ translate('you_need_to_select_address_from_your_selected_country') }}
-                                    </span>
-                                </div>
-                            </div>
-                            @if(getWebConfig('map_api_status') ==1 )
-                                <div class="col-md-12">
-                                    <div class="form-group map-area-alert-border location-map-address-canvas-area">
-                                        <input id="pac-input" class="controls rounded __inline-46 location-search-input-field" title="{{translate('search_your_location_here')}}" type="text" placeholder="{{translate('search_here')}}"/>
-                                        <div class="__h-200px" id="location_map_canvas"></div>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                        @php($shipping_latitude=$shippingAddress->latitude)
-                        @php($shipping_longitude=$shippingAddress->longitude)
-                        <input type="hidden" id="latitude"
-                            name="latitude" class="form-control d-inline"
-                            placeholder="{{ translate('ex')}} : -94.22213" value="{{$shipping_latitude??0}}" required readonly>
-                        <input type="hidden"
-                            name="longitude" class="form-control"
-                            placeholder="{{ translate('ex')}} : 103.344322" id="longitude" value="{{$shipping_longitude??0}}" required readonly>
-                        <div class="modal-footer">
-                            <a href="{{ route('account-address') }}" class="closeB btn btn-secondary fs-14 font-semi-bold py-2 px-4">{{translate('close')}}</a>
-                            <button type="submit" class="btn btn--primary fs-14 font-semi-bold py-2 px-4">{{translate('update')}}  </button>
-                        </div>
-                    </form>
-                </div>
+        <div class="sf-form-grid">
+            <div>
+                <span class="sf-form-label">{{ translate('address_type') }}</span>
+                <ul class="sf-segment">
+                    @foreach(['permanent' => 'a25', 'home' => 'a50', 'office' => 'a75'] as $addressTypeValue => $addressTypeId)
+                        <li>
+                            <input type="radio" id="{{ $addressTypeId }}" name="address_type" value="{{ $addressTypeValue }}" @checked($currentAddressType == $addressTypeValue)>
+                            <label for="{{ $addressTypeId }}">{{ translate($addressTypeValue) }}</label>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
 
-        </section>
-    </div>
-</div>
-<span id="system-country-restrict-status" data-value="{{ $country_restrict_status }}"></span>
+            <div>
+                <span class="sf-form-label">{{ translate('address_for') }}</span>
+                <ul class="sf-segment">
+                    <li><input type="radio" id="b25" name="is_billing" value="0" @checked($shippingAddress->is_billing == '0')><label for="b25">{{ translate('shipping') }}</label></li>
+                    <li><input type="radio" id="b50" name="is_billing" value="1" @checked($shippingAddress->is_billing == '1')><label for="b50">{{ translate('billing') }}</label></li>
+                </ul>
+            </div>
+
+            <div>
+                <label class="sf-form-label" for="person_name">{{ translate('contact_person_name') }}<span class="sf-required">*</span></label>
+                <input class="sf-filter-field" type="text" id="person_name" name="name" value="{{ $shippingAddress->contact_person_name }}" required>
+            </div>
+
+            <div>
+                <label class="sf-form-label" for="own_phone">{{ translate('phone') }}<span class="sf-required">*</span></label>
+                <input class="sf-filter-field phone-input-with-country-picker" type="tel" id="own_phone" name="phone" value="{{ $shippingAddress->phone }}" required>
+            </div>
+
+            <div>
+                <label class="sf-form-label" for="city">{{ translate('city') }}<span class="sf-required">*</span></label>
+                <input class="sf-filter-field" type="text" id="city" name="city" value="{{ $shippingAddress->city }}" required>
+            </div>
+
+            <div>
+                <label class="sf-form-label" for="zip_code">{{ translate('zip_code') }}@if($zip_restrict_status)<span class="sf-required">*</span>@endif</label>
+                @if($zip_restrict_status)
+                    <select name="zip" id="zip_code" class="sf-filter-field" required>
+                        @foreach($delivery_zipcodes as $deliveryZipcode)
+                            <option value="{{ $deliveryZipcode->zipcode }}" @selected($deliveryZipcode->zipcode == $shippingAddress->zip)>{{ $deliveryZipcode->zipcode }}</option>
+                        @endforeach
+                    </select>
+                @else
+                    <input class="sf-filter-field" type="text" id="zip_code" name="zip" value="{{ $shippingAddress->zip }}" dir="ltr">
+                @endif
+            </div>
+
+            <div class="sf-form-full">
+                <label class="sf-form-label" for="address">{{ translate('address') }}<span class="sf-required">*</span></label>
+                <textarea class="sf-filter-field" id="address" name="address" required>{{ $shippingAddress->address }}</textarea>
+                <span class="sf-map-alert map-address-alert">{{ translate('note') }}: {{ translate('you_need_to_select_address_from_your_selected_country') }}</span>
+            </div>
+
+            @if(getWebConfig('map_api_status') == 1)
+                <div class="sf-form-full location-map-address-canvas-area">
+                    <label class="sf-form-label" for="pac-input">{{ translate('search_your_location_here') }}</label>
+                    <input id="pac-input" class="sf-filter-field" type="text" style="margin-bottom: 10px;"
+                           title="{{ translate('search_your_location_here') }}" placeholder="{{ translate('search_here') }}">
+                    <div class="sf-map-canvas" id="location_map_canvas"></div>
+                </div>
+            @endif
+        </div>
+
+        <input type="hidden" id="latitude" name="latitude" value="{{ $shippingAddress->latitude ?? 0 }}" readonly required>
+        <input type="hidden" id="longitude" name="longitude" value="{{ $shippingAddress->longitude ?? 0 }}" readonly required>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px;">
+            <button type="submit" class="sf-btn-block" style="flex: 1 1 200px; width: auto;">{{ translate('update') }}</button>
+            <a href="{{ route('account-address') }}" class="sf-btn-outline" style="flex: 1 1 140px; width: auto;">{{ translate('close') }}</a>
+        </div>
+    </form>
+
+    <span id="system-country-restrict-status" data-value="{{ $country_restrict_status }}"></span>
 @endsection
 
 @push('script')
-<script>
-    'use strict'
-    const deliveryRestrictedCountries = @json($countriesName);
-    function deliveryRestrictedCountriesCheck(countryOrCode, elementSelector, inputElement) {
-        const foundIndex = deliveryRestrictedCountries.findIndex(country => country.toLowerCase() === countryOrCode.toLowerCase());
-        if (foundIndex !== -1) {
-            $(elementSelector).removeClass('map-area-alert-danger');
-            $(inputElement).parent().find('.map-address-alert').removeClass('opacity-100').addClass('opacity-0')
-        } else {
-            $(elementSelector).addClass('map-area-alert-danger');
-            $(inputElement).val('')
-            $(inputElement).parent().find('.map-address-alert').removeClass('opacity-0').addClass('opacity-100')
-        }
-    }
-</script>
-<script src="{{ theme_asset(path: 'public/assets/front-end/js/bootstrap-select.min.js') }}"></script>
+    @include('web-views.seafood.partials._phone-input-scripts')
 
-@if(getWebConfig('map_api_status') ==1 )
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key={{getWebConfig('map_api_key')}}&callback=callBackFunction&loading=async&libraries=places&v=3.56" defer>
-    </script>
-    <script>
-        async function initAutocomplete() {
-            var myLatLng = { lat: {{$shipping_latitude??'-33.8688'}}, lng: {{$shipping_longitude??'151.2195'}} };
-            const { Map } = await google.maps.importLibrary("maps");
-            const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-            const map = new google.maps.Map(document.getElementById("location_map_canvas"), {
-                center: { lat: {{$shipping_latitude??'-33.8688'}}, lng: {{$shipping_longitude??'151.2195'}} },
-                zoom: 13,
-                mapId: 'roadmap'
-            });
-
-            var marker = new AdvancedMarkerElement({
-                map,
-                position: myLatLng,
-            });
-
-            marker.setMap( map );
-            var geocoder = geocoder = new google.maps.Geocoder();
-            google.maps.event.addListener(map, 'click', function (mapsMouseEvent) {
-                var coordinates = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2);
-                var coordinates = JSON.parse(coordinates);
-                var latlng = new google.maps.LatLng( coordinates['lat'], coordinates['lng'] ) ;
-                marker.position={lat:coordinates['lat'], lng:coordinates['lng']};
-                map.panTo( latlng );
-
-                document.getElementById('latitude').value = coordinates['lat'];
-                document.getElementById('longitude').value = coordinates['lng'];
-
-                geocoder.geocode({ 'latLng': latlng }, function (results, status) {
-                    if (status == google.maps.GeocoderStatus.OK) {
-                        if (results[1]) {
-                            document.getElementById('address').value = results[1].formatted_address;
-
-                            let systemCountryRestrictStatus = $('#system-country-restrict-status').data('value');
-                            if (systemCountryRestrictStatus) {
-                                const countryObject = findCountryObject(results[1].address_components);
-                                deliveryRestrictedCountriesCheck(countryObject.long_name, '.location-map-address-canvas-area', '#address')
-                            }
-                        }
-                    }
-                });
-            });
-
-            const input = document.getElementById("pac-input");
-            const searchBox = new google.maps.places.SearchBox(input);
-            map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
-            map.addListener("bounds_changed", () => {
-                searchBox.setBounds(map.getBounds());
-            });
-            let markers = [];
-
-            searchBox.addListener("places_changed", () => {
-                const places = searchBox.getPlaces();
-
-                if (places.length == 0) {
-                    return;
-                }
-
-                markers.forEach((marker) => {
-                    marker.setMap(null);
-                });
-                markers = [];
-                const bounds = new google.maps.LatLngBounds();
-                places.forEach((place) => {
-                    if (!place.geometry || !place.geometry.location) {
-                        console.log("Returned place contains no geometry");
-                        return;
-                    }
-                    var mrkr = new AdvancedMarkerElement({
-                        map,
-                        title: place.name,
-                        position: place.geometry.location,
-                    });
-
-                    google.maps.event.addListener(mrkr, "click", function (event) {
-                        document.getElementById('latitude').value = this.position.lat();
-                        document.getElementById('longitude').value = this.position.lng();
-                    });
-
-                    markers.push(mrkr);
-
-                    if (place.geometry.viewport) {
-                        bounds.union(place.geometry.viewport);
-                    } else {
-                        bounds.extend(place.geometry.location);
-                    }
-                });
-                map.fitBounds(bounds);
-            });
-        }
-        function callBackFunction(){
-            initAutocomplete();
-        }
-
-        $(document).on("keydown", "input", function(e) {
-            if (e.which==13) e.preventDefault();
-        });
-    </script>
-@endif
+    @include('web-views.seafood.partials._address-map-scripts', ['addressMapCenter' => [
+        'lat' => $shippingAddress->latitude ?: -33.8688,
+        'lng' => $shippingAddress->longitude ?: 151.2195,
+    ]])
 @endpush

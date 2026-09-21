@@ -11,7 +11,7 @@
     [
         'label' => translate('my_order'),
         'url' => route('account-oder'),
-        'active' => Request::is('account-oder*') || Request::is('account-order-details*'),
+        'active' => Request::is('account-oder*') || Request::is('account-order-details*') || Request::is('refund-request*') || Request::is('refund-details*'),
         'icon' => 'order',
     ],
     [

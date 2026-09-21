@@ -11,6 +11,7 @@
                     'showPricingDetails' => true,
                     'showRating' => true,
                     'isWishlisted' => true,
+                    'wishlistRemovesCard' => true,
                 ])
             @endif
         @endforeach

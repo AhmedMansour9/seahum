@@ -1,157 +1,60 @@
-@extends('layouts.front-end.app')
+@extends('web-views.seafood.order-details-layout')
 
-@section('title', translate('order_Details'))
+@section('order_content')
+    @php
+        $isVendorOrder = $order->seller_is == 'seller';
+        $vendorShop = $isVendorOrder ? $order?->seller?->shop : null;
+        $vendorShopName = $isVendorOrder ? ($vendorShop->name ?? translate('shop_not_found')) : getInHouseShopConfig(key: 'name');
+        $vendorShopImage = $isVendorOrder ? $vendorShop?->image_full_url : getInHouseShopConfig(key: 'image_full_url');
+        $vendorAbilityType = $isVendorOrder ? 'vendor' : 'inhouse';
+        $isVendorTemporarilyClosed = checkVendorAbility(type: $vendorAbilityType, status: 'temporary_close', vendor: $vendorShop);
+        $isVendorOnVacation = !$isVendorTemporarilyClosed && checkVendorAbility(type: $vendorAbilityType, status: 'vacation_status', vendor: $vendorShop);
+        $vendorAverageRating = round((float) $avg_rating, 1);
+    @endphp
 
-@section('content')
-
-    <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl __inline-47 text-start">
-        <div class="row g-3">
-            @include('web-views.partials._profile-aside')
-
-            <section class="col-lg-9">
-                @include('web-views.users-profile.account-details.partial')
-                <div class="card mt-3">
-                    <div class="card-body">
-                        @if ($order->seller_is == 'seller')
-                            <div class="media flex-wrap gap-2 gap-sm-3 border rounded p-3">
-                                <div class="position-relative">
-                                    <div class="overflow-hidden other-store-logo aspect-1 border">
-                                        <img width="77" alt="{{ translate('store') }}"
-                                            src="{{ getStorageImages(path: $order?->seller?->shop->image_full_url, type: 'shop') }}">
-                                    </div>
-
-                                    @if (checkVendorAbility(type: 'vendor', status: 'temporary_close', vendor: $order?->seller?->shop))
-                                        <span class="temporary-closed position-absolute text-center p-2">
-                                            <span class="fs-12">{{ translate('Temporary_OFF') }}</span>
-                                        </span>
-                                    @elseif(checkVendorAbility(type: 'vendor', status: 'vacation_status', vendor: $order?->seller?->shop))
-                                        <span class="temporary-closed position-absolute text-center p-2">
-                                            <span class="fs-12">{{ translate('closed_now') }}</span>
-                                        </span>
-                                    @endif
-                                </div>
-
-                                <div class="media-body">
-                                    <div class="d-flex gap-2 gap-sm-3 align-items-sm-center justify-content-between">
-                                        <div class="">
-                                            <h6 class="text-capitalize seller-info-title mb-1 mb-sm-2">
-                                                {{ $order->seller->shop->name }}</h6>
-                                            <div class="rating-show justify-content-between">
-                                                <span class="d-inline-block font-size-sm text-body">
-                                                    @for ($inc = 1; $inc <= 5; $inc++)
-                                                        @if ($inc <= (int) $avg_rating)
-                                                            <i class="tio-star text-warning"></i>
-                                                        @elseif ($avg_rating != 0 && $inc <= (int) $avg_rating + 1.1 && $avg_rating > ((int) $avg_rating))
-                                                            <i class="tio-star-half text-warning"></i>
-                                                        @else
-                                                            <i class="tio-star-outlined text-warning"></i>
-                                                        @endif
-                                                    @endfor
-                                                    <label class="badge-style">
-                                                        ( {{ number_format($avg_rating, 1) }} )
-                                                    </label>
-                                                </span>
-                                            </div>
-                                            <ul class="list-unstyled list-inline-dot fs-12 mb-0">
-                                                <li class="mb-0">{{ $rating_count }} {{ 'reviews' }} </li>
-                                            </ul>
-                                        </div>
-
-                                        <?php
-
-                                        $isTemporaryClosed = checkVendorAbility(type: 'vendor', status: 'temporary_close', vendor: $order->seller->shop);
-                                        $canChat = !$isTemporaryClosed;
-                                        ?>
-
-                                        <div>
-                                            <button type="button" class="btn btn-soft-info text-capitalize px-2 px-sm-4"
-                                                data-toggle="modal" data-target="#chatting_modal"
-                                                @if (!$canChat) disabled @endif>
-                                                <img alt=""
-                                                    src="{{ theme_asset(path: 'public/assets/front-end/img/seller-info-chat.png') }}">
-                                                <span class="d-none d-sm-inline-block">
-                                                    {{ translate('chat_with_vendor') }}
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @else
-                            <div class="media flex-wrap gap-3 border rounded p-3">
-                                <div class="position-relative">
-                                    <div class="overflow-hidden other-store-logo aspect-1 border">
-                                        <img width="77" alt="{{ translate('store') }}"
-                                            src="{{ getStorageImages(path: getInHouseShopConfig(key: 'image_full_url'), type: 'shop') }}">
-                                    </div>
-
-                                    @if (checkVendorAbility(type: 'inhouse', status: 'temporary_close'))
-                                        <span class="temporary-closed position-absolute text-center p-2">
-                                            <span class="fs-12">{{ translate('Temporary_OFF') }}</span>
-                                        </span>
-                                    @elseif(checkVendorAbility(type: 'inhouse', status: 'vacation_status'))
-                                        <span class="temporary-closed position-absolute text-center p-2">
-                                            <span class="fs-12">{{ translate('closed_now') }}</span>
-                                        </span>
-                                    @endif
-                                </div>
-
-                                <div class="media-body">
-                                    <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between">
-                                        <div>
-                                            <h6 class="text-capitalize">
-                                                {{ getInHouseShopConfig(key:'name') }}
-                                            </h6>
-                                            <div class="rating-show justify-content-between">
-                                                <span class="d-inline-block font-size-sm text-body">
-                                                    @for ($inc = 1; $inc <= 5; $inc++)
-                                                        @if ($inc <= (int) $avg_rating)
-                                                            <i class="tio-star text-warning"></i>
-                                                        @elseif ($avg_rating != 0 && $inc <= (int) $avg_rating + 1.1 && $avg_rating > ((int) $avg_rating))
-                                                            <i class="tio-star-half text-warning"></i>
-                                                        @else
-                                                            <i class="tio-star-outlined text-warning"></i>
-                                                        @endif
-                                                    @endfor
-                                                    <label class="badge-style">
-                                                        ( {{ number_format($avg_rating, 1) }} )
-                                                    </label>
-                                                </span>
-                                            </div>
-                                            <ul class="list-unstyled list-inline-dot fs-12 mb-0">
-                                                <li class="mb-0">
-                                                    {{ $rating_count }} {{ translate('reviews') }}
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <?php
-                                        $isTemporaryClosed = checkVendorAbility(type: 'inhouse', status: 'temporary_close');
-                                        $canChat = !$isTemporaryClosed;
-                                        ?>
-                                        <div>
-                                            <button @if (!$canChat) disabled @endif type="button"
-                                                class="btn btn-soft-info text-capitalize px-2 px-sm-4" data-toggle="modal"
-                                                data-target="#chatting_modal">
-                                                <img alt=""
-                                                    src="{{ theme_asset(path: 'public/assets/front-end/img/seller-info-chat.png') }}">
-                                                <span class="d-none d-sm-inline-block">
-                                                    {{ translate('chat_with_vendor') }}
-                                                </span>
-                                            </button>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
+    <section class="sf-panel">
+        <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+            <span class="sf-shop-logo" style="width: 76px; height: 76px; border-width: 1px; border-color: #E4EFF1; box-shadow: none;">
+                <img src="{{ getStorageImages(path: $vendorShopImage, type: 'shop') }}" alt="{{ $vendorShopName }}">
+            </span>
+            <div class="sf-shop-body">
+                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <h2 class="sf-shop-name" style="font-size: 19px;">{{ $vendorShopName }}</h2>
+                    @if($isVendorTemporarilyClosed)
+                        <span class="sf-badge sf-badge-danger">{{ translate('Temporary_OFF') }}</span>
+                    @elseif($isVendorOnVacation)
+                        <span class="sf-badge sf-badge-warning">{{ translate('closed_now') }}</span>
+                    @endif
                 </div>
-            </section>
+                <div class="sf-row-meta">
+                    <span style="display: inline-flex; align-items: center; gap: 6px;">
+                        @include('web-views.seafood.partials._star-rating-display', ['displayRating' => $vendorAverageRating])
+                        <bdi dir="ltr">({{ number_format($vendorAverageRating, 1) }})</bdi>
+                    </span>
+                    <span><bdi dir="ltr">{{ $rating_count }}</bdi> {{ translate('reviews') }}</span>
+                    <span><bdi dir="ltr">{{ $product_count }}</bdi> {{ translate('products') }}</span>
+                    <span><bdi dir="ltr">{{ round($rating_percentage) }}%</bdi> {{ translate('positive_review') }}</span>
+                </div>
+            </div>
+            <div class="sf-shop-actions">
+                @if($isVendorOrder && $vendorShop)
+                    <a href="{{ route('vendor-shop', ['slug' => $vendorShop->slug]) }}" class="sf-btn-sm">{{ translate('visit_store') }}</a>
+                @elseif(!$isVendorOrder)
+                    <a href="{{ route('vendor-shop', ['slug' => getInHouseShopConfig(key: 'slug')]) }}" class="sf-btn-sm">{{ translate('visit_store') }}</a>
+                @endif
+                <button type="button" class="sf-btn-sm sf-btn-sm-primary" data-sf-modal-open="chatting_modal" @disabled($isVendorTemporarilyClosed)>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12.5a7.5 7.5 0 0 1-11 6.6L4 20.5l1.4-4.6A7.5 7.5 0 1 1 20 12.5z"></path></svg>
+                    {{ translate('chat_with_vendor') }}
+                </button>
+            </div>
         </div>
-    </div>
+    </section>
 
-    @include('layouts.front-end.partials.modal._chatting', [
-        'seller' => $order->seller,
-        'user_type' => $order->seller_is,
+    @include('web-views.seafood.partials._chat-modal', [
+        'chatModalId' => 'chatting_modal',
+        'chatModalTitle' => translate('send_message_to') . ' ' . $vendorShopName,
+        'chatRecipientField' => 'vendor_id',
+        'chatRecipientId' => $isVendorOrder ? $order->seller?->id : 0,
+        'chatInboxType' => 'vendor',
     ])
 @endsection

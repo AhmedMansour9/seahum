@@ -1,6 +1,8 @@
 @php($cartItemKeysByProduct = \App\Utils\CartManager::getCartListQuery()->pluck('id', 'product_id'))
 @php($hasActiveFilters = collect(['product_name', 'min_price', 'max_price', 'brand_id', 'product_type'])->contains(fn ($filterKey) => filled(request($filterKey))))
 
+<span hidden data-listing-total="{{ method_exists($products, 'total') ? $products->total() : count($products) }}"></span>
+
 @if(count($products) > 0)
     <div class="sf-product-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px;">
         @foreach($products as $product)

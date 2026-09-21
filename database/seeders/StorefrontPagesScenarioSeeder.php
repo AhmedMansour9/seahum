@@ -751,7 +751,7 @@ class StorefrontPagesScenarioSeeder extends Seeder
                     'category_id' => $category->id,
                     'writer' => 'Seafood Kitchen',
                     'title' => $post['title'],
-                    'description' => '<p>'.$post['title'].' — seeded article for storefront previews.</p>',
+                    'description' => $this->blogArticleBody(title: $post['title']),
                     'image' => 'def.png',
                     'image_storage_type' => 'public',
                     'publish_date' => now()->subDays(2),
@@ -766,6 +766,26 @@ class StorefrontPagesScenarioSeeder extends Seeder
         }
 
         return $first;
+    }
+
+    /**
+     * Several <h2> sections so the blog details page renders its "In this article" navigation.
+     */
+    private function blogArticleBody(string $title): string
+    {
+        $sections = [
+            'Look at the eyes and gills' => 'Fresh fish has clear, bright eyes and red gills. Cloudy eyes or brown gills mean it has been out of the water too long.',
+            'Press the flesh' => 'The flesh should spring back when pressed. A dent that stays is a sign the fish is past its best.',
+            'Trust your nose' => 'Fresh seafood smells of the sea, never sour or strongly fishy.',
+            'Store it cold, cook it soon' => 'Keep seafood on ice in the coldest part of the fridge and cook it within one or two days.',
+        ];
+
+        $body = '<p>'.$title.' — seeded article for storefront previews.</p>';
+        foreach ($sections as $heading => $paragraph) {
+            $body .= '<h2>'.$heading.'</h2>'.str_repeat('<p>'.$paragraph.'</p>', 3);
+        }
+
+        return $body;
     }
 
     /**

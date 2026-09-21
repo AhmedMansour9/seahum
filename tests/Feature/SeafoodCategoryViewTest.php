@@ -18,7 +18,7 @@ class SeafoodCategoryViewTest extends TestCase
     {
         $viewFileNames = include base_path(self::THEME_PATH.'/file_names.php');
 
-        foreach (['all_categories_page', 'category_products_view_page', 'category_products_ajax_partials', 'products_details', 'product_reviews_partials'] as $viewKey) {
+        foreach (['all_categories_page', 'category_products_view_page', 'category_products_ajax_partials', 'products_details', 'product_reviews_partials', 'products_view_page', 'products__ajax_partials', 'all_brands', 'flash_deals', 'shop_view_page', 'cart_list', 'products_cart_details_partials', 'order_shipping', 'payment_details', 'order_complete'] as $viewKey) {
             $this->assertArrayHasKey($viewKey, $viewFileNames, "file_names.php is missing the '{$viewKey}' entry.");
             $this->assertFileExists($this->templatePath($viewFileNames[$viewKey]));
         }
@@ -132,15 +132,27 @@ class SeafoodCategoryViewTest extends TestCase
         }
     }
 
-    public function test_category_filter_sheet_locks_the_page_scroll_while_it_is_open(): void
+    public function test_listing_filter_sheet_locks_the_page_scroll_while_it_is_open(): void
     {
-        $categoryPage = file_get_contents($this->templatePath('web-views.seafood.category'));
+        $listingStyles = file_get_contents($this->templatePath('web-views.seafood.partials._listing-styles'));
+        $listingScripts = file_get_contents($this->templatePath('web-views.seafood.partials._listing-scripts'));
 
-        $this->assertStringContainsString('body.sf-filter-sheet-open', $categoryPage);
-        $this->assertStringContainsString('overscroll-behavior: contain', $categoryPage);
+        $this->assertStringContainsString('body.sf-filter-sheet-open', $listingStyles);
+        $this->assertStringContainsString('overscroll-behavior: contain', $listingStyles);
 
         foreach (['lockSeafoodPageScroll();', 'unlockSeafoodPageScroll();'] as $scrollCall) {
-            $this->assertStringContainsString($scrollCall, $categoryPage);
+            $this->assertStringContainsString($scrollCall, $listingScripts);
+        }
+    }
+
+    public function test_every_product_listing_page_shares_the_listing_partials(): void
+    {
+        foreach (['web-views.seafood.category', 'web-views.seafood.products', 'web-views.seafood.flash-deal', 'web-views.seafood.shop'] as $listingPage) {
+            $pageContents = file_get_contents($this->templatePath($listingPage));
+
+            foreach (['_listing-styles', '_listing\'', '_listing-scripts'] as $partial) {
+                $this->assertStringContainsString('web-views.seafood.partials.'.$partial, $pageContents, "{$listingPage} must use the shared {$partial} partial.");
+            }
         }
     }
 
@@ -173,8 +185,8 @@ class SeafoodCategoryViewTest extends TestCase
             $this->assertStringContainsString($rule, $touchBlock, 'Tap-target rules must cover tablet widths, not only phones.');
         }
 
-        $categoryPage = file_get_contents($this->templatePath('web-views.seafood.category'));
-        $categoryTouchBlock = $this->mediaBlock($categoryPage, 'max-width: 979px');
+        $listingStyles = file_get_contents($this->templatePath('web-views.seafood.partials._listing-styles'));
+        $categoryTouchBlock = $this->mediaBlock($listingStyles, 'max-width: 979px');
 
         $this->assertStringContainsString('.sf-search-submit { width: 44px !important; height: 44px !important;', $touchBlock);
         $this->assertStringContainsString('.sf-category-link--sub { min-height: 44px; }', $categoryTouchBlock);

@@ -1174,7 +1174,7 @@ class WebController extends Controller
             return response()->json([
                 'success' => $data,
                 'message' => translate('product_has_been_removed_from_wishlist'),
-                'count' => count($wishlists),
+                'count' => count(session('wish_list') ?? []),
                 'id' => $request->id,
                 'wishlist' => view(VIEW_FILE_NAMES['account_wishlist_partials'], compact('wishlists', 'brand_setting'))->render(),
             ]);

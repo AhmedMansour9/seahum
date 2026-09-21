@@ -250,7 +250,8 @@
         /* ---------- wishlist ---------- */
 
         $(document).on('click', '.product-action-add-wishlist', function () {
-            const productId = $(this).data('product-id');
+            const button = $(this);
+            const productId = button.data('product-id');
 
             if ($('#is-customer-auth-active').data('value') !== 1) {
                 location.href = $('#route-customer-login').data('url');
@@ -261,9 +262,18 @@
                 url: $('#route-store-wishlist').data('url'),
                 data: {product_id: productId},
                 success: function (response) {
-                    $('.wishlist_icon_' + productId).attr('fill', response.value === 1 ? '#E4574F' : 'none');
+                    if (response.value === 0) {
+                        toastr.warning(response.error);
+                        return;
+                    }
+
+                    const isWishlisted = response.value === 1;
+                    button.attr('data-wishlisted', isWishlisted ? 'true' : 'false')
+                        .attr('aria-label', isWishlisted ? button.data('remove-label') : button.data('add-label'));
+                    $('.wishlist_icon_' + productId).attr('fill', isWishlisted ? '#E4574F' : 'none');
                     $('.countWishlist-' + productId).text(response.product_count);
-                    toastr.success(response.message);
+                    $('.seafood-wishlist-count').text(response.count);
+                    toastr.success(isWishlisted ? response.success : response.error);
                 },
             });
         });

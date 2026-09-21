@@ -7,7 +7,8 @@
 @php($mediaRatio = $mediaRatio ?? 'auto')
 @php($showPricingDetails = $showPricingDetails ?? false)
 @php($showRating = $showRating ?? false)
-@php($isWishlisted = $isWishlisted ?? false)
+@php($isWishlisted = $isWishlisted ?? isProductInWishList(productId: $product['id']))
+@php($wishlistRemovesCard = $wishlistRemovesCard ?? false)
 @php($unitPrice = (float) $product['unit_price'])
 @php($discountedUnitPrice = (float) getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value'))
 @php($hasDiscount = $showPricingDetails && $discountedUnitPrice > 0 && $discountedUnitPrice < $unitPrice)
@@ -34,8 +35,10 @@
                 </span>
             @endif
         </span>
-        <button type="button" class="{{ $isWishlisted ? 'function-remove-wishList' : 'seafood-wishlist-btn' }}"
+        <button type="button" class="{{ $wishlistRemovesCard ? 'function-remove-wishList' : 'seafood-wishlist-btn' }}"
                 data-product-id="{{ $product['id'] }}" data-id="{{ $product['id'] }}"
+                data-wishlisted="{{ $isWishlisted ? 'true' : 'false' }}"
+                data-add-label="{{ translate('add_to_wishlist') }}" data-remove-label="{{ translate('remove_from_wishlist') }}"
                 aria-label="{{ $isWishlisted ? translate('remove_from_wishlist') : translate('add_to_wishlist') }}"
                 style="position: absolute; top: 7px; inset-inline-end: 7px; width: 44px; height: 44px; border-radius: 50%; border: none; background: rgba(255,255,255,.92); display: grid; place-items: center; cursor: pointer; transition: transform .2s;">
             <svg width="17" height="17" viewBox="0 0 24 24" stroke="{{ $isWishlisted ? '#E4574F' : '#0B2C3F' }}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" fill="{{ $isWishlisted ? '#E4574F' : 'none' }}">

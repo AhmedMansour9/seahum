@@ -70,20 +70,44 @@
         });
     });
 
+    function setSeafoodWishlistState(button, isWishlisted) {
+        button.attr('data-wishlisted', isWishlisted ? 'true' : 'false');
+        button.attr('aria-label', isWishlisted ? button.data('remove-label') : button.data('add-label'));
+        button.find('svg').attr('fill', isWishlisted ? '#E4574F' : 'none').attr('stroke', isWishlisted ? '#E4574F' : '#0B2C3F');
+    }
+
+    function setSeafoodWishlistCount(count) {
+        if (typeof count !== 'undefined') {
+            $('.seafood-wishlist-count').text(count);
+        }
+    }
+
     $(document).on('click', '.seafood-wishlist-btn', function () {
         if ($('#is-customer-auth-active').data('value') !== 1) {
             location.href = $('#route-customer-login').data('url');
             return;
         }
         const button = $(this);
+        const productId = button.data('product-id');
         $.post({
             url: $('#route-store-wishlist').data('url'),
-            data: {product_id: button.data('product-id')},
+            data: {product_id: productId},
             success: function (response) {
-                if (response.value === 1) {
-                    button.find('svg').attr('fill', '#E4574F');
+                if (response.value === 0) {
+                    toastr.warning(response.error);
+                    return;
                 }
-                toastr.success(response.message);
+
+                const isWishlisted = response.value === 1;
+                $('.seafood-wishlist-btn').filter(function () {
+                    return String($(this).data('product-id')) === String(productId);
+                }).each(function () {
+                    setSeafoodWishlistState($(this), isWishlisted);
+                });
+                $('.wishlist_icon_' + productId).attr('fill', isWishlisted ? '#E4574F' : 'none');
+                $('.countWishlist-' + productId).text(response.product_count);
+                setSeafoodWishlistCount(response.count);
+                toastr.success(isWishlisted ? response.success : response.error);
             }
         });
     });
@@ -106,6 +130,9 @@
 
         field.attr('type', willReveal ? 'text' : 'password');
         button.attr('aria-pressed', willReveal ? 'true' : 'false');
+        button.find('.sf-password-show').toggle(!willReveal);
+        button.find('.sf-password-hide').toggle(willReveal);
+        button.attr('aria-label', willReveal ? button.data('hide-label') || button.attr('aria-label') : button.data('show-label') || button.attr('aria-label'));
     });
 
     /* ---- Account nav drawer ---- */
@@ -148,6 +175,93 @@
 
     $(document).on('click', '.sf-dropdown-menu', function (event) {
         event.stopPropagation();
+    });
+
+    /* ---- Copy to clipboard ---- */
+    function copySeafoodText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text);
+        }
+        // Plain-http dev hosts have no async clipboard, so fall back to a selected textarea.
+        const helper = $('<textarea readonly style="position: fixed; opacity: 0;"></textarea>').val(text).appendTo('body');
+        helper[0].select();
+        const isCopied = document.execCommand('copy');
+        helper.remove();
+        return isCopied ? Promise.resolve() : Promise.reject();
+    }
+
+    $(document).on('click', '[data-sf-copy]', function () {
+        copySeafoodText(String($(this).data('sf-copy')))
+            .then(() => toastr.success(@json(translate('successfully_copied'))))
+            .catch(() => toastr.error(@json(translate('copied_failed'))));
+    });
+
+    /* ---- Image picker: keeps an accumulated FileList on the input so plain form posts send every file ---- */
+    function renderSeafoodImagePicker(picker, files) {
+        const input = picker.find('.sf-image-picker-input')[0];
+        const transfer = new DataTransfer();
+        files.forEach((file) => transfer.items.add(file));
+        input.files = transfer.files;
+
+        const list = picker.find('.sf-image-picker-list').empty();
+        files.forEach((file, index) => {
+            const item = $('<li class="sf-image-picker-item"><img alt=""><button type="button" class="sf-image-picker-remove"></button></li>');
+            item.find('img').attr('src', URL.createObjectURL(file));
+            item.find('button').attr({'data-index': index, 'aria-label': @json(translate('remove')) + ' ' + file.name})
+                .html('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"></path></svg>');
+            list.append(item);
+        });
+        picker.find('.sf-image-picker-add').prop('hidden', files.length >= parseInt(picker.data('max-count'), 10));
+        picker.data('files', files);
+    }
+
+    $(document).on('change', '.sf-image-picker-input', function () {
+        const picker = $(this).closest('.sf-image-picker');
+        const maxCount = parseInt(picker.data('max-count'), 10);
+        const maxSizeMb = parseFloat($(this).data('max-size')) || 0;
+        const files = (picker.data('files') || []).slice();
+
+        Array.from(this.files).forEach((file) => {
+            if (!file.type.startsWith('image/')) {
+                toastr.error(@json(translate('input_png_or_jpg')));
+            } else if (maxSizeMb && file.size > maxSizeMb * 1024 * 1024) {
+                toastr.error(@json(translate('file_size_too_big')));
+            } else if (files.length < maxCount && !files.some((existing) => existing.name === file.name && existing.size === file.size)) {
+                files.push(file);
+            }
+        });
+        renderSeafoodImagePicker(picker, files);
+    });
+
+    $(document).on('click', '.sf-image-picker-remove', function () {
+        const picker = $(this).closest('.sf-image-picker');
+        const files = (picker.data('files') || []).slice();
+        files.splice(parseInt($(this).attr('data-index'), 10), 1);
+        renderSeafoodImagePicker(picker, files);
+    });
+
+    /* ---- Quick chat modal (vendor / delivery man) ---- */
+    $(document).on('submit', '.sf-chat-form', function (event) {
+        event.preventDefault();
+        const chatForm = $(this);
+        const submitButton = chatForm.find('[type="submit"]').prop('disabled', true);
+
+        $.ajax({
+            type: 'POST',
+            url: chatForm.attr('action'),
+            data: chatForm.serialize(),
+            success: function () {
+                toastr.success(@json(translate('send_successfully')));
+                chatForm.trigger('reset');
+                closeSeafoodModal(chatForm.closest('.sf-modal'));
+            },
+            error: function () {
+                toastr.error(@json(translate('something_went_wrong')));
+            },
+            complete: function () {
+                submitButton.prop('disabled', false);
+            },
+        });
     });
 
     /* ---- Modals ---- */

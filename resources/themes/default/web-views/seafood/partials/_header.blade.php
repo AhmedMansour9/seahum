@@ -64,7 +64,7 @@
                     <a href="{{ route('wishlists') }}" class="sf-tool sf-header-wishlist" aria-label="{{ translate('wishlist') }}"
                        style="position: relative; width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; display: grid; place-items: center;">
                         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9Z"></path></svg>
-                        <span style="position: absolute; top: -6px; inset-inline-start: -6px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 999px; background: #0D3B58; color: #FFFFFF; font-size: 11px; font-weight: 700; display: grid; place-items: center;">
+                        <span class="seafood-wishlist-count" style="position: absolute; top: -6px; inset-inline-start: -6px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 999px; background: #0D3B58; color: #FFFFFF; font-size: 11px; font-weight: 700; display: grid; place-items: center;">
                             {{ session()->has('wish_list') ? count(session('wish_list')) : 0 }}
                         </span>
                     </a>

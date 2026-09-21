@@ -146,7 +146,9 @@
                 @endif
 
                 <button type="button" class="sf-icon-action product-action-add-wishlist" data-product-id="{{ $product['id'] }}"
-                        aria-label="{{ translate('wishlist') }}">
+                        data-wishlisted="{{ $wishlistStatus == 1 ? 'true' : 'false' }}"
+                        data-add-label="{{ translate('add_to_wishlist') }}" data-remove-label="{{ translate('remove_from_wishlist') }}"
+                        aria-label="{{ $wishlistStatus == 1 ? translate('remove_from_wishlist') : translate('add_to_wishlist') }}">
                     <svg class="wishlist_icon_{{ $product['id'] }}" width="20" height="20" viewBox="0 0 24 24"
                          fill="{{ $wishlistStatus == 1 ? '#E4574F' : 'none' }}" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 20s-7-4.4-7-9.3A4 4 0 0 1 12 8a4 4 0 0 1 7 2.7c0 4.9-7 9.3-7 9.3Z"></path>
