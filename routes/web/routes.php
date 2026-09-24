@@ -218,6 +218,8 @@ Route::group(['namespace' => 'Web', 'middleware' => ['maintenance_mode', 'guestC
         Route::get('order-cancel/{id}', 'order_cancel')->name('order-cancel');
         Route::post('ticket-submit', 'submitSupportTicket')->name('ticket-submit');
         Route::get('account-delete/{id}', 'account_delete')->name('account-delete');
+        Route::get('account-delete', 'getAccountDeleteView')->name('account-delete-form');
+        Route::post('account-delete', 'deleteAccountWithCredentials')->name('account-delete-submit')->middleware('throttle:5,1');
         Route::get('refer-earn', 'refer_earn')->name('refer-earn')->middleware('customer');
         Route::get('user-coupons', 'user_coupons')->name('user-coupons')->middleware('customer');
         Route::get('user-restock-requests', 'restockRequestsView')->name('user-restock-requests')->middleware('customer');

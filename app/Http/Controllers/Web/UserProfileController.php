@@ -10,6 +10,7 @@ use App\Contracts\Repositories\RestockProductCustomerRepositoryInterface;
 use App\Contracts\Repositories\RobotsMetaContentRepositoryInterface;
 use App\Enums\WebConfigKey;
 use App\Events\RefundEvent;
+use App\Http\Requests\Web\CustomerAccountDeleteRequest;
 use App\Http\Requests\Web\CustomerProfileUpdateRequest;
 use App\Models\OfflinePaymentMethod;
 use App\Models\OrderEditHistory;
@@ -129,35 +130,50 @@ class UserProfileController extends Controller
     public function account_delete($id)
     {
         if (auth('customer')->id() == $id) {
-            $user = User::find($id);
-
-            $ongoing = ['out_for_delivery', 'processing', 'confirmed', 'pending'];
-            $order = Order::where('customer_id', $user->id)->whereIn('order_status', $ongoing)->count();
-            if ($order > 0) {
-                Toastr::warning(translate('you_can_not_delete_account_due_ongoing_order'));
-                return redirect()->back();
-            }
-
-            if (getCheckAddonPublishedStatus(moduleName: 'Auction')) {
-                $auctionBlocker = app(AuctionAccountDeletionGuardService::class)->blockingReason((int) $user->id);
-                if ($auctionBlocker !== null) {
-                    Toastr::warning(translate($auctionBlocker));
-                    return redirect()->back();
-                }
-            }
-
-            auth()->guard('customer')->logout();
-
-            ImageManager::delete('/profile/' . $user['image']);
-            session()->forget('wish_list');
-
-            $user->delete();
-            Toastr::info(translate('Your_account_deleted_successfully!!'));
-            return redirect()->route('home');
+            return $this->deleteCustomerAccount(user: User::find($id));
         }
 
         Toastr::warning(translate('access_denied') . '!!');
         return back();
+    }
+
+    public function getAccountDeleteView(): View
+    {
+        return view(VIEW_FILE_NAMES['account_delete']);
+    }
+
+    public function deleteAccountWithCredentials(CustomerAccountDeleteRequest $request): RedirectResponse
+    {
+        return $this->deleteCustomerAccount(user: $request->customer());
+    }
+
+    private function deleteCustomerAccount(User $user): RedirectResponse
+    {
+        $ongoing = ['out_for_delivery', 'processing', 'confirmed', 'pending'];
+        $order = Order::where('customer_id', $user->id)->whereIn('order_status', $ongoing)->count();
+        if ($order > 0) {
+            Toastr::warning(translate('you_can_not_delete_account_due_ongoing_order'));
+            return redirect()->back();
+        }
+
+        if (getCheckAddonPublishedStatus(moduleName: 'Auction')) {
+            $auctionBlocker = app(AuctionAccountDeletionGuardService::class)->blockingReason((int) $user->id);
+            if ($auctionBlocker !== null) {
+                Toastr::warning(translate($auctionBlocker));
+                return redirect()->back();
+            }
+        }
+
+        if (auth('customer')->id() == $user->id) {
+            auth()->guard('customer')->logout();
+        }
+
+        ImageManager::delete('/profile/' . $user['image']);
+        session()->forget('wish_list');
+
+        $user->delete();
+        Toastr::info(translate('Your_account_deleted_successfully!!'));
+        return redirect()->route('home');
     }
 
     public function account_address(): View|RedirectResponse

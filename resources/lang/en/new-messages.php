@@ -2696,4 +2696,12 @@ ____________________________________________________on_search_engines_and_see_th
     'Total_Loyalty_Point' => 'Total Loyalty Point',
     'Convert_point_to_wallet_money' => 'Convert point to wallet money',
     'Enters_Point_Amount' => 'Enters Point Amount',
+    'we_have_received_your_order_and_will_ship_it_shortly' => 'We have received your order and will ship it shortly.',
+    'your_order_id' => 'Your order ID',
+    'your_order_ids' => 'Your order IDs',
+    'keep_it_handy_for_tracking' => 'Keep it handy for tracking.',
+    'explore_more_items' => 'Explore more items',
+    'deleting_your_account_is_permanent_and_cannot_be_undone' => 'Deleting your account is permanent and cannot be undone. Your profile, addresses and wishlist will be removed.',
+    'enter_your_email_and_password_to_confirm' => 'Enter your account email and password to confirm.',
+    'the_email_or_password_is_incorrect' => 'The email or password is incorrect.',
 ];

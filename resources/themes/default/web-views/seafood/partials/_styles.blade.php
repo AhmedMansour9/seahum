@@ -274,6 +274,7 @@
         .sf-account-link-danger > svg { color: #E4574F; }
         .sf-account-link-danger:hover { background: #FDF0EF; color: #C63F38; }
         .sf-account-link-danger:hover > svg { color: #C63F38; }
+        .sf-account-link-danger.active, .sf-account-link-danger.active > svg { background: #FDF0EF; color: #C63F38; }
         .sf-account-nav-group { margin-top: 14px; padding-top: 12px; border-top: 1px solid #EDF5F6; }
         .sf-account-nav-group-title { display: block; font-family: Cairo, sans-serif; font-size: 12.5px; font-weight: 800; letter-spacing: .5px; color: #6E8C99; padding: 0 12px 8px; }
         .sf-account-nav-backdrop { display: none; position: fixed; inset: 0; background: rgba(11,44,63,.45); z-index: 1040; }

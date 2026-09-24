@@ -134,7 +134,7 @@
         <div class="sf-modal" id="order_successfully" role="dialog" aria-modal="true" aria-labelledby="order-success-title" hidden>
             <div class="sf-modal-dialog" style="max-width: 480px;">
                 <div class="sf-modal-head">
-                    <h2 class="sf-modal-title" id="order-success-title">{{ translate('Thank You For Your Purchase!') }}</h2>
+                    <h2 class="sf-modal-title" id="order-success-title">{{ translate('thank_you_for_your_purchase') }}</h2>
                     <button type="button" class="sf-icon-btn" data-sf-modal-close aria-label="{{ translate('close') }}">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"></path></svg>
                     </button>
@@ -144,12 +144,12 @@
                         <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8.2 12.4 2.6 2.6 5-5.4"></path></svg>
                     </span>
                     <p style="font-size: 14.5px; line-height: 1.9; color: #55747F; margin: 0 0 22px; overflow-wrap: anywhere;">
-                        {{ translate('We have received your order and will ship it shortly.') }}
-                        {{ translate('Your Order ID' . ($isPlural ? 's' : '')) }}
+                        {{ translate('we_have_received_your_order_and_will_ship_it_shortly') }}
+                        {{ translate($isPlural ? 'your_order_ids' : 'your_order_id') }}
                         <bdi dir="ltr">{{ implode(', ', $orderSuccessIds) }}</bdi>
-                        {{ translate('keep it handy for tracking.') }}
+                        {{ translate('keep_it_handy_for_tracking') }}
                     </p>
-                    <a href="{{ route('home') }}" class="sf-btn-block">{{ translate('Explore More Items') }}</a>
+                    <a href="{{ route('home') }}" class="sf-btn-block">{{ translate('explore_more_items') }}</a>
                 </div>
             </div>
         </div>

@@ -125,9 +125,9 @@
             <span class="sf-account-link-label">{{ translate('logout') }}</span>
         </a>
 
-        <a href="javascript:" class="sf-account-link sf-account-link-danger customer-account-delete-by-route"
-           data-route="{{ route('account-delete', [auth('customer')->id()]) }}"
-           data-message="{{ translate('want_to_delete_this_account') }}?">
+        <a href="{{ route('account-delete-form') }}"
+           class="sf-account-link sf-account-link-danger {{ Route::is('account-delete-form') ? 'active' : '' }}"
+           @if(Route::is('account-delete-form')) aria-current="page" @endif>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M10 7V5h4v2M7 7l.8 12.2A1.8 1.8 0 0 0 9.6 21h4.8a1.8 1.8 0 0 0 1.8-1.8L17 7"></path><path d="M10.5 11v6M13.5 11v6"></path></svg>
             <span class="sf-account-link-label">{{ translate('delete_account') }}</span>
         </a>

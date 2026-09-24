@@ -16,9 +16,7 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2h.01M12 12h.01M12 17.8h.01"></path></svg>
         </button>
         <div class="sf-dropdown-menu" id="account-more-menu" hidden>
-            <a class="sf-dropdown-item sf-dropdown-item-danger call-route-alert" href="javascript:"
-               data-route="{{ route('account-delete', [$customerDetail['id']]) }}"
-               data-message="{{ translate('want_to_delete_this_account') }}?">
+            <a class="sf-dropdown-item sf-dropdown-item-danger" href="{{ route('account-delete-form') }}">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M10 7V5h4v2M7 7l.8 12.2A1.8 1.8 0 0 0 9.6 21h4.8a1.8 1.8 0 0 0 1.8-1.8L17 7"></path></svg>
                 {{ translate('delete_account') }}
             </a>
