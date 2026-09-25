@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\RestAPI\v1;
 
+use App\Enums\PaymentMethod;
 use App\Events\DigitalProductOtpVerificationEvent;
 use App\Events\RefundEvent;
 use App\Http\Controllers\Controller;
@@ -90,7 +91,7 @@ class OrderController extends Controller
         }
         $order = Order::where(['id' => $request->order_id])->first();
 
-        if ($order['payment_method'] == 'cash_on_delivery' && $order['order_status'] == 'pending') {
+        if (in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['order_status'] == 'pending') {
             OrderManager::getStockUpdateOnOrderStatusChange($order, 'canceled');
             Order::where(['id' => $request->order_id])->update([
                 'order_status' => 'canceled'
@@ -104,6 +105,18 @@ class OrderController extends Controller
 
     public function place_order(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'payment_method' => 'nullable|in:' . implode(',', PaymentMethod::PAY_ON_DELIVERY),
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
+        }
+
+        $paymentMethod = $request['payment_method'] ?? PaymentMethod::CASH_ON_DELIVERY;
+        if ($paymentMethod == PaymentMethod::CARD_ON_DELIVERY && !OrderManager::isCardOnDeliveryEnabled()) {
+            return response()->json(['message' => translate('card_on_delivery_is_not_available')], 403);
+        }
+
         $user = Helpers::getCustomerInformation($request);
         $newCustomerRegister = null;
         $cartGroupIds = CartManager::get_cart_group_ids(request: $request, type: 'checked');
@@ -179,7 +192,7 @@ class OrderController extends Controller
             'guest_id' => $request['guest_id'],
             'customer_id' => $user == 'offline' ? $request['guest_id'] : $user['id'],
             'order_status' => 'pending',
-            'payment_method' => 'cash_on_delivery',
+            'payment_method' => $paymentMethod,
             'payment_status' => 'unpaid',
             'transaction_ref' => '',
             'address_id' => $request['address_id'],

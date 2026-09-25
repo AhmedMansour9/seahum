@@ -5,7 +5,7 @@
         $latestEditHistory = $order?->latestEditHistory;
         $isEditedOrder = $order->edited_status == 1;
         $isDefaultOrder = $order['order_type'] === 'default_type';
-        $isCashOnDelivery = $order['payment_method'] == 'cash_on_delivery';
+        $isPayOnDelivery = in_array($order['payment_method'], \App\Enums\PaymentMethod::PAY_ON_DELIVERY);
         $showVerificationCode = $order->order_status != 'delivered' && $isDefaultOrder && getWebConfig(name: 'order_verification');
         $hasDigitalProduct = $order->details->contains(fn ($detail) => ($detail->product->product_type ?? null) === 'digital');
         $shippingAddressData = is_string($order->shipping_address_data ?? null) ? json_decode($order->shipping_address_data) : ($order->shipping_address_data ?? null);
@@ -16,13 +16,13 @@
             && $billingAddressData->address == $shippingAddressData->address
             && $billingAddressData->city == $shippingAddressData->city
             && $billingAddressData->zip == $shippingAddressData->zip;
-        $isDuePaymentPending = $isEditedOrder && $order->edit_due_amount > 0 && !$isCashOnDelivery
+        $isDuePaymentPending = $isEditedOrder && $order->edit_due_amount > 0 && !$isPayOnDelivery
             && $latestEditHistory?->order_due_payment_method != 'cash_on_delivery' && $latestEditHistory?->order_due_payment_status == 'unpaid';
         $refundStatusLabels = [1 => 'refund_pending', 2 => 'refund_approved', 3 => 'refund_rejected', 4 => 'refund_refunded'];
         $refundStatusBadges = [1 => 'sf-badge-warning', 2 => 'sf-badge-info', 3 => 'sf-badge-danger', 4 => 'sf-badge-success'];
     @endphp
 
-    @if(($isCashOnDelivery || $latestEditHistory?->order_due_payment_method == 'cash_on_delivery') && $order['bring_change_amount'] > 0)
+    @if(($isPayOnDelivery || $latestEditHistory?->order_due_payment_method == 'cash_on_delivery') && $order['bring_change_amount'] > 0)
         <p class="sf-summary-saved" style="margin-bottom: 16px;">
             {{ translate('Please bring') }}
             <strong><bdi dir="ltr">{{ $order['bring_change_amount'] }} {{ $order['bring_change_amount_currency'] ?? '' }}</bdi></strong>
@@ -52,7 +52,7 @@
                         @endif
                     </span>
                 </span>
-                @unless($isCashOnDelivery)
+                @unless($isPayOnDelivery)
                     <span class="sf-meta-item">
                         <span class="sf-meta-label">{{ translate('Amount') }}</span>
                         <span class="sf-meta-value">@include('web-views.seafood.partials._price', ['amount' => ($order['total_order_amount'] ?? 0) > 0 ? $order['total_order_amount'] : $order['init_order_amount']])</span>
@@ -70,7 +70,7 @@
             @endif
         </section>
 
-        @if($isEditedOrder && !$isCashOnDelivery)
+        @if($isEditedOrder && !$isPayOnDelivery)
             <section class="sf-panel">
                 @if($latestEditHistory?->order_due_payment_method == 'offline_payment' || $latestEditHistory?->order_due_payment_method == 'cash_on_delivery' || $latestEditHistory?->order_due_payment_status == 'paid')
                     <h2 class="sf-panel-title">{{ translate('Another Payment Info') }}</h2>
@@ -222,7 +222,7 @@
         ])
     @endif
 
-    @if($isEditedOrder && $order->edit_due_amount > 0 && !$isCashOnDelivery)
+    @if($isEditedOrder && $order->edit_due_amount > 0 && !$isPayOnDelivery)
         @include('web-views.seafood.partials._order-due-payment-modal', ['order' => $order, 'paymentGatewayList' => $paymentGatewayList])
     @endif
 @endsection

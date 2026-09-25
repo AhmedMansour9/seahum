@@ -505,6 +505,21 @@
                                                 </div>
                                                 <div class="col-xl-4 col-md-6">
                                                     <div class="form-check d-flex gap-3">
+                                                        <input class="form-check-input checkbox--input" type="checkbox" name="card_on_delivery"
+                                                            id="card_on_delivery" value="1" {{ ($cardOnDelivery['status'] ?? 0) == 1 ? 'checked' : '' }}>
+                                                        <div class="flex-grow-1">
+                                                            <label for="card_on_delivery"
+                                                                class="form-label text-dark fw-semibold mb-1 user-select-none">
+                                                                {{ translate('card_on_delivery') }}
+                                                            </label>
+                                                            <p class="fs-12 mb-0">
+                                                                {{ translate('enabling_card_on_delivery_lets_customers_pay_by_card_using_the_delivery_agent_POS_machine_when_the_order_arrives') }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-4 col-md-6">
+                                                    <div class="form-check d-flex gap-3">
                                                         <input class="form-check-input checkbox--input" type="checkbox" name="digital_payment"
                                                             id="digital_payment" value="1"  {{ $digitalPayment['status'] ? 'checked' : '' }}>
                                                         <div class="flex-grow-1">

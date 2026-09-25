@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Contracts\Repositories\RobotsMetaContentRepositoryInterface;
+use App\Enums\PaymentMethod;
 use App\Events\DigitalProductOtpVerificationEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
@@ -452,6 +453,11 @@ class WebController extends Controller
             $availablePaymentMethod = ['cash_on_delivery'];
         }
 
+        $isCardOnDeliveryEnabled = OrderManager::isCardOnDeliveryEnabled();
+        if ($isCardOnDeliveryEnabled && $cashOnDeliveryBtnShow) {
+            $availablePaymentMethod = ['card_on_delivery'];
+        }
+
         if (getWebConfig(name: 'digital_payment') && count(payment_gateways()) > 0) {
             $availablePaymentMethod = ['payment_gateways'];
         }
@@ -467,6 +473,7 @@ class WebController extends Controller
             return view(VIEW_FILE_NAMES['payment_details'], [
                 'cashOnDeliveryBtnShow' => $cashOnDeliveryBtnShow,
                 'cash_on_delivery' => $cashOnDeliveryStatus,
+                'isCardOnDeliveryEnabled' => $isCardOnDeliveryEnabled,
                 'digital_payment' => getWebConfig(name: 'digital_payment'),
                 'wallet_status' => getWebConfig(name: 'wallet_status'),
                 'offline_payment' => $offlinePaymentStatus,
@@ -489,7 +496,8 @@ class WebController extends Controller
 
     public function getCashOnDeliveryCheckoutComplete(Request $request): View|RedirectResponse|JsonResponse
     {
-        if ($request['payment_method'] != 'cash_on_delivery') {
+        $isCardOnDeliveryUnavailable = $request['payment_method'] == PaymentMethod::CARD_ON_DELIVERY && ! OrderManager::isCardOnDeliveryEnabled();
+        if (! in_array($request['payment_method'], PaymentMethod::PAY_ON_DELIVERY) || $isCardOnDeliveryUnavailable) {
             if ($request->ajax()) {
                 return response()->json([
                     'status' => 0, 'message' => translate('Something_went_wrong'),
@@ -589,7 +597,7 @@ class WebController extends Controller
 
         $orderIds = OrderManager::generateOrder(data: [
             'order_status' => 'pending',
-            'payment_method' => 'cash_on_delivery',
+            'payment_method' => $request['payment_method'],
             'payment_status' => 'unpaid',
             'transaction_ref' => '',
             'coupon_code' => session('coupon_code'),

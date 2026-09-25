@@ -30,9 +30,10 @@ class BusinessSettingRequest extends FormRequest
                 'nullable',
                 'string',
             ],
-            'cash_on_delivery' => 'required_without_all:digital_payment,offline_payment|boolean',
-            'digital_payment' => 'required_without_all:cash_on_delivery,offline_payment|boolean',
-            'offline_payment' => 'required_without_all:cash_on_delivery,digital_payment|boolean',
+            'cash_on_delivery' => 'required_without_all:card_on_delivery,digital_payment,offline_payment|boolean',
+            'card_on_delivery' => 'required_without_all:cash_on_delivery,digital_payment,offline_payment|boolean',
+            'digital_payment' => 'required_without_all:cash_on_delivery,card_on_delivery,offline_payment|boolean',
+            'offline_payment' => 'required_without_all:cash_on_delivery,card_on_delivery,digital_payment|boolean',
             'timezone' => 'required',
         ];
     }
@@ -59,6 +60,7 @@ class BusinessSettingRequest extends FormRequest
             'sales_commission.min' => translate('sales_commission_cannot_be_less_than_zero'),
             'sales_commission.max' => translate('sales_commission_cannot_be_more_than_100'),
             'cash_on_delivery.required_without_all' => 'At least one payment option should be checked.',
+            'card_on_delivery.required_without_all' => 'At least one payment option should be checked.',
             'digital_payment.required_without_all' => 'At least one payment option should be checked.',
             'offline_payment.required_without_all' => 'At least one payment option should be checked.',
         ];

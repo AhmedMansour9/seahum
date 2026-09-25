@@ -2,6 +2,7 @@
 
 namespace App\Utils;
 
+use App\Enums\PaymentMethod;
 use App\Events\OrderEditDuePaymentEvent;
 use App\Models\OrderDetailsRewards;
 use App\Models\OrderEditHistory;
@@ -254,7 +255,7 @@ class OrderManager
             $wallet->save();
         }
 
-        if ($order['payment_method'] == 'cash_on_delivery' || $order['payment_method'] == 'offline_payment') {
+        if (in_array($order['payment_method'], [...PaymentMethod::PAY_ON_DELIVERY, 'offline_payment'])) {
             $shop = Shop::when($order['seller_is'] == 'admin', function ($query) {
                 return $query->where(['author_type' => 'admin']);
             })->when($order['seller_is'] == 'seller', function ($query) use ($order) {
@@ -314,7 +315,7 @@ class OrderManager
                         $currentOrderAmount -= $editHistoryAmount;
                     }
 
-                    if ($order['payment_method'] == 'cash_on_delivery') {
+                    if (in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY)) {
                         $wallet->collected_cash += $currentOrderAmount;
                     }
 
@@ -1405,9 +1406,14 @@ class OrderManager
         return [];
     }
 
+    public static function isCardOnDeliveryEnabled(): bool
+    {
+        return (bool)(getWebConfig(name: PaymentMethod::CARD_ON_DELIVERY)['status'] ?? 0);
+    }
+
     public static function getAddOrderTransactionsOnGenerateOrder($order, $ordersData): void
     {
-        if ($ordersData['payment_method'] != 'cash_on_delivery' && $ordersData['payment_method'] != 'offline_payment') {
+        if (!in_array($ordersData['payment_method'], [...PaymentMethod::PAY_ON_DELIVERY, 'offline_payment'])) {
             $orderSummary = OrderManager::getOrderTotalAndSubTotalAmountSummary($order);
             $orderAmount = $orderSummary['subtotal'] + $orderSummary['total_tax'] - $orderSummary['total_discount_on_product'] - $order['discount'];
 
@@ -1459,7 +1465,7 @@ class OrderManager
             }
         }
         if ($customer != 'offline') {
-            if ($order['payment_method'] != 'cash_on_delivery' && $order['payment_method'] != 'offline_payment') {
+            if (!in_array($order['payment_method'], [...PaymentMethod::PAY_ON_DELIVERY, 'offline_payment'])) {
                 $orderPlacedNotificationEvents[] = [
                     'notification' => true,
                     'notificationData' => (object)[

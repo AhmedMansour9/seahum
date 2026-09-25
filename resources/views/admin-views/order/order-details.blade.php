@@ -647,7 +647,7 @@
                             <span class="fw-semibold">{{ translate($order['payment_method']) }}</span>
                         </div>
 
-                        @if($order->payment_method != 'cash_on_delivery' && $order->payment_method != 'pay_by_wallet' && !isset($order->offlinePayments))
+                        @if(!in_array($order->payment_method, [...\App\Enums\PaymentMethod::PAY_ON_DELIVERY, 'pay_by_wallet']) && !isset($order->offlinePayments))
                             <div class="d-flex gap-3 align-items-center overflow-wrap-anywhere">
                                 <span class="w-120 flex-shrink-0 text-capitalize">
                                     {{ translate('Reference_Code') }}
@@ -944,7 +944,7 @@
                                     {{ translate('Mark_as_Paid') }}
                                 </button>
                             </div>
-                        @elseif ($editDueAmount > 0 && !in_array($paymentMethod, ['cash_on_delivery']) && $order?->latestEditHistory?->order_due_payment_method != "cash_on_delivery")
+                        @elseif ($editDueAmount > 0 && !in_array($paymentMethod, \App\Enums\PaymentMethod::PAY_ON_DELIVERY) && $order?->latestEditHistory?->order_due_payment_method != "cash_on_delivery")
                             <div class="bg-section rounded-10 p-12 p-sm-20 text-center">
                                 <h4 class="text-danger mb-3">{{ translate('Amount_Due') }}</h4>
                                 <h3 class="fw-bold">
@@ -2095,9 +2095,9 @@
     @include('admin-views.order.partials.offcanvas._edit-products-offcanvas', ['order' => $order])
 
     <span id="message-status-title-text"
-          data-text="{{$order['payment_method'] != 'cash_on_delivery' && $order['order_status']=='delivered' ? translate("Order_is_already_delivered_and_transaction_amount_has_been_disbursed_changing_status_can_be_the_reason_of_miscalculation") : translate("are_you_sure_change_this") }}"></span>
+          data-text="{{!in_array($order['payment_method'], \App\Enums\PaymentMethod::PAY_ON_DELIVERY) && $order['order_status']=='delivered' ? translate("Order_is_already_delivered_and_transaction_amount_has_been_disbursed_changing_status_can_be_the_reason_of_miscalculation") : translate("are_you_sure_change_this") }}"></span>
     <span id="message-status-subtitle-text"
-          data-text="{{ $order['payment_method'] != 'cash_on_delivery' && $order['order_status']=='delivered' ? translate('think_before_you_proceed') : translate("you_will_not_be_able_to_revert_this") }}!"></span>
+          data-text="{{ !in_array($order['payment_method'], \App\Enums\PaymentMethod::PAY_ON_DELIVERY) && $order['order_status']=='delivered' ? translate('think_before_you_proceed') : translate("you_will_not_be_able_to_revert_this") }}!"></span>
     <span id="payment-status-message" data-title="{{translate('confirm_payments_before_change_the_status').'.'}}"
           data-message="{{ translate('Change the status to Paid only when you receive the customers payment and have verified it.') }}"></span>
     <span id="message-status-confirm-text" data-text="{{ translate("yes_change_it") }}!"></span>

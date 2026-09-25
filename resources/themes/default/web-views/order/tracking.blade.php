@@ -21,7 +21,7 @@
         $order = $orderDetails;
         $latestEditHistory = $order?->latestEditHistory;
         $isEditedOrder = $order->edited_status == 1;
-        $isCashOnDelivery = $order['payment_method'] == 'cash_on_delivery';
+        $isPayOnDelivery = in_array($order['payment_method'], \App\Enums\PaymentMethod::PAY_ON_DELIVERY);
         $isDuePaymentPending = $isEditedOrder && $latestEditHistory?->order_due_payment_status == 'unpaid'
             && !in_array($latestEditHistory?->order_due_payment_method, ['offline_payment', 'cash_on_delivery'])
             && $latestEditHistory?->order_due_amount > 0;
@@ -106,7 +106,7 @@
                                 </span>
                             </div>
 
-                            @if(($isCashOnDelivery || $latestEditHistory?->order_due_payment_method == 'cash_on_delivery') && $order['bring_change_amount'] > 0)
+                            @if(($isPayOnDelivery || $latestEditHistory?->order_due_payment_method == 'cash_on_delivery') && $order['bring_change_amount'] > 0)
                                 <p class="sf-summary-saved" style="margin: 16px 0 0;">
                                     {{ translate('Please bring') }}
                                     <strong><bdi dir="ltr">{{ $order['bring_change_amount'] }} {{ $order['bring_change_amount_currency'] ?? '' }}</bdi></strong>

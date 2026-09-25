@@ -11,6 +11,7 @@
 @section('content')
     @php
         $isCashOnDeliveryAvailable = $cashOnDeliveryBtnShow && $cash_on_delivery['status'];
+        $isCardOnDeliveryAvailable = $cashOnDeliveryBtnShow && $isCardOnDeliveryEnabled;
         $isWalletAvailable = auth('customer')->check() && $wallet_status == 1;
         $isDigitalPaymentAvailable = $digital_payment['status'] == 1 && count($payment_gateways_list) > 0;
         $isOfflinePaymentAvailable = isset($offline_payment) && $offline_payment['status'] && count($offline_payment_methods) > 0;
@@ -63,6 +64,20 @@
                                                 <span class="sf-choice-body">
                                                     <span class="sf-choice-title">{{ translate('cash_on_Delivery') }}</span>
                                                     <span class="sf-choice-text">{{ translate('pay_when_your_order_arrives') }}</span>
+                                                </span>
+                                            </label>
+                                        </li>
+                                        @php $isFirstChoice = false; @endphp
+                                    @endif
+
+                                    @if($isCardOnDeliveryAvailable)
+                                        <li>
+                                            <label class="sf-choice">
+                                                <input type="radio" name="sf_payment_method" value="card_on_delivery" @checked($isFirstChoice)>
+                                                <span class="sf-choice-dot" aria-hidden="true"></span>
+                                                <span class="sf-choice-body">
+                                                    <span class="sf-choice-title">{{ translate('card_on_Delivery') }}</span>
+                                                    <span class="sf-choice-text">{{ translate('pay_by_card_using_the_delivery_agent_POS_machine_when_your_order_arrives') }}</span>
                                                 </span>
                                             </label>
                                         </li>
@@ -157,6 +172,12 @@
                             <form action="{{ route('checkout-complete') }}" method="get" id="cash_on_delivery_form" hidden>
                                 <input type="hidden" name="payment_method" value="cash_on_delivery">
                                 <input type="hidden" name="bring_change_amount" id="bring_change_amount_value">
+                            </form>
+                        @endif
+
+                        @if($isCardOnDeliveryAvailable)
+                            <form action="{{ route('checkout-complete') }}" method="get" id="card_on_delivery_form" hidden>
+                                <input type="hidden" name="payment_method" value="card_on_delivery">
                             </form>
                         @endif
 

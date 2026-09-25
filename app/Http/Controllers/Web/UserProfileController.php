@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\PaymentMethod;
 use App\Contracts\Repositories\BusinessSettingRepositoryInterface;
 use App\Contracts\Repositories\OrderDetailsRewardsRepositoryInterface;
 use App\Contracts\Repositories\OrderStatusHistoryRepositoryInterface;
@@ -904,7 +905,7 @@ class UserProfileController extends Controller
     public function order_cancel($id)
     {
         $order = Order::where(['id' => $id])->first();
-        if ($order['payment_method'] == 'cash_on_delivery' && $order['order_status'] == 'pending') {
+        if (in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['order_status'] == 'pending') {
             OrderManager::getStockUpdateOnOrderStatusChange($order, 'canceled');
             $orderStatusHistoryData = $this->orderStatusHistoryService->getOrderHistoryData(orderId: $id, userId: auth('customer')->id(), userType: 'customer', status: 'canceled');
             $this->orderStatusHistoryRepo->add($orderStatusHistoryData);

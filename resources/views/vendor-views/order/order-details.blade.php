@@ -155,7 +155,7 @@
                                         @endif
                                     </div>
 
-                                    @if(isset($order['transaction_ref']) && $order->payment_method != 'cash_on_delivery' && $order->payment_method != 'pay_by_wallet' && !isset($order->offlinePayments))
+                                    @if(isset($order['transaction_ref']) && !in_array($order->payment_method, [...\App\Enums\PaymentMethod::PAY_ON_DELIVERY, 'pay_by_wallet']) && !isset($order->offlinePayments))
                                         <div
                                             class="reference-code d-flex justify-content-sm-end gap-10 text-capitalize fs-12">
                                             <span class="title-color">{{translate('reference_Code')}} :</span>
@@ -632,7 +632,7 @@
                             <span class="fw-semibold">{{ translate($order['payment_method']) }}</span>
                         </div>
 
-                        @if($order->payment_method != 'cash_on_delivery' && $order->payment_method != 'pay_by_wallet' && !isset($order->offlinePayments))
+                        @if(!in_array($order->payment_method, [...\App\Enums\PaymentMethod::PAY_ON_DELIVERY, 'pay_by_wallet']) && !isset($order->offlinePayments))
                             <div class="d-flex gap-3 align-items-center overflow-wrap-anywhere">
                                 <span class="w-120 flex-shrink-0 text-capitalize">
                                     {{ translate('Reference_Code') }}
@@ -849,7 +849,7 @@
                         <h4 class="mb-0 text-center fw-bold">{{translate('order_&_Shipping_Info')}}</h4>
                     </div>
                     <div class="card-body d-flex flex-column gap-4">
-                        @if ($editDueAmount > 0 && !in_array($paymentMethod, ['cash_on_delivery']) && ($order?->latestEditHistory?->order_due_payment_method != "cash_on_delivery" && $order?->latestEditHistory?->order_due_payment_method == ''))
+                        @if ($editDueAmount > 0 && !in_array($paymentMethod, \App\Enums\PaymentMethod::PAY_ON_DELIVERY) && ($order?->latestEditHistory?->order_due_payment_method != "cash_on_delivery" && $order?->latestEditHistory?->order_due_payment_method == ''))
                             <div class="bg-section rounded-10 p-12 p-sm-20 text-center">
                                 <h5 class="text-danger mb-3">{{ translate('Amount_Due') }}</h5>
                                 <h4 class="fw-bold">{{ webCurrencyConverter(amount: $order['edit_due_amount']) }}</h4>

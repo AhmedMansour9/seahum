@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\RestAPI\v3\seller;
 
+use App\Enums\PaymentMethod;
 use App\Contracts\Repositories\OrderRepositoryInterface;
 use App\Events\OrderStatusEvent;
 use App\Http\Controllers\Controller;
@@ -285,11 +286,11 @@ class OrderController extends Controller
             return response()->json(['status' => 0, 'message' => translate('Please confirm the offline payment information before changing the order status.')], 202);
         }
 
-        if ($order['payment_method'] !== 'cash_on_delivery' && $order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid') {
+        if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid') {
             return response()->json(['status' => 0, 'message' => translate('After admin confirm the due amount payment as paid then you can change this status.')], 202);
         }
 
-        if ($order['payment_method'] !== 'cash_on_delivery' && $order['edit_return_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_return_payment_status == 'pending') {
+        if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['edit_return_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_return_payment_status == 'pending') {
             return response()->json(['status' => 0, 'message' => translate('After admin confirm the return amount payment as returned then you can change this status.')], 202);
         }
 
@@ -428,7 +429,7 @@ class OrderController extends Controller
                 return response()->json(['success' => 0, 'message' => translate("Customer account has been deleted. you can't update status!")], 202);
             }
 
-            if ($order['payment_method'] == 'cash_on_delivery' && $order['order_status'] != 'delivered' && $request['payment_status'] == 'paid') {
+            if (in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['order_status'] != 'delivered' && $request['payment_status'] == 'paid') {
                 return response()->json([
                     'errors' => [
                         ['code' => 'order', 'message' => translate('Can not change payment status before order delivered!')]
@@ -508,11 +509,11 @@ class OrderController extends Controller
                 return response()->json(['status' => 0, 'message' => translate('Please confirm the offline payment information before changing the order status.')], 403);
             }
 
-            if ($order['payment_method'] !== 'cash_on_delivery' && $order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid') {
+            if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid') {
                 return response()->json(['status' => 0, 'message' => translate('After admin confirm the due amount payment as paid then you can change this status.')], 403);
             }
 
-            if ($order['payment_method'] !== 'cash_on_delivery' && $order['edit_return_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_return_payment_status == 'pending') {
+            if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['edit_return_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_return_payment_status == 'pending') {
                 return response()->json(['status' => 0, 'message' => translate('After admin confirm the return amount payment as returned then you can change this status.')], 403);
             }
 

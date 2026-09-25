@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Order;
 
+use App\Enums\PaymentMethod;
 use App\Contracts\Repositories\AdminWalletRepositoryInterface;
 use App\Contracts\Repositories\AuthorRepositoryInterface;
 use App\Contracts\Repositories\OrderDetailsRewardsRepositoryInterface;
@@ -635,14 +636,14 @@ class OrderController extends BaseController
             ]);
         }
 
-        if ($order['payment_method'] !== 'cash_on_delivery' && $order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid') {
+        if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid') {
             return response()->json([
                 'status' => 0,
                 'message' => translate('Please confirm the due payment has been paid before changing the order status.'),
             ]);
         }
 
-        if ($order['payment_method'] !== 'cash_on_delivery' && $order['edit_return_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_return_payment_status == 'pending') {
+        if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['edit_return_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_return_payment_status == 'pending') {
             return response()->json([
                 'status' => 0,
                 'message' => translate('Please return the amount first before changing the order status.'),

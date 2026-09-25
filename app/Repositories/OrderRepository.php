@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\PaymentMethod;
 use App\Contracts\Repositories\OrderRepositoryInterface;
 use App\Models\AdminWallet;
 use App\Models\Order;
@@ -772,7 +773,7 @@ class OrderRepository implements OrderRepositoryInterface
             $wallet->save();
         }
 
-        if ($order['payment_method'] == 'cash_on_delivery' || $order['payment_method'] == 'offline_payment') {
+        if (in_array($order['payment_method'], [...PaymentMethod::PAY_ON_DELIVERY, 'offline_payment'])) {
             $shop = $this->shop->when($order['seller_is'] == 'admin', function ($query) {
                 return $query->where(['author_type' => 'admin']);
             })->when($order['seller_is'] == 'seller', function ($query) use ($order) {
@@ -833,7 +834,7 @@ class OrderRepository implements OrderRepositoryInterface
                         $currentOrderAmount -= $editHistoryAmount;
                     }
 
-                    if ($order['payment_method'] == 'cash_on_delivery') {
+                    if (in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY)) {
                         $wallet->collected_cash += $currentOrderAmount;
                     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Enums\PaymentMethod;
 use App\Events\OrderEditDuePaymentEvent;
 use App\Events\OrderEditEvent;
 use App\Library\Payer;
@@ -390,7 +391,7 @@ trait OrderEditManager
             'updated_at' => Carbon::now(),
         ];
 
-        if ($order['payment_method'] == 'cash_on_delivery') {
+        if (in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY)) {
             $orderDueAmount = 0;
             $orderReturnAmount = 0;
 

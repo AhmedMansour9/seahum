@@ -115,6 +115,7 @@ class BusinessSettingsController extends BaseController
             'maintenanceSystemSetup' => $maintenanceSystemSetup,
             'selectedMaintenanceMessage' => $selectedMaintenanceMessage,
             'cashOnDelivery' => getWebConfig(name: 'cash_on_delivery'),
+            'cardOnDelivery' => getWebConfig(name: 'card_on_delivery'),
             'digitalPayment' => getWebConfig(name: 'digital_payment'),
             'offlinePayment' => getWebConfig(name: 'offline_payment'),
             'cookieSetting' => getWebConfig(name: 'cookie_setting'),
@@ -567,6 +568,7 @@ class BusinessSettingsController extends BaseController
         }
 
         $this->businessSettingRepo->updateOrInsert(type: 'cash_on_delivery', value: json_encode(['status' => $request->get('cash_on_delivery', 0)]));
+        $this->businessSettingRepo->updateOrInsert(type: 'card_on_delivery', value: json_encode(['status' => $request->get('card_on_delivery', 0)]));
         $this->businessSettingRepo->updateOrInsert(type: 'digital_payment', value: json_encode(['status' => $request->get('digital_payment', 0)]));
         $this->businessSettingRepo->updateOrInsert(type: 'offline_payment', value: json_encode(['status' => $request->get('offline_payment', 0)]));
 

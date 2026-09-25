@@ -8,6 +8,7 @@ use App\Traits\CacheManagerTrait;
 use App\Traits\MaintenanceModeTrait;
 use App\Traits\SettingsTrait;
 use App\Utils\Helpers;
+use App\Utils\OrderManager;
 use App\Utils\ProductManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
@@ -131,6 +132,7 @@ class ConfigController extends Controller
             'system_default_currency' => (int)getWebConfig(name: 'system_default_currency'),
             'digital_payment' => (boolean)getWebConfig(name: 'digital_payment')['status'] ?? 0,
             'cash_on_delivery' => (boolean)getWebConfig(name: 'cash_on_delivery')['status'] ?? 0,
+            'card_on_delivery' => OrderManager::isCardOnDeliveryEnabled(),
             'seller_registration' => (string)getWebConfig(name: 'seller_registration') ?? 0,
             'pos_active' => (string)getWebConfig(name: 'seller_pos') ?? 0,
             'company_name' => getWebConfig(name: 'company_name') ?? '',
