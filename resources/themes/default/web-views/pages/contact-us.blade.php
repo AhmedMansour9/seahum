@@ -6,11 +6,17 @@
 @php($storeEmail = getWebConfig(name: 'company_email'))
 @php($whatsappConfig = getWebConfig(name: 'whatsapp'))
 @php($whatsappNumber = ($whatsappConfig['status'] ?? 0) ? $whatsappConfig['phone'] : null)
+@php($recaptchaConfig = getWebConfig(name: 'recaptcha'))
+@php($isRecaptchaEnabled = ($recaptchaConfig['status'] ?? 0) == 1)
 
 @push('css_or_js')
     @include('web-views.seafood.partials._styles')
 
     @include('web-views.seafood.partials._phone-input-styles')
+
+    @if($isRecaptchaEnabled)
+        <link rel="stylesheet" href="{{ dynamicAsset(path: 'public/assets/backend/libs/google-recaptcha/google-recaptcha-init.css') }}">
+    @endif
 
     <style>
         .sf-contact-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 32px); align-items: start; }
@@ -142,6 +148,20 @@
                                     @enderror
                                 </div>
 
+                                @if($isRecaptchaEnabled)
+                                    <div class="sf-form-full dynamic-default-and-recaptcha-section">
+                                        <input type="hidden" name="g-recaptcha-response" class="render-grecaptcha-response"
+                                               data-action="contact"
+                                               data-default-captcha="#contact-default-captcha-section">
+
+                                        <div class="default-captcha-container d-none" id="contact-default-captcha-section"
+                                             data-placeholder="{{ translate('enter_captcha_value') }}"
+                                             data-base-url="{{ route('g-recaptcha-session-store') }}"
+                                             data-session="default_captcha_value_contact">
+                                        </div>
+                                    </div>
+                                @endif
+
                                 <div class="sf-form-full">
                                     <button class="sf-btn-block" type="submit" id="contact-form-btn">{{ translate('send') }}</button>
                                 </div>
@@ -215,4 +235,8 @@
     @include('web-views.seafood.partials._scripts')
 
     @include('web-views.seafood.partials._phone-input-scripts')
+
+    @if($isRecaptchaEnabled)
+        @include('web-views.seafood.partials._recaptcha-scripts')
+    @endif
 @endpush

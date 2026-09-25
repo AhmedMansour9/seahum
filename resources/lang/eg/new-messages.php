@@ -9424,4 +9424,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"enabling_card_on_delivery_lets_customers_pay_by_card_using_the_delivery_agent_POS_machine_when_the_order_arrives" => "تفعيل الدفع بالبطاقة عند الاستلام يتيح للعملاء الدفع بالبطاقة عبر جهاز نقاط البيع مع مندوب التوصيل عند وصول الطلب",
 	"card_on_delivery_is_not_available" => "الدفع بالبطاقة عند الاستلام غير متاح",
 	"no_withdraw_method_found" => "No withdraw method found",
+	"ReCAPTCHA_Action_Invalid" => "إجراء ReCAPTCHA غير صالح",
 ];

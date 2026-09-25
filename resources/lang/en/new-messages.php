@@ -2717,4 +2717,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"The_validity_type_field_is_required_when_referral_earning_discount_is_enabled" => "The validity type field is required when referral earning discount is enabled",
 	"minimum_amount_cannot_be_greater_than_maximum_amount" => "Minimum amount cannot be greater than maximum amount",
 	"Order_is_editable" => "Order is editable",
+	"ReCAPTCHA_Action_Invalid" => "ReCAPTCHA Action Invalid",
 ];

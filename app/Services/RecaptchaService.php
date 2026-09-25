@@ -58,17 +58,16 @@ class RecaptchaService
             try {
                 $request->validate([
                     'g-recaptcha-response' => [
+                        'required',
                         function ($attribute, $value, $fail) use ($action) {
-                            if (empty($value)) {
-                                $fail(translate('ReCAPTCHA_verification_failed.'));
-                                return;
-                            }
                             if (!RecaptchaService::verify(token: $value, action: $action)) {
                                 $fail(translate('ReCAPTCHA_verification_failed.'));
                                 return;
                             }
                         },
                     ],
+                ], [
+                    'g-recaptcha-response.required' => translate('ReCAPTCHA_verification_failed.'),
                 ]);
             } catch (ValidationException $e) {
                 return [

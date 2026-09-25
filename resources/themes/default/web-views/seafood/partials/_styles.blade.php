@@ -67,6 +67,7 @@
         .sf-password-toggle[aria-pressed="true"] .sf-eye-off { display: block; }
         /* The captcha widget is rendered by google-recaptcha-init.js, so it is styled from the outside. */
         .default-captcha-container { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .default-captcha-container.d-none { display: none; }
         .default-captcha-container input { flex: 1 1 180px; min-width: 0; height: 48px; border-radius: 12px; border: 1px solid #E4EFF1; background: #FFFFFF; color: #0B2C3F; padding: 0 14px; font-family: Tajawal, sans-serif; font-size: 15px; outline: none; transition: border-color .2s, box-shadow .2s; }
         .default-captcha-container input:focus { border: 1.5px solid #17B0A7; box-shadow: 0 0 0 3px rgba(23,176,167,.22); }
         .default-captcha-container input::placeholder { color: #7B98A4; }

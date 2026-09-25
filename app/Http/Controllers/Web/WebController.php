@@ -28,6 +28,7 @@ use App\Models\Subscription;
 use App\Models\User;
 use App\Models\Wishlist;
 use App\Services\ProductService;
+use App\Services\RecaptchaService;
 use App\Services\ShopService;
 use App\Traits\CacheManagerTrait;
 use App\Traits\CommonTrait;
@@ -1204,6 +1205,15 @@ class WebController extends Controller
 
     public function contact_store(Request $request): RedirectResponse
     {
+        if ((getWebConfig(name: 'recaptcha')['status'] ?? 0) == 1) {
+            $recaptchaResult = RecaptchaService::verificationStatus(request: $request, session: 'default_captcha_value_contact', action: 'contact');
+            if (!$recaptchaResult['status']) {
+                Toastr::error($recaptchaResult['message']);
+
+                return back()->withInput();
+            }
+        }
+
         $request->validate([
             'mobile_number' => 'required|max:20',
             'subject' => 'required',

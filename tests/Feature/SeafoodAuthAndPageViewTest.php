@@ -129,21 +129,17 @@ class SeafoodAuthAndPageViewTest extends TestCase
     }
 
     /**
-     * The contact form no longer ships a captcha, so the server-side check has
-     * to go with it: RecaptchaService compares the posted value against the
-     * session and would reject every submission once the input disappears.
+     * The contact controller verifies the token only while reCAPTCHA is
+     * enabled, so the page must render the token input under the same
+     * condition and load the scripts that fill it.
      */
-    public function test_contact_page_and_controller_drop_the_captcha_together(): void
+    public function test_contact_page_renders_recaptcha_only_when_enabled(): void
     {
         $contactPage = file_get_contents($this->templatePath('web-views.pages.contact-us'));
-        $webController = file_get_contents(base_path('app/Http/Controllers/Web/WebController.php'));
 
-        foreach (['default-captcha-container', 'render-grecaptcha-response', 'g-recaptcha-response'] as $captchaMarker) {
-            $this->assertStringNotContainsString($captchaMarker, $contactPage);
-        }
-
-        $this->assertStringNotContainsString('default_captcha_value_contact', $webController);
-        $this->assertStringNotContainsString('RecaptchaService', $webController);
+        $this->assertMatchesRegularExpression('/@if\(\$isRecaptchaEnabled\)\s*<div[^>]*dynamic-default-and-recaptcha-section.*?render-grecaptcha-response.*?data-action="contact"/s', $contactPage);
+        $this->assertStringContainsString('data-session="default_captcha_value_contact"', $contactPage);
+        $this->assertMatchesRegularExpression('/@if\(\$isRecaptchaEnabled\)\s*@include\(\'web-views\.seafood\.partials\._recaptcha-scripts\'\)/', $contactPage);
     }
 
     /**
