@@ -43,6 +43,8 @@ class FilePermissionProcess extends Command
             chmod(base_path('sitemap.xml'), 0777);
             chmod(public_path('robots.txt'), 0777);
             chmod(base_path('robots.txt'), 0777);
+            chmod(public_path('firebase-messaging-sw.js'), 0777);
+            chmod(base_path('firebase-messaging-sw.js'), 0777);
         } catch (Exception $exception) {
         }
     }
