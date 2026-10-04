@@ -426,7 +426,7 @@ class ProductController extends Controller
             ], 404);
         }
 
-        $averageRating = count($product->rating) > 0 ? number_format($product->rating[0]->average, 2, '.', ' ') : 0;
+        $averageRating = count($product->rating) > 0 ? number_format($product->rating[0]->average, 2, '.', ' ') : '0.00';
         $reviews = Review::with(['customer', 'product', 'reply'])->where(['product_id' => $product['id']])
             ->latest('updated_at')
             ->paginate(($request['limit'] ?? 10), ['*'], 'page', ($request['offset'] ?? 1));

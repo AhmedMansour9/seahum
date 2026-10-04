@@ -8,7 +8,7 @@ trait  PdfGenerator
 {
     public static function generatePdf($view, $filePrefix, $filePostfix, $pdfType = null, $requestFrom = 'admin'): string
     {
-        $mpdf = new \Mpdf\Mpdf(['default_font' => 'FreeSerif', 'mode' => 'utf-8', 'format' => [190, 250], 'autoLangToFont' => true]);
+        $mpdf = new \Mpdf\Mpdf(['default_font' => 'FreeSerif', 'mode' => 'utf-8', 'format' => [190, 250], 'autoLangToFont' => true, 'tempDir' => storage_path('app/mpdf')]);
         $mpdf->autoScriptToLang = true;
         $mpdf->autoLangToFont = true;
         if ($pdfType = 'invoice') {
@@ -23,7 +23,7 @@ trait  PdfGenerator
 
     public static function storePdf($view, $filePrefix, $filePostfix, $pdfType = null, $requestFrom = 'admin'): string
     {
-        $mpdf = new \Mpdf\Mpdf(['default_font' => 'FreeSerif', 'mode' => 'utf-8', 'format' => [190, 250], 'autoLangToFont' => true]);
+        $mpdf = new \Mpdf\Mpdf(['default_font' => 'FreeSerif', 'mode' => 'utf-8', 'format' => [190, 250], 'autoLangToFont' => true, 'tempDir' => storage_path('app/mpdf')]);
         $mpdf->autoScriptToLang = true;
         $mpdf->autoLangToFont = true;
         if ($pdfType = 'invoice') {
