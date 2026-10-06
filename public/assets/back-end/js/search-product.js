@@ -12,16 +12,21 @@ $('.search-product').on('input', function () {
     });
 });
 
-$('.search-all-type-product').on('focus click keyup',function (){
-    let name = $(this).val();
+let searchAllTypeProductTimeout;
+let searchAllTypeProductRequest;
+$('.search-all-type-product').on('focus click input', function () {
     let $input = $(this);
-    let $wrapper = $input.closest('.dropdown');
-    let $dropdown = $wrapper.find('.dropdown-menu');
-    $dropdown.addClass('show');
-    let searchRoute = $input.data('route') || $('#get-search-product-route').data('action');
-    $.get(searchRoute, {searchValue: name}, (response) => {
-        $('.search-result-box').empty().html(response.result);
-    })
+    $input.closest('.dropdown').find('.dropdown-menu').addClass('show');
+    clearTimeout(searchAllTypeProductTimeout);
+    searchAllTypeProductTimeout = setTimeout(function () {
+        let searchRoute = $input.data('route') || $('#get-search-product-route').data('action');
+        if (searchAllTypeProductRequest) {
+            searchAllTypeProductRequest.abort();
+        }
+        searchAllTypeProductRequest = $.get(searchRoute, {searchValue: $input.val()}, (response) => {
+            $('.search-result-box').empty().html(response.result);
+        });
+    }, 400);
 })
 
 let selectProductSearch = $('.select-product-search');
