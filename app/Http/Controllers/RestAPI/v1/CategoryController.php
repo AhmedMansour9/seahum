@@ -42,12 +42,12 @@ class CategoryController extends Controller
                 return $query->with(['childes' => function ($query) {
                     return $query->withCount(['subSubCategoryProduct' => function ($query) {
                         return $query->active();
-                    }])->where('position', 2);
+                    }])->where(['position' => 2, 'home_status' => 1]);
                 }])->withCount(['subCategoryProduct' => function ($query) {
                     return $query->active();
-                }])->where('position', 1);
+                }])->where(['position' => 1, 'home_status' => 1]);
             }, 'childes.childes'])
-            ->where(['position' => 0])->get();
+            ->where(['position' => 0, 'home_status' => 1])->get();
 
         $categories = CategoryManager::getPriorityWiseCategorySortQuery(query: $categories);
 
