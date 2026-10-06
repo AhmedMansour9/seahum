@@ -14,12 +14,12 @@ $('.search-product').on('input', function () {
 
 $('.search-all-type-product').on('focus click keyup',function (){
     let name = $(this).val();
-    let data = { searchValue: name };
     let $input = $(this);
     let $wrapper = $input.closest('.dropdown');
     let $dropdown = $wrapper.find('.dropdown-menu');
     $dropdown.addClass('show');
-    $.get($('#get-search-product-route').data('action'), {searchValue: name}, (response) => {
+    let searchRoute = $input.data('route') || $('#get-search-product-route').data('action');
+    $.get(searchRoute, {searchValue: name}, (response) => {
         $('.search-result-box').empty().html(response.result);
     })
 })

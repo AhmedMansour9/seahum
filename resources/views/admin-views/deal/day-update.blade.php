@@ -87,6 +87,7 @@
                                                     </button>
                                                     <input type="text"
                                                            class="js-form-search form-control search-bar-input search-all-type-product"
+                                                           data-route="{{ route('admin.deal.search-product') }}"
                                                            placeholder="{{ translate('search menu').'...' }}">
                                                 </div>
                                                 <div
