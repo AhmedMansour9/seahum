@@ -206,7 +206,7 @@
 @endsection
 
 @push('script')
-    <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/search-product.js') }}"></script>
+    <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/search-product.js?v=1.1') }}"></script>
     <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/admin/deal.js') }}"></script>
     <script>
         $('.search-all-type-product').off('focus click');

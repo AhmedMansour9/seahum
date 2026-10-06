@@ -286,7 +286,7 @@
     </div>
 @endsection
 @push('script')
-    <script src="{{dynamicAsset(path: 'public/assets/back-end/js/search-product.js')}}"></script>
+    <script src="{{dynamicAsset(path: 'public/assets/back-end/js/search-product.js?v=1.1')}}"></script>
     <script>
         $(document).ready(function () {
 
