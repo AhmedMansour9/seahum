@@ -35,6 +35,10 @@
 <span id="get-product-status-message"
       data-error="{{ translate("status_updated_failed").'.'.' '.translate("product_must_be_approved").'.' }}"></span>
 <span id="get-featured-status-message" data-success="{{ translate("featured_status_updated_successfully") }}"></span>
+<span id="ajax-submit-error-messages"
+      data-session-expired="{{ translate('your_session_has_expired_please_reload_the_page_and_log_in_again') }}"
+      data-upload-too-large="{{ translate('the_total_upload_size_is_too_large_please_use_smaller_or_fewer_files') }}"
+      data-something-went-wrong="{{ translate('Something_went_wrong._Please_try_again.') }}"></span>
 <span id="get-multiple-image-text"
       data-on-extension-err="{{ translate('please_only_input_png_or_jpg_type_file') }}"
       data-on-size-err="{{ translate('file_size_too_big') }}">

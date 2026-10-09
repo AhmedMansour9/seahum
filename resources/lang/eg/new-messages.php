@@ -9425,4 +9425,6 @@ ____________________________________________________on_search_engines_and_see_th
 	"card_on_delivery_is_not_available" => "الدفع بالبطاقة عند الاستلام غير متاح",
 	"no_withdraw_method_found" => "No withdraw method found",
 	"ReCAPTCHA_Action_Invalid" => "إجراء ReCAPTCHA غير صالح",
+	"your_session_has_expired_please_reload_the_page_and_log_in_again" => "انتهت صلاحية الجلسة. يرجى إعادة تحميل الصفحة وتسجيل الدخول مرة أخرى.",
+	"the_total_upload_size_is_too_large_please_use_smaller_or_fewer_files" => "الحجم الإجمالي للملفات المرفوعة كبير جدًا. يرجى استخدام ملفات أصغر أو أقل عددًا.",
 ];

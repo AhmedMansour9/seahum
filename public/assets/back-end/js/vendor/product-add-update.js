@@ -572,7 +572,7 @@ $(".product-add-requirements-check").on("click", async function() {
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        toastMagic.error(errorThrown);
+                        showAjaxSubmitErrorToast(jqXHR);
                         $("#loading").fadeOut();
                     },
                     complete: function() {

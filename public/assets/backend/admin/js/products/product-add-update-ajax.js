@@ -137,6 +137,7 @@ document.addEventListener("click", async function(e) {
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
+                            showAjaxSubmitErrorToast(jqXHR);
                             $("#loading").fadeOut();
                         },
                         complete: function () {

@@ -318,6 +318,23 @@ function showErrorToast(msg) {
     }
 }
 
+/**
+ * Show a translated error toast for a failed ajax form submission
+ * @param {jqXHR} jqXHR
+ */
+function showAjaxSubmitErrorToast(jqXHR) {
+    const messages = $('#ajax-submit-error-messages');
+    const sessionExpiredStatuses = [401, 419];
+
+    if (sessionExpiredStatuses.includes(jqXHR?.status)) {
+        showErrorToast(messages.data('session-expired'));
+    } else if (jqXHR?.status === 413) {
+        showErrorToast(messages.data('upload-too-large'));
+    } else {
+        showErrorToast(messages.data('something-went-wrong'));
+    }
+}
+
 
 /**
  * Form validation helper

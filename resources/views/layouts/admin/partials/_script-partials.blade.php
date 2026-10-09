@@ -49,7 +49,7 @@
 
 <script src="{{ dynamicAsset(path: 'public/assets/backend/file-validation/polyfills.js') }}"></script>
 <script src="{{ dynamicAsset(path: 'public/assets/backend/file-validation/just-validate.min.js') }}"></script>
-<script src="{{ dynamicAsset(path: 'public/assets/backend/file-validation/form-advance-validation.js') }}"></script>
+<script src="{{ dynamicAsset(path: 'public/assets/backend/file-validation/form-advance-validation.js?v=1.1') }}"></script>
 
 <script src="{{ dynamicAsset(path: 'public/assets/backend/backend-utils.js') }}"></script>
 

@@ -56,3 +56,7 @@
 
 <span id="imageUploadMaxSize" data-max-size="{{ getFileUploadMaxSize() }}"></span>
 <span id="message-loading-word" data-text="{{ translate('Loading') }}"></span>
+<span id="ajax-submit-error-messages"
+      data-session-expired="{{ translate('your_session_has_expired_please_reload_the_page_and_log_in_again') }}"
+      data-upload-too-large="{{ translate('the_total_upload_size_is_too_large_please_use_smaller_or_fewer_files') }}"
+      data-something-went-wrong="{{ translate('Something_went_wrong._Please_try_again.') }}"></span>

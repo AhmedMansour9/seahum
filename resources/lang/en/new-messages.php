@@ -2719,4 +2719,6 @@ ____________________________________________________on_search_engines_and_see_th
 	"Order_is_editable" => "Order is editable",
 	"ReCAPTCHA_Action_Invalid" => "ReCAPTCHA Action Invalid",
 	"not_selected" => "Not selected",
+	"your_session_has_expired_please_reload_the_page_and_log_in_again" => "Your session has expired. Please reload the page and log in again.",
+	"the_total_upload_size_is_too_large_please_use_smaller_or_fewer_files" => "The total upload size is too large. Please use smaller or fewer files.",
 ];
