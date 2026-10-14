@@ -489,6 +489,11 @@
         .sf-btn-primary:hover { background: #14C6BB; color: #062A3E; transform: translateY(-2px); }
         .sf-btn-ghost { transition: background .22s, border-color .22s, color .22s; }
         .sf-btn-ghost:hover { background: #FFFFFF; color: #0B2C3F; border-color: #FFFFFF; }
+        .sf-store-badge { display: inline-flex; align-items: center; gap: 10px; min-height: 50px; padding: 7px 18px 7px 14px; border-radius: 12px; background: #000000; border: 1px solid rgba(255,255,255,.28); color: #FFFFFF; transition: border-color .2s, transform .2s; }
+        .sf-store-badge:hover { border-color: #FFFFFF; color: #FFFFFF; transform: translateY(-2px); }
+        .sf-store-badge-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; font-family: 'Segoe UI', Helvetica, Arial, sans-serif; }
+        .sf-store-badge-caption { font-size: 10.5px; letter-spacing: .3px; opacity: .85; }
+        .sf-store-badge-name { font-size: 17px; font-weight: 600; }
         .seafood-cart-toggle { flex-shrink: 0; display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 16px; border: none; border-radius: 13px; background: #ECF8F8; color: #0B2C3F; font-family: Cairo, sans-serif; font-size: 14px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background .22s, color .22s, transform .22s; }
         .seafood-cart-toggle:hover { background: #17B0A7; color: #FFFFFF; transform: translateY(-2px); }
         .seafood-cart-toggle.in-cart { background: #0B2C3F; color: #FFFFFF; }

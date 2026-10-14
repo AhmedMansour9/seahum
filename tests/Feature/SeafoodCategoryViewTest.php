@@ -192,6 +192,34 @@ class SeafoodCategoryViewTest extends TestCase
         $this->assertStringContainsString('.sf-category-link--sub { min-height: 44px; }', $categoryTouchBlock);
     }
 
+    /**
+     * The hero store badges must follow the admin "download app" settings, so a disabled or empty link never renders.
+     */
+    public function test_home_hero_store_badges_follow_the_admin_download_app_settings(): void
+    {
+        $homePage = file_get_contents($this->templatePath('web-views.seafood.home'));
+
+        foreach (['download_app_google_store' => '$googlePlayUrl', 'download_app_apple_store' => '$appStoreUrl'] as $settingName => $urlVariable) {
+            $this->assertStringContainsString("getWebConfig(name: '{$settingName}')", $homePage);
+            $this->assertStringContainsString("@if({$urlVariable})", $homePage);
+            $this->assertStringContainsString('<a href="{{ '.$urlVariable.' }}" target="_blank" rel="noopener noreferrer"', $homePage);
+        }
+
+        $this->assertStringContainsString("!empty(\$googleStoreConfig['status'])", $homePage);
+        $this->assertStringContainsString("!empty(\$appleStoreConfig['status'])", $homePage);
+
+        foreach (['en', 'eg'] as $locale) {
+            $messages = include base_path("resources/lang/{$locale}/new-messages.php");
+
+            $this->assertArrayHasKey('download_the_app_from', $messages, "resources/lang/{$locale}/new-messages.php is missing 'download_the_app_from'.");
+        }
+
+        /* Store badge artwork stays in English in every locale, per the store brand guidelines. */
+        foreach (['GET IT ON', 'Google Play', 'Download on the', 'App Store'] as $badgeText) {
+            $this->assertStringContainsString(">{$badgeText}</span>", $homePage);
+        }
+    }
+
     private function mediaBlock(string $stylesheet, string $condition): string
     {
         $start = strpos($stylesheet, '@media ('.$condition.')');
