@@ -42,6 +42,7 @@ use App\Http\Controllers\Admin\ProductReportController;
 use App\Http\Controllers\Admin\ProductStockReportController;
 use App\Http\Controllers\Admin\ProductWishlistReportController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\Promotion\LuckyWheelController;
 use App\Http\Controllers\Admin\Promotion\BannerController;
 use App\Http\Controllers\Admin\Promotion\ClearanceSaleController;
 use App\Http\Controllers\Admin\Promotion\ClearanceSalePrioritySetupController;
@@ -607,6 +608,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin', '
     });
 
     /** Notification and push notification */
+    Route::group(['prefix' => 'lucky-wheel', 'as' => 'lucky-wheel.', 'middleware' => ['module:marketing']], function () {
+        Route::controller(LuckyWheelController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('settings', 'updateSettings')->name('settings');
+            Route::get('reward/add', 'getAddView')->name('reward.add');
+            Route::post('reward/add', 'add');
+            Route::get('reward/update/{id}', 'getUpdateView')->name('reward.update');
+            Route::post('reward/update/{id}', 'update');
+            Route::post('reward/status', 'updateStatus')->name('reward.status');
+            Route::post('reward/delete', 'delete')->name('reward.delete');
+        });
+    });
+
     Route::group(['prefix' => 'push-notification', 'as' => 'push-notification.', 'middleware' => ['module:marketing']], function () {
         Route::controller(PushNotificationSettingsController::class)->group(function () {
             Route::get('index', 'index')->name('index');

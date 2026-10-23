@@ -20,6 +20,7 @@ use App\Http\Controllers\RestAPI\v1\CustomerRestockRequestController;
 use App\Http\Controllers\RestAPI\v1\DealController;
 use App\Http\Controllers\RestAPI\v1\DealOfTheDayController;
 use App\Http\Controllers\RestAPI\v1\FlashDealController;
+use App\Http\Controllers\RestAPI\v1\LuckyWheelController;
 use App\Http\Controllers\RestAPI\v1\GeneralController;
 use App\Http\Controllers\RestAPI\v1\MapApiController;
 use App\Http\Controllers\RestAPI\v1\NotificationController;
@@ -344,6 +345,15 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api_lang']], function () {
             Route::controller(UserWalletController::class)->group(function () {
                 Route::get('list', 'list');
                 Route::get('bonus-list', 'bonus_list');
+            });
+        });
+
+        Route::group(['prefix' => 'lucky-wheel'], function () {
+            Route::controller(LuckyWheelController::class)->group(function () {
+                Route::get('/', 'getStatus');
+                Route::post('spin', 'spin')->middleware('throttle:10,1');
+                Route::get('gifts', 'getWonGifts');
+                Route::get('checkout-summary', 'getCheckoutSummary');
             });
         });
 

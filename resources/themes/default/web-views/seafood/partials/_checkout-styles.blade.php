@@ -52,6 +52,17 @@
         /* ---- Order summary ---- */
         .sf-summary { position: sticky; top: 18px; min-width: 0; }
         .sf-summary-saved { display: flex; align-items: center; gap: 9px; margin: 0 0 16px; padding: 10px 14px; border-radius: 12px; background: #ECF8F8; color: #0E8E88; font-size: 14px; }
+        .sf-summary-gifts { margin: 0 0 16px; padding: 12px 14px; border-radius: 12px; border: 1px dashed #9ED9D6; background: #F4FBFB; }
+        .sf-summary-gifts-title { display: block; font-family: Cairo, sans-serif; font-size: 13.5px; font-weight: 700; color: #0E8E88; margin-bottom: 8px; }
+        .sf-summary-gifts.is-locked { border-color: #F2C98A; background: #FFF9EF; }
+        .sf-summary-gifts.is-locked .sf-summary-gifts-title { color: #A86A12; }
+        .sf-summary-gifts.is-locked li { opacity: .7; }
+        .sf-summary-gifts-hint { display: block; font-size: 12.5px; color: #6E8C99; margin: -4px 0 8px; overflow-wrap: anywhere; }
+        .sf-summary-gifts ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+        .sf-summary-gifts li { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: center; gap: 10px; font-size: 13.5px; color: #0B2C3F; }
+        .sf-summary-gifts li img { width: 36px; height: 36px; border-radius: 9px; object-fit: cover; background: #FFFFFF; }
+        .sf-summary-gifts li span { overflow-wrap: anywhere; }
+        .sf-summary-gifts li strong { color: #1E8A5B; font-size: 12.5px; }
         .sf-coupon-form { display: flex; gap: 8px; margin-bottom: 16px; }
         .sf-coupon-form .sf-filter-field { height: 44px; min-width: 0; }
         .sf-coupon-form .sf-btn-sm { min-height: 44px; }

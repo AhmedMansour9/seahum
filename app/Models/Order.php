@@ -194,6 +194,11 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class)->orderBy('seller_id', 'ASC');
     }
 
+    public function luckyWheelGifts(): HasMany
+    {
+        return $this->hasMany(LuckyWheelWonGift::class, 'order_id')->orderBy('id');
+    }
+
     public function seller(): BelongsTo
     {
         return $this->belongsTo(Seller::class);

@@ -8,6 +8,7 @@ use App\Models\OrderDetailsRewards;
 use App\Models\OrderEditHistory;
 use App\Models\OrderStatusHistory;
 use App\Models\ShippingMethod;
+use App\Services\LuckyWheelService;
 use Carbon\Carbon;
 use App\Models\Cart;
 use App\Models\Shop;
@@ -81,6 +82,7 @@ class OrderManager
 
     public static function getStockUpdateOnOrderStatusChange($order, $status): void
     {
+        app(LuckyWheelService::class)->releaseGiftsOnOrderStatusChange(orderId: $order['id'], orderStatus: $status);
         if ($status == 'returned' || $status == 'failed' || $status == 'canceled') {
             foreach ($order->details as $detail) {
                 if ($detail['is_stock_decreased'] == 1) {
@@ -1313,6 +1315,10 @@ class OrderManager
                 order: $order,
                 customer: $getCustomerInfo['customer'],
             );
+        }
+
+        if (!$getCustomerInfo['is_guest'] && !empty($orderPlacedIds)) {
+            app(LuckyWheelService::class)->attachPendingGiftsToQualifyingOrders(customerId: $getCustomerInfo['customer_id'], orderIds: $orderPlacedIds);
         }
 
         $user = Helpers::getCustomerInformation(($data['requestObj'] ?? request()->all()));

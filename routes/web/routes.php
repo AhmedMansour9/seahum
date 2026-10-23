@@ -28,6 +28,7 @@ use App\Http\Controllers\Web\ChattingController;
 use App\Http\Controllers\Web\CouponController;
 use App\Http\Controllers\Web\CurrencyController;
 use App\Http\Controllers\Web\DigitalProductDownloadController;
+use App\Http\Controllers\Web\LuckyWheelController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\PageController;
 use App\Http\Controllers\Web\ProductCompareController;
@@ -236,6 +237,11 @@ Route::group(['namespace' => 'Web', 'middleware' => ['maintenance_mode', 'guestC
     Route::controller(UserWalletController::class)->group(function () {
         Route::get('wallet-account', 'myWalletAccount')->name('wallet-account'); //theme fashion
         Route::get('wallet', 'index')->name('wallet')->middleware('customer');
+    });
+
+    Route::controller(LuckyWheelController::class)->group(function () {
+        Route::get('lucky-wheel', 'index')->name('lucky-wheel')->middleware('customer');
+        Route::post('lucky-wheel/spin', 'spin')->name('lucky-wheel.spin')->middleware(['customer', 'throttle:10,1']);
     });
 
     Route::controller(UserLoyaltyController::class)->group(function () {

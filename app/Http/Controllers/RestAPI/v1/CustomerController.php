@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\RestAPI\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LuckyWheel\LuckyWheelWonGiftResource;
 use App\Http\Requests\API\v1\SupportTicketRequest;
 use App\Http\Requests\API\v1\UpdateProfileApiRequest;
 use App\Models\BusinessSetting;
@@ -34,6 +35,7 @@ use Modules\Auction\app\Models\AuctionParticipant;
 use Modules\Auction\app\Models\AuctionProduct;
 use Modules\Auction\app\Models\AuctionSavedProduct;
 use Modules\Auction\app\Services\AuctionAccountDeletionGuardService;
+
 
 class CustomerController extends Controller
 {
@@ -504,6 +506,11 @@ class CustomerController extends Controller
         $order = Order::withCount('orderDetails')->with(['deliveryMan', 'offlinePayments', 'verificationImages', 'latestEditHistory', 'orderEditHistory'])->where(['id' => $request['order_id']])->first();
         if (isset($order['offlinePayments'])) {
             $order['offlinePayments']->payment_info = $order->offlinePayments->payment_info;
+        }
+        if ($order) {
+            $customer = Helpers::getCustomerInformation($request);
+            $isOrderOwner = $customer != 'offline' && !$order['is_guest'] && $order['customer_id'] == $customer->id;
+            $order['lucky_wheel_gifts'] = $isOrderOwner ? LuckyWheelWonGiftResource::collection($order->luckyWheelGifts()->get())->resolve() : [];
         }
         $order = json_decode(json_encode($order), true);
         return response()->json($order, 200);
