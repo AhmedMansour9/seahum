@@ -1,0 +1,44 @@
+$kind: http-request
+id: 82f16270-1d46-4a82-a3f1-af7088128fdc
+name: v3/seller/orders/assign-third-party-delivery
+description: |-
+  **Route:** `POST /api/v3/seller/orders/assign-third-party-delivery`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\OrderController@assign_third_party_delivery`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:133`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `order_id` | yes | string |
+  | `delivery_service_name` | yes | string |
+
+
+  **Inputs read without declared validation (static scan):** `third_party_delivery_tracking_id`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/orders/assign-third-party-delivery"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "order_id": 1,
+        "delivery_service_name": "Test",
+        "third_party_delivery_tracking_id": 1
+    }
+order: 4000

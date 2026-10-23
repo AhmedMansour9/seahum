@@ -1,0 +1,33 @@
+$kind: http-request
+id: 7f8933a0-ed6d-40ae-af19-a800d87f85db
+description: |-
+  **Route:** `GET /api/v2/delivery-man/order-delivery-history`
+
+  **Authentication:** Delivery-man token: `Authorization: Bearer {{deliveryman_token}}` (`delivery_man_auth`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\delivery_man\DeliveryManController@get_order_history`
+
+  **Middleware:** `api`, `api_lang`, `delivery_man_auth`, `actch:deliveryman_app`
+
+  **Registered in:** `routes/rest_api/v2/api.php:151`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `order_id` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/order-delivery-history?order_id=1"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: order_id
+    value: "1"
+    description: Required. string.
+order: 4000

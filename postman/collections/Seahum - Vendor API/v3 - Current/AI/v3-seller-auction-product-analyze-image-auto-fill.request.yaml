@@ -1,0 +1,37 @@
+$kind: http-request
+id: c29f8f77-5c05-403a-a487-1c38f3733db3
+name: v3/seller/auction/product/analyze-image-auto-fill
+description: |-
+  **Route:** `POST /api/v3/seller/auction/product/analyze-image-auto-fill` (`v3/seller.auction.product.analyze-image-auto-fill`)
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `Modules\AI\app\Http\Controllers\API\V3\AIAuctionProductController@generateTitleFromImages`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `Modules/AI/routes/api.php:40`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `image` | yes | file Must be an image. Must not be greater than 2048 kilobytes. |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/auction/product/analyze-image-auto-fill"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+body:
+  type: formdata
+  content:
+    - type: file
+      key: image
+      src: []
+      description: Required file.
+order: 1000

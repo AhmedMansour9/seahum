@@ -1,0 +1,41 @@
+$kind: http-request
+id: de35500c-7539-41c3-a7b8-f7e7c44aff82
+name: messages/list/{type}
+description: |-
+  **Route:** `GET /api/v2/delivery-man/messages/list/{type}`
+
+  **Authentication:** Delivery-man token: `Authorization: Bearer {{deliveryman_token}}` (`delivery_man_auth`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\delivery_man\ChatController@list`
+
+  **Middleware:** `api`, `api_lang`, `delivery_man_auth`, `actch:deliveryman_app`
+
+  **Registered in:** `routes/rest_api/v2/api.php:185`
+
+
+  **Inputs read without declared validation (static scan):** `limit`, `offset`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/messages/list/:type?"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: limit
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: offset
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+pathVariables:
+  - key: type
+    value: string
+    description: string.
+order: 2000

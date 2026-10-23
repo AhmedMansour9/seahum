@@ -1,0 +1,24 @@
+$kind: http-request
+id: d430a054-1354-460e-a7f2-62d3f61bf13a
+description: |-
+  **Route:** `PUT /api/v2/delivery-man/is-online`
+
+  **Authentication:** Delivery-man token: `Authorization: Bearer {{deliveryman_token}}` (`delivery_man_auth`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\delivery_man\DeliveryManController@is_online`
+
+  **Middleware:** `api`, `api_lang`, `delivery_man_auth`, `actch:deliveryman_app`
+
+  **Registered in:** `routes/rest_api/v2/api.php:145`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/is-online"
+method: PUT
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+order: 5000

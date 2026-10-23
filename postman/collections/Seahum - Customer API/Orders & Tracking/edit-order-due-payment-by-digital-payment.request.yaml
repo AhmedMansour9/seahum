@@ -1,0 +1,46 @@
+$kind: http-request
+id: dcd6227b-8514-4689-ae63-8b0d9f0b0b7e
+name: edit-order/due-payment-by-digital-payment
+description: |-
+  **Route:** `POST /api/v1/edit-order/due-payment-by-digital-payment`
+
+  **Authentication:** Customer Bearer token **or** `guest_id` (`apiGuestCheck`). With an `Authorization` header the guest id is ignored; to run as a guest, disable auth on the request and send `guest_id`.
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\OrderEditController@duePaymentByDigitalPayment`
+
+  **Middleware:** `api`, `api_lang`, `apiGuestCheck`
+
+  **Registered in:** `routes/rest_api/v1/api.php:391`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `order_id` | yes | string |
+  | `payment_method` | yes | string |
+  | `current_currency_code` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/edit-order/due-payment-by-digital-payment?guest_id={{guest_id}}"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+queryParams:
+  - key: guest_id
+    value: "{{guest_id}}"
+    description: "Guest flow: used when no customer Bearer token is sent. Obtain one from GET /get-guest-id."
+body:
+  type: json
+  content: |-
+    {
+        "order_id": 1,
+        "payment_method": "string",
+        "current_currency_code": "AED"
+    }
+order: 16000

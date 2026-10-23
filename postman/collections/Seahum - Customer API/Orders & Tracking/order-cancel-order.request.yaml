@@ -1,0 +1,38 @@
+$kind: http-request
+id: 9a0ef464-1cb6-4323-a989-803a7eea1e41
+name: order/cancel-order
+description: |-
+  > **Possible state-changing GET:** a static scan of the handler found write-like calls (`->update(`). Treat it as unsafe against shared data until verified.
+
+  **Route:** `GET /api/v1/order/cancel-order`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\OrderController@order_cancel`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:381`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `order_id` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/order/cancel-order?order_id=1"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: order_id
+    value: "1"
+    description: Required. string.
+auth:
+  type: noauth
+order: 19000

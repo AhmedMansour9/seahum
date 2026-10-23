@@ -1,0 +1,49 @@
+$kind: http-request
+id: 0f6e26d1-a548-42fe-a3f7-6a4556ee108a
+name: customer/order/refund-store
+description: |-
+  **Route:** `POST /api/v1/customer/order/refund-store`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\OrderController@store_refund`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:317`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `order_details_id` | yes | string Must match an existing stored value. |
+  | `amount` | yes | number Must be at least 0. |
+  | `refund_reason` | yes | string |
+  | `images` | no | file Must not be greater than 2048 characters. |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/customer/order/refund-store"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+body:
+  type: formdata
+  content:
+    - type: text
+      key: order_details_id
+      value: "1"
+    - type: text
+      key: amount
+      value: "1000"
+    - type: text
+      key: refund_reason
+      value: string
+    - type: file
+      key: images
+      src: []
+      description: Optional file.
+order: 14000

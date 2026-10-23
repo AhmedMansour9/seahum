@@ -1,0 +1,38 @@
+$kind: http-request
+id: caee1f77-8f36-45eb-a4d0-edf7145ea605
+name: customer/wish-list/add
+description: |-
+  **Route:** `POST /api/v1/customer/wish-list/add`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\CustomerController@add_to_wishlist`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:301`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `product_id` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/customer/wish-list/add"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "product_id": 1
+    }
+order: 18000

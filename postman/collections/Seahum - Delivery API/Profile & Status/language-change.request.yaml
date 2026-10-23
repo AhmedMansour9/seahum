@@ -1,0 +1,35 @@
+$kind: http-request
+id: 52a58cde-e804-4372-a5e6-063d504e8979
+description: |-
+  **Route:** `PUT /api/v2/delivery-man/language-change`
+
+  **Authentication:** Delivery-man token: `Authorization: Bearer {{deliveryman_token}}` (`delivery_man_auth`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\delivery_man\DeliveryManController@language_change`
+
+  **Middleware:** `api`, `api_lang`, `delivery_man_auth`, `actch:deliveryman_app`
+
+  **Registered in:** `routes/rest_api/v2/api.php:144`
+
+
+  **Inputs read without declared validation (static scan):** `current_language`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/language-change"
+method: PUT
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "current_language": "en"
+    }
+order: 6000

@@ -1,0 +1,83 @@
+$kind: http-request
+id: 9ee91caf-a64c-4bbd-a7e4-29310eb21eda
+name: v2/seller/registration
+description: |-
+  **Route:** `POST /api/v2/seller/registration`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\seller\auth\RegisterController@store`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v2/api.php:127`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `email` | yes | string |
+  | `shop_address` | yes | string |
+  | `f_name` | yes | string |
+  | `l_name` | yes | string |
+  | `shop_name` | yes | string |
+  | `phone` | yes | string |
+  | `password` | yes | string Must be at least 8 characters. |
+  | `image` | yes | file |
+  | `logo` | yes | file |
+  | `banner` | yes | file |
+
+
+  **Inputs read without declared validation (static scan):** `status`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v2/seller/registration"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+body:
+  type: formdata
+  content:
+    - type: text
+      key: email
+      value: seller@gmail.com
+    - type: text
+      key: shop_address
+      value: Dubai, UAE
+    - type: text
+      key: f_name
+      value: Test
+    - type: text
+      key: l_name
+      value: Test
+    - type: text
+      key: shop_name
+      value: Test
+    - type: text
+      key: phone
+      value: "+971500000000"
+    - type: text
+      key: password
+      value: password
+    - type: text
+      key: status
+      value: string
+    - type: file
+      key: image
+      src: []
+      description: Required file.
+    - type: file
+      key: logo
+      src: []
+      description: Required file.
+    - type: file
+      key: banner
+      src: []
+      description: Required file.
+auth:
+  type: noauth
+order: 5000

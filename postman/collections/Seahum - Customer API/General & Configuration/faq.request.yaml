@@ -1,0 +1,26 @@
+$kind: http-request
+id: bd918af7-b69a-46ae-a099-593d28af7ee4
+description: |-
+  **Route:** `GET /api/v1/faq`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\GeneralController@faq`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:433`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/faq"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+auth:
+  type: noauth
+order: 8000

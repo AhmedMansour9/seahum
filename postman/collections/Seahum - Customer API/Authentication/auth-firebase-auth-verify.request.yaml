@@ -1,0 +1,48 @@
+$kind: http-request
+id: c33f18ff-237b-43bf-a26c-4a736c332f34
+name: auth/firebase-auth-verify
+description: |-
+  **Route:** `POST /api/v1/auth/firebase-auth-verify`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\auth\CustomerAPIAuthController@firebaseAuthVerify`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:65`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `sessionInfo` | yes | string |
+  | `phoneNumber` | yes | string |
+  | `code` | yes | string |
+
+
+  **Inputs read without declared validation (static scan):** `is_reset_token`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/auth/firebase-auth-verify"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "sessionInfo": "string",
+        "phoneNumber": "+971500000000",
+        "code": "string",
+        "is_reset_token": "string"
+    }
+auth:
+  type: noauth
+order: 5000

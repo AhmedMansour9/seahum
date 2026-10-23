@@ -1,0 +1,44 @@
+$kind: http-request
+id: b1c08a92-2b61-4d91-a712-28bdb11ff0b7
+name: v3/seller/payment-information/update
+description: |-
+  **Route:** `POST /api/v3/seller/payment-information/update` (`payment-information.`)
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\VendorPaymentInfoController@update`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:277`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `method_name` | yes | string Must not be greater than 255 characters. |
+  | `withdraw_method_id` | yes | string Must match an existing stored value. |
+
+
+  **Inputs read without declared validation (static scan):** `id`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/payment-information/update"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "method_name": "Test",
+        "withdraw_method_id": 1,
+        "id": 1
+    }
+order: 6000

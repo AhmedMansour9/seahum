@@ -1,0 +1,77 @@
+$kind: http-request
+id: 8c0d2477-7460-420f-a02f-4444348727d0
+name: v3/seller/delivery-man/store
+description: |-
+  **Route:** `POST /api/v3/seller/delivery-man/store`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\DeliveryManController@store`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:230`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `f_name` | yes | string |
+  | `l_name` | yes | string |
+  | `phone` | yes | string |
+  | `email` | yes | string Must be a valid email address. |
+  | `country_code` | yes | string |
+  | `password` | yes | string The value and <code>confirm_password</code> must match. Must be at least 8 characters. |
+  | `identity_image` | no | file Must not be greater than 2048 characters. |
+
+
+  **Inputs read without declared validation (static scan):** `address`, `identity_number`, `identity_type`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/delivery-man/store"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+body:
+  type: formdata
+  content:
+    - type: text
+      key: f_name
+      value: Test
+    - type: text
+      key: l_name
+      value: Test
+    - type: text
+      key: phone
+      value: "+971500000000"
+    - type: text
+      key: email
+      value: seller@gmail.com
+    - type: text
+      key: country_code
+      value: United Arab Emirates
+    - type: text
+      key: password
+      value: password
+    - type: text
+      key: address
+      value: Dubai, UAE
+    - type: text
+      key: identity_number
+      value: string
+    - type: text
+      key: identity_type
+      value: string
+    - type: file
+      key: identity_image
+      src: []
+      description: Optional file.
+    - type: file
+      key: image
+      src: []
+      description: Optional file.
+order: 16000

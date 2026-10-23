@@ -1,0 +1,52 @@
+$kind: http-request
+id: 77c4754b-028d-4b0e-afdb-a0e10ebf1796
+name: products/reviews/submit
+description: |-
+  **Route:** `POST /api/v1/products/reviews/submit`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\ProductController@submit_product_review`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:170`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `product_id` | yes | string |
+  | `order_id` | yes | string |
+  | `comment` | yes | string |
+  | `rating` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/products/reviews/submit"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+body:
+  type: formdata
+  content:
+    - type: text
+      key: product_id
+      value: "1"
+    - type: text
+      key: order_id
+      value: "1"
+    - type: text
+      key: comment
+      value: string
+    - type: text
+      key: rating
+      value: "1"
+    - type: file
+      key: fileUpload
+      src: []
+      description: Optional file.
+order: 23000

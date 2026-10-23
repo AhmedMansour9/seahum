@@ -1,0 +1,48 @@
+$kind: http-request
+id: b0c0ee4b-7b78-42c7-aaf1-5932236dc1ed
+name: brands/products/{brand_id}
+description: |-
+  **Route:** `GET /api/v1/brands/products/{brand_id}`
+
+  **Authentication:** Customer Bearer token **or** `guest_id` (`apiGuestCheck`). With an `Authorization` header the guest id is ignored; to run as a guest, disable auth on the request and send `guest_id`.
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\BrandController@get_products`
+
+  **Middleware:** `api`, `api_lang`, `apiGuestCheck`
+
+  **Registered in:** `routes/rest_api/v1/api.php:226`
+
+
+  **Inputs read without declared validation (static scan):** `limit`, `offset`, `search`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/brands/products/:brand_id?guest_id={{guest_id}}"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: limit
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: offset
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: search
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: guest_id
+    value: "{{guest_id}}"
+    description: "Guest flow: used when no customer Bearer token is sent. Obtain one from GET /get-guest-id."
+pathVariables:
+  - key: brand_id
+    value: "1"
+    description: integer. The ID of the brand.
+order: 2000

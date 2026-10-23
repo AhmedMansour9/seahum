@@ -1,0 +1,24 @@
+$kind: http-request
+id: 53cfac8e-ff88-4335-a276-0d3380331968
+description: |-
+  **Route:** `GET /api/v2/delivery-man/current-orders`
+
+  **Authentication:** Delivery-man token: `Authorization: Bearer {{deliveryman_token}}` (`delivery_man_auth`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\delivery_man\DeliveryManController@get_current_orders`
+
+  **Middleware:** `api`, `api_lang`, `delivery_man_auth`, `actch:deliveryman_app`
+
+  **Registered in:** `routes/rest_api/v2/api.php:148`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/current-orders"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+order: 2000

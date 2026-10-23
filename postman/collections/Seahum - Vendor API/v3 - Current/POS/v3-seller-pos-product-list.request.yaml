@@ -1,0 +1,45 @@
+$kind: http-request
+id: 1626a9cc-10b9-450e-a50b-481e110c47d6
+name: v3/seller/pos/product-list
+description: |-
+  **Route:** `GET /api/v3/seller/pos/product-list`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\POSController@product_list`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:217`
+
+
+  **Inputs read without declared validation (static scan):** `category_id`, `limit`, `name`, `offset`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/pos/product-list?"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: category_id
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: limit
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: name
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: offset
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+order: 7000

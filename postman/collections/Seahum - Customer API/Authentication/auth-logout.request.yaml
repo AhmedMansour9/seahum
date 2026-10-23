@@ -1,0 +1,27 @@
+$kind: http-request
+id: 87931f1b-14f8-4243-acb8-adb6c2573482
+name: auth/logout
+description: |-
+  > **Possible state-changing GET:** a static scan of the handler found write-like calls (`->update(`). Treat it as unsafe against shared data until verified.
+
+  **Route:** `GET /api/v1/auth/logout`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\auth\PassportAuthController@logout`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:57`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/auth/logout"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+order: 8000

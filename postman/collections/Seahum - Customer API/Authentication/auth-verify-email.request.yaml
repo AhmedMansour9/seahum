@@ -1,0 +1,42 @@
+$kind: http-request
+id: d0c66f61-875e-45b5-abf5-da87dc7c2742
+name: auth/verify-email
+description: |-
+  **Route:** `POST /api/v1/auth/verify-email`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\auth\CustomerAPIAuthController@verifyEmail`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:68`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `email` | yes | string |
+  | `token` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/auth/verify-email"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "email": "buyer@gmail.com",
+        "token": "{{otp_or_token}}"
+    }
+auth:
+  type: noauth
+order: 18000

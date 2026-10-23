@@ -1,0 +1,77 @@
+$kind: http-request
+id: f9dd3635-dc69-4cde-afa5-556d3b1795bc
+name: v3/seller/delivery-man/update/{id}
+description: |-
+  **Route:** `PUT /api/v3/seller/delivery-man/update/{id}`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\DeliveryManController@update`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:231`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `f_name` | yes | string |
+  | `l_name` | yes | string |
+  | `email` | no | string |
+  | `phone` | yes | string |
+  | `country_code` | yes | string |
+
+
+  **Inputs read without declared validation (static scan):** `address`, `identity_image`, `identity_number`, `identity_type`, `image`, `password`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/delivery-man/update/:id"
+method: PUT
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+pathVariables:
+  - key: id
+    value: "1"
+    description: string. The ID of the update.
+body:
+  type: formdata
+  content:
+    - type: text
+      key: f_name
+      value: Test
+    - type: text
+      key: l_name
+      value: Test
+    - type: text
+      key: email
+      value: seller@gmail.com
+    - type: text
+      key: phone
+      value: "+971500000000"
+    - type: text
+      key: country_code
+      value: United Arab Emirates
+    - type: text
+      key: address
+      value: Dubai, UAE
+    - type: text
+      key: identity_image
+      value: string
+    - type: text
+      key: identity_number
+      value: string
+    - type: text
+      key: identity_type
+      value: string
+    - type: text
+      key: image
+      value: string
+    - type: text
+      key: password
+      value: password
+order: 17000

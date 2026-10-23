@@ -1,0 +1,37 @@
+$kind: http-request
+id: bb24c744-c7a5-41fe-a6cc-66be9ef4e557
+name: v2/seller/close-withdraw-request
+description: |-
+  **Route:** `DELETE /api/v2/seller/close-withdraw-request`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\seller\SellerController@close_withdraw_request`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v2/api.php:45`
+
+
+  **Inputs read without declared validation (static scan):** `amount`, `id`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v2/seller/close-withdraw-request"
+method: DELETE
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "amount": 1000,
+        "id": 1
+    }
+order: 2000

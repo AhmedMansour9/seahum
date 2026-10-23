@@ -1,0 +1,961 @@
+openapi: 3.0.3
+info:
+  title: 'Seahum - Delivery API'
+  description: 'Statically extracted API reference. Responses are not captured from live calls.'
+  version: 1.0.0
+servers:
+  -
+    url: '{api_host}'
+    variables:
+      api_host:
+        default: 'http://localhost'
+tags:
+  -
+    name: Endpoints
+    description: ''
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: ''
+security:
+  -
+    default: []
+paths:
+  /api/v2/delivery-man/auth/login:
+    post:
+      summary: ''
+      operationId: postApiV2DeliveryManAuthLogin
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: ''
+                  example: architecto
+                password:
+                  type: string
+                  description: 'Must be at least 8 characters.'
+                  example: ']|{+-0pBNvYg'
+              required:
+                - phone
+                - password
+      security: []
+  /api/v2/delivery-man/auth/forgot-password:
+    post:
+      summary: ''
+      operationId: postApiV2DeliveryManAuthForgotPassword
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identity:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - identity
+      security: []
+  /api/v2/delivery-man/auth/verify-otp:
+    post:
+      summary: ''
+      operationId: postApiV2DeliveryManAuthVerifyOtp
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                otp:
+                  type: string
+                  description: ''
+                  example: architecto
+                identity:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - otp
+                - identity
+      security: []
+  /api/v2/delivery-man/auth/reset-password:
+    post:
+      summary: ''
+      operationId: postApiV2DeliveryManAuthResetPassword
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: ''
+                  example: architecto
+                password:
+                  type: string
+                  description: 'The value and <code>confirm_password</code> must match. Must be at least 8 characters.'
+                  example: ']|{+-0pBNvYg'
+              required:
+                - phone
+                - password
+      security: []
+  /api/v2/delivery-man/language-change:
+    put:
+      summary: ''
+      operationId: putApiV2DeliveryManLanguageChange
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/is-online:
+    put:
+      summary: ''
+      operationId: putApiV2DeliveryManIsOnline
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/info:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManInfo
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/distance-api:
+    post:
+      summary: ''
+      operationId: postApiV2DeliveryManDistanceApi
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                origin_lat:
+                  type: string
+                  description: ''
+                  example: architecto
+                origin_lng:
+                  type: string
+                  description: ''
+                  example: architecto
+                destination_lat:
+                  type: string
+                  description: ''
+                  example: architecto
+                destination_lng:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - origin_lat
+                - origin_lng
+                - destination_lat
+                - destination_lng
+      security: []
+  /api/v2/delivery-man/current-orders:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManCurrentOrders
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/all-orders:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManAllOrders
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/record-location-data:
+    post:
+      summary: ''
+      operationId: postApiV2DeliveryManRecordLocationData
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                longitude:
+                  type: string
+                  description: ''
+                  example: architecto
+                latitude:
+                  type: string
+                  description: ''
+                  example: architecto
+                location:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - order_id
+                - longitude
+                - latitude
+                - location
+      security: []
+  /api/v2/delivery-man/order-delivery-history:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManOrderDeliveryHistory
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - order_id
+      security: []
+  /api/v2/delivery-man/update-order-status:
+    put:
+      summary: ''
+      operationId: putApiV2DeliveryManUpdateOrderStatus
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                status:
+                  type: string
+                  description: ''
+                  example: canceled
+                  enum:
+                    - delivered
+                    - canceled
+                    - returned
+                    - out_for_delivery
+              required:
+                - order_id
+                - status
+      security: []
+  /api/v2/delivery-man/update-expected-delivery:
+    put:
+      summary: ''
+      operationId: putApiV2DeliveryManUpdateExpectedDelivery
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                expected_delivery_date:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - order_id
+                - expected_delivery_date
+      security: []
+  /api/v2/delivery-man/update-payment-status:
+    put:
+      summary: ''
+      operationId: putApiV2DeliveryManUpdatePaymentStatus
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                payment_status:
+                  type: string
+                  description: ''
+                  example: paid
+                  enum:
+                    - paid
+              required:
+                - order_id
+                - payment_status
+      security: []
+  /api/v2/delivery-man/order-update-is-pause:
+    put:
+      summary: ''
+      operationId: putApiV2DeliveryManOrderUpdateIsPause
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                is_pause:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - order_id
+                - is_pause
+      security: []
+  /api/v2/delivery-man/order-item:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManOrderItem
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/order-details:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManOrderDetails
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/last-location:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManLastLocation
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - order_id
+      security: []
+  /api/v2/delivery-man/update-fcm-token:
+    put:
+      summary: ''
+      operationId: putApiV2DeliveryManUpdateFcmToken
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fcm_token:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - fcm_token
+      security: []
+  /api/v2/delivery-man/delivery-wise-earned:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManDeliveryWiseEarned
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                offset:
+                  type: string
+                  description: ''
+                  example: architecto
+                limit:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - offset
+                - limit
+      security: []
+  /api/v2/delivery-man/search:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManSearch
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/profile-dashboard-counts:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManProfileDashboardCounts
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/change-status:
+    post:
+      summary: ''
+      operationId: postApiV2DeliveryManChangeStatus
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - status
+      security: []
+  /api/v2/delivery-man/update-info:
+    put:
+      summary: ''
+      operationId: putApiV2DeliveryManUpdateInfo
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                f_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                l_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                image:
+                  type: string
+                  description: 'Must not be greater than 2048 characters.'
+                  example: 'n'
+                  nullable: true
+                password:
+                  type: string
+                  description: 'The value and <code>confirm_password</code> must match. Must be at least 8 characters.'
+                  example: '|{+-0pBNvYgx'
+                  nullable: true
+              required:
+                - f_name
+                - l_name
+      security: []
+  /api/v2/delivery-man/bank-info:
+    put:
+      summary: ''
+      operationId: putApiV2DeliveryManBankInfo
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/review-list:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManReviewList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/save-review:
+    put:
+      summary: ''
+      operationId: putApiV2DeliveryManSaveReview
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/collected_cash_history:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManCollected_cash_history
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                offset:
+                  type: string
+                  description: ''
+                  example: architecto
+                limit:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - offset
+                - limit
+      security: []
+  /api/v2/delivery-man/emergency-contact-list:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManEmergencyContactList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/notifications:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManNotifications
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/verify-order-delivery-otp:
+    post:
+      summary: 'Dellivery man order verification'
+      operationId: delliveryManOrderVerification
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/resend-verification-code:
+    post:
+      summary: 'Resend OTP Verification'
+      operationId: resendOTPVerification
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/order-delivery-verification:
+    post:
+      summary: ''
+      operationId: postApiV2DeliveryManOrderDeliveryVerification
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                image:
+                  type: array
+                  description: 'Must not be greater than 2048 characters.'
+                  example:
+                    - 'n'
+                  items:
+                    type: string
+              required:
+                - order_id
+                - image
+      security: []
+  /api/v2/delivery-man/withdraw-request:
+    post:
+      summary: ''
+      operationId: postApiV2DeliveryManWithdrawRequest
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/delivery-man/withdraw-list-by-approved:
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManWithdrawListByApproved
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                offset:
+                  type: string
+                  description: ''
+                  example: architecto
+                limit:
+                  type: string
+                  description: ''
+                  example: architecto
+                type:
+                  type: string
+                  description: ''
+                  example: withdrawn
+                  enum:
+                    - withdrawn
+                    - pending
+              required:
+                - offset
+                - limit
+                - type
+      security: []
+  '/api/v2/delivery-man/messages/list/{type}':
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManMessagesListType
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: type
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v2/delivery-man/messages/get-message/{type}/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManMessagesGetMessageTypeId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                offset:
+                  type: string
+                  description: ''
+                  example: architecto
+                limit:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - offset
+                - limit
+      security: []
+    parameters:
+      -
+        in: path
+        name: type
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: id
+        description: 'The ID of the {type}.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v2/delivery-man/messages/send-message/{type}':
+    post:
+      summary: ''
+      operationId: postApiV2DeliveryManMessagesSendMessageType
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ''
+                  example: architecto
+                message:
+                  type: string
+                  description: 'This field is required when none of <code>file</code> and <code>media</code> are present.'
+                  example: null
+                media:
+                  type: array
+                  description: 'Must be a file. Must not be greater than 2048 kilobytes.'
+                  items:
+                    type: string
+                    format: binary
+                file:
+                  type: array
+                  description: 'Must be a file. Must not be greater than 2048 kilobytes.'
+                  items:
+                    type: string
+                    format: binary
+              required:
+                - id
+      security: []
+    parameters:
+      -
+        in: path
+        name: type
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v2/delivery-man/messages/search/{type}':
+    get:
+      summary: ''
+      operationId: getApiV2DeliveryManMessagesSearchType
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: type
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string

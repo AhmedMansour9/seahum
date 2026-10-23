@@ -1,0 +1,27 @@
+$kind: http-request
+id: a61824cb-bcf0-4b91-a90d-5a3fe8b4082e
+name: seller/more
+description: |-
+  **Route:** `GET /api/v1/seller/more`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\SellerController@more_sellers`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:405`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/seller/more"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+auth:
+  type: noauth
+order: 3000

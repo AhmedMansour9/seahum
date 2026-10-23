@@ -1,0 +1,40 @@
+$kind: http-request
+id: b055b9ae-227a-4075-a92b-7142ceb7b328
+name: order/track-order
+description: |-
+  **Route:** `POST /api/v1/order/track-order`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\OrderController@track_order`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:382`
+
+
+  **Inputs read without declared validation (static scan):** `from_order_details`, `order_id`, `phone_number`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/order/track-order"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "from_order_details": "string",
+        "order_id": 1,
+        "phone_number": "+971500000000"
+    }
+auth:
+  type: noauth
+order: 21000

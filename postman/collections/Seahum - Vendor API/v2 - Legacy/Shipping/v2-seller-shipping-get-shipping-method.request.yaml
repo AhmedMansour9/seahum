@@ -1,0 +1,25 @@
+$kind: http-request
+id: 450df0a6-840a-4687-af21-95ab289f74cf
+name: v2/seller/shipping/get-shipping-method
+description: |-
+  **Route:** `GET /api/v2/seller/shipping/get-shipping-method`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\seller\shippingController@get_shipping_type`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v2/api.php:90`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v2/seller/shipping/get-shipping-method"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+order: 8000

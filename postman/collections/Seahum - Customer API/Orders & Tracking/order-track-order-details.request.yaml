@@ -1,0 +1,36 @@
+$kind: http-request
+id: cfd8e0e1-4358-4b64-a7a1-b8af7c77b561
+name: order/track-order-details
+description: |-
+  **Route:** `GET /api/v1/order/track-order-details`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\OrderController@track_order_details_history`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:380`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `order_id` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/order/track-order-details?order_id=1"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: order_id
+    value: "1"
+    description: Required. string.
+auth:
+  type: noauth
+order: 22000

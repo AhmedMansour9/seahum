@@ -1,0 +1,38 @@
+$kind: http-request
+id: 93f4fe0e-6ae3-4676-aa45-7b65cd712b6b
+name: vat-tax/get-taxVat-list
+description: |-
+  **Route:** `GET /api/v1/vat-tax/get-taxVat-list` (`v1.vat-tax.`)
+
+  **Authentication:** None (public).
+
+  **Handler:** `Modules\TaxModule\app\Http\Controllers\Api\V1\TaxController@getTaxVatList`
+
+  **Middleware:** `api`
+
+  **Registered in:** `Modules/TaxModule/routes/api/v1/api.php:19`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `limit` | no | number |
+  | `offset` | no | number |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/vat-tax/get-taxVat-list?"
+method: GET
+headers:
+  Accept: application/json
+queryParams:
+  - key: limit
+    value: "10"
+    disabled: true
+    description: Optional. number.
+  - key: offset
+    value: "1"
+    disabled: true
+    description: Optional. number.
+auth:
+  type: noauth
+order: 2000

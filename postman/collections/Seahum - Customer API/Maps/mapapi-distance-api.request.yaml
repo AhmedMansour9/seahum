@@ -1,0 +1,48 @@
+$kind: http-request
+id: fc779e3c-7248-4f50-a20f-0a973ec8ef59
+name: mapapi/distance-api
+description: |-
+  **Route:** `GET /api/v1/mapapi/distance-api`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\MapApiController@distanceApi`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:426`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `origin_lat` | yes | string |
+  | `origin_lng` | yes | string |
+  | `destination_lat` | yes | string |
+  | `destination_lng` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/mapapi/distance-api?origin_lat=25.2048&origin_lng=55.2708&destination_lat=25.2048&destination_lng=55.2708"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: origin_lat
+    value: "25.2048"
+    description: Required. string.
+  - key: origin_lng
+    value: "55.2708"
+    description: Required. string.
+  - key: destination_lat
+    value: "25.2048"
+    description: Required. string.
+  - key: destination_lng
+    value: "55.2708"
+    description: Required. string.
+auth:
+  type: noauth
+order: 1000

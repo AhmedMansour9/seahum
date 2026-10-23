@@ -1,0 +1,44 @@
+$kind: http-request
+id: 175a8aa8-8355-4b0a-a518-833e05258116
+name: auth/registration-with-otp
+description: |-
+  **Route:** `POST /api/v1/auth/registration-with-otp`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\auth\CustomerAPIAuthController@registrationWithOTP`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:70`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `name` | yes | string Must not be greater than 255 characters. |
+  | `email` | no | string Must not be greater than 255 characters. |
+  | `phone` | yes | string Must be at least 6 characters. Must not be greater than 15 characters. |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/auth/registration-with-otp"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "name": "Test",
+        "email": "buyer@gmail.com",
+        "phone": "+971500000000"
+    }
+auth:
+  type: noauth
+order: 10000

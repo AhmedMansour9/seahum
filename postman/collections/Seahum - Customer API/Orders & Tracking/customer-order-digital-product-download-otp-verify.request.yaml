@@ -1,0 +1,46 @@
+$kind: http-request
+id: 35317236-3247-432c-a0cc-badadac13c3c
+name: customer/order/digital-product-download-otp-verify
+description: |-
+  > **Possible state-changing GET:** a static scan of the handler found write-like calls (`->delete(`). Treat it as unsafe against shared data until verified.
+
+  **Route:** `GET /api/v1/customer/order/digital-product-download-otp-verify`
+
+  **Authentication:** Customer Bearer token **or** `guest_id` (`apiGuestCheck`). With an `Authorization` header the guest id is ignored; to run as a guest, disable auth on the request and send `guest_id`.
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\OrderController@digital_product_download_otp_verify`
+
+  **Middleware:** `api`, `api_lang`, `apiGuestCheck`
+
+  **Registered in:** `routes/rest_api/v1/api.php:363`
+
+
+  **Inputs read without declared validation (static scan):** `action`, `order_details_id`, `otp`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/customer/order/digital-product-download-otp-verify?guest_id={{guest_id}}"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: action
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: order_details_id
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: otp
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: guest_id
+    value: "{{guest_id}}"
+    description: "Guest flow: used when no customer Bearer token is sent. Obtain one from GET /get-guest-id."
+order: 7000

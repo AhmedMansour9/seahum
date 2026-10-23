@@ -1,0 +1,40 @@
+$kind: http-request
+id: 8d0b3ba2-70bc-40e9-a06d-e7b30fce68dc
+name: v3/seller/auth/check-vendor-exist-info
+description: |-
+  **Route:** `POST /api/v3/seller/auth/check-vendor-exist-info`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\auth\ForgotPasswordController@checkVendorExistInfo`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:45`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `phone` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/auth/check-vendor-exist-info"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "phone": "+971500000000"
+    }
+auth:
+  type: noauth
+order: 1000

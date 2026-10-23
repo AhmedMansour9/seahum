@@ -1,0 +1,25 @@
+$kind: http-request
+id: 48c05027-2e62-42f0-a4aa-131995cf9bde
+name: products/shop-again-product
+description: |-
+  **Route:** `GET /api/v1/products/shop-again-product`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\ProductController@getShopAgainProduct`
+
+  **Middleware:** `api`, `api_lang`, `apiGuestCheck`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:193`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/products/shop-again-product"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+order: 25000

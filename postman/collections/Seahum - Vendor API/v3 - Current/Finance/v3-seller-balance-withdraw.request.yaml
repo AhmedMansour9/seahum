@@ -1,0 +1,37 @@
+$kind: http-request
+id: 7652daa9-dd57-407a-ac78-39c75b4f15b6
+name: v3/seller/balance-withdraw
+description: |-
+  **Route:** `POST /api/v3/seller/balance-withdraw`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\SellerController@withdraw_request`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:75`
+
+
+  **Inputs read without declared validation (static scan):** `amount`, `withdraw_method_id`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/balance-withdraw"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "amount": 1000,
+        "withdraw_method_id": 1
+    }
+order: 1000

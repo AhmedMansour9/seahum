@@ -1,0 +1,32 @@
+$kind: http-request
+id: eff0b09e-b3df-4fe9-a133-9a3a740c3248
+description: |-
+  **Route:** `GET /api/v2/delivery-man/order-item`
+
+  **Authentication:** Delivery-man token: `Authorization: Bearer {{deliveryman_token}}` (`delivery_man_auth`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\delivery_man\DeliveryManController@getOrderItem`
+
+  **Middleware:** `api`, `api_lang`, `delivery_man_auth`, `actch:deliveryman_app`
+
+  **Registered in:** `routes/rest_api/v2/api.php:156`
+
+
+  **Inputs read without declared validation (static scan):** `id`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/order-item?"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: id
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+order: 7000

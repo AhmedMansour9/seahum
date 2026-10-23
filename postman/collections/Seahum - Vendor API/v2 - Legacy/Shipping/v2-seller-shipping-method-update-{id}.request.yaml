@@ -1,0 +1,46 @@
+$kind: http-request
+id: 454c4bd0-950b-413f-a0d4-9073bfdc2f27
+name: v2/seller/shipping-method/update/{id}
+description: |-
+  **Route:** `PUT /api/v2/seller/shipping-method/update/{id}`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\seller\ShippingMethodController@update`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v2/api.php:103`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `title` | yes | string Must not be greater than 200 characters. |
+  | `duration` | yes | string |
+  | `cost` | no | number |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v2/seller/shipping-method/update/:id"
+method: PUT
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: string. The ID of the update.
+body:
+  type: json
+  content: |-
+    {
+        "title": "string",
+        "duration": "string",
+        "cost": 1000
+    }
+order: 6000

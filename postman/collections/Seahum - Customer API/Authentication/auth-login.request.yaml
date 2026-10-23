@@ -1,0 +1,54 @@
+$kind: http-request
+id: cb74c08a-262d-4034-aa60-da61ed30fcf4
+name: auth/login
+description: |-
+  **Route:** `POST /api/v1/auth/login`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\auth\CustomerAPIAuthController@login`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:62`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `email_or_phone` | yes | string |
+  | `password` | yes | string Must be at least 6 characters. |
+  | `type` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/auth/login"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "email_or_phone": "buyer@gmail.com",
+        "password": "password",
+        "type": "phone"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Login succeeded (200)', function () { pm.response.to.have.status(200); });
+      if (pm.response.code === 200) {
+          const responseBody = pm.response.json();
+          pm.test('Response contains token', function () { pm.expect(responseBody.token).to.be.a('string'); });
+          if (responseBody.token) { pm.environment.set('customer_token', responseBody.token); }
+      }
+    language: text/javascript
+order: 7000

@@ -1,0 +1,64 @@
+$kind: http-request
+id: 3bd57074-82ca-4e3a-aa9d-cc15ea06e35c
+name: customer/address/add
+description: |-
+  **Route:** `POST /api/v1/customer/address/add`
+
+  **Authentication:** Customer Bearer token **or** `guest_id` (`apiGuestCheck`). With an `Authorization` header the guest id is ignored; to run as a guest, disable auth on the request and send `guest_id`.
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\CustomerController@add_new_address`
+
+  **Middleware:** `api`, `api_lang`, `apiGuestCheck`
+
+  **Registered in:** `routes/rest_api/v1/api.php:239`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `contact_person_name` | yes | string |
+  | `address_type` | yes | string |
+  | `address` | yes | string |
+  | `city` | yes | string |
+  | `zip` | yes | string |
+  | `country` | yes | string |
+  | `phone` | yes | string |
+  | `latitude` | yes | string |
+  | `longitude` | yes | string |
+  | `is_billing` | yes | string |
+
+
+  **Inputs read without declared validation (static scan):** `email`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/customer/address/add?guest_id={{guest_id}}"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+queryParams:
+  - key: guest_id
+    value: "{{guest_id}}"
+    description: "Guest flow: used when no customer Bearer token is sent. Obtain one from GET /get-guest-id."
+body:
+  type: json
+  content: |-
+    {
+        "contact_person_name": "Test",
+        "address_type": "Dubai, UAE",
+        "address": "Dubai, UAE",
+        "city": "Dubai",
+        "zip": "00000",
+        "country": "United Arab Emirates",
+        "phone": "+971500000000",
+        "latitude": 25.2048,
+        "longitude": 55.2708,
+        "is_billing": "string",
+        "email": "buyer@gmail.com"
+    }
+order: 3000

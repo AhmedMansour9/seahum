@@ -1,0 +1,39 @@
+$kind: http-request
+id: 1f589f07-6854-48b2-aa97-b64f8a7b52d3
+name: v3/seller/auth/firebase-auth-token-store
+description: |-
+  **Route:** `POST /api/v3/seller/auth/firebase-auth-token-store`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\auth\ForgotPasswordController@firebaseAuthTokenStore`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:43`
+
+
+  **Inputs read without declared validation (static scan):** `identity`, `token`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/auth/firebase-auth-token-store"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "identity": "string",
+        "token": "{{otp_or_token}}"
+    }
+auth:
+  type: noauth
+order: 2000

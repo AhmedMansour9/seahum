@@ -1,0 +1,41 @@
+$kind: http-request
+id: 99fdf843-8322-4754-afad-1ffb36dcfa5e
+name: v3/seller/pos/get-tax-amount
+description: |-
+  **Route:** `POST /api/v3/seller/pos/get-tax-amount`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\POSCartController@getTaxAmountCart`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:223`
+
+
+  **Inputs read without declared validation (static scan):** `cart`, `coupon_discount_amount`, `extra_discount`, `extra_discount_type`, `modified_cart`, `total_tax_amount`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/pos/get-tax-amount"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "cart": "string",
+        "coupon_discount_amount": 1000,
+        "extra_discount": 1,
+        "extra_discount_type": "string",
+        "modified_cart": "string",
+        "total_tax_amount": 1000
+    }
+order: 5000

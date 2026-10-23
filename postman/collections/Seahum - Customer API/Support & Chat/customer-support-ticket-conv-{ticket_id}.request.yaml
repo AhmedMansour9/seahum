@@ -1,0 +1,29 @@
+$kind: http-request
+id: 42b636ce-4739-4972-a887-3cd286e0634a
+name: customer/support-ticket/conv/{ticket_id}
+description: |-
+  **Route:** `GET /api/v1/customer/support-ticket/conv/{ticket_id}`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\CustomerController@get_support_ticket_conv`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:283`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/customer/support-ticket/conv/:ticket_id"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+pathVariables:
+  - key: ticket_id
+    value: "1"
+    description: string. The ID of the ticket.
+order: 7000

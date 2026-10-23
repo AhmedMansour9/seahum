@@ -1,0 +1,57 @@
+$kind: http-request
+id: 797f06d6-2e1a-422b-a0df-b6cda715d716
+name: customer/update-profile
+description: |-
+  **Route:** `PUT /api/v1/customer/update-profile`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\CustomerController@update_profile`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:269`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `f_name` | yes | string Must not be greater than 255 characters. |
+  | `l_name` | yes | string Must not be greater than 255 characters. |
+  | `phone` | yes | string |
+  | `email` | no | string Must be a valid email address. |
+  | `password` | no | string Must be at least 6 characters. |
+  | `image` | no | file Must be an image. Must not be greater than 2048 kilobytes. |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/customer/update-profile"
+method: PUT
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+body:
+  type: formdata
+  content:
+    - type: text
+      key: f_name
+      value: Test
+    - type: text
+      key: l_name
+      value: Test
+    - type: text
+      key: phone
+      value: "+971500000000"
+    - type: text
+      key: email
+      value: buyer@gmail.com
+    - type: text
+      key: password
+      value: password
+    - type: file
+      key: image
+      src: []
+      description: Optional file.
+order: 16000

@@ -1,0 +1,47 @@
+$kind: http-request
+id: 56671dd5-0744-4016-a632-1b2a388c72f8
+name: customer/order/place-by-offline-payment
+description: |-
+  **Route:** `POST /api/v1/customer/order/place-by-offline-payment`
+
+  **Authentication:** Customer Bearer token **or** `guest_id` (`apiGuestCheck`). With an `Authorization` header the guest id is ignored; to run as a guest, disable auth on the request and send `guest_id`.
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\OrderController@placeOrderByOfflinePayment`
+
+  **Middleware:** `api`, `api_lang`, `apiGuestCheck`
+
+  **Registered in:** `routes/rest_api/v1/api.php:250`
+
+
+  **Inputs read without declared validation (static scan):** `address_id`, `billing_address_id`, `coupon_code`, `is_check_create_account`, `method_id`, `method_informations`, `order_note`, `payment_note`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/customer/order/place-by-offline-payment?guest_id={{guest_id}}"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+queryParams:
+  - key: guest_id
+    value: "{{guest_id}}"
+    description: "Guest flow: used when no customer Bearer token is sent. Obtain one from GET /get-guest-id."
+body:
+  type: json
+  content: |-
+    {
+        "address_id": 1,
+        "billing_address_id": 1,
+        "coupon_code": "string",
+        "is_check_create_account": "string",
+        "method_id": 1,
+        "method_informations": "string",
+        "order_note": "string",
+        "payment_note": "string"
+    }
+order: 16000

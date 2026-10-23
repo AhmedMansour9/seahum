@@ -1,0 +1,38 @@
+$kind: http-request
+id: 6b74f59b-0a70-4004-a377-f5d2e44d97d4
+name: v3/seller/clearance-sale/product-discount-update
+description: |-
+  **Route:** `POST /api/v3/seller/clearance-sale/product-discount-update`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\ClearanceSaleController@updateClearanceProductDiscount`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:153`
+
+
+  **Inputs read without declared validation (static scan):** `discount_amount`, `discount_type`, `product_id`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/clearance-sale/product-discount-update"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "discount_amount": 1000,
+        "discount_type": "string",
+        "product_id": 1
+    }
+order: 7000

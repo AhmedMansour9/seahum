@@ -1,0 +1,57 @@
+$kind: http-request
+id: 0d09268c-d97f-4192-a54d-048ab7693fa1
+name: products/review/update
+description: |-
+  **Route:** `PUT /api/v1/products/review/update`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\ProductController@updateProductReview`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:171`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `product_id` | yes | string |
+  | `order_id` | yes | string |
+  | `comment` | yes | string |
+  | `rating` | yes | string |
+
+
+  **Inputs read without declared validation (static scan):** `fileUpload`, `id`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/products/review/update"
+method: PUT
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+body:
+  type: formdata
+  content:
+    - type: text
+      key: product_id
+      value: "1"
+    - type: text
+      key: order_id
+      value: "1"
+    - type: text
+      key: comment
+      value: string
+    - type: text
+      key: rating
+      value: "1"
+    - type: text
+      key: fileUpload
+      value: string
+    - type: text
+      key: id
+      value: "1"
+order: 21000

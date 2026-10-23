@@ -1,0 +1,37 @@
+$kind: http-request
+id: 1f3d32bb-385f-4881-a594-fb80d15a6603
+name: products/review/delete-image
+description: |-
+  **Route:** `DELETE /api/v1/products/review/delete-image`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\ProductController@deleteReviewImage`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:173`
+
+
+  **Inputs read without declared validation (static scan):** `id`, `name`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/products/review/delete-image"
+method: DELETE
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "id": 1,
+        "name": "Test"
+    }
+order: 20000

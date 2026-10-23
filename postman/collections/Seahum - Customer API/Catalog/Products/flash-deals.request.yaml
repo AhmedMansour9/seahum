@@ -1,0 +1,26 @@
+$kind: http-request
+id: 3564bdcc-15c7-4aca-adfb-49890f6daa19
+description: |-
+  **Route:** `GET /api/v1/flash-deals`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\FlashDealController@getFlashDeal`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:146`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/flash-deals"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+auth:
+  type: noauth
+order: 3000

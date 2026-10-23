@@ -1,0 +1,31 @@
+$kind: http-request
+id: ead96a83-6f2c-45bd-a754-97f3a21763c5
+name: customer/support-ticket/close/{id}
+description: |-
+  > **Possible state-changing GET:** a static scan of the handler found write-like calls (`->save(`). Treat it as unsafe against shared data until verified.
+
+  **Route:** `GET /api/v1/customer/support-ticket/close/{id}`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\CustomerController@support_ticket_close`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:285`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/customer/support-ticket/close/:id"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+pathVariables:
+  - key: id
+    value: "1"
+    description: string. The ID of the close.
+order: 6000

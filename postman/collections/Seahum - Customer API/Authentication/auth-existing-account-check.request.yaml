@@ -1,0 +1,44 @@
+$kind: http-request
+id: 75437e90-1031-4a06-a49c-835790482892
+name: auth/existing-account-check
+description: |-
+  **Route:** `POST /api/v1/auth/existing-account-check`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\auth\SocialAuthController@existingAccountCheck`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:96`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `email` | yes | string Must be a valid email address. |
+  | `user_response` | yes | string |
+  | `medium` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/auth/existing-account-check"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "email": "buyer@gmail.com",
+        "user_response": 0,
+        "medium": "google"
+    }
+auth:
+  type: noauth
+order: 3000

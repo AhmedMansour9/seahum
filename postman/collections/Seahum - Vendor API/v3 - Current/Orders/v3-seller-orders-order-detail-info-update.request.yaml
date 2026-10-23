@@ -1,0 +1,50 @@
+$kind: http-request
+id: aec662bc-33f6-4764-a38a-8416ca227a95
+name: v3/seller/orders/order-detail-info-update
+description: |-
+  **Route:** `POST /api/v3/seller/orders/order-detail-info-update`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\OrderController@updateOrderDetails`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:136`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `order_id` | yes | string |
+  | `payment_status` | yes | string |
+
+
+  **Inputs read without declared validation (static scan):** `delivery_man_id`, `delivery_service_name`, `delivery_type`, `deliveryman_charge`, `expected_delivery_date`, `order_status`, `third_party_delivery_tracking_id`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/orders/order-detail-info-update"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "order_id": 1,
+        "payment_status": "paid",
+        "delivery_man_id": 1,
+        "delivery_service_name": "Test",
+        "delivery_type": "string",
+        "deliveryman_charge": "string",
+        "expected_delivery_date": "2026-01-01",
+        "order_status": "string",
+        "third_party_delivery_tracking_id": 1
+    }
+order: 9000

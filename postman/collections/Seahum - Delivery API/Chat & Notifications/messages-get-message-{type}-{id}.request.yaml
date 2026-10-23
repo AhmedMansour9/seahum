@@ -1,0 +1,47 @@
+$kind: http-request
+id: 327a49c2-6484-4856-a8dc-e6a537c37b00
+name: messages/get-message/{type}/{id}
+description: |-
+  > **Possible state-changing GET:** a static scan of the handler found write-like calls (`->update(`). Treat it as unsafe against shared data until verified.
+
+  **Route:** `GET /api/v2/delivery-man/messages/get-message/{type}/{id}`
+
+  **Authentication:** Delivery-man token: `Authorization: Bearer {{deliveryman_token}}` (`delivery_man_auth`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\delivery_man\ChatController@get_message`
+
+  **Middleware:** `api`, `api_lang`, `delivery_man_auth`, `actch:deliveryman_app`
+
+  **Registered in:** `routes/rest_api/v2/api.php:186`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `offset` | yes | string |
+  | `limit` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/messages/get-message/:type/:id?offset=1&limit=10"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: offset
+    value: "1"
+    description: Required. string.
+  - key: limit
+    value: "10"
+    description: Required. string.
+pathVariables:
+  - key: type
+    value: string
+    description: string.
+  - key: id
+    value: "1"
+    description: string. The ID of the {type}.
+order: 1000

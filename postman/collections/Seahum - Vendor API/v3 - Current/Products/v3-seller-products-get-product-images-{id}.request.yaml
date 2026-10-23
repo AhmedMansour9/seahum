@@ -1,0 +1,29 @@
+$kind: http-request
+id: 63cd4259-a599-42c3-a1c2-d3c83de10f2f
+name: v3/seller/products/get-product-images/{id}
+description: |-
+  **Route:** `GET /api/v3/seller/products/get-product-images/{id}`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\ProductController@getProductImages`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:113`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/products/get-product-images/:id"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+pathVariables:
+  - key: id
+    value: "1"
+    description: string. The ID of the get product image.
+order: 13000

@@ -1,0 +1,31 @@
+$kind: http-request
+id: dafdbc8f-345e-4886-a8fd-e0877c4bb590
+name: products/counter/{slug}
+description: |-
+  **Route:** `GET /api/v1/products/counter/{slug}`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\ProductController@counter`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:167`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/products/counter/:slug"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+pathVariables:
+  - key: slug
+    value: sample-slug
+    description: string. The slug of the counter.
+auth:
+  type: noauth
+order: 7000

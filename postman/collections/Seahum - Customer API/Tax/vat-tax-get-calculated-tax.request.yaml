@@ -1,0 +1,55 @@
+$kind: http-request
+id: dde324c0-5730-4d0a-ae4d-27c7f2e9dbd4
+name: vat-tax/get-calculated-tax
+description: |-
+  **Route:** `POST /api/v1/vat-tax/get-calculated-tax` (`v1.vat-tax.`)
+
+  **Authentication:** None (public).
+
+  **Handler:** `Modules\TaxModule\app\Http\Controllers\Api\V1\TaxController@getCalculateTax`
+
+  **Middleware:** `api`
+
+  **Registered in:** `Modules/TaxModule/routes/api/v1/api.php:20`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `totalProductAmount` | yes | number |
+  | `productIds` | yes | string |
+  | `categoryIds` | yes | string |
+  | `quantity` | yes | string |
+  | `additionalCharges` | no | string |
+  | `orderId` | no | string |
+  | `countryCode` | no | string |
+  | `taxPayer` | no | string |
+  | `addonIds` | no | string |
+  | `addonQuantity` | no | string |
+  | `addonCategoryIds` | no | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/vat-tax/get-calculated-tax"
+method: POST
+headers:
+  Accept: application/json
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "totalProductAmount": 1000,
+        "productIds": "string",
+        "categoryIds": "string",
+        "quantity": 1,
+        "additionalCharges": "string",
+        "orderId": "string",
+        "countryCode": "United Arab Emirates",
+        "taxPayer": "string",
+        "addonIds": "string",
+        "addonQuantity": 1,
+        "addonCategoryIds": "string"
+    }
+auth:
+  type: noauth
+order: 1000

@@ -1,0 +1,19 @@
+name: Seahum Staging
+values:
+  - key: api_host
+    value: https://staging.example.com
+  - key: customer_token
+    value: ""
+    type: secret
+  - key: seller_token
+    value: ""
+    type: secret
+  - key: deliveryman_token
+    value: ""
+    type: secret
+  - key: guest_id
+    value: ""
+  - key: lang
+    value: en
+  - key: otp_or_token
+    value: ""

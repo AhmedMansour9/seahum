@@ -1,0 +1,47 @@
+$kind: http-request
+id: d47f5048-8630-4fd8-abbe-4e13aba88723
+name: v2/seller/messages/get-message/{type}/{id}
+description: |-
+  > **Possible state-changing GET:** a static scan of the handler found write-like calls (`->update(`). Treat it as unsafe against shared data until verified.
+
+  **Route:** `GET /api/v2/seller/messages/get-message/{type}/{id}`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\seller\ChatController@get_message`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v2/api.php:111`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `offset` | yes | string |
+  | `limit` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v2/seller/messages/get-message/:type/:id?offset=1&limit=10"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: offset
+    value: "1"
+    description: Required. string.
+  - key: limit
+    value: "10"
+    description: Required. string.
+pathVariables:
+  - key: type
+    value: string
+    description: string.
+  - key: id
+    value: "1"
+    description: string. The ID of the {type}.
+order: 1000

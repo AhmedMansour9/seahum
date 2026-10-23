@@ -1,0 +1,50 @@
+$kind: http-request
+id: 50bb2d82-6f10-4932-a39f-caa1e3a3df02
+name: customer/address/update
+description: |-
+  **Route:** `POST /api/v1/customer/address/update`
+
+  **Authentication:** Customer Bearer token **or** `guest_id` (`apiGuestCheck`). With an `Authorization` header the guest id is ignored; to run as a guest, disable auth on the request and send `guest_id`.
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\CustomerController@update_address`
+
+  **Middleware:** `api`, `api_lang`, `apiGuestCheck`
+
+  **Registered in:** `routes/rest_api/v1/api.php:242`
+
+
+  **Inputs read without declared validation (static scan):** `address`, `address_type`, `city`, `contact_person_name`, `country`, `id`, `is_billing`, `latitude`, `longitude`, `phone`, `zip`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/customer/address/update?guest_id={{guest_id}}"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+queryParams:
+  - key: guest_id
+    value: "{{guest_id}}"
+    description: "Guest flow: used when no customer Bearer token is sent. Obtain one from GET /get-guest-id."
+body:
+  type: json
+  content: |-
+    {
+        "address": "Dubai, UAE",
+        "address_type": "Dubai, UAE",
+        "city": "Dubai",
+        "contact_person_name": "Test",
+        "country": "United Arab Emirates",
+        "id": 1,
+        "is_billing": "string",
+        "latitude": 25.2048,
+        "longitude": 55.2708,
+        "phone": "+971500000000",
+        "zip": "00000"
+    }
+order: 6000

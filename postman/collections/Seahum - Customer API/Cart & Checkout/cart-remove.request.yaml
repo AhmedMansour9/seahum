@@ -1,0 +1,42 @@
+$kind: http-request
+id: deb85b8d-ea9e-45cd-a58e-7731358eebd7
+name: cart/remove
+description: |-
+  **Route:** `DELETE /api/v1/cart/remove`
+
+  **Authentication:** Customer Bearer token **or** `guest_id` (`apiGuestCheck`). With an `Authorization` header the guest id is ignored; to run as a guest, disable auth on the request and send `guest_id`.
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\CartController@remove_from_cart`
+
+  **Middleware:** `api`, `api_lang`, `apiGuestCheck`
+
+  **Registered in:** `routes/rest_api/v1/api.php:116`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `key` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/cart/remove?guest_id={{guest_id}}"
+method: DELETE
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+queryParams:
+  - key: guest_id
+    value: "{{guest_id}}"
+    description: "Guest flow: used when no customer Bearer token is sent. Obtain one from GET /get-guest-id."
+body:
+  type: json
+  content: |-
+    {
+        "key": "string"
+    }
+order: 6000

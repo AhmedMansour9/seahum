@@ -1,0 +1,46 @@
+$kind: http-request
+id: 9675941b-012e-4c76-a5f7-59ac59a01630
+name: auth/social-customer-login
+description: |-
+  **Route:** `POST /api/v1/auth/social-customer-login`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\auth\SocialAuthController@customerSocialLogin`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:95`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `token` | yes | string |
+  | `unique_id` | yes | string |
+  | `email` | no | string This field is required when <code>medium</code> is <code>google</code> or <code>facebook</code>. |
+  | `medium` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/auth/social-customer-login"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "token": "{{otp_or_token}}",
+        "unique_id": 1,
+        "email": "buyer@gmail.com",
+        "medium": "google"
+    }
+auth:
+  type: noauth
+order: 15000

@@ -1,0 +1,43 @@
+$kind: http-request
+id: 68ebaa83-fc1d-4b07-a92f-b6073b9226ae
+name: v3/seller/get-vat-tax-report-list
+description: |-
+  > **Possible state-changing GET:** a static scan of the handler found write-like calls (`::createFromFormat(`). Treat it as unsafe against shared data until verified.
+
+  **Route:** `GET /api/v3/seller/get-vat-tax-report-list`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `Modules\TaxModule\app\Http\Controllers\Api\v3\VendorTaxReportController@vendorWiseTaxes`
+
+  **Middleware:** `api`, `seller_api_auth`, `api_lang`
+
+  **Registered in:** `Modules/TaxModule/routes/api/v3/api.php:19`
+
+
+  **Inputs read without declared validation (static scan):** `limit`, `offset`, `search`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/get-vat-tax-report-list?"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: limit
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: offset
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: search
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+order: 1000

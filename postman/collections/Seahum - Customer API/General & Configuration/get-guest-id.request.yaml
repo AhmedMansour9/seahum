@@ -1,0 +1,28 @@
+$kind: http-request
+id: d026a60d-cec7-4c74-aa9f-54c29264db79
+description: |-
+  > **Possible state-changing GET:** a static scan of the handler found write-like calls (`::create(`). Treat it as unsafe against shared data until verified.
+
+  **Route:** `GET /api/v1/get-guest-id`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\GeneralController@get_guest_id`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:434`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/get-guest-id"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+auth:
+  type: noauth
+order: 9000

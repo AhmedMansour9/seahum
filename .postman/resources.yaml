@@ -1,0 +1,12 @@
+cloudResources:
+  collections:
+    ../postman/collections/Seahum - Customer API: 5338765-a4f5f0a2-7d24-4970-8f20-e429a5ce4b76
+    ../postman/collections/Seahum - Delivery API: 5338765-43e1f722-065e-4946-bfe2-8322617ade65
+    ../postman/collections/Seahum - Vendor API: 5338765-0247be22-6d5d-45e6-bc8f-802f2372b5fa
+  environments:
+    ../postman/environments/Seahum Local.environment.yaml: 5338765-5bd7bc40-7d4c-47b7-bcce-01a998144cc4
+    ../postman/environments/Seahum Staging.environment.yaml: 5338765-8e9b6df9-e689-4bb3-b73d-3acb9976f919
+  globals:
+    ../postman/globals/workspace.globals.yaml: 7512dc1f-09a9-41cf-8067-51a7ec1460c7
+workspace:
+  id: 507c286f-5186-4261-86c5-b0e2ec2eff9f

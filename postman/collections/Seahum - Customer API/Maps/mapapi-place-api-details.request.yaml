@@ -1,0 +1,36 @@
+$kind: http-request
+id: 8834dd70-69de-479d-adbf-53970779ec8e
+name: mapapi/place-api-details
+description: |-
+  **Route:** `GET /api/v1/mapapi/place-api-details`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\MapApiController@placeApiDetails`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:427`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `placeid` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/mapapi/place-api-details?placeid=string"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: placeid
+    value: string
+    description: Required. string.
+auth:
+  type: noauth
+order: 4000

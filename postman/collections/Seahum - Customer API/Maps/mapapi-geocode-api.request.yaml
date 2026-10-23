@@ -1,0 +1,40 @@
+$kind: http-request
+id: 57c9bb77-1e9b-4389-a848-361020af5285
+name: mapapi/geocode-api
+description: |-
+  **Route:** `GET /api/v1/mapapi/geocode-api`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\MapApiController@geocode_api`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:428`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `lat` | yes | string |
+  | `lng` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/mapapi/geocode-api?lat=25.2048&lng=55.2708"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: lat
+    value: "25.2048"
+    description: Required. string.
+  - key: lng
+    value: "55.2708"
+    description: Required. string.
+auth:
+  type: noauth
+order: 2000

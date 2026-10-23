@@ -1,0 +1,43 @@
+$kind: http-request
+id: a40968fc-0ee8-470c-a2b1-d9edbe11ba2c
+name: v3/seller/products/delete-image
+description: |-
+  > **Possible state-changing GET:** a static scan of the handler found write-like calls (`->deleteFile(`, `->update(`). Treat it as unsafe against shared data until verified.
+
+  **Route:** `GET /api/v3/seller/products/delete-image`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\ProductController@deleteImage`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:112`
+
+
+  **Inputs read without declared validation (static scan):** `color`, `id`, `name`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/products/delete-image?"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: color
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: id
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: name
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+order: 6000

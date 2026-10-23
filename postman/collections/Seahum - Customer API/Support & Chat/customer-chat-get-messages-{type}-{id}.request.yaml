@@ -1,0 +1,47 @@
+$kind: http-request
+id: 6b3ae22f-27ba-4af2-aa10-061ef83c975b
+name: customer/chat/get-messages/{type}/{id}
+description: |-
+  > **Possible state-changing GET:** a static scan of the handler found write-like calls (`->update(`). Treat it as unsafe against shared data until verified.
+
+  **Route:** `GET /api/v1/customer/chat/get-messages/{type}/{id}`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\ChatController@get_message`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:335`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `offset` | yes | string |
+  | `limit` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/customer/chat/get-messages/:type/:id?offset=1&limit=10"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: offset
+    value: "1"
+    description: Required. string.
+  - key: limit
+    value: "10"
+    description: Required. string.
+pathVariables:
+  - key: type
+    value: string
+    description: string.
+  - key: id
+    value: "1"
+    description: string. The ID of the {type}.
+order: 1000

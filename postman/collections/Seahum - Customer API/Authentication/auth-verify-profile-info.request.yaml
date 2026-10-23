@@ -1,0 +1,46 @@
+$kind: http-request
+id: e36465b6-d707-4aa6-a698-13167f2595e3
+name: auth/verify-profile-info
+description: |-
+  **Route:** `POST /api/v1/auth/verify-profile-info`
+
+  **Authentication:** Customer Bearer token **or** `guest_id` (`apiGuestCheck`). With an `Authorization` header the guest id is ignored; to run as a guest, disable auth on the request and send `guest_id`.
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\auth\CustomerAPIAuthController@verifyProfileInfo`
+
+  **Middleware:** `api`, `api_lang`, `apiGuestCheck`
+
+  **Registered in:** `routes/rest_api/v1/api.php:78`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `type` | yes | string |
+  | `email_or_phone` | yes | string |
+  | `token` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/auth/verify-profile-info?guest_id={{guest_id}}"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+queryParams:
+  - key: guest_id
+    value: "{{guest_id}}"
+    description: "Guest flow: used when no customer Bearer token is sent. Obtain one from GET /get-guest-id."
+body:
+  type: json
+  content: |-
+    {
+        "type": "phone",
+        "email_or_phone": "buyer@gmail.com",
+        "token": "{{otp_or_token}}"
+    }
+order: 21000

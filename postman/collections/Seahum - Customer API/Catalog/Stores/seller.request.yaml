@@ -1,0 +1,34 @@
+$kind: http-request
+id: 826a90cd-3c2f-44ec-a61d-9e0a877ac26a
+description: |-
+  **Route:** `GET /api/v1/seller`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\SellerController@get_seller_info`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:403`
+
+
+  **Inputs read without declared validation (static scan):** `slug`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/seller?"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: slug
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+auth:
+  type: noauth
+order: 1000

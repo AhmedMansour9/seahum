@@ -1,0 +1,32 @@
+$kind: http-request
+id: 5252ba21-29c7-4d1e-a39a-3088687fe402
+name: products/review/{product_id}/{order_id}
+description: |-
+  **Route:** `GET /api/v1/products/review/{product_id}/{order_id}`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\ProductController@getProductReviewByOrder`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:172`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/products/review/:product_id/:order_id"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+pathVariables:
+  - key: product_id
+    value: "1"
+    description: integer. The ID of the product.
+  - key: order_id
+    value: "1"
+    description: string. The ID of the order.
+order: 22000

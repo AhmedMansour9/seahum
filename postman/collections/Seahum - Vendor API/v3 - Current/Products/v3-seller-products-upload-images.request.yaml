@@ -1,0 +1,50 @@
+$kind: http-request
+id: a83f5209-64de-4251-a3ba-258b7e7d9ff9
+name: v3/seller/products/upload-images
+description: |-
+  **Route:** `POST /api/v3/seller/products/upload-images`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\ProductController@upload_images`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:97`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `image` | yes | file Must not be greater than 2048 characters. |
+  | `type` | yes | string |
+
+
+  **Inputs read without declared validation (static scan):** `color`, `colors_active`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/products/upload-images"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+body:
+  type: formdata
+  content:
+    - type: text
+      key: type
+      value: product
+    - type: text
+      key: color
+      value: string
+    - type: text
+      key: colors_active
+      value: string
+    - type: file
+      key: image
+      src: []
+      description: Required file.
+order: 28000

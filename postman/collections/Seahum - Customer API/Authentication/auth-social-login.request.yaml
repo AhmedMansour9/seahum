@@ -1,0 +1,48 @@
+$kind: http-request
+id: 2e396a2b-955d-48a7-a57c-b91d250ee1f0
+name: auth/social-login
+description: |-
+  **Route:** `POST /api/v1/auth/social-login`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\auth\SocialAuthController@social_login`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:93`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `token` | yes | string |
+  | `unique_id` | yes | string |
+  | `medium` | yes | string |
+
+
+  **Inputs read without declared validation (static scan):** `email`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/auth/social-login"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "token": "{{otp_or_token}}",
+        "unique_id": 1,
+        "medium": "google",
+        "email": "buyer@gmail.com"
+    }
+auth:
+  type: noauth
+order: 16000

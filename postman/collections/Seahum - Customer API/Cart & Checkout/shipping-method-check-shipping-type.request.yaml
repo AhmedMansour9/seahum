@@ -1,0 +1,41 @@
+$kind: http-request
+id: 28804119-c811-4e73-a95b-49fe98b2c9a9
+name: shipping-method/check-shipping-type
+description: |-
+  **Route:** `GET /api/v1/shipping-method/check-shipping-type`
+
+  **Authentication:** Customer Bearer token **or** `guest_id` (`apiGuestCheck`). With an `Authorization` header the guest id is ignored; to run as a guest, disable auth on the request and send `guest_id`.
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\ShippingMethodController@check_shipping_type`
+
+  **Middleware:** `api`, `api_lang`, `apiGuestCheck`
+
+  **Registered in:** `routes/rest_api/v1/api.php:107`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `seller_is` | yes | string |
+  | `seller_id` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/shipping-method/check-shipping-type?seller_is=string&seller_id=1&guest_id={{guest_id}}"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: seller_is
+    value: string
+    description: Required. string.
+  - key: seller_id
+    value: "1"
+    description: Required. string.
+  - key: guest_id
+    value: "{{guest_id}}"
+    description: "Guest flow: used when no customer Bearer token is sent. Obtain one from GET /get-guest-id."
+order: 21000

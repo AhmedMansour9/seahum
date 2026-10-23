@@ -1,0 +1,56 @@
+$kind: http-request
+id: 634e3296-2803-4698-a698-7bd3cd437c2c
+name: auth/login
+description: |-
+  **Route:** `POST /api/v2/delivery-man/auth/login`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\delivery_man\auth\LoginController@login`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v2/api.php:135`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `phone` | yes | string |
+  | `password` | yes | string Must be at least 8 characters. |
+
+
+  **Inputs read without declared validation (static scan):** `country_code`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/auth/login"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "phone": "+971500000000",
+        "password": "password",
+        "country_code": "United Arab Emirates"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Login succeeded (200)', function () { pm.response.to.have.status(200); });
+      if (pm.response.code === 200) {
+          const responseBody = pm.response.json();
+          pm.test('Response contains token', function () { pm.expect(responseBody.token).to.be.a('string'); });
+          if (responseBody.token) { pm.environment.set('deliveryman_token', responseBody.token); }
+      }
+    language: text/javascript
+order: 2000

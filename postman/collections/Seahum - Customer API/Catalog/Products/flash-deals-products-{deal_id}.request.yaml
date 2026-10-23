@@ -1,0 +1,43 @@
+$kind: http-request
+id: 84dbf8a2-1dce-4e6d-ad95-77fc73c6b468
+name: flash-deals/products/{deal_id}
+description: |-
+  **Route:** `GET /api/v1/flash-deals/products/{deal_id}`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\FlashDealController@getFlashDealProducts`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:147`
+
+
+  **Inputs read without declared validation (static scan):** `limit`, `offset`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/flash-deals/products/:deal_id?"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: limit
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: offset
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+pathVariables:
+  - key: deal_id
+    value: "1"
+    description: integer. The ID of the deal.
+auth:
+  type: noauth
+order: 4000

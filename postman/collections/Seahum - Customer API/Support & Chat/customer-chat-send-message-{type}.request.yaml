@@ -1,0 +1,54 @@
+$kind: http-request
+id: 954566d4-2827-4654-ac43-12b2bcea8525
+name: customer/chat/send-message/{type}
+description: |-
+  **Route:** `POST /api/v1/customer/chat/send-message/{type}`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\ChatController@send_message`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:336`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `id` | yes | string |
+  | `message` | no | string This field is required when none of <code>file</code> and <code>media</code> are present. |
+  | `media` | no | file Must be a file. Must not be greater than 2048 kilobytes. |
+  | `file` | no | file Must be a file. Must not be greater than 2048 kilobytes. |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/customer/chat/send-message/:type"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+pathVariables:
+  - key: type
+    value: string
+    description: string.
+body:
+  type: formdata
+  content:
+    - type: text
+      key: id
+      value: "1"
+    - type: text
+      key: message
+      value: string
+    - type: file
+      key: media
+      src: []
+      description: Optional file.
+    - type: file
+      key: file
+      src: []
+      description: Optional file.
+order: 5000

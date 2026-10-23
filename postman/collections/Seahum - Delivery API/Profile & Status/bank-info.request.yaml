@@ -1,0 +1,38 @@
+$kind: http-request
+id: 1e91d6c6-f535-42ef-a67c-867428f6e961
+description: |-
+  **Route:** `PUT /api/v2/delivery-man/bank-info`
+
+  **Authentication:** Delivery-man token: `Authorization: Bearer {{deliveryman_token}}` (`delivery_man_auth`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\delivery_man\DeliveryManController@bank_info`
+
+  **Middleware:** `api`, `api_lang`, `delivery_man_auth`, `actch:deliveryman_app`
+
+  **Registered in:** `routes/rest_api/v2/api.php:167`
+
+
+  **Inputs read without declared validation (static scan):** `account_no`, `bank_name`, `branch`, `holder_name`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/bank-info"
+method: PUT
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "account_no": "string",
+        "bank_name": "Test",
+        "branch": "string",
+        "holder_name": "Test"
+    }
+order: 1000

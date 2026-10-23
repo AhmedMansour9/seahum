@@ -1,0 +1,64 @@
+$kind: http-request
+id: 6a729b8b-7f4f-4543-a644-be48ae716a31
+name: v3/seller/coupon/update/{id}
+description: |-
+  **Route:** `PUT /api/v3/seller/coupon/update/{id}`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\CouponController@update`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:173`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `coupon_type` | yes | string |
+  | `customer_id` | no | string This field is required when <code>coupon_type</code> is <code>discount_on_purchase</code> or <code>free_delivery</code>. |
+  | `limit` | no | string This field is required when <code>coupon_type</code> is <code>discount_on_purchase</code> or <code>free_delivery</code>. |
+  | `discount_type` | no | string This field is required when <code>coupon_type</code> is <code>discount_on_purchase</code>. |
+  | `discount` | no | string This field is required when <code>coupon_type</code> is <code>discount_on_purchase</code>. |
+  | `min_purchase` | yes | string |
+  | `code` | no | string |
+  | `title` | yes | string |
+  | `start_date` | yes | string |
+  | `expire_date` | yes | string |
+
+
+  **Inputs read without declared validation (static scan):** `max_discount`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/coupon/update/:id"
+method: PUT
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: id
+    value: "1"
+    description: string. The ID of the update.
+body:
+  type: json
+  content: |-
+    {
+        "coupon_type": "string",
+        "customer_id": 1,
+        "limit": 10,
+        "discount_type": "string",
+        "discount": 1,
+        "min_purchase": "string",
+        "code": "string",
+        "title": "string",
+        "start_date": "2026-01-01",
+        "expire_date": "2026-01-01",
+        "max_discount": 1
+    }
+order: 7000

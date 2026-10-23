@@ -1,0 +1,4998 @@
+openapi: 3.0.3
+info:
+  title: 'Seahum - Vendor API'
+  description: 'Statically extracted API reference. Responses are not captured from live calls.'
+  version: 1.0.0
+servers:
+  -
+    url: '{api_host}'
+    variables:
+      api_host:
+        default: 'http://localhost'
+tags:
+  -
+    name: Endpoints
+    description: ''
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: ''
+security:
+  -
+    default: []
+paths:
+  /api/v2/seller/seller-info:
+    get:
+      summary: ''
+      operationId: getApiV2SellerSellerInfo
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/account-delete:
+    get:
+      summary: ''
+      operationId: getApiV2SellerAccountDelete
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/seller-delivery-man:
+    get:
+      summary: ''
+      operationId: getApiV2SellerSellerDeliveryMan
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/shop-product-reviews:
+    get:
+      summary: ''
+      operationId: getApiV2SellerShopProductReviews
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/shop-product-reviews-status:
+    get:
+      summary: ''
+      operationId: getApiV2SellerShopProductReviewsStatus
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/seller-update:
+    put:
+      summary: ''
+      operationId: putApiV2SellerSellerUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/monthly-earning:
+    get:
+      summary: ''
+      operationId: getApiV2SellerMonthlyEarning
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/monthly-commission-given:
+    get:
+      summary: ''
+      operationId: getApiV2SellerMonthlyCommissionGiven
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/cm-firebase-token:
+    put:
+      summary: ''
+      operationId: putApiV2SellerCmFirebaseToken
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cm_firebase_token:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - cm_firebase_token
+      security: []
+  /api/v2/seller/shop-info:
+    get:
+      summary: ''
+      operationId: getApiV2SellerShopInfo
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/transactions:
+    get:
+      summary: ''
+      operationId: getApiV2SellerTransactions
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/shop-update:
+    put:
+      summary: ''
+      operationId: putApiV2SellerShopUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/balance-withdraw:
+    post:
+      summary: ''
+      operationId: postApiV2SellerBalanceWithdraw
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/close-withdraw-request:
+    delete:
+      summary: ''
+      operationId: deleteApiV2SellerCloseWithdrawRequest
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/brands:
+    get:
+      summary: ''
+      operationId: getApiV2SellerBrands
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/products/upload-images:
+    post:
+      summary: ''
+      operationId: postApiV2SellerProductsUploadImages
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  description: ''
+                  example: architecto
+                type:
+                  type: string
+                  description: ''
+                  example: thumbnail
+                  enum:
+                    - product
+                    - thumbnail
+                    - meta
+              required:
+                - image
+                - type
+      security: []
+  /api/v2/seller/products/upload-digital-product:
+    post:
+      summary: ''
+      operationId: postApiV2SellerProductsUploadDigitalProduct
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/products/add:
+    post:
+      summary: ''
+      operationId: postApiV2SellerProductsAdd
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ''
+                  example: architecto
+                category_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                product_type:
+                  type: string
+                  description: ''
+                  example: architecto
+                digital_product_type:
+                  type: string
+                  description: 'This field is required when <code>product_type</code> is <code>==</code> or <code>digital</code>.'
+                  example: null
+                digital_file_ready:
+                  type: string
+                  description: 'This field is required when <code>digital_product_type</code> is <code>==</code> or <code>ready_product</code>.'
+                  example: null
+                unit:
+                  type: string
+                  description: 'This field is required when <code>product_type</code> is <code>==</code> or <code>physical</code>.'
+                  example: null
+                images:
+                  type: string
+                  description: ''
+                  example: architecto
+                thumbnail:
+                  type: string
+                  description: ''
+                  example: architecto
+                discount_type:
+                  type: string
+                  description: ''
+                  example: percent
+                  enum:
+                    - percent
+                    - flat
+                tax:
+                  type: string
+                  description: 'Must be at least 0 characters.'
+                  example: ngzmiyvdljnikhwaykcmyuwpwlv
+                lang:
+                  type: string
+                  description: ''
+                  example: architecto
+                unit_price:
+                  type: string
+                  description: 'Must be at least 1 character.'
+                  example: ngzmiyvdljnikhwa
+                purchase_price:
+                  type: string
+                  description: 'Must be at least 1 character.'
+                  example: ykcmyuwpwlvqwrsi
+                discount:
+                  type: string
+                  description: ''
+                  example: architecto
+                shipping_cost:
+                  type: string
+                  description: 'This field is required when <code>product_type</code> is <code>==</code> or <code>physical</code>.'
+                  example: null
+                code:
+                  type: string
+                  description: ''
+                  example: architecto
+                minimum_order_qty:
+                  type: number
+                  description: 'Must be at least 1.'
+                  example: 22
+              required:
+                - name
+                - category_id
+                - product_type
+                - images
+                - thumbnail
+                - discount_type
+                - tax
+                - lang
+                - unit_price
+                - purchase_price
+                - discount
+                - code
+                - minimum_order_qty
+      security: []
+  /api/v2/seller/products/list:
+    get:
+      summary: ''
+      operationId: getApiV2SellerProductsList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/products/stock-out-list:
+    get:
+      summary: ''
+      operationId: getApiV2SellerProductsStockOutList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/products/status-update:
+    get:
+      summary: ''
+      operationId: getApiV2SellerProductsStatusUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  '/api/v2/seller/products/edit/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2SellerProductsEditId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the edit.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v2/seller/products/update/{id}':
+    put:
+      summary: ''
+      operationId: putApiV2SellerProductsUpdateId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ''
+                  example: architecto
+                category_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                product_type:
+                  type: string
+                  description: ''
+                  example: architecto
+                digital_product_type:
+                  type: string
+                  description: 'This field is required when <code>product_type</code> is <code>==</code> or <code>digital</code>.'
+                  example: null
+                unit:
+                  type: string
+                  description: 'This field is required when <code>product_type</code> is <code>==</code> or <code>physical</code>.'
+                  example: null
+                discount_type:
+                  type: string
+                  description: ''
+                  example: percent
+                  enum:
+                    - percent
+                    - flat
+                tax:
+                  type: string
+                  description: 'Must be at least 0 characters.'
+                  example: ngzmiyvdljnikhwaykcmyuwpwlv
+                lang:
+                  type: string
+                  description: ''
+                  example: architecto
+                unit_price:
+                  type: string
+                  description: 'Must be at least 1 character.'
+                  example: ngzmiyvdljnikhwa
+                purchase_price:
+                  type: string
+                  description: 'Must be at least 1 character.'
+                  example: ykcmyuwpwlvqwrsi
+                discount:
+                  type: string
+                  description: ''
+                  example: architecto
+                shipping_cost:
+                  type: string
+                  description: 'This field is required when <code>product_type</code> is <code>==</code> or <code>physical</code>.'
+                  example: null
+                minimum_order_qty:
+                  type: number
+                  description: 'Must be at least 1.'
+                  example: 22
+                code:
+                  type: string
+                  description: ''
+                  example: null
+              required:
+                - name
+                - category_id
+                - product_type
+                - discount_type
+                - tax
+                - lang
+                - unit_price
+                - purchase_price
+                - discount
+                - minimum_order_qty
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the update.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v2/seller/products/delete/{id}':
+    delete:
+      summary: ''
+      operationId: deleteApiV2SellerProductsDeleteId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the delete.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v2/seller/products/barcode/generate:
+    get:
+      summary: ''
+      operationId: getApiV2SellerProductsBarcodeGenerate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ''
+                  example: architecto
+                quantity:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - id
+                - quantity
+      security: []
+  /api/v2/seller/orders/list:
+    get:
+      summary: ''
+      operationId: getApiV2SellerOrdersList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  '/api/v2/seller/orders/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2SellerOrdersId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the order.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v2/seller/orders/order-detail-status/{id}':
+    put:
+      summary: ''
+      operationId: putApiV2SellerOrdersOrderDetailStatusId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the order detail status.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v2/seller/orders/assign-delivery-man:
+    put:
+      summary: ''
+      operationId: putApiV2SellerOrdersAssignDeliveryMan
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                delivery_man_id:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - order_id
+                - delivery_man_id
+      security: []
+  /api/v2/seller/orders/order-wise-product-upload:
+    put:
+      summary: 'Digital file upload after sell'
+      operationId: digitalFileUploadAfterSell
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                digital_file_after_sell:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - order_id
+                - digital_file_after_sell
+      security: []
+  /api/v2/seller/orders/delivery-charge-date-update:
+    put:
+      summary: ''
+      operationId: putApiV2SellerOrdersDeliveryChargeDateUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/orders/assign-third-party-delivery:
+    post:
+      summary: ''
+      operationId: postApiV2SellerOrdersAssignThirdPartyDelivery
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                delivery_service_name:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - order_id
+                - delivery_service_name
+      security: []
+  /api/v2/seller/orders/update-payment-status:
+    post:
+      summary: ''
+      operationId: postApiV2SellerOrdersUpdatePaymentStatus
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                payment_status:
+                  type: string
+                  description: ''
+                  example: paid
+                  enum:
+                    - paid
+                    - unpaid
+              required:
+                - order_id
+                - payment_status
+      security: []
+  /api/v2/seller/refund/list:
+    get:
+      summary: ''
+      operationId: getApiV2SellerRefundList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/refund/refund-details:
+    get:
+      summary: ''
+      operationId: getApiV2SellerRefundRefundDetails
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/refund/refund-status-update:
+    post:
+      summary: ''
+      operationId: postApiV2SellerRefundRefundStatusUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refund_status:
+                  type: string
+                  description: ''
+                  example: architecto
+                refund_request_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                note:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - refund_status
+                - refund_request_id
+                - note
+      security: []
+  /api/v2/seller/shipping/get-shipping-method:
+    get:
+      summary: ''
+      operationId: getApiV2SellerShippingGetShippingMethod
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/shipping/selected-shipping-method:
+    get:
+      summary: ''
+      operationId: getApiV2SellerShippingSelectedShippingMethod
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/shipping/all-category-cost:
+    get:
+      summary: ''
+      operationId: getApiV2SellerShippingAllCategoryCost
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/shipping/set-category-cost:
+    post:
+      summary: ''
+      operationId: postApiV2SellerShippingSetCategoryCost
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: string
+                  description: ''
+                  example: architecto
+                cost:
+                  type: string
+                  description: ''
+                  example: architecto
+                multiply_qty:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - ids
+                - cost
+                - multiply_qty
+      security: []
+  /api/v2/seller/shipping-method/list:
+    get:
+      summary: ''
+      operationId: getApiV2SellerShippingMethodList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v2/seller/shipping-method/add:
+    post:
+      summary: ''
+      operationId: postApiV2SellerShippingMethodAdd
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'Must not be greater than 200 characters.'
+                  example: b
+                duration:
+                  type: string
+                  description: ''
+                  example: architecto
+                cost:
+                  type: number
+                  description: ''
+                  example: 4326.41688
+              required:
+                - title
+                - duration
+      security: []
+  '/api/v2/seller/shipping-method/edit/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2SellerShippingMethodEditId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the edit.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v2/seller/shipping-method/status:
+    put:
+      summary: ''
+      operationId: putApiV2SellerShippingMethodStatus
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ''
+                  example: architecto
+                status:
+                  type: string
+                  description: ''
+                  example: 1
+                  enum:
+                    - 1
+                    - 0
+              required:
+                - id
+                - status
+      security: []
+  '/api/v2/seller/shipping-method/update/{id}':
+    put:
+      summary: ''
+      operationId: putApiV2SellerShippingMethodUpdateId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'Must not be greater than 200 characters.'
+                  example: b
+                duration:
+                  type: string
+                  description: ''
+                  example: architecto
+                cost:
+                  type: number
+                  description: ''
+                  example: 4326.41688
+              required:
+                - title
+                - duration
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the update.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v2/seller/shipping-method/delete/{id}':
+    delete:
+      summary: ''
+      operationId: deleteApiV2SellerShippingMethodDeleteId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the delete.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v2/seller/messages/list/{type}':
+    get:
+      summary: ''
+      operationId: getApiV2SellerMessagesListType
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: type
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v2/seller/messages/get-message/{type}/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2SellerMessagesGetMessageTypeId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                offset:
+                  type: string
+                  description: ''
+                  example: architecto
+                limit:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - offset
+                - limit
+      security: []
+    parameters:
+      -
+        in: path
+        name: type
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: id
+        description: 'The ID of the {type}.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v2/seller/messages/send/{type}':
+    post:
+      summary: ''
+      operationId: postApiV2SellerMessagesSendType
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ''
+                  example: architecto
+                message:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - id
+                - message
+      security: []
+    parameters:
+      -
+        in: path
+        name: type
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v2/seller/messages/search/{type}':
+    get:
+      summary: ''
+      operationId: getApiV2SellerMessagesSearchType
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: type
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v2/seller/auth/login:
+    post:
+      summary: ''
+      operationId: postApiV2SellerAuthLogin
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: ''
+                  example: architecto
+                password:
+                  type: string
+                  description: 'Must be at least 6 characters.'
+                  example: ']|{+-0pBNvYg'
+              required:
+                - email
+                - password
+      security: []
+  /api/v2/seller/auth/forgot-password:
+    post:
+      summary: ''
+      operationId: postApiV2SellerAuthForgotPassword
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identity:
+                  type: string
+                  description: 'Must be at least 6 characters.'
+                  example: bngzmiyvdljnikhwaykcmyuwpwlvqwrsitcpscqldzsnrw
+              required:
+                - identity
+      security: []
+  /api/v2/seller/auth/verify-otp:
+    post:
+      summary: ''
+      operationId: postApiV2SellerAuthVerifyOtp
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identity:
+                  type: string
+                  description: ''
+                  example: architecto
+                otp:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - identity
+                - otp
+      security: []
+  /api/v2/seller/auth/reset-password:
+    put:
+      summary: ''
+      operationId: putApiV2SellerAuthResetPassword
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identity:
+                  type: string
+                  description: ''
+                  example: architecto
+                otp:
+                  type: string
+                  description: ''
+                  example: architecto
+                password:
+                  type: string
+                  description: 'The value and <code>confirm_password</code> must match. Must be at least 8 characters.'
+                  example: ']|{+-0pBNvYg'
+              required:
+                - identity
+                - otp
+                - password
+      security: []
+  /api/v2/seller/registration:
+    post:
+      summary: ''
+      operationId: postApiV2SellerRegistration
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: ''
+                  example: architecto
+                shop_address:
+                  type: string
+                  description: ''
+                  example: architecto
+                f_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                l_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                shop_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                phone:
+                  type: string
+                  description: ''
+                  example: architecto
+                password:
+                  type: string
+                  description: 'Must be at least 8 characters.'
+                  example: ']|{+-0pBNvYg'
+                image:
+                  type: string
+                  description: ''
+                  example: architecto
+                logo:
+                  type: string
+                  description: ''
+                  example: architecto
+                banner:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - email
+                - shop_address
+                - f_name
+                - l_name
+                - shop_name
+                - phone
+                - password
+                - image
+                - logo
+                - banner
+      security: []
+  /api/v3/seller/auth/login:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuthLogin
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: ''
+                  example: architecto
+                password:
+                  type: string
+                  description: 'Must be at least 6 characters.'
+                  example: ']|{+-0pBNvYg'
+              required:
+                - email
+                - password
+      security: []
+  /api/v3/seller/auth/forgot-password:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuthForgotPassword
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identity:
+                  type: string
+                  description: 'Must be at least 6 characters.'
+                  example: bngzmiyvdljnikhwaykcmyuwpwlvqwrsitcpscqldzsnrw
+              required:
+                - identity
+      security: []
+  /api/v3/seller/auth/verify-otp:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuthVerifyOtp
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identity:
+                  type: string
+                  description: ''
+                  example: architecto
+                otp:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - identity
+                - otp
+      security: []
+  /api/v3/seller/auth/reset-password:
+    put:
+      summary: ''
+      operationId: putApiV3SellerAuthResetPassword
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identity:
+                  type: string
+                  description: ''
+                  example: architecto
+                otp:
+                  type: string
+                  description: ''
+                  example: architecto
+                password:
+                  type: string
+                  description: 'The value and <code>confirm_password</code> must match. Must be at least 8 characters.'
+                  example: ']|{+-0pBNvYg'
+              required:
+                - identity
+                - otp
+                - password
+      security: []
+  /api/v3/seller/auth/firebase-auth-token-store:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuthFirebaseAuthTokenStore
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/auth/firebase-auth-verify:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuthFirebaseAuthVerify
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sessionInfo:
+                  type: string
+                  description: ''
+                  example: architecto
+                phoneNumber:
+                  type: string
+                  description: ''
+                  example: architecto
+                code:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - sessionInfo
+                - phoneNumber
+                - code
+      security: []
+  /api/v3/seller/auth/check-vendor-exist-info:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuthCheckVendorExistInfo
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - phone
+      security: []
+  /api/v3/seller/registration:
+    post:
+      summary: ''
+      operationId: postApiV3SellerRegistration
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: gbailey@example.net
+                shop_address:
+                  type: string
+                  description: ''
+                  example: architecto
+                f_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                l_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                shop_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                phone:
+                  type: string
+                  description: ''
+                  example: architecto
+                password:
+                  type: string
+                  description: 'Must be at least 8 characters.'
+                  example: ']|{+-0pBNvYg'
+                image:
+                  type: string
+                  description: 'Must not be greater than 2048 characters.'
+                  example: h
+                logo:
+                  type: string
+                  description: 'Must not be greater than 2048 characters.'
+                  example: w
+                banner:
+                  type: string
+                  description: 'Must not be greater than 2048 characters.'
+                  example: a
+                bottom_banner:
+                  type: string
+                  description: 'Must not be greater than 2048 characters.'
+                  example: 'y'
+                  nullable: true
+                tin_certificate:
+                  type: string
+                  description: 'Must not be greater than 2048 characters.'
+                  example: k
+                  nullable: true
+                tax_identification_number:
+                  type: string
+                  description: ''
+                  example: architecto
+                  nullable: true
+                tin_expire_date:
+                  type: string
+                  description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
+                  example: '2052-11-15'
+                  nullable: true
+              required:
+                - email
+                - shop_address
+                - f_name
+                - l_name
+                - shop_name
+                - phone
+                - password
+                - image
+                - logo
+                - banner
+      security: []
+  /api/v3/seller/language-change:
+    put:
+      summary: ''
+      operationId: putApiV3SellerLanguageChange
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/seller-info:
+    get:
+      summary: ''
+      operationId: getApiV3SellerSellerInfo
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/get-earning-statitics:
+    get:
+      summary: ''
+      operationId: getApiV3SellerGetEarningStatitics
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/order-statistics:
+    get:
+      summary: ''
+      operationId: getApiV3SellerOrderStatistics
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/account-delete:
+    get:
+      summary: ''
+      operationId: getApiV3SellerAccountDelete
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/seller-delivery-man:
+    get:
+      summary: ''
+      operationId: getApiV3SellerSellerDeliveryMan
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/shop-product-reviews:
+    get:
+      summary: ''
+      operationId: getApiV3SellerShopProductReviews
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/shop-product-reviews-reply:
+    post:
+      summary: ''
+      operationId: postApiV3SellerShopProductReviewsReply
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/shop-product-reviews-status:
+    get:
+      summary: ''
+      operationId: getApiV3SellerShopProductReviewsStatus
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/seller-update:
+    put:
+      summary: ''
+      operationId: putApiV3SellerSellerUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  description: 'Must not be greater than 2048 characters.'
+                  example: b
+                  nullable: true
+      security: []
+  /api/v3/seller/monthly-earning:
+    get:
+      summary: ''
+      operationId: getApiV3SellerMonthlyEarning
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/monthly-commission-given:
+    get:
+      summary: ''
+      operationId: getApiV3SellerMonthlyCommissionGiven
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/cm-firebase-token:
+    put:
+      summary: ''
+      operationId: putApiV3SellerCmFirebaseToken
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cm_firebase_token:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - cm_firebase_token
+      security: []
+  /api/v3/seller/shop-info:
+    get:
+      summary: ''
+      operationId: getApiV3SellerShopInfo
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/transactions:
+    get:
+      summary: ''
+      operationId: getApiV3SellerTransactions
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/shop-update:
+    put:
+      summary: ''
+      operationId: putApiV3SellerShopUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                logo:
+                  type: string
+                  description: 'Must not be greater than 2048 characters.'
+                  example: b
+                  nullable: true
+                banner:
+                  type: string
+                  description: 'Must not be greater than 2048 characters.'
+                  example: 'n'
+                  nullable: true
+                bottom_banner:
+                  type: string
+                  description: 'Must not be greater than 2048 characters.'
+                  example: g
+                  nullable: true
+                offer_banner:
+                  type: string
+                  description: 'Must not be greater than 2048 characters.'
+                  example: z
+                  nullable: true
+                tin_certificate:
+                  type: string
+                  description: 'Must not be greater than 2048 characters.'
+                  example: m
+                  nullable: true
+      security: []
+  /api/v3/seller/update-setup-guide-app:
+    post:
+      summary: ''
+      operationId: postApiV3SellerUpdateSetupGuideApp
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                key:
+                  type: string
+                  description: ''
+                  example: architecto
+                value:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - key
+                - value
+      security: []
+  /api/v3/seller/withdraw-method-list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerWithdrawMethodList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/balance-withdraw:
+    post:
+      summary: ''
+      operationId: postApiV3SellerBalanceWithdraw
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/balance-withdraw-update:
+    post:
+      summary: ''
+      operationId: postApiV3SellerBalanceWithdrawUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/close-withdraw-request:
+    delete:
+      summary: ''
+      operationId: deleteApiV3SellerCloseWithdrawRequest
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/vacation-add:
+    put:
+      summary: ''
+      operationId: putApiV3SellerVacationAdd
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/temporary-close:
+    put:
+      summary: ''
+      operationId: putApiV3SellerTemporaryClose
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/brands:
+    get:
+      summary: ''
+      operationId: getApiV3SellerBrands
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/top-delivery-man:
+    get:
+      summary: ''
+      operationId: getApiV3SellerTopDeliveryMan
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/categories:
+    get:
+      summary: ''
+      operationId: getApiV3SellerCategories
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/products/list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/products/upload-images:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductsUploadImages
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  description: 'Must not be greater than 2048 characters.'
+                  example: b
+                type:
+                  type: string
+                  description: ''
+                  example: product
+                  enum:
+                    - product
+                    - thumbnail
+                    - meta
+              required:
+                - image
+                - type
+      security: []
+  /api/v3/seller/products/upload-digital-product:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductsUploadDigitalProduct
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                digital_file_ready:
+                  type: string
+                  format: binary
+                  description: 'Must be a file. Must not be greater than 2048 kilobytes.'
+              required:
+                - digital_file_ready
+      security: []
+  /api/v3/seller/products/delete-digital-product:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductsDeleteDigitalProduct
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                variant_key:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - product_id
+                - variant_key
+      security: []
+  /api/v3/seller/products/add:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductsAdd
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ''
+                  example: architecto
+                category_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                product_type:
+                  type: string
+                  description: ''
+                  example: architecto
+                unit:
+                  type: string
+                  description: 'This field is required when <code>product_type</code> is <code>==</code> or <code>physical</code>.'
+                  example: null
+                images:
+                  type: string
+                  description: ''
+                  example: architecto
+                thumbnail:
+                  type: string
+                  description: ''
+                  example: architecto
+                discount_type:
+                  type: string
+                  description: ''
+                  example: percent
+                  enum:
+                    - percent
+                    - flat
+                lang:
+                  type: string
+                  description: ''
+                  example: architecto
+                unit_price:
+                  type: string
+                  description: 'Must be at least 1 character.'
+                  example: ngzmiyvdljnikhwa
+                discount:
+                  type: string
+                  description: ''
+                  example: architecto
+                shipping_cost:
+                  type: string
+                  description: 'This field is required when <code>product_type</code> is <code>==</code> or <code>physical</code>.'
+                  example: null
+                code:
+                  type: string
+                  description: 'Must match the regex /^[a-zA-Z0-9]+$/. Must be at least 6 characters. Must not be greater than 20 characters.'
+                  example: ngzmiyvdljnikhwa
+                minimum_order_qty:
+                  type: number
+                  description: 'Must be at least 1.'
+                  example: 79
+              required:
+                - name
+                - category_id
+                - product_type
+                - images
+                - thumbnail
+                - discount_type
+                - lang
+                - unit_price
+                - discount
+                - code
+                - minimum_order_qty
+      security: []
+  '/api/v3/seller/products/details/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsDetailsId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the detail.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v3/seller/products/stock-out-list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsStockOutList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/products/status-update:
+    put:
+      summary: ''
+      operationId: putApiV3SellerProductsStatusUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  '/api/v3/seller/products/edit/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsEditId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the edit.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/products/update/{id}':
+    put:
+      summary: ''
+      operationId: putApiV3SellerProductsUpdateId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ''
+                  example: architecto
+                category_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                product_type:
+                  type: string
+                  description: ''
+                  example: architecto
+                unit:
+                  type: string
+                  description: 'This field is required when <code>product_type</code> is <code>==</code> or <code>physical</code>.'
+                  example: null
+                discount_type:
+                  type: string
+                  description: ''
+                  example: flat
+                  enum:
+                    - percent
+                    - flat
+                lang:
+                  type: string
+                  description: ''
+                  example: architecto
+                unit_price:
+                  type: string
+                  description: 'Must be at least 1 character.'
+                  example: ngzmiyvdljnikhwa
+                discount:
+                  type: string
+                  description: ''
+                  example: architecto
+                shipping_cost:
+                  type: string
+                  description: 'This field is required when <code>product_type</code> is <code>==</code> or <code>physical</code>.'
+                  example: null
+                minimum_order_qty:
+                  type: number
+                  description: 'Must be at least 1.'
+                  example: 22
+                code:
+                  type: string
+                  description: ''
+                  example: null
+              required:
+                - name
+                - category_id
+                - product_type
+                - discount_type
+                - lang
+                - unit_price
+                - discount
+                - minimum_order_qty
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the update.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/products/review-list/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsReviewListId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the review list.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v3/seller/products/quantity-update:
+    put:
+      summary: ''
+      operationId: putApiV3SellerProductsQuantityUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  '/api/v3/seller/products/delete/{id}':
+    delete:
+      summary: ''
+      operationId: deleteApiV3SellerProductsDeleteId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the delete.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v3/seller/products/barcode/generate:
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsBarcodeGenerate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ''
+                  example: architecto
+                quantity:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - id
+                - quantity
+      security: []
+  /api/v3/seller/products/top-selling-product:
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsTopSellingProduct
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/products/most-popular-product:
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsMostPopularProduct
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/products/delete-image:
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsDeleteImage
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  '/api/v3/seller/products/get-product-images/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsGetProductImagesId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the get product image.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v3/seller/products/stock-limit-status:
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsStockLimitStatus
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/products/delete-preview-file:
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsDeletePreviewFile
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/products/digital-author-list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsDigitalAuthorList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/products/digital-publishing-house-list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsDigitalPublishingHouseList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/products/restock-request-list:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductsRestockRequestList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/products/restock-request-delete:
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsRestockRequestDelete
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/products/restock-request-stock-update:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductsRestockRequestStockUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/products/restock-request-brands-list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsRestockRequestBrandsList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/orders/list:
+    post:
+      summary: ''
+      operationId: postApiV3SellerOrdersList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  '/api/v3/seller/orders/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerOrdersId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the order.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/orders/order-detail-status/{id}':
+    put:
+      summary: ''
+      operationId: putApiV3SellerOrdersOrderDetailStatusId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the order detail status.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v3/seller/orders/assign-delivery-man:
+    put:
+      summary: ''
+      operationId: putApiV3SellerOrdersAssignDeliveryMan
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                delivery_man_id:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - order_id
+                - delivery_man_id
+      security: []
+  /api/v3/seller/orders/order-wise-product-upload:
+    put:
+      summary: 'Digital file upload after sell'
+      operationId: putApiV3SellerOrdersOrderWiseProductUpload
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                digital_file_ready:
+                  type: string
+                  format: binary
+                  description: 'Must be a file. Must not be greater than 2048 kilobytes.'
+              required:
+                - order_id
+                - digital_file_ready
+      security: []
+  /api/v3/seller/orders/delivery-charge-date-update:
+    put:
+      summary: ''
+      operationId: putApiV3SellerOrdersDeliveryChargeDateUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/orders/assign-third-party-delivery:
+    post:
+      summary: ''
+      operationId: postApiV3SellerOrdersAssignThirdPartyDelivery
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                delivery_service_name:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - order_id
+                - delivery_service_name
+      security: []
+  /api/v3/seller/orders/update-payment-status:
+    post:
+      summary: ''
+      operationId: postApiV3SellerOrdersUpdatePaymentStatus
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                payment_status:
+                  type: string
+                  description: ''
+                  example: paid
+                  enum:
+                    - paid
+                    - unpaid
+              required:
+                - order_id
+                - payment_status
+      security: []
+  /api/v3/seller/orders/address-update:
+    post:
+      summary: ''
+      operationId: postApiV3SellerOrdersAddressUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/orders/order-detail-info-update:
+    post:
+      summary: ''
+      operationId: postApiV3SellerOrdersOrderDetailInfoUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                payment_status:
+                  type: string
+                  description: ''
+                  example: paid
+                  enum:
+                    - paid
+                    - unpaid
+              required:
+                - order_id
+                - payment_status
+      security: []
+  /api/v3/seller/orders/edit-order-submit:
+    post:
+      summary: ''
+      operationId: postApiV3SellerOrdersEditOrderSubmit
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/orders/edit-order-validation:
+    post:
+      summary: ''
+      operationId: postApiV3SellerOrdersEditOrderValidation
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/orders/assign-order-in-cod:
+    post:
+      summary: ''
+      operationId: postApiV3SellerOrdersAssignOrderInCod
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/clearance-sale/product-list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerClearanceSaleProductList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/clearance-sale/product-add:
+    post:
+      summary: ''
+      operationId: postApiV3SellerClearanceSaleProductAdd
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/clearance-sale/product-delete:
+    post:
+      summary: ''
+      operationId: postApiV3SellerClearanceSaleProductDelete
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/clearance-sale/all-product-delete:
+    post:
+      summary: ''
+      operationId: postApiV3SellerClearanceSaleAllProductDelete
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/clearance-sale/product-status-update:
+    post:
+      summary: ''
+      operationId: postApiV3SellerClearanceSaleProductStatusUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/clearance-sale/product-discount-update:
+    post:
+      summary: ''
+      operationId: postApiV3SellerClearanceSaleProductDiscountUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/clearance-sale/config-status-update:
+    post:
+      summary: ''
+      operationId: postApiV3SellerClearanceSaleConfigStatusUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/clearance-sale/config-data:
+    get:
+      summary: ''
+      operationId: getApiV3SellerClearanceSaleConfigData
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/clearance-sale/config-data-update:
+    post:
+      summary: ''
+      operationId: postApiV3SellerClearanceSaleConfigDataUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/refund/list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerRefundList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/refund/single-item:
+    get:
+      summary: ''
+      operationId: getApiV3SellerRefundSingleItem
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/refund/refund-details:
+    get:
+      summary: ''
+      operationId: getApiV3SellerRefundRefundDetails
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/refund/refund-status-update:
+    post:
+      summary: ''
+      operationId: postApiV3SellerRefundRefundStatusUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refund_status:
+                  type: string
+                  description: ''
+                  example: architecto
+                refund_request_id:
+                  type: string
+                  description: ''
+                  example: architecto
+                note:
+                  type: string
+                  description: 'This field is required when <code>refund_status</code> is <code>rejected</code>.'
+                  example: null
+              required:
+                - refund_status
+                - refund_request_id
+      security: []
+  /api/v3/seller/coupon/list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerCouponList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/coupon/store:
+    post:
+      summary: ''
+      operationId: postApiV3SellerCouponStore
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                coupon_type:
+                  type: string
+                  description: ''
+                  example: architecto
+                customer_id:
+                  type: string
+                  description: 'This field is required when <code>coupon_type</code> is <code>discount_on_purchase</code> or <code>free_delivery</code>.'
+                  example: null
+                limit:
+                  type: string
+                  description: 'This field is required when <code>coupon_type</code> is <code>discount_on_purchase</code> or <code>free_delivery</code>.'
+                  example: null
+                discount_type:
+                  type: string
+                  description: 'This field is required when <code>coupon_type</code> is <code>discount_on_purchase</code>.'
+                  example: null
+                discount:
+                  type: string
+                  description: 'This field is required when <code>coupon_type</code> is <code>discount_on_purchase</code>.'
+                  example: null
+                min_purchase:
+                  type: string
+                  description: ''
+                  example: architecto
+                code:
+                  type: string
+                  description: ''
+                  example: architecto
+                title:
+                  type: string
+                  description: ''
+                  example: architecto
+                start_date:
+                  type: string
+                  description: ''
+                  example: architecto
+                expire_date:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - coupon_type
+                - min_purchase
+                - code
+                - title
+                - start_date
+                - expire_date
+      security: []
+  '/api/v3/seller/coupon/update/{id}':
+    put:
+      summary: ''
+      operationId: putApiV3SellerCouponUpdateId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                coupon_type:
+                  type: string
+                  description: ''
+                  example: architecto
+                customer_id:
+                  type: string
+                  description: 'This field is required when <code>coupon_type</code> is <code>discount_on_purchase</code> or <code>free_delivery</code>.'
+                  example: null
+                limit:
+                  type: string
+                  description: 'This field is required when <code>coupon_type</code> is <code>discount_on_purchase</code> or <code>free_delivery</code>.'
+                  example: null
+                discount_type:
+                  type: string
+                  description: 'This field is required when <code>coupon_type</code> is <code>discount_on_purchase</code>.'
+                  example: null
+                discount:
+                  type: string
+                  description: 'This field is required when <code>coupon_type</code> is <code>discount_on_purchase</code>.'
+                  example: null
+                min_purchase:
+                  type: string
+                  description: ''
+                  example: architecto
+                code:
+                  type: string
+                  description: ''
+                  example: null
+                title:
+                  type: string
+                  description: ''
+                  example: architecto
+                start_date:
+                  type: string
+                  description: ''
+                  example: architecto
+                expire_date:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - coupon_type
+                - min_purchase
+                - title
+                - start_date
+                - expire_date
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the update.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/coupon/status-update/{id}':
+    put:
+      summary: ''
+      operationId: putApiV3SellerCouponStatusUpdateId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the status update.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/coupon/delete/{id}':
+    delete:
+      summary: ''
+      operationId: deleteApiV3SellerCouponDeleteId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the delete.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v3/seller/coupon/check-coupon:
+    post:
+      summary: ''
+      operationId: postApiV3SellerCouponCheckCoupon
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/coupon/customers:
+    get:
+      summary: ''
+      operationId: getApiV3SellerCouponCustomers
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/shipping/get-shipping-method:
+    get:
+      summary: ''
+      operationId: getApiV3SellerShippingGetShippingMethod
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/shipping/selected-shipping-method:
+    get:
+      summary: ''
+      operationId: getApiV3SellerShippingSelectedShippingMethod
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/shipping/all-category-cost:
+    get:
+      summary: ''
+      operationId: getApiV3SellerShippingAllCategoryCost
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/shipping/set-category-cost:
+    post:
+      summary: ''
+      operationId: postApiV3SellerShippingSetCategoryCost
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: string
+                  description: ''
+                  example: architecto
+                cost:
+                  type: string
+                  description: ''
+                  example: architecto
+                multiply_qty:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - ids
+                - cost
+                - multiply_qty
+      security: []
+  /api/v3/seller/shipping-method/list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerShippingMethodList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/shipping-method/add:
+    post:
+      summary: ''
+      operationId: postApiV3SellerShippingMethodAdd
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'Must not be greater than 200 characters.'
+                  example: b
+                duration:
+                  type: string
+                  description: ''
+                  example: architecto
+                cost:
+                  type: number
+                  description: ''
+                  example: 4326.41688
+              required:
+                - title
+                - duration
+      security: []
+  '/api/v3/seller/shipping-method/edit/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerShippingMethodEditId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the edit.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v3/seller/shipping-method/status:
+    put:
+      summary: ''
+      operationId: putApiV3SellerShippingMethodStatus
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ''
+                  example: architecto
+                status:
+                  type: string
+                  description: ''
+                  example: 1
+                  enum:
+                    - 1
+                    - 0
+              required:
+                - id
+                - status
+      security: []
+  '/api/v3/seller/shipping-method/update/{id}':
+    put:
+      summary: ''
+      operationId: putApiV3SellerShippingMethodUpdateId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'Must not be greater than 200 characters.'
+                  example: b
+                duration:
+                  type: string
+                  description: ''
+                  example: architecto
+                cost:
+                  type: number
+                  description: ''
+                  example: 4326.41688
+              required:
+                - title
+                - duration
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the update.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/shipping-method/delete/{id}':
+    delete:
+      summary: ''
+      operationId: deleteApiV3SellerShippingMethodDeleteId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the delete.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/messages/list/{type}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerMessagesListType
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: type
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/messages/get-message/{type}/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerMessagesGetMessageTypeId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                offset:
+                  type: string
+                  description: ''
+                  example: architecto
+                limit:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - offset
+                - limit
+      security: []
+    parameters:
+      -
+        in: path
+        name: type
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: id
+        description: 'The ID of the {type}.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/messages/send/{type}':
+    post:
+      summary: ''
+      operationId: postApiV3SellerMessagesSendType
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ''
+                  example: architecto
+                message:
+                  type: string
+                  description: 'This field is required when none of <code>file</code> and <code>media</code> are present.'
+                  example: null
+                media:
+                  type: array
+                  description: 'Must be a file. Must not be greater than 2048 kilobytes.'
+                  items:
+                    type: string
+                    format: binary
+                file:
+                  type: array
+                  description: 'Must be a file. Must not be greater than 2048 kilobytes.'
+                  items:
+                    type: string
+                    format: binary
+              required:
+                - id
+      security: []
+    parameters:
+      -
+        in: path
+        name: type
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/messages/seen/{type}':
+    post:
+      summary: ''
+      operationId: postApiV3SellerMessagesSeenType
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - id
+      security: []
+    parameters:
+      -
+        in: path
+        name: type
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/messages/search/{type}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerMessagesSearchType
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: type
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v3/seller/pos/get-categories:
+    get:
+      summary: ''
+      operationId: getApiV3SellerPosGetCategories
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/pos/customers:
+    get:
+      summary: ''
+      operationId: getApiV3SellerPosCustomers
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/pos/customer-store:
+    post:
+      summary: ''
+      operationId: postApiV3SellerPosCustomerStore
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                f_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                l_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: zbailey@example.net
+                phone:
+                  type: string
+                  description: ''
+                  example: null
+                country:
+                  type: string
+                  description: ''
+                  example: architecto
+                city:
+                  type: string
+                  description: ''
+                  example: architecto
+                zip_code:
+                  type: string
+                  description: ''
+                  example: architecto
+                address:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - f_name
+                - l_name
+                - email
+                - country
+                - city
+                - zip_code
+                - address
+      security: []
+  /api/v3/seller/pos/products:
+    get:
+      summary: ''
+      operationId: getApiV3SellerPosProducts
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/pos/product-list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerPosProductList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/pos/place-order:
+    post:
+      summary: ''
+      operationId: postApiV3SellerPosPlaceOrder
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/pos/get-invoice:
+    get:
+      summary: ''
+      operationId: getApiV3SellerPosGetInvoice
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/pos/get-tax-amount:
+    post:
+      summary: ''
+      operationId: postApiV3SellerPosGetTaxAmount
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/delivery-man/list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerDeliveryManList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/delivery-man/store:
+    post:
+      summary: ''
+      operationId: postApiV3SellerDeliveryManStore
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                f_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                l_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                phone:
+                  type: string
+                  description: ''
+                  example: architecto
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: zbailey@example.net
+                country_code:
+                  type: string
+                  description: ''
+                  example: architecto
+                password:
+                  type: string
+                  description: 'The value and <code>confirm_password</code> must match. Must be at least 8 characters.'
+                  example: ']|{+-0pBNvYg'
+                identity_image:
+                  type: array
+                  description: 'Must not be greater than 2048 characters.'
+                  example:
+                    - h
+                  items:
+                    type: string
+                    nullable: true
+              required:
+                - f_name
+                - l_name
+                - phone
+                - email
+                - country_code
+                - password
+      security: []
+  '/api/v3/seller/delivery-man/update/{id}':
+    put:
+      summary: ''
+      operationId: putApiV3SellerDeliveryManUpdateId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                f_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                l_name:
+                  type: string
+                  description: ''
+                  example: architecto
+                email:
+                  type: string
+                  description: ''
+                  example: null
+                phone:
+                  type: string
+                  description: ''
+                  example: architecto
+                country_code:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - f_name
+                - l_name
+                - phone
+                - country_code
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the update.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/delivery-man/details/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerDeliveryManDetailsId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the detail.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v3/seller/delivery-man/status-update:
+    post:
+      summary: ''
+      operationId: postApiV3SellerDeliveryManStatusUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  '/api/v3/seller/delivery-man/delete/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerDeliveryManDeleteId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the delete.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/delivery-man/reviews/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerDeliveryManReviewsId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the review.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v3/seller/delivery-man/order-list/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerDeliveryManOrderListId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the order list.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/delivery-man/order-status-history/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerDeliveryManOrderStatusHistoryId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the order status history.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  '/api/v3/seller/delivery-man/earning/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerDeliveryManEarningId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the earning.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v3/seller/delivery-man/cash-receive:
+    post:
+      summary: ''
+      operationId: postApiV3SellerDeliveryManCashReceive
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  description: ''
+                  example: 4326.41688
+              required:
+                - amount
+      security: []
+  '/api/v3/seller/delivery-man/collect-cash-list/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerDeliveryManCollectCashListId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the collect cash list.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v3/seller/delivery-man/withdraw/list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerDeliveryManWithdrawList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  '/api/v3/seller/delivery-man/withdraw/details/{id}':
+    get:
+      summary: ''
+      operationId: getApiV3SellerDeliveryManWithdrawDetailsId
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the detail.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v3/seller/delivery-man/withdraw/status-update:
+    put:
+      summary: ''
+      operationId: putApiV3SellerDeliveryManWithdrawStatusUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/delivery-man/emergency-contact/list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerDeliveryManEmergencyContactList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/delivery-man/emergency-contact/store:
+    post:
+      summary: ''
+      operationId: postApiV3SellerDeliveryManEmergencyContactStore
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ''
+                  example: architecto
+                phone:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - name
+                - phone
+      security: []
+  /api/v3/seller/delivery-man/emergency-contact/update:
+    put:
+      summary: ''
+      operationId: putApiV3SellerDeliveryManEmergencyContactUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ''
+                  example: architecto
+                phone:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - name
+                - phone
+      security: []
+  /api/v3/seller/delivery-man/emergency-contact/status-update:
+    put:
+      summary: ''
+      operationId: putApiV3SellerDeliveryManEmergencyContactStatusUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/delivery-man/emergency-contact/delete:
+    delete:
+      summary: ''
+      operationId: deleteApiV3SellerDeliveryManEmergencyContactDelete
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/notification:
+    get:
+      summary: ''
+      operationId: getApiV3SellerNotification
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/notification/view:
+    get:
+      summary: ''
+      operationId: getApiV3SellerNotificationView
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/payment-information/list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerPaymentInformationList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/payment-information/withdrawal-method-list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerPaymentInformationWithdrawalMethodList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/payment-information/add:
+    post:
+      summary: ''
+      operationId: postApiV3SellerPaymentInformationAdd
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                method_name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                withdraw_method_id:
+                  type: string
+                  description: 'Must match an existing stored value.'
+                  example: architecto
+              required:
+                - method_name
+                - withdraw_method_id
+      security: []
+  /api/v3/seller/payment-information/update:
+    post:
+      summary: ''
+      operationId: postApiV3SellerPaymentInformationUpdate
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                method_name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                withdraw_method_id:
+                  type: string
+                  description: 'Must match an existing stored value.'
+                  example: architecto
+              required:
+                - method_name
+                - withdraw_method_id
+      security: []
+  /api/v3/seller/payment-information/default:
+    post:
+      summary: ''
+      operationId: postApiV3SellerPaymentInformationDefault
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/payment-information/status:
+    post:
+      summary: ''
+      operationId: postApiV3SellerPaymentInformationStatus
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/payment-information/delete:
+    get:
+      summary: ''
+      operationId: getApiV3SellerPaymentInformationDelete
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  '/api/v3/seller/products/{seller_id}/all-products':
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsSeller_idAllProducts
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: seller_id
+        description: 'The ID of the seller.'
+        example: 18
+        required: true
+        schema:
+          type: integer
+  '/api/v3/seller/products/{seller_id}/edit-order-all-products':
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductsSeller_idEditOrderAllProducts
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: seller_id
+        description: 'The ID of the seller.'
+        example: 18
+        required: true
+        schema:
+          type: integer
+  /api/v3/seller/product/title-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductTitleAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                langCode:
+                  type: string
+                  description: 'Must not be greater than 20 characters.'
+                  example: ngzmiyvdljnikhwa
+              required:
+                - name
+                - langCode
+      security: []
+  /api/v3/seller/product/description-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductDescriptionAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                langCode:
+                  type: string
+                  description: 'Must not be greater than 20 characters.'
+                  example: ngzmiyvdljnikhwa
+              required:
+                - name
+                - langCode
+      security: []
+  /api/v3/seller/product/general-setup-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductGeneralSetupAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: ''
+                  example: 'Eius et animi quos velit et.'
+              required:
+                - name
+                - description
+      security: []
+  /api/v3/seller/product/price-others-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductPriceOthersAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: ''
+                  example: 'Eius et animi quos velit et.'
+                  nullable: true
+              required:
+                - name
+      security: []
+  /api/v3/seller/product/seo-section-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductSeoSectionAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: ''
+                  example: 'Eius et animi quos velit et.'
+                  nullable: true
+              required:
+                - name
+      security: []
+  /api/v3/seller/product/variation-setup-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductVariationSetupAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - name
+                - description
+      security: []
+  /api/v3/seller/product/analyze-image-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductAnalyzeImageAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: 'Must be an image. Must not be greater than 2048 kilobytes.'
+              required:
+                - image
+      security: []
+  /api/v3/seller/product/generate-title-suggestions:
+    post:
+      summary: ''
+      operationId: postApiV3SellerProductGenerateTitleSuggestions
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                keywords:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+              required:
+                - keywords
+      security: []
+  /api/v3/seller/product/generate-limit-check:
+    get:
+      summary: ''
+      operationId: getApiV3SellerProductGenerateLimitCheck
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/auction/product/title-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuctionProductTitleAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                langCode:
+                  type: string
+                  description: 'Must not be greater than 20 characters.'
+                  example: ngzmiyvdljnikhwa
+              required:
+                - name
+                - langCode
+      security: []
+  /api/v3/seller/auction/product/description-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuctionProductDescriptionAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                langCode:
+                  type: string
+                  description: 'Must not be greater than 20 characters.'
+                  example: ngzmiyvdljnikhwa
+              required:
+                - name
+                - langCode
+      security: []
+  /api/v3/seller/auction/product/general-setup-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuctionProductGeneralSetupAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: ''
+                  example: 'Eius et animi quos velit et.'
+                  nullable: true
+              required:
+                - name
+      security: []
+  /api/v3/seller/auction/product/shipping-policy-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuctionProductShippingPolicyAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: ''
+                  example: 'Eius et animi quos velit et.'
+                  nullable: true
+              required:
+                - name
+      security: []
+  /api/v3/seller/auction/product/auction-info-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuctionProductAuctionInfoAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: ''
+                  example: 'Eius et animi quos velit et.'
+                  nullable: true
+              required:
+                - name
+      security: []
+  /api/v3/seller/auction/product/seo-section-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuctionProductSeoSectionAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: ''
+                  example: 'Eius et animi quos velit et.'
+                  nullable: true
+              required:
+                - name
+      security: []
+  /api/v3/seller/auction/product/analyze-image-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuctionProductAnalyzeImageAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: 'Must be an image. Must not be greater than 2048 kilobytes.'
+              required:
+                - image
+      security: []
+  /api/v3/seller/auction/product/generate-title-suggestions:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuctionProductGenerateTitleSuggestions
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                keywords:
+                  type: array
+                  description: 'Must not be greater than 255 characters.'
+                  example:
+                    - b
+                  items:
+                    type: string
+              required:
+                - keywords
+      security: []
+  /api/v3/seller/auction/product/setup-auto-fill:
+    post:
+      summary: ''
+      operationId: postApiV3SellerAuctionProductSetupAutoFill
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: ''
+                  example: 'Eius et animi quos velit et.'
+                  nullable: true
+              required:
+                - name
+      security: []
+  /api/v3/seller/auction/product/generate-limit-check:
+    get:
+      summary: ''
+      operationId: getApiV3SellerAuctionProductGenerateLimitCheck
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []
+  /api/v3/seller/get-vat-tax-report-list:
+    get:
+      summary: ''
+      operationId: getApiV3SellerGetVatTaxReportList
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: 'Response not captured: documentation is generated statically without calling the endpoint.'
+      tags:
+        - Endpoints
+      security: []

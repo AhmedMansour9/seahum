@@ -1,0 +1,39 @@
+$kind: http-request
+id: 7c533ae2-5f83-4d4e-a75a-c19e3aab4464
+name: customer/compare/product-replace
+description: |-
+  > **Possible state-changing GET:** a static scan of the handler found write-like calls (`->save(`, `->insert(`). Treat it as unsafe against shared data until verified.
+
+  **Route:** `GET /api/v1/customer/compare/product-replace`
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\CompareController@compare_product_replace`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `routes/rest_api/v1/api.php:294`
+
+
+  **Inputs read without declared validation (static scan):** `compare_id`, `product_id`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/customer/compare/product-replace?"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: compare_id
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: product_id
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+order: 10000

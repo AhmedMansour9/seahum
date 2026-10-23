@@ -1,0 +1,40 @@
+$kind: http-request
+id: 5672149e-3492-4883-a0fb-bc7f3a595504
+name: v3/seller/product/variation-setup-auto-fill
+description: |-
+  **Route:** `POST /api/v3/seller/product/variation-setup-auto-fill` (`v3/seller.product.variation-setup-auto-fill`)
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `Modules\AI\app\Http\Controllers\API\V3\AIProductController@productVariationSetupAutoFill`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `Modules/AI/routes/api.php:27`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `name` | yes | string Must not be greater than 255 characters. |
+  | `description` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/product/variation-setup-auto-fill"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "name": "Test",
+        "description": "string"
+    }
+order: 19000

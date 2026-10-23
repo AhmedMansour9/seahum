@@ -1,0 +1,47 @@
+$kind: http-request
+id: 89894336-23e5-4362-aa0d-31f85275ca42
+description: |-
+  **Route:** `POST /api/v1/contact-us`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\GeneralController@contact_store`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:435`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `mobile_number` | yes | string |
+  | `subject` | yes | string |
+  | `message` | yes | string |
+  | `email` | yes | string |
+  | `name` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/contact-us"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "mobile_number": "string",
+        "subject": "string",
+        "message": "string",
+        "email": "buyer@gmail.com",
+        "name": "Test"
+    }
+auth:
+  type: noauth
+order: 5000

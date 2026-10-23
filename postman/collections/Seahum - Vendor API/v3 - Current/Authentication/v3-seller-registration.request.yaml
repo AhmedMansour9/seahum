@@ -1,0 +1,101 @@
+$kind: http-request
+id: 0e414fa8-3c83-440f-ac59-bc1e54ca253a
+name: v3/seller/registration
+description: |-
+  **Route:** `POST /api/v3/seller/registration`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\auth\RegisterController@store`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:51`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `email` | yes | string Must be a valid email address. |
+  | `shop_address` | yes | string |
+  | `f_name` | yes | string |
+  | `l_name` | yes | string |
+  | `shop_name` | yes | string |
+  | `phone` | yes | string |
+  | `password` | yes | string Must be at least 8 characters. |
+  | `image` | yes | file Must not be greater than 2048 characters. |
+  | `logo` | yes | file Must not be greater than 2048 characters. |
+  | `banner` | yes | file Must not be greater than 2048 characters. |
+  | `bottom_banner` | no | file Must not be greater than 2048 characters. |
+  | `tin_certificate` | no | file Must not be greater than 2048 characters. |
+  | `tax_identification_number` | no | string |
+  | `tin_expire_date` | no | string Must be a valid date. Must be a date after or equal to <code>today</code>. |
+
+
+  **Inputs read without declared validation (static scan):** `status`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/registration"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+body:
+  type: formdata
+  content:
+    - type: text
+      key: email
+      value: seller@gmail.com
+    - type: text
+      key: shop_address
+      value: Dubai, UAE
+    - type: text
+      key: f_name
+      value: Test
+    - type: text
+      key: l_name
+      value: Test
+    - type: text
+      key: shop_name
+      value: Test
+    - type: text
+      key: phone
+      value: "+971500000000"
+    - type: text
+      key: password
+      value: password
+    - type: text
+      key: tax_identification_number
+      value: string
+    - type: text
+      key: tin_expire_date
+      value: 2026-01-01
+    - type: text
+      key: status
+      value: string
+    - type: file
+      key: image
+      src: []
+      description: Required file.
+    - type: file
+      key: logo
+      src: []
+      description: Required file.
+    - type: file
+      key: banner
+      src: []
+      description: Required file.
+    - type: file
+      key: bottom_banner
+      src: []
+      description: Optional file.
+    - type: file
+      key: tin_certificate
+      src: []
+      description: Optional file.
+auth:
+  type: noauth
+order: 8000

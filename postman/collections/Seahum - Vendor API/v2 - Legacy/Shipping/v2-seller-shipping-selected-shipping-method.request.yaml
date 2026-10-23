@@ -1,0 +1,35 @@
+$kind: http-request
+id: 8f509dfe-593f-4d5c-ae14-845323b34a89
+name: v2/seller/shipping/selected-shipping-method
+description: |-
+  > **Possible state-changing GET:** a static scan of the handler found write-like calls (`->save(`). Treat it as unsafe against shared data until verified.
+
+  **Route:** `GET /api/v2/seller/shipping/selected-shipping-method`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\seller\shippingController@selected_shipping_type`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v2/api.php:91`
+
+
+  **Inputs read without declared validation (static scan):** `shipping_type`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v2/seller/shipping/selected-shipping-method?"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: shipping_type
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+order: 9000

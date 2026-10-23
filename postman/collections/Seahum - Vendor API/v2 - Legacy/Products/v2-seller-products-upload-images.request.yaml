@@ -1,0 +1,43 @@
+$kind: http-request
+id: fd42ff92-8c1d-4038-add4-f5c12129e670
+name: v2/seller/products/upload-images
+description: |-
+  **Route:** `POST /api/v2/seller/products/upload-images`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\seller\ProductController@upload_images`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v2/api.php:56`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `image` | yes | file |
+  | `type` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v2/seller/products/upload-images"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+body:
+  type: formdata
+  content:
+    - type: text
+      key: type
+      value: product
+    - type: file
+      key: image
+      src: []
+      description: Required file.
+auth:
+  type: noauth
+order: 11000

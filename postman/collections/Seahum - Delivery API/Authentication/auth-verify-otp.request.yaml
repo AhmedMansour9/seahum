@@ -1,0 +1,42 @@
+$kind: http-request
+id: dabcc528-1cd3-4a0b-a459-acf55f14bfc0
+name: auth/verify-otp
+description: |-
+  **Route:** `POST /api/v2/delivery-man/auth/verify-otp`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\delivery_man\auth\LoginController@otp_verification_submit`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v2/api.php:137`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `otp` | yes | string |
+  | `identity` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/auth/verify-otp"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "otp": "{{otp_or_token}}",
+        "identity": "string"
+    }
+auth:
+  type: noauth
+order: 4000

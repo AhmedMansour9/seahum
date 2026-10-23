@@ -1,0 +1,44 @@
+$kind: http-request
+id: 4a30e3f5-83ee-4185-a104-fcb194b307aa
+name: v3/seller/delivery-man/emergency-contact/update
+description: |-
+  **Route:** `PUT /api/v3/seller/delivery-man/emergency-contact/update`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\EmergencyContactController@update`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:258`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `name` | yes | string |
+  | `phone` | yes | string |
+
+
+  **Inputs read without declared validation (static scan):** `id`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/delivery-man/emergency-contact/update"
+method: PUT
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "name": "Test",
+        "phone": "+971500000000",
+        "id": 1
+    }
+order: 10000

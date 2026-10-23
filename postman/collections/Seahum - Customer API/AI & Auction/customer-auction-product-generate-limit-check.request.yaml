@@ -1,0 +1,25 @@
+$kind: http-request
+id: 96a47fee-8c9d-45f0-a138-c0e42132f581
+name: customer/auction/product/generate-limit-check
+description: |-
+  **Route:** `GET /api/v1/customer/auction/product/generate-limit-check` (`v1/customer.auction.product.generate-limit-check`)
+
+  **Authentication:** Customer Passport token: `Authorization: Bearer {{customer_token}}` (`auth:api`).
+
+  **Handler:** `Modules\AI\app\Http\Controllers\API\V3\AIAuctionProductController@generateLimitCheck`
+
+  **Middleware:** `api`, `api_lang`, `auth:api`
+
+  **Registered in:** `Modules/AI/routes/api.php:60`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/customer/auction/product/generate-limit-check"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+order: 5000

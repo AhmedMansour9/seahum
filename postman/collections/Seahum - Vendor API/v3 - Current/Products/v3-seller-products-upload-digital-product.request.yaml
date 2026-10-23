@@ -1,0 +1,37 @@
+$kind: http-request
+id: d89edd04-4b40-4952-a7fd-03a0559157cc
+name: v3/seller/products/upload-digital-product
+description: |-
+  **Route:** `POST /api/v3/seller/products/upload-digital-product`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\ProductController@upload_digital_product`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:98`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `digital_file_ready` | yes | file Must be a file. Must not be greater than 2048 kilobytes. |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/products/upload-digital-product"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+body:
+  type: formdata
+  content:
+    - type: file
+      key: digital_file_ready
+      src: []
+      description: Required file.
+order: 27000

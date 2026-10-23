@@ -1,0 +1,27 @@
+$kind: http-request
+id: a416c06c-9ed5-4907-a3ec-a79840d86932
+name: deals/featured
+description: |-
+  **Route:** `GET /api/v1/deals/featured`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\DealController@getFeaturedDealProducts`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:153`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/deals/featured"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+auth:
+  type: noauth
+order: 1000

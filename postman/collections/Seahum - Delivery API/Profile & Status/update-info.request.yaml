@@ -1,0 +1,54 @@
+$kind: http-request
+id: b40fe795-d94d-4f73-a5a1-c2c54e1c681c
+description: |-
+  **Route:** `PUT /api/v2/delivery-man/update-info`
+
+  **Authentication:** Delivery-man token: `Authorization: Bearer {{deliveryman_token}}` (`delivery_man_auth`).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v2\delivery_man\DeliveryManController@update_info`
+
+  **Middleware:** `api`, `api_lang`, `delivery_man_auth`, `actch:deliveryman_app`
+
+  **Registered in:** `routes/rest_api/v2/api.php:166`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `f_name` | yes | string |
+  | `l_name` | yes | string |
+  | `image` | no | file Must not be greater than 2048 characters. |
+  | `password` | no | string The value and <code>confirm_password</code> must match. Must be at least 8 characters. |
+
+
+  **Inputs read without declared validation (static scan):** `address`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/update-info"
+method: PUT
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+body:
+  type: formdata
+  content:
+    - type: text
+      key: f_name
+      value: Test
+    - type: text
+      key: l_name
+      value: Test
+    - type: text
+      key: password
+      value: password
+    - type: text
+      key: address
+      value: Dubai, UAE
+    - type: file
+      key: image
+      src: []
+      description: Optional file.
+order: 12000

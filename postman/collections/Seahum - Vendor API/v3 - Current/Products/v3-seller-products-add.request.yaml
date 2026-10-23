@@ -1,0 +1,148 @@
+$kind: http-request
+id: 062c310c-70c5-4e08-afe9-0e3c6d08cb0e
+name: v3/seller/products/add
+description: |-
+  **Route:** `POST /api/v3/seller/products/add`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\ProductController@add_new`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:100`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `name` | yes | string |
+  | `category_id` | yes | string |
+  | `product_type` | yes | string |
+  | `unit` | no | string This field is required when <code>product_type</code> is <code>==</code> or <code>physical</code>. |
+  | `images` | yes | string |
+  | `thumbnail` | yes | string |
+  | `discount_type` | yes | string |
+  | `lang` | yes | string |
+  | `unit_price` | yes | string Must be at least 1 character. |
+  | `discount` | yes | string |
+  | `shipping_cost` | no | string This field is required when <code>product_type</code> is <code>==</code> or <code>physical</code>. |
+  | `code` | yes | string Must match the regex /^[a-zA-Z0-9]+$/. Must be at least 6 characters. Must not be greater than 20 characters. |
+  | `minimum_order_qty` | yes | number Must be at least 1. |
+
+
+  **Inputs read without declared validation (static scan):** `brand_id`, `choice`, `choice_attributes`, `choice_no`, `color_image`, `colors`, `colors_active`, `current_stock`, `description`, `digital_file_ready`, `digital_product_type`, `extensions_type`, `multiplyQTY`, `preview_file`, `sub_category_id`, `sub_sub_category_id`, `tags`, `tax_ids`, `video_url`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/products/add"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+body:
+  type: formdata
+  content:
+    - type: text
+      key: name
+      value: Test
+    - type: text
+      key: category_id
+      value: "1"
+    - type: text
+      key: product_type
+      value: string
+    - type: text
+      key: unit
+      value: string
+    - type: text
+      key: images
+      value: string
+    - type: text
+      key: thumbnail
+      value: string
+    - type: text
+      key: discount_type
+      value: percent
+    - type: text
+      key: lang
+      value: en
+    - type: text
+      key: unit_price
+      value: "1000"
+    - type: text
+      key: discount
+      value: "1"
+    - type: text
+      key: shipping_cost
+      value: "1000"
+    - type: text
+      key: code
+      value: string
+    - type: text
+      key: minimum_order_qty
+      value: "1"
+    - type: text
+      key: brand_id
+      value: "1"
+    - type: text
+      key: choice
+      value: string
+    - type: text
+      key: choice_attributes
+      value: string
+    - type: text
+      key: choice_no
+      value: string
+    - type: text
+      key: color_image
+      value: string
+    - type: text
+      key: colors
+      value: string
+    - type: text
+      key: colors_active
+      value: string
+    - type: text
+      key: current_stock
+      value: "1"
+    - type: text
+      key: description
+      value: string
+    - type: text
+      key: digital_file_ready
+      value: string
+    - type: text
+      key: digital_product_type
+      value: string
+    - type: text
+      key: extensions_type
+      value: string
+    - type: text
+      key: multiplyQTY
+      value: "1"
+    - type: text
+      key: preview_file
+      value: string
+    - type: text
+      key: sub_category_id
+      value: "1"
+    - type: text
+      key: sub_sub_category_id
+      value: "1"
+    - type: text
+      key: tags
+      value: string
+    - type: text
+      key: tax_ids
+      value: "1"
+    - type: text
+      key: video_url
+      value: string
+    - type: file
+      key: digital_files_
+      src: []
+      description: Optional file.
+order: 3000

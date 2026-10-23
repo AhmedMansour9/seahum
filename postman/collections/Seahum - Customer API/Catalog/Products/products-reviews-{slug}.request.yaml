@@ -1,0 +1,43 @@
+$kind: http-request
+id: 57519ade-7c7f-4f60-a50d-b23efcac6c24
+name: products/reviews/{slug}
+description: |-
+  **Route:** `GET /api/v1/products/reviews/{slug}`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\ProductController@get_product_reviews`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:165`
+
+
+  **Inputs read without declared validation (static scan):** `limit`, `offset`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/products/reviews/:slug?"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+queryParams:
+  - key: limit
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+  - key: offset
+    value: ""
+    disabled: true
+    description: Read by the controller without declared validation (static scan). Optional unless the handler requires it.
+pathVariables:
+  - key: slug
+    value: sample-slug
+    description: integer. The slug of the review.
+auth:
+  type: noauth
+order: 24000

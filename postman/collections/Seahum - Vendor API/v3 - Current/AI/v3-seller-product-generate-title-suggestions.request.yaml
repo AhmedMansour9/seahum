@@ -1,0 +1,42 @@
+$kind: http-request
+id: cb070733-7dee-429c-a966-3da7bc8e0fa5
+name: v3/seller/product/generate-title-suggestions
+description: |-
+  **Route:** `POST /api/v3/seller/product/generate-title-suggestions` (`v3/seller.product.generate-title-suggestions`)
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `Modules\AI\app\Http\Controllers\API\V3\AIProductController@generateProductTitleSuggestion`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `Modules/AI/routes/api.php:29`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `keywords` | yes | string Must not be greater than 255 characters. |
+
+
+  **Inputs read without declared validation (static scan):** `description`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/product/generate-title-suggestions"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "keywords": "string",
+        "description": "string"
+    }
+order: 15000

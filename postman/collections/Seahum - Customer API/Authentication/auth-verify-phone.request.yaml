@@ -1,0 +1,42 @@
+$kind: http-request
+id: 2704251b-be9a-4a22-a5d6-c5204b91d39b
+name: auth/verify-phone
+description: |-
+  **Route:** `POST /api/v1/auth/verify-phone`
+
+  **Authentication:** None (public).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v1\auth\CustomerAPIAuthController@verifyPhone`
+
+  **Middleware:** `api`, `api_lang`
+
+  **Registered in:** `routes/rest_api/v1/api.php:69`
+
+
+  | Parameter | Required | Rules |
+  |---|---|---|
+  | `phone` | yes | string |
+  | `token` | yes | string |
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/auth/verify-phone"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "phone": "+971500000000",
+        "token": "{{otp_or_token}}"
+    }
+auth:
+  type: noauth
+order: 20000

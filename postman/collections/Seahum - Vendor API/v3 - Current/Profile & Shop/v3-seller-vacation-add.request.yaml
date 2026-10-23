@@ -1,0 +1,40 @@
+$kind: http-request
+id: 7d2d5389-fdfa-43bc-a4e4-e815982952af
+name: v3/seller/vacation-add
+description: |-
+  **Route:** `PUT /api/v3/seller/vacation-add`
+
+  **Authentication:** Seller token: `Authorization: Bearer {{seller_token}}` (shared by v2 and v3; enforced by `seller_api_auth` middleware in v3, by `Helpers::get_seller_by_token()` inside the handler in v2).
+
+  **Handler:** `App\Http\Controllers\RestAPI\v3\seller\ShopController@vacation_add`
+
+  **Middleware:** `api`, `api_lang`, `seller_api_auth`
+
+  **Registered in:** `routes/rest_api/v3/seller.php:81`
+
+
+  **Inputs read without declared validation (static scan):** `vacation_duration_type`, `vacation_end_date`, `vacation_note`, `vacation_start_date`, `vacation_status`
+
+
+  **Responses:** not captured. No endpoint was executed while generating this collection; the shape is defined by the handler above. Validation failures in this codebase typically return `403` with `{"errors": [{"code", "message"}]}`.
+url: "{{base_url}}/v3/seller/vacation-add"
+method: PUT
+headers:
+  - key: Accept
+    value: application/json
+  - key: lang
+    value: "{{lang}}"
+    description: Locale for translated messages (APILocalizationMiddleware).
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+        "vacation_duration_type": "string",
+        "vacation_end_date": "2026-01-01",
+        "vacation_note": "string",
+        "vacation_start_date": "2026-01-01",
+        "vacation_status": "string"
+    }
+order: 13000
