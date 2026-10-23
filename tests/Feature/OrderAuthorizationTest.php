@@ -71,7 +71,7 @@ class OrderAuthorizationTest extends TestCase
 
         $nextOrder = $this->createOrder(customerId: $this->owner->id);
         DB::table('order_details')->insert(['order_id' => $nextOrder->id, 'price' => 1300, 'qty' => 1]);
-        $this->assertSame(1, app(LuckyWheelService::class)->attachPendingGiftsToQualifyingOrders(customerId: $this->owner->id, orderIds: [$nextOrder->id]));
+        $this->assertSame(1, app(LuckyWheelService::class)->attachPendingGiftToQualifyingOrders(customerId: $this->owner->id, orderIds: [$nextOrder->id]));
         $this->assertSame([$giftId => $nextOrder->id], LuckyWheelWonGift::pluck('order_id', 'id')->all());
     }
 
@@ -166,7 +166,7 @@ class OrderAuthorizationTest extends TestCase
         $luckyWheelService->spin(customerId: $customer->id);
 
         $order = $this->createOrder(customerId: $customer->id);
-        $luckyWheelService->attachPendingGiftsToOrder(customerId: $customer->id, orderId: $order->id);
+        $luckyWheelService->attachOldestPendingGiftToOrder(customerId: $customer->id, orderId: $order->id);
         return $order;
     }
 }

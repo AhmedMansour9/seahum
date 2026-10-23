@@ -101,8 +101,9 @@ class LuckyWheelService
 
     /**
      * Checkout preview of the gift minimum, or null when the customer has no pending gifts.
+     * An order takes one gift only: the oldest pending one, returned as next_gift.
      *
-     * @return array{minimum_order_amount: float, current_order_subtotal: float, is_eligible: bool, remaining_amount: float, pending_gifts: Collection}|null
+     * @return array{minimum_order_amount: float, current_order_subtotal: float, is_eligible: bool, remaining_amount: float, pending_gifts: Collection, next_gift: LuckyWheelWonGift}|null
      */
     public function getCheckoutGiftSummary(int $customerId, float|int|string $itemSubtotal, float|int|string $productDiscount, float|int|string $couponDiscount, float|int|string $referralDiscount): ?array
     {
@@ -117,7 +118,7 @@ class LuckyWheelService
             couponDiscount: $couponDiscount,
             referralDiscount: $referralDiscount,
         );
-        return [...$this->getGiftEligibility(qualifyingSubtotal: $qualifyingSubtotal), 'pending_gifts' => $pendingGifts];
+        return [...$this->getGiftEligibility(qualifyingSubtotal: $qualifyingSubtotal), 'pending_gifts' => $pendingGifts, 'next_gift' => $pendingGifts->first()];
     }
 
     public function getBusinessNow(): Carbon
@@ -262,12 +263,12 @@ class LuckyWheelService
     }
 
     /**
-     * Attaches pending gifts to the first order of a placed checkout when the checkout meets the minimum.
-     * Otherwise the gifts stay pending for a later qualifying order.
+     * Attaches the oldest pending gift to the first order of a placed checkout when the checkout meets the minimum.
+     * Otherwise, and for every other pending gift, the gifts stay pending for later qualifying orders.
      *
      * @param array<int, int|string> $orderIds
      */
-    public function attachPendingGiftsToQualifyingOrders(int $customerId, array $orderIds): int
+    public function attachPendingGiftToQualifyingOrders(int $customerId, array $orderIds): int
     {
         if (empty($orderIds) || !LuckyWheelWonGift::where('customer_id', $customerId)->pending()->exists()) {
             return 0;
@@ -278,15 +279,23 @@ class LuckyWheelService
             return 0;
         }
 
-        return DB::transaction(fn () => $this->attachPendingGiftsToOrder(customerId: $customerId, orderId: (int)reset($orderIds)));
+        return $this->attachOldestPendingGiftToOrder(customerId: $customerId, orderId: (int)reset($orderIds));
     }
 
     /**
-     * A single conditional update, so a retried or concurrent checkout can never attach the same gift twice.
+     * The order row is locked so a retried call cannot add a second gift to it, and the gift is claimed by a
+     * single conditional update, so concurrent checkouts can never attach the same gift twice.
      */
-    public function attachPendingGiftsToOrder(int $customerId, int $orderId): int
+    public function attachOldestPendingGiftToOrder(int $customerId, int $orderId): int
     {
-        return LuckyWheelWonGift::where('customer_id', $customerId)->pending()->update(['order_id' => $orderId]);
+        return DB::transaction(function () use ($customerId, $orderId) {
+            Order::whereKey($orderId)->lockForUpdate()->first();
+            if (LuckyWheelWonGift::where('order_id', $orderId)->exists()) {
+                return 0;
+            }
+
+            return LuckyWheelWonGift::where('customer_id', $customerId)->pending()->orderBy('id')->limit(1)->update(['order_id' => $orderId]);
+        });
     }
 
     private function toMoney(float|int|string $amount): string

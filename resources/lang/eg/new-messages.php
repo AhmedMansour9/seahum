@@ -9498,4 +9498,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"try_your_luck_today" => "جرّب حظك اليوم!",
 	"spin_the_lucky_wheel_for_a_chance_to_win_a_free_gift_with_your_next_order" => "أدر عجلة الحظ واربح هدية مجانية مع طلبك القادم.",
 	"maybe_later" => "لاحقًا",
+	"free_gift_added_to_this_order" => "هدية مجانية مضافة إلى هذا الطلب",
+	"more_to_get_your_free_gift_with_this_order" => "إضافية للحصول على هديتك المجانية مع هذا الطلب",
+	"one_gift_per_order_your_other_gifts_stay_saved_for_your_next_orders" => "هدية واحدة لكل طلب، وباقي هداياك محفوظة لطلباتك القادمة.",
 ];

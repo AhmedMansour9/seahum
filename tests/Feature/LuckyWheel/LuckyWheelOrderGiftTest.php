@@ -50,19 +50,22 @@ class LuckyWheelOrderGiftTest extends TestCase
         $this->assertSame(1, LuckyWheelWonGift::count());
     }
 
-    public function test_all_pending_gifts_attach_to_the_next_order_once_and_do_not_change_its_total(): void
+    public function test_each_order_takes_only_the_oldest_pending_gift_and_keeps_its_total(): void
     {
         $this->createReward(name: '50g Salmon');
         $customer = $this->createCustomer();
         $this->winGiftsOnConsecutiveDays(customer: $customer, numberOfDays: 3);
+        $giftIds = LuckyWheelWonGift::orderBy('id')->pluck('id')->all();
         $firstOrder = $this->createOrder(customer: $customer);
-        $retriedOrder = $this->createOrder(customer: $customer);
+        $secondOrder = $this->createOrder(customer: $customer);
 
-        $this->assertSame(3, $this->luckyWheelService->attachPendingGiftsToOrder(customerId: $customer->id, orderId: $firstOrder->id));
-        $this->assertSame(0, $this->luckyWheelService->attachPendingGiftsToOrder(customerId: $customer->id, orderId: $retriedOrder->id));
+        $this->assertSame(1, $this->luckyWheelService->attachOldestPendingGiftToOrder(customerId: $customer->id, orderId: $firstOrder->id));
+        $this->assertSame(0, $this->luckyWheelService->attachOldestPendingGiftToOrder(customerId: $customer->id, orderId: $firstOrder->id));
+        $this->assertSame(1, $this->luckyWheelService->attachOldestPendingGiftToOrder(customerId: $customer->id, orderId: $secondOrder->id));
 
-        $this->assertSame(3, $firstOrder->luckyWheelGifts()->count());
-        $this->assertSame(0, $retriedOrder->luckyWheelGifts()->count());
+        $this->assertSame([$giftIds[0]], $firstOrder->luckyWheelGifts()->pluck('id')->all());
+        $this->assertSame([$giftIds[1]], $secondOrder->luckyWheelGifts()->pluck('id')->all());
+        $this->assertSame([$giftIds[2]], LuckyWheelWonGift::pending()->pluck('id')->all());
         $this->assertEquals(1000, $firstOrder->fresh()->order_amount);
     }
 
@@ -73,7 +76,7 @@ class LuckyWheelOrderGiftTest extends TestCase
         $otherCustomer = $this->createCustomer(email: 'seller@gmail.com');
         $this->luckyWheelService->spin(customerId: $winner->id);
 
-        $this->luckyWheelService->attachPendingGiftsToOrder(customerId: $otherCustomer->id, orderId: $this->createOrder(customer: $otherCustomer)->id);
+        $this->luckyWheelService->attachOldestPendingGiftToOrder(customerId: $otherCustomer->id, orderId: $this->createOrder(customer: $otherCustomer)->id);
 
         $this->assertNull(LuckyWheelWonGift::sole()->order_id);
     }
@@ -108,7 +111,7 @@ class LuckyWheelOrderGiftTest extends TestCase
         OrderManager::getStockUpdateOnOrderStatusChange(Order::with('details')->find($canceledOrder->id), 'canceled');
 
         $nextOrder = $this->createOrder(customer: $customer);
-        $this->luckyWheelService->attachPendingGiftsToOrder(customerId: $customer->id, orderId: $nextOrder->id);
+        $this->luckyWheelService->attachOldestPendingGiftToOrder(customerId: $customer->id, orderId: $nextOrder->id);
         $this->assertSame(1, $nextOrder->luckyWheelGifts()->count());
     }
 
@@ -170,7 +173,7 @@ class LuckyWheelOrderGiftTest extends TestCase
         Carbon::setTestNow();
 
         $order = $this->createOrder(customer: $customer);
-        $this->luckyWheelService->attachPendingGiftsToOrder(customerId: $customer->id, orderId: $order->id);
+        $this->luckyWheelService->attachOldestPendingGiftToOrder(customerId: $customer->id, orderId: $order->id);
         return $order;
     }
 }

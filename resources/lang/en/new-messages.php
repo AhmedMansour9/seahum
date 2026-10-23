@@ -2793,4 +2793,8 @@ ____________________________________________________on_search_engines_and_see_th
 	"try_your_luck_today" => "Try your luck today!",
 	"spin_the_lucky_wheel_for_a_chance_to_win_a_free_gift_with_your_next_order" => "Spin the lucky wheel for a chance to win a free gift with your next order.",
 	"maybe_later" => "Maybe later",
+	"free_gift_added_to_this_order" => "Free gift added to this order",
+	"more_to_get_your_free_gift_with_this_order" => "more to get your free gift with this order",
+	"one_gift_per_order_your_other_gifts_stay_saved_for_your_next_orders" => "One gift per order. Your other gifts stay saved for your next orders.",
+	"too_many_attempts._please_try_again_after_" => "Too many attempts. please try again after ",
 ];

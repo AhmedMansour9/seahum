@@ -107,7 +107,7 @@ class LuckyWheelMinimumOrderAmountTest extends TestCase
         $firstOrder = $this->createOrder(customer: $customer, itemPrice: '600');
         $secondOrder = $this->createOrder(customer: $customer, itemPrice: '400');
 
-        $this->assertSame(1, $this->luckyWheelService->attachPendingGiftsToQualifyingOrders(customerId: $customer->id, orderIds: [$firstOrder->id, $secondOrder->id]));
+        $this->assertSame(1, $this->luckyWheelService->attachPendingGiftToQualifyingOrders(customerId: $customer->id, orderIds: [$firstOrder->id, $secondOrder->id]));
         $this->assertSame($firstOrder->id, LuckyWheelWonGift::sole()->order_id);
     }
 
@@ -176,6 +176,7 @@ class LuckyWheelMinimumOrderAmountTest extends TestCase
         $belowMinimum = $this->luckyWheelService->getCheckoutGiftSummary(customerId: $customer->id, itemSubtotal: '900', productDiscount: '150', couponDiscount: 0, referralDiscount: 0);
         $this->assertSame([1000.0, 750.0, false, 250.0], [$belowMinimum['minimum_order_amount'], $belowMinimum['current_order_subtotal'], $belowMinimum['is_eligible'], $belowMinimum['remaining_amount']]);
         $this->assertSame(['50g Salmon'], $belowMinimum['pending_gifts']->pluck('name')->all());
+        $this->assertSame($belowMinimum['pending_gifts']->first()->id, $belowMinimum['next_gift']->id);
 
         $atMinimum = $this->luckyWheelService->getCheckoutGiftSummary(customerId: $customer->id, itemSubtotal: '1000', productDiscount: 0, couponDiscount: 0, referralDiscount: 0);
         $this->assertSame([true, 0.0], [$atMinimum['is_eligible'], $atMinimum['remaining_amount']]);
@@ -193,7 +194,7 @@ class LuckyWheelMinimumOrderAmountTest extends TestCase
 
     private function attachToCheckout(User $customer, Order $order): int
     {
-        return $this->luckyWheelService->attachPendingGiftsToQualifyingOrders(customerId: $customer->id, orderIds: [$order->id]);
+        return $this->luckyWheelService->attachPendingGiftToQualifyingOrders(customerId: $customer->id, orderIds: [$order->id]);
     }
 
     private function createCustomerWithPendingGift(): User

@@ -88,6 +88,7 @@ class LuckyWheelController extends Controller
 
         if ($checkoutGiftSummary) {
             $checkoutGiftSummary['pending_gifts'] = LuckyWheelWonGiftResource::collection($checkoutGiftSummary['pending_gifts'])->resolve();
+            $checkoutGiftSummary['next_gift'] = LuckyWheelWonGiftResource::make($checkoutGiftSummary['next_gift'])->resolve();
         }
         return response()->json(['lucky_wheel' => $checkoutGiftSummary], 200);
     }

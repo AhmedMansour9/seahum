@@ -1318,7 +1318,7 @@ class OrderManager
         }
 
         if (!$getCustomerInfo['is_guest'] && !empty($orderPlacedIds)) {
-            app(LuckyWheelService::class)->attachPendingGiftsToQualifyingOrders(customerId: $getCustomerInfo['customer_id'], orderIds: $orderPlacedIds);
+            app(LuckyWheelService::class)->attachPendingGiftToQualifyingOrders(customerId: $getCustomerInfo['customer_id'], orderIds: $orderPlacedIds);
         }
 
         $user = Helpers::getCustomerInformation(($data['requestObj'] ?? request()->all()));
