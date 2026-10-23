@@ -216,7 +216,7 @@ Route::group(['namespace' => 'Web', 'middleware' => ['maintenance_mode', 'guestC
         Route::get('refund-details/{id}', 'refund_details')->name('refund-details');
         Route::post('refund-store', 'store_refund')->name('refund-store');
         Route::get('account-tickets', 'account_tickets')->name('account-tickets');
-        Route::get('order-cancel/{id}', 'order_cancel')->name('order-cancel');
+        Route::get('order-cancel/{id}', 'order_cancel')->name('order-cancel')->middleware('customer');
         Route::post('ticket-submit', 'submitSupportTicket')->name('ticket-submit');
         Route::get('account-delete/{id}', 'account_delete')->name('account-delete');
         Route::get('account-delete', 'getAccountDeleteView')->name('account-delete-form');

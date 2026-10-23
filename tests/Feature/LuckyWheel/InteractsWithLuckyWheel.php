@@ -49,6 +49,8 @@ trait InteractsWithLuckyWheel
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->boolean('is_guest')->default(0);
             $table->string('order_status')->default('pending');
+            $table->string('payment_method')->default('cash_on_delivery');
+            $table->string('payment_status')->default('unpaid');
             $table->decimal('order_amount', 40, 20)->default(0);
             $table->decimal('shipping_cost', 40, 20)->default(0);
             $table->decimal('total_tax_amount', 40, 20)->default(0);
@@ -128,5 +130,26 @@ trait InteractsWithLuckyWheel
         }
 
         return $reward;
+    }
+
+    private function createOrderApiTables(): void
+    {
+        Schema::table('orders', function (Blueprint $table) {
+            $table->unsignedBigInteger('delivery_man_id')->nullable();
+        });
+        Schema::create('order_delivery_verifications', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('order_id');
+        });
+        Schema::create('order_edit_histories', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('order_id');
+            $table->timestamps();
+        });
+        Schema::create('offline_payments', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('order_id');
+            $table->text('payment_info')->nullable();
+        });
     }
 }

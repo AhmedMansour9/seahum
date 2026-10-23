@@ -143,7 +143,7 @@
 
         @if($summaryStep === 'payment')
             <label class="sf-check sf-summary-terms">
-                <input type="checkbox" class="sf-payment-terms">
+                <input type="checkbox" class="sf-payment-terms" checked>
                 <span class="sf-check-box" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>
                 <span class="sf-check-label">
                     {{ translate('i_agree_to_Your') }}

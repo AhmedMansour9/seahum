@@ -9,17 +9,17 @@
     $defaultLocation = getWebConfig(name: 'default_location');
     $fieldNames = $isBilling ? [
         'name' => 'billing_contact_person_name', 'phone' => 'billing_phone', 'email' => 'billing_contact_email',
-        'type' => 'billing_address_type', 'country' => 'billing_country', 'city' => 'billing_city', 'zip' => 'billing_zip',
+        'type' => 'billing_address_type', 'city' => 'billing_city', 'zip' => 'billing_zip',
         'address' => 'billing_address', 'latitude' => 'billing_latitude', 'longitude' => 'billing_longitude',
         'method' => 'billing_method_id', 'save' => 'save_address_billing', 'update' => 'update_billing_address',
     ] : [
         'name' => 'contact_person_name', 'phone' => 'phone', 'email' => 'email',
-        'type' => 'address_type', 'country' => 'country', 'city' => 'city', 'zip' => 'zip',
+        'type' => 'address_type', 'city' => 'city', 'zip' => 'zip',
         'address' => 'address', 'latitude' => 'latitude', 'longitude' => 'longitude',
         'method' => 'shipping_method_id', 'save' => 'save_address', 'update' => 'update_address',
     ];
     $fieldIds = $isBilling ? array_merge($fieldNames, ['save' => 'save_address_billing']) : [
-        'name' => 'name', 'phone' => 'phone', 'email' => 'email', 'type' => 'address_type', 'country' => 'country',
+        'name' => 'name', 'phone' => 'phone', 'email' => 'email', 'type' => 'address_type',
         'city' => 'city', 'zip' => $zipRestrictStatus ? 'select2-zip-container' : 'zip', 'address' => 'address',
         'latitude' => 'latitude', 'longitude' => 'longitude', 'method' => 'shipping_method_id', 'save' => 'save_address',
     ];
@@ -84,17 +84,6 @@
         </select>
     </div>
     <div>
-        <label class="sf-form-label" for="{{ $fieldIds['country'] }}">{{ translate('country') }} <span class="sf-required">*</span></label>
-        <select class="sf-filter-field" name="{{ $fieldNames['country'] }}" id="{{ $fieldIds['country'] }}" @required(!$isBilling)>
-            <option value="">{{ translate('Select Your Country') }}</option>
-            @forelse($countries as $country)
-                <option value="{{ $country['name'] }}">{{ $country['name'] }}</option>
-            @empty
-                <option value="">{{ translate('no_country_to_deliver') }}</option>
-            @endforelse
-        </select>
-    </div>
-    <div>
         <label class="sf-form-label" for="{{ $fieldIds['city'] }}">{{ translate('city') }} <span class="sf-required">*</span></label>
         <input type="text" class="sf-filter-field" name="{{ $fieldNames['city'] }}" id="{{ $fieldIds['city'] }}" autocomplete="address-level2" @required($isFirstAddress)>
     </div>
@@ -135,7 +124,7 @@
             <label class="sf-check">
                 <input type="checkbox" class="sf-address-save" id="{{ $fieldIds['save'] }}" name="{{ $fieldNames['save'] }}"
                        data-save-name="{{ $fieldNames['save'] }}" data-update-name="{{ $fieldNames['update'] }}"
-                       data-save-label="{{ translate('save_this_Address') }}" data-update-label="{{ translate('Update_this_Address') }}">
+                       data-save-label="{{ translate('save_this_Address') }}" data-update-label="{{ translate('Update_this_Address') }}" checked>
                 <span class="sf-check-box" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>
                 <span class="sf-check-label sf-address-save-label">{{ translate('save_this_Address') }}</span>
             </label>

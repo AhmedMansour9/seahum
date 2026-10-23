@@ -10,9 +10,7 @@ use App\Models\Order;
 use App\Models\User;
 use App\Services\LuckyWheelService;
 use App\Utils\OrderManager;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class LuckyWheelOrderGiftTest extends TestCase
@@ -147,8 +145,8 @@ class LuckyWheelOrderGiftTest extends TestCase
 
         $this->actingAs($this->createCustomer(email: 'seller@gmail.com'), 'api')
             ->getJson('/api/v1/customer/order/get-order-by-id?order_id='.$order->id, ['Authorization' => 'Bearer token'])
-            ->assertOk()
-            ->assertJsonPath('lucky_wheel_gifts', []);
+            ->assertForbidden()
+            ->assertJsonMissingPath('lucky_wheel_gifts');
     }
 
     private function winGiftsOnConsecutiveDays(User $customer, int $numberOfDays): void
@@ -174,26 +172,5 @@ class LuckyWheelOrderGiftTest extends TestCase
         $order = $this->createOrder(customer: $customer);
         $this->luckyWheelService->attachPendingGiftsToOrder(customerId: $customer->id, orderId: $order->id);
         return $order;
-    }
-
-    private function createOrderApiTables(): void
-    {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->unsignedBigInteger('delivery_man_id')->nullable();
-        });
-        Schema::create('order_delivery_verifications', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('order_id');
-        });
-        Schema::create('order_edit_histories', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('order_id');
-            $table->timestamps();
-        });
-        Schema::create('offline_payments', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('order_id');
-            $table->text('payment_info')->nullable();
-        });
     }
 }

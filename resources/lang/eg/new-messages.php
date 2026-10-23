@@ -9490,4 +9490,12 @@ ____________________________________________________on_search_engines_and_see_th
 	"more_to_get_your_free_gifts_with_this_order" => "إضافية للحصول على هداياك المجانية مع هذا الطلب",
 	"minimum_order_for_gifts" => "الحد الأدنى للطلب للهدايا",
 	"gifts_stay_saved_for_a_later_order" => "تبقى الهدايا محفوظة لطلب لاحق",
+	"no_shipping_address_found" => "No shipping address found",
+	"order_not_found" => "الطلب غير موجود",
+	"order_canceled_successfully" => "تم إلغاء الطلب بنجاح",
+	"status_not_changeable_now" => "لا يمكن تغيير الحالة الآن",
+	"Order_is_editable" => "Order is editable",
+	"try_your_luck_today" => "جرّب حظك اليوم!",
+	"spin_the_lucky_wheel_for_a_chance_to_win_a_free_gift_with_your_next_order" => "أدر عجلة الحظ واربح هدية مجانية مع طلبك القادم.",
+	"maybe_later" => "لاحقًا",
 ];

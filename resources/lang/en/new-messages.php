@@ -2785,4 +2785,12 @@ ____________________________________________________on_search_engines_and_see_th
 	"more_to_get_your_free_gifts_with_this_order" => "more to get your free gifts with this order",
 	"minimum_order_for_gifts" => "Minimum order for gifts",
 	"gifts_stay_saved_for_a_later_order" => "Gifts stay saved for a later order",
+	"order_not_found" => "Order not found",
+	"order_canceled_successfully" => "Order canceled successfully",
+	"status_not_changeable_now" => "Status not changeable now",
+	"no_shipping_address_found" => "No shipping address found",
+	"the_account_is_suspended" => "The account is suspended",
+	"try_your_luck_today" => "Try your luck today!",
+	"spin_the_lucky_wheel_for_a_chance_to_win_a_free_gift_with_your_next_order" => "Spin the lucky wheel for a chance to win a free gift with your next order.",
+	"maybe_later" => "Maybe later",
 ];

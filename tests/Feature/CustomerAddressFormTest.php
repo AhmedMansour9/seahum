@@ -49,6 +49,50 @@ class CustomerAddressFormTest extends TestCase
         $this->assertStringNotContainsString("'country' => 'required'", $controller);
     }
 
+    public function test_checkout_address_form_has_no_country_and_checkout_stores_the_default_country(): void
+    {
+        $checkoutFields = file_get_contents(base_path('resources/themes/default/web-views/seafood/partials/_checkout-address-fields.blade.php'));
+        $checkoutController = file_get_contents(base_path('app/Http/Controllers/Customer/SystemController.php'));
+
+        $this->assertStringNotContainsString("translate('country')", $checkoutFields);
+        $this->assertStringNotContainsString("'country' =>", $checkoutFields);
+        $this->assertStringContainsString("\$shipping['country'] = empty(\$shipping['country']) ? \$this->getDefaultCountryName() : \$shipping['country'];", $checkoutController);
+        $this->assertStringContainsString("\$billing['billing_country'] = empty(\$billing['billing_country']) ? \$this->getDefaultCountryName() : \$billing['billing_country'];", $checkoutController);
+    }
+
+    public function test_checkout_bills_physical_orders_to_the_shipping_address_without_asking(): void
+    {
+        $checkoutPage = file_get_contents(base_path('resources/themes/default/web-views/seafood/checkout-shipping.blade.php'));
+        $checkoutScripts = file_get_contents(base_path('resources/themes/default/web-views/seafood/partials/_checkout-scripts.blade.php'));
+
+        $this->assertStringNotContainsString('same_as_shipping_address', $checkoutPage);
+        $this->assertStringContainsString('@if($billingInputByCustomer && !$physical_product_view)', $checkoutPage);
+        $this->assertStringContainsString('const sameAsShipping = hasPhysicalProduct;', $checkoutScripts);
+    }
+
+    public function test_checkout_saves_a_new_address_by_default_but_not_a_chosen_saved_one(): void
+    {
+        $checkoutFields = file_get_contents(base_path('resources/themes/default/web-views/seafood/partials/_checkout-address-fields.blade.php'));
+        $checkoutPage = file_get_contents(base_path('resources/themes/default/web-views/seafood/checkout-shipping.blade.php'));
+
+        $this->assertMatchesRegularExpression('/<input type="checkbox" class="sf-address-save"[^>]*\schecked>/', $checkoutFields);
+        $this->assertStringContainsString("saveToggle.prop('checked', !address)", $checkoutPage);
+    }
+
+    public function test_checkout_payment_does_not_ask_for_a_change_amount(): void
+    {
+        $paymentPage = file_get_contents(base_path('resources/themes/default/web-views/seafood/checkout-payment.blade.php'));
+
+        $this->assertStringNotContainsString('bring_change_amount', $paymentPage);
+    }
+
+    public function test_checkout_terms_are_accepted_by_default(): void
+    {
+        $orderSummary = file_get_contents(base_path('resources/themes/default/web-views/seafood/partials/_order-summary.blade.php'));
+
+        $this->assertStringContainsString('<input type="checkbox" class="sf-payment-terms" checked>', $orderSummary);
+    }
+
     private function defaultCountryNameFor(string $systemCountryCode): string
     {
         Cache::flush();

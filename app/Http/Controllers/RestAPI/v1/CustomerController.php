@@ -4,6 +4,7 @@ namespace App\Http\Controllers\RestAPI\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LuckyWheel\LuckyWheelWonGiftResource;
+use App\Services\OrderService;
 use App\Http\Requests\API\v1\SupportTicketRequest;
 use App\Http\Requests\API\v1\UpdateProfileApiRequest;
 use App\Models\BusinessSetting;
@@ -493,7 +494,7 @@ class CustomerController extends Controller
         return response()->json($byteArray);
     }
 
-    public function getOrderById(Request $request): JsonResponse
+    public function getOrderById(Request $request, OrderService $orderService): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'order_id' => 'required',
@@ -503,15 +504,26 @@ class CustomerController extends Controller
             return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
         }
 
+        $customer = Helpers::getCustomerInformation($request);
+        if ($customer == 'offline' && !$request->filled('guest_id')) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        }
+
         $order = Order::withCount('orderDetails')->with(['deliveryMan', 'offlinePayments', 'verificationImages', 'latestEditHistory', 'orderEditHistory'])->where(['id' => $request['order_id']])->first();
+        if (!$order) {
+            return response()->json(['message' => translate('order_not_found')], 404);
+        }
+        $isOrderOwner = $customer != 'offline'
+            ? $orderService->isOrderOwner(order: $order, customerId: $customer->id, isGuest: false)
+            : $orderService->isOrderOwner(order: $order, customerId: $request->integer('guest_id'), isGuest: true);
+        if (!$isOrderOwner) {
+            return response()->json(['message' => translate('access_Denied')], 403);
+        }
+
         if (isset($order['offlinePayments'])) {
             $order['offlinePayments']->payment_info = $order->offlinePayments->payment_info;
         }
-        if ($order) {
-            $customer = Helpers::getCustomerInformation($request);
-            $isOrderOwner = $customer != 'offline' && !$order['is_guest'] && $order['customer_id'] == $customer->id;
-            $order['lucky_wheel_gifts'] = $isOrderOwner ? LuckyWheelWonGiftResource::collection($order->luckyWheelGifts()->get())->resolve() : [];
-        }
+        $order['lucky_wheel_gifts'] = LuckyWheelWonGiftResource::collection($order->luckyWheelGifts()->get())->resolve();
         $order = json_decode(json_encode($order), true);
         return response()->json($order, 200);
     }

@@ -17,6 +17,7 @@ use App\Models\OfflinePaymentMethod;
 use App\Models\OrderEditHistory;
 use App\Models\OrderStatusHistory;
 use App\Models\SupportTicketConv;
+use App\Services\OrderService;
 use App\Services\OrderStatusHistoryService;
 use App\Traits\PdfGenerator;
 use App\Http\Controllers\Controller;
@@ -902,9 +903,13 @@ class UserProfileController extends Controller
 
     }
 
-    public function order_cancel($id)
+    public function order_cancel($id, OrderService $orderService)
     {
         $order = Order::where(['id' => $id])->first();
+        if (!$order || !$orderService->isOrderOwner(order: $order, customerId: auth('customer')->id(), isGuest: false)) {
+            Toastr::error(translate('access_Denied'));
+            return back();
+        }
         if (in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['order_status'] == 'pending') {
             OrderManager::getStockUpdateOnOrderStatusChange($order, 'canceled');
             $orderStatusHistoryData = $this->orderStatusHistoryService->getOrderHistoryData(orderId: $id, userId: auth('customer')->id(), userType: 'customer', status: 'canceled');

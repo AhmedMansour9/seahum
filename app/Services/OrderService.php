@@ -44,6 +44,14 @@ class OrderService
         ];
     }
 
+    /**
+     * Whether the order belongs to the given registered customer (isGuest false) or guest id (isGuest true).
+     */
+    public function isOrderOwner(object $order, int $customerId, bool $isGuest): bool
+    {
+        return (int)$order['customer_id'] === $customerId && (bool)$order['is_guest'] === $isGuest;
+    }
+
     public function getCheckIsOrderOnlyDigital(object $order): bool
     {
         $isOrderOnlyDigital = true;

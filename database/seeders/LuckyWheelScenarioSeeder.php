@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\LuckyWheel\LuckyWheelRewardType;
 use App\Enums\LuckyWheel\LuckyWheelSpinFrequency;
 use App\Models\BusinessSetting;
+use App\Models\Cart;
 use App\Models\LuckyWheelReward;
 use App\Models\LuckyWheelSpin;
 use App\Models\LuckyWheelWonGift;
@@ -15,6 +16,7 @@ use App\Models\User;
 use App\Services\LuckyWheelService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -27,6 +29,18 @@ class LuckyWheelScenarioSeeder extends Seeder
     private const PASSWORD = '12345678';
     private const SCENARIO_EMAIL_DOMAIN = '@seahum.test';
     private const ORDER_GROUP_PREFIX = 'lucky-wheel-scenario-';
+    private const QA_PRODUCT_SLUG_PREFIX = 'qa-lucky-wheel-item-';
+
+    /**
+     * Cart scenarios around the gift minimum: label => cart item price (base currency, no discount, no tax).
+     */
+    private const CART_SCENARIOS = [
+        '600' => '600.00',
+        '999-99' => '999.99',
+        '1000' => '1000.00',
+        '1200' => '1200.00',
+        'empty' => null,
+    ];
 
     private LuckyWheelService $luckyWheelService;
     private Carbon $businessToday;
@@ -57,6 +71,7 @@ class LuckyWheelScenarioSeeder extends Seeder
         $this->seedGiftOnDeliveredOrder(reward: $salmonReward);
         $this->seedRetiredRewardSnapshot();
         $this->seedInactiveReward();
+        $this->seedCartScenarios(reward: $salmonReward);
 
         clearWebConfigCacheKeys();
         $this->printReport();
@@ -215,6 +230,83 @@ class LuckyWheelScenarioSeeder extends Seeder
             login: 'admin (dashboard)',
             reach: '/admin/lucky-wheel · GET {{base_url}}/customer/lucky-wheel',
             request: ['GET', '/customer/lucky-wheel', null, '200 rewards[] excludes this id'],
+        );
+    }
+
+    private function seedCartScenarios(LuckyWheelReward $reward): void
+    {
+        foreach (self::CART_SCENARIOS as $label => $itemPrice) {
+            $customer = $this->scenarioCustomer(key: 'cart-'.$label, firstName: 'Cart '.$label);
+            $gift = $this->seedSpin(customer: $customer, reward: $reward, daysAgo: 1)->wonGift;
+            if (!$itemPrice) {
+                Cart::where(['customer_id' => $customer->id, 'is_guest' => 0])->delete();
+            }
+            $cartItem = $itemPrice ? $this->seedCartItem(customer: $customer, product: $this->qaProduct(price: $itemPrice, label: $label)) : null;
+            Cache::forget('cache_cart_list_for_customer_'.$customer->id);
+
+            $this->addRow(
+                scenario: 'Checked cart '.($itemPrice ?? '0').' vs minimum',
+                ids: "user={$customer->id} gift={$gift->id}".($cartItem ? " cart={$cartItem->id} product={$cartItem->product_id}" : ''),
+                keyFields: 'cart_subtotal='.($itemPrice ?? '0.00').', min='.$this->luckyWheelService->getMinimumOrderAmount(),
+                login: $customer->email,
+                reach: 'GET {{base_url}}/customer/lucky-wheel/checkout-summary',
+                request: ['GET', '/customer/lucky-wheel/checkout-summary', null, '200 is_eligible='.($itemPrice && bccomp($itemPrice, $this->luckyWheelService->getMinimumOrderAmount(), 2) >= 0 ? 'true' : 'false')],
+            );
+        }
+    }
+
+    /**
+     * A purchasable admin product cloned from the catalogue, with a fixed price and no discount, tax or variations.
+     */
+    private function qaProduct(string $price, string $label): Product
+    {
+        $product = Product::where('slug', self::QA_PRODUCT_SLUG_PREFIX.$label)->first() ?? $this->orderProduct->replicate();
+        $product->forceFill([
+            'name' => '[QA] Lucky Wheel Item '.$price,
+            'slug' => self::QA_PRODUCT_SLUG_PREFIX.$label,
+            'unit_price' => $price,
+            'purchase_price' => $price,
+            'discount' => 0,
+            'discount_type' => 'flat',
+            'tax' => 0,
+            'variation' => json_encode([]),
+            'choice_options' => json_encode([]),
+            'colors' => json_encode([]),
+            'attributes' => json_encode([]),
+            'current_stock' => 1000,
+            'minimum_order_qty' => 1,
+            'status' => 1,
+            'request_status' => 1,
+        ])->save();
+        return $product;
+    }
+
+    private function seedCartItem(User $customer, Product $product): Cart
+    {
+        Cart::where(['customer_id' => $customer->id, 'is_guest' => 0])->where('product_id', '!=', $product->id)->delete();
+
+        return Cart::updateOrCreate(
+            ['customer_id' => $customer->id, 'is_guest' => 0, 'product_id' => $product->id],
+            [
+                'cart_group_id' => $customer->id.'-lucky-wheel-qa',
+                'product_type' => 'physical',
+                'choices' => json_encode([]),
+                'variations' => json_encode([]),
+                'variant' => '',
+                'quantity' => 1,
+                'price' => $product->unit_price,
+                'tax' => 0,
+                'discount' => 0,
+                'tax_model' => 'exclude',
+                'is_checked' => 1,
+                'slug' => $product->slug,
+                'name' => $product->name,
+                'thumbnail' => $product->thumbnail,
+                'seller_id' => $product->user_id,
+                'seller_is' => 'admin',
+                'shipping_cost' => 0,
+                'shipping_type' => 'order_wise',
+            ],
         );
     }
 
