@@ -90,6 +90,12 @@ class OrderController extends Controller
             return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
         }
         $order = Order::where(['id' => $request->order_id])->first();
+        if (!$order) {
+            return response()->json(['message' => translate('order_not_found')], 404);
+        }
+        if (!$this->orderService->isOrderOwner(order: $order, customerId: $request->user()->id, isGuest: false)) {
+            return response()->json(['message' => translate('access_Denied')], 403);
+        }
 
         if (in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['order_status'] == 'pending') {
             OrderManager::getStockUpdateOnOrderStatusChange($order, 'canceled');

@@ -55,24 +55,16 @@
                             @endif
                         @endif
 
-                        @if($billingInputByCustomer)
+                        {{-- Orders with physical items are always billed to the shipping address, so the billing form is only asked for digital-only carts. --}}
+                        @if($billingInputByCustomer && !$physical_product_view)
                             <div class="sf-panel">
                                 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
                                     <h2 class="sf-panel-title" style="margin: 0;">{{ translate('billing_address') }}</h2>
-                                    @if($physical_product_view)
-                                        <label class="sf-check" style="min-height: 0;">
-                                            <input type="checkbox" id="same_as_shipping_address" name="same_as_shipping_address">
-                                            <span class="sf-check-box" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>
-                                            <span class="sf-check-label">{{ translate('same_as_shipping_address') }}</span>
-                                        </label>
-                                    @endif
                                 </div>
 
-                                @unless($physical_product_view)
-                                    <p class="sf-summary-saved" style="margin-bottom: 16px;">
-                                        {{ translate('When you input all the required information and save or update it, this billing address will be stored for future purchases.') }}
-                                    </p>
-                                @endunless
+                                <p class="sf-summary-saved" style="margin-bottom: 16px;">
+                                    {{ translate('When you input all the required information and save or update it, this billing address will be stored for future purchases.') }}
+                                </p>
 
                                 <form id="billing-address-form" method="post" novalidate>
                                     @include('web-views.seafood.partials._checkout-address-fields', [
@@ -84,7 +76,7 @@
                                 </form>
                             </div>
 
-                            @if($isGuestCheckout && !$physical_product_view)
+                            @if($isGuestCheckout)
                                 @include('web-views.seafood.partials._checkout-guest-account')
                             @endif
                         @endif
@@ -121,12 +113,12 @@
         const seafoodAddressFields = {
             shipping: {
                 form: '#address-form', name: '#name', phone: '#phone', email: '#email', type: '#address_type',
-                country: '#country', city: '#city', zip: '#zip, #select2-zip-container', address: '#address',
+                city: '#city', zip: '#zip, #select2-zip-container', address: '#address',
                 latitude: '#latitude', longitude: '#longitude',
             },
             billing: {
                 form: '#billing-address-form', name: '#billing_contact_person_name', phone: '#billing_phone', email: '#billing_contact_email',
-                type: '#billing_address_type', country: '#billing_country', city: '#billing_city', zip: '#billing_zip',
+                type: '#billing_address_type', city: '#billing_city', zip: '#billing_zip',
                 address: '#billing_address', latitude: '#billing_latitude', longitude: '#billing_longitude',
             },
         };
@@ -141,7 +133,6 @@
             $(fields.phone).val(address?.phone ?? '');
             $(fields.email).val(address?.email ?? '');
             $(fields.type).val(address?.address_type ?? 'permanent');
-            $(fields.country).val(address?.country ?? '');
             $(fields.city).val(address?.city ?? '');
             $(fields.zip).val(address?.zip ?? '');
             $(fields.address).val(address?.address ?? '');
@@ -152,8 +143,8 @@
             form.find('.sf-address-method-id').val(address?.id ?? 0);
             form.find('.is-invalid').removeClass('is-invalid');
 
-            // A saved address can be updated in place; a new one can be saved to the address book.
-            saveToggle.prop('checked', false)
+            // A new address is saved to the address book by default; a chosen saved address is only updated on request.
+            saveToggle.prop('checked', !address)
                 .attr('name', address ? saveToggle.data('update-name') : saveToggle.data('save-name'));
             form.find('.sf-address-save-label').text(address ? saveToggle.data('update-label') : saveToggle.data('save-label'));
         }
@@ -164,10 +155,6 @@
 
         $('.sf-address-choice:checked').each(function () {
             applySeafoodAddressChoice($(this));
-        });
-
-        $(document).on('change', '#same_as_shipping_address', function () {
-            $('#billing-address-form').prop('hidden', this.checked);
         });
 
         $(document).on('change', '#is_check_create_account', function () {

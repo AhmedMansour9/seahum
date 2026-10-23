@@ -20,6 +20,7 @@ return [
     'user_restock_requests' => 'web-views.users-profile.account-restock-requests',
     'user_wallet' => 'web-views.users-profile.user-wallet',
     'user_loyalty' => 'web-views.users-profile.user-loyalty',
+    'lucky_wheel' => 'web-views.users-profile.lucky-wheel',
     'account_tickets' => 'web-views.users-profile.account-tickets',
     'ticket_view' => 'web-views.users-profile.ticket-view',
     'user_inbox' => 'web-views.users-profile.inbox.index',

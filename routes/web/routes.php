@@ -28,6 +28,7 @@ use App\Http\Controllers\Web\ChattingController;
 use App\Http\Controllers\Web\CouponController;
 use App\Http\Controllers\Web\CurrencyController;
 use App\Http\Controllers\Web\DigitalProductDownloadController;
+use App\Http\Controllers\Web\LuckyWheelController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\PageController;
 use App\Http\Controllers\Web\ProductCompareController;
@@ -215,7 +216,7 @@ Route::group(['namespace' => 'Web', 'middleware' => ['maintenance_mode', 'guestC
         Route::get('refund-details/{id}', 'refund_details')->name('refund-details');
         Route::post('refund-store', 'store_refund')->name('refund-store');
         Route::get('account-tickets', 'account_tickets')->name('account-tickets');
-        Route::get('order-cancel/{id}', 'order_cancel')->name('order-cancel');
+        Route::get('order-cancel/{id}', 'order_cancel')->name('order-cancel')->middleware('customer');
         Route::post('ticket-submit', 'submitSupportTicket')->name('ticket-submit');
         Route::get('account-delete/{id}', 'account_delete')->name('account-delete');
         Route::get('account-delete', 'getAccountDeleteView')->name('account-delete-form');
@@ -236,6 +237,11 @@ Route::group(['namespace' => 'Web', 'middleware' => ['maintenance_mode', 'guestC
     Route::controller(UserWalletController::class)->group(function () {
         Route::get('wallet-account', 'myWalletAccount')->name('wallet-account'); //theme fashion
         Route::get('wallet', 'index')->name('wallet')->middleware('customer');
+    });
+
+    Route::controller(LuckyWheelController::class)->group(function () {
+        Route::get('lucky-wheel', 'index')->name('lucky-wheel')->middleware('customer');
+        Route::post('lucky-wheel/spin', 'spin')->name('lucky-wheel.spin')->middleware(['customer', 'throttle:10,1']);
     });
 
     Route::controller(UserLoyaltyController::class)->group(function () {

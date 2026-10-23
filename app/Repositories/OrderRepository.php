@@ -14,6 +14,7 @@ use App\Models\Product;
 use App\Models\SellerWallet;
 use App\Models\Shop;
 use App\Models\Transaction;
+use App\Services\LuckyWheelService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -547,6 +548,7 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function updateStockOnOrderStatusChange(string|int $orderId, string $status): bool
     {
+        app(LuckyWheelService::class)->releaseGiftsOnOrderStatusChange(orderId: (int)$orderId, orderStatus: $status);
         $order = $this->order->with('details.product')->find($orderId);
         if ($status == 'returned' || $status == 'failed' || $status == 'canceled') {
             foreach ($order['details'] as $detail) {

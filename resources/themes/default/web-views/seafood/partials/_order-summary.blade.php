@@ -30,6 +30,15 @@
         + max($shippingCostSavedForFreeDelivery, 0);
     $isTaxShownSeparately = $systemTaxConfig['SystemTaxVat']['is_active'] && !$systemTaxConfig['is_included'];
     $isCheckoutDisabled = $summaryCart->count() <= 0;
+    $luckyWheelCheckout = $summaryStep !== 'cart' && auth('customer')->check()
+        ? app(\App\Services\LuckyWheelService::class)->getCheckoutGiftSummary(
+            customerId: auth('customer')->id(),
+            itemSubtotal: $subTotal,
+            productDiscount: $totalDiscountOnProduct,
+            couponDiscount: $isFreeDeliveryCoupon ? 0 : $couponDiscount,
+            referralDiscount: $referralAmount,
+        )
+        : null;
 @endphp
 
 <aside class="sf-summary" aria-labelledby="sf-summary-title">
@@ -62,6 +71,32 @@
                     <button type="submit" class="sf-btn-sm sf-btn-sm-primary" id="sf-coupon-apply">{{ translate('apply') }}</button>
                 </form>
             @endif
+        @endif
+
+        @if($luckyWheelCheckout)
+            <div class="sf-summary-gifts {{ $luckyWheelCheckout['is_eligible'] ? '' : 'is-locked' }}">
+                @if($luckyWheelCheckout['is_eligible'])
+                    <span class="sf-summary-gifts-title">{{ translate('free_gifts_added_to_this_order') }}</span>
+                @else
+                    <span class="sf-summary-gifts-title">
+                        {{ translate('add') }} @include('web-views.seafood.partials._price', ['amount' => $luckyWheelCheckout['remaining_amount'], 'symbolColor' => 'currentColor'])
+                        {{ translate('more_to_get_your_free_gifts_with_this_order') }}
+                    </span>
+                    <span class="sf-summary-gifts-hint">
+                        {{ translate('minimum_order_for_gifts') }}: @include('web-views.seafood.partials._price', ['amount' => $luckyWheelCheckout['minimum_order_amount']])
+                        · {{ translate('gifts_stay_saved_for_a_later_order') }}
+                    </span>
+                @endif
+                <ul>
+                    @foreach($luckyWheelCheckout['pending_gifts'] as $pendingLuckyWheelGift)
+                        <li>
+                            <img src="{{ getStorageImages(path: $pendingLuckyWheelGift->image_full_url, type: 'product') }}" alt="" loading="lazy">
+                            <span>{{ $pendingLuckyWheelGift->getLocalizedName() }}</span>
+                            <strong>{{ translate('free') }}</strong>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
         @endif
 
         <dl class="sf-summary-rows">
@@ -108,7 +143,7 @@
 
         @if($summaryStep === 'payment')
             <label class="sf-check sf-summary-terms">
-                <input type="checkbox" class="sf-payment-terms">
+                <input type="checkbox" class="sf-payment-terms" checked>
                 <span class="sf-check-box" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>
                 <span class="sf-check-label">
                     {{ translate('i_agree_to_Your') }}

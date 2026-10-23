@@ -268,6 +268,7 @@
                                 @endforeach
                                 </tbody>
                             </table>
+                            @include('admin-views.order.partials._lucky-wheel-gifts', ['luckyWheelGifts' => $order->luckyWheelGifts])
 
 
                             @foreach($order->details as $key=>$detail)

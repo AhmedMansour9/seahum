@@ -359,6 +359,10 @@
                         <span class="v2-nav-btn"><span class="v2-nav-label">{{ translate('banner_Setup') }}</span></span>
                         <div class="v2-nav-right"><button class="v2-pin-btn" type="button" data-pin="banners" aria-label="Pin"></button></div>
                     </a>
+                    <a class="v2-nav-item {{ Request::is('admin/lucky-wheel*') ? 'v2-is-active' : '' }}" data-item="lucky-wheel" href="{{ route('admin.lucky-wheel.index') }}">
+                        <span class="v2-nav-btn"><span class="v2-nav-label">{{ translate('lucky_wheel') }}</span></span>
+                        <div class="v2-nav-right"><button class="v2-pin-btn" type="button" data-pin="lucky-wheel" aria-label="Pin"></button></div>
+                    </a>
 
                     <div class="v2-nav-item v2-has-children {{ (Request::is('admin/coupon*') || Request::is('admin/deal*')) ? 'v2-is-active' : '' }}" data-item="offers">
                         <a class="v2-nav-btn" href="{{ route('admin.coupon.add') }}">

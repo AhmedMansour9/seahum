@@ -191,6 +191,13 @@
         </ul>
     </section>
 
+    @if($order->luckyWheelGifts->isNotEmpty())
+        <section class="sf-panel" style="margin-top: 16px;">
+            <h2 class="sf-panel-title">{{ translate('lucky_wheel_gifts') }}</h2>
+            @include('web-views.seafood.partials._lucky-wheel-gift-list', ['luckyWheelGifts' => $order->luckyWheelGifts])
+        </section>
+    @endif
+
     <section class="sf-panel sf-order-totals">
         @include('web-views.seafood.partials._order-totals', ['order' => $order])
 

@@ -68,6 +68,8 @@
 
 {!! Toastr::message() !!}
 
+@include('web-views.seafood.partials._lucky-wheel-popup')
+
 @stack('script')
 </body>
 </html>

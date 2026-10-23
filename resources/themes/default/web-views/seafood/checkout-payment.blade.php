@@ -142,18 +142,6 @@
                                     @endif
                                 </ul>
 
-                                @if($isCashOnDeliveryAvailable)
-                                    <div class="sf-payment-extra" data-payment-extra="cash_on_delivery" style="margin-top: 18px;">
-                                        <label class="sf-form-label" for="bring_change_amount_input">
-                                            {{ translate('Change_Amount') }} ({{ getCurrencySymbol(type: 'web') }})
-                                            <span style="font-weight: 500; color: #6E8C99;">({{ translate('optional') }})</span>
-                                        </label>
-                                        <input type="text" inputmode="numeric" class="sf-filter-field" id="bring_change_amount_input" style="max-width: 260px;"
-                                               placeholder="{{ translate('Amount') }}" dir="ltr">
-                                        <span class="sf-field-hint">{{ translate('Insert_amount_if_you_need_deliveryman_to_bring') }}</span>
-                                    </div>
-                                @endif
-
                                 @if($isOfflinePaymentAvailable)
                                     <div class="sf-payment-extra" data-payment-extra="pay_offline" style="margin-top: 18px;" hidden>
                                         <span class="sf-form-label">{{ translate('select_Payment_Method') }}</span>
@@ -171,7 +159,6 @@
                         @if($isCashOnDeliveryAvailable)
                             <form action="{{ route('checkout-complete') }}" method="get" id="cash_on_delivery_form" hidden>
                                 <input type="hidden" name="payment_method" value="cash_on_delivery">
-                                <input type="hidden" name="bring_change_amount" id="bring_change_amount_value">
                             </form>
                         @endif
 
@@ -269,11 +256,6 @@
         $(document).on('change', '.sf-payment-terms', function () {
             $('.sf-payment-terms').prop('checked', this.checked);
             updateSeafoodPaymentState();
-        });
-
-        $(document).on('input', '#bring_change_amount_input', function () {
-            this.value = this.value.replace(/[^0-9.]/g, '');
-            $('#bring_change_amount_value').val(this.value);
         });
 
         function loadSeafoodOfflineMethodFields(methodId) {

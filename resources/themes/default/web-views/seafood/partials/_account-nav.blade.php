@@ -1,4 +1,6 @@
 @php($businessMode = getWebConfig(name: 'business_mode'))
+@php($isLuckyWheelVisible = isset(VIEW_FILE_NAMES['lucky_wheel']) && auth('customer')->check()
+    && (app(\App\Services\LuckyWheelService::class)->isEnabled() || \App\Models\LuckyWheelWonGift::where('customer_id', auth('customer')->id())->exists()))
 @php($customerName = trim(auth('customer')->user()?->f_name . ' ' . auth('customer')->user()?->l_name))
 
 @php($accountNavItems = array_values(array_filter([
@@ -37,6 +39,12 @@
         'url' => route('loyalty'),
         'active' => Request::is('loyalty*'),
         'icon' => 'award',
+    ] : null,
+    $isLuckyWheelVisible ? [
+        'label' => translate('lucky_wheel'),
+        'url' => route('lucky-wheel'),
+        'active' => Request::is('lucky-wheel*'),
+        'icon' => 'wheel',
     ] : null,
     [
         'label' => translate('inbox'),
@@ -83,6 +91,7 @@
     'heart' => '<path d="M12 20s-7-4.4-7-9.2A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.8C19 15.6 12 20 12 20z"></path>',
     'wallet' => '<rect x="3" y="6" width="18" height="13" rx="3"></rect><path d="M16 12.5h3"></path><path d="M3 9.5h13"></path>',
     'award' => '<circle cx="12" cy="9" r="5"></circle><path d="m8.6 13.4-1.1 6.6 4.5-2.4 4.5 2.4-1.1-6.6"></path>',
+    'wheel' => '<circle cx="12" cy="12" r="8.4"></circle><path d="M12 3.6v16.8M3.6 12h16.8M6.1 6.1l11.8 11.8M17.9 6.1 6.1 17.9"></path><circle cx="12" cy="12" r="2"></circle>',
     'chat' => '<path d="M20 12.5a7 7 0 0 1-9.9 6.4L4 20.5l1.6-5.4A7 7 0 1 1 20 12.5z"></path>',
     'pin' => '<path d="M12 21s6.5-5.4 6.5-10.2A6.5 6.5 0 0 0 5.5 10.8C5.5 15.6 12 21 12 21z"></path><circle cx="12" cy="10.6" r="2.4"></circle>',
     'support' => '<path d="M4.5 13v-1a7.5 7.5 0 0 1 15 0v1"></path><rect x="2.6" y="12.4" width="4" height="5.6" rx="2"></rect><rect x="17.4" y="12.4" width="4" height="5.6" rx="2"></rect><path d="M19.5 18v.6a3 3 0 0 1-3 3H13"></path>',

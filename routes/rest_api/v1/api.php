@@ -20,6 +20,7 @@ use App\Http\Controllers\RestAPI\v1\CustomerRestockRequestController;
 use App\Http\Controllers\RestAPI\v1\DealController;
 use App\Http\Controllers\RestAPI\v1\DealOfTheDayController;
 use App\Http\Controllers\RestAPI\v1\FlashDealController;
+use App\Http\Controllers\RestAPI\v1\LuckyWheelController;
 use App\Http\Controllers\RestAPI\v1\GeneralController;
 use App\Http\Controllers\RestAPI\v1\MapApiController;
 use App\Http\Controllers\RestAPI\v1\NotificationController;
@@ -347,6 +348,15 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api_lang']], function () {
             });
         });
 
+        Route::group(['prefix' => 'lucky-wheel'], function () {
+            Route::controller(LuckyWheelController::class)->group(function () {
+                Route::get('/', 'getStatus');
+                Route::post('spin', 'spin')->middleware('throttle:10,1');
+                Route::get('gifts', 'getWonGifts');
+                Route::get('checkout-summary', 'getCheckoutSummary');
+            });
+        });
+
         //loyalty
         Route::group(['prefix' => 'loyalty'], function () {
             Route::controller(UserLoyaltyController::class)->group(function () {
@@ -378,7 +388,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api_lang']], function () {
         Route::controller(OrderController::class)->group(function () {
             Route::get('track', 'track_by_order_id');
             Route::get('track-order-details', 'track_order_details_history');
-            Route::get('cancel-order', 'order_cancel');
+            Route::get('cancel-order', 'order_cancel')->middleware('auth:api');
             Route::post('track-order', 'track_order');
         });
     });

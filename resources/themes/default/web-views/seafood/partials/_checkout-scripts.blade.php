@@ -207,7 +207,7 @@
 
     function proceedSeafoodFromShipping() {
         const hasPhysicalProduct = $('#physical_product').val() === 'yes';
-        const sameAsShipping = hasPhysicalProduct && $('#same_as_shipping_address').is(':checked');
+        const sameAsShipping = hasPhysicalProduct;
         const createAccountToggle = $('#is_check_create_account');
 
         areSeafoodRequiredFieldsFilled(document.getElementById('address-form'));

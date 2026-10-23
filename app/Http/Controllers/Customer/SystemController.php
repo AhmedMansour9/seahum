@@ -300,6 +300,8 @@ class SystemController extends Controller
         $billing = [];
         parse_str($request['shipping'], $shipping);
         parse_str($request['billing'], $billing);
+        $shipping['country'] = empty($shipping['country']) ? $this->getDefaultCountryName() : $shipping['country'];
+        $billing['billing_country'] = empty($billing['billing_country']) ? $this->getDefaultCountryName() : $billing['billing_country'];
 
         if (!auth('customer')->check()) {
 
