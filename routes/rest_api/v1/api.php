@@ -351,7 +351,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api_lang']], function () {
         Route::group(['prefix' => 'lucky-wheel'], function () {
             Route::controller(LuckyWheelController::class)->group(function () {
                 Route::get('/', 'getStatus');
-                Route::post('spin', 'spin')->middleware('throttle:10,1');
+                Route::post('spin', 'spin')->middleware('throttle:lucky-wheel-spin');
                 Route::get('gifts', 'getWonGifts');
                 Route::get('checkout-summary', 'getCheckoutSummary');
             });

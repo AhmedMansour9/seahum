@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Http\Requests\Request;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
@@ -145,6 +146,11 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('global', function (Request $request) {
             return Limit::perMinute(3000);
+        });
+
+        RateLimiter::for('lucky-wheel-spin', function (HttpRequest $request) {
+            $customerId = $request->is('api/*') ? $request->user('api')?->id : auth('customer')->id();
+            return Limit::perMinute(config('lucky_wheel.spin_attempts_per_minute'))->by($customerId);
         });
     }
 }

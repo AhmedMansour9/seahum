@@ -241,7 +241,7 @@ Route::group(['namespace' => 'Web', 'middleware' => ['maintenance_mode', 'guestC
 
     Route::controller(LuckyWheelController::class)->group(function () {
         Route::get('lucky-wheel', 'index')->name('lucky-wheel')->middleware('customer');
-        Route::post('lucky-wheel/spin', 'spin')->name('lucky-wheel.spin')->middleware(['customer', 'throttle:10,1']);
+        Route::post('lucky-wheel/spin', 'spin')->name('lucky-wheel.spin')->middleware(['customer', 'throttle:lucky-wheel-spin']);
     });
 
     Route::controller(UserLoyaltyController::class)->group(function () {

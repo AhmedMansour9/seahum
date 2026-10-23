@@ -263,6 +263,26 @@ class LuckyWheelSpinApiTest extends TestCase
             ->assertJsonPath('gifts.0.status', 'pending');
     }
 
+    public function test_spin_limit_counts_only_spins_of_each_customer(): void
+    {
+        $this->configureLuckyWheel(isEnabled: true, spinFrequency: LuckyWheelSpinFrequency::Daily);
+        $this->createReward(name: '50g Salmon');
+        $customer = $this->createCustomer(email: 'buyer@gmail.com');
+        $otherCustomer = $this->createCustomer(email: 'seller@gmail.com');
+
+        foreach (range(1, 15) as $statusRequest) {
+            $this->actingAs($customer, 'api')->getJson(self::STATUS_ENDPOINT)->assertOk();
+        }
+        $this->spinAs($customer)->assertOk();
+
+        foreach (range(2, config('lucky_wheel.spin_attempts_per_minute')) as $spinAttempt) {
+            $this->spinAs($customer)->assertForbidden();
+        }
+        $this->spinAs($customer)->assertTooManyRequests();
+
+        $this->spinAs($otherCustomer)->assertOk();
+    }
+
     private function spinAs($customer): TestResponse
     {
         return $this->actingAs($customer, 'api')->postJson(self::SPIN_ENDPOINT);
