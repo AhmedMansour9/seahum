@@ -114,8 +114,6 @@
                             <th>{{ translate('reward') }}</th>
                             <th>{{ translate('type') }}</th>
                             <th class="text-center">{{ translate('display_order') }}</th>
-                            <th class="text-center">{{ translate('chance_daily_mode') }}</th>
-                            <th class="text-center">{{ translate('chance_once_mode') }}</th>
                             <th class="text-center">{{ translate('status') }}</th>
                             <th class="text-center">{{ translate('action') }}</th>
                         </tr>
@@ -148,15 +146,6 @@
                                     @endif
                                 </td>
                                 <td class="text-center">{{ $reward->display_order }}</td>
-                                @foreach([$dailyFrequency, $onceFrequency] as $spinFrequency)
-                                    <td class="text-center">
-                                        @if(isset($selectionProbabilities[$spinFrequency->value][$reward->id]))
-                                            {{ $selectionProbabilities[$spinFrequency->value][$reward->id] }}%
-                                        @else
-                                            <span class="text-body-light" title="{{ translate('not_on_the_wheel_in_this_mode') }}">—</span>
-                                        @endif
-                                    </td>
-                                @endforeach
                                 <td>
                                     <form action="{{ route('admin.lucky-wheel.reward.status') }}" method="post"
                                           id="lucky-wheel-reward-status{{ $reward->id }}-form" class="no-reload-form">

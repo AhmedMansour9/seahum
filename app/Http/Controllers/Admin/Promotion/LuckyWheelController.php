@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin\Promotion;
 use App\Contracts\Repositories\BusinessSettingRepositoryInterface;
 use App\Contracts\Repositories\LuckyWheelRewardRepositoryInterface;
 use App\Contracts\Repositories\TranslationRepositoryInterface;
-use App\Enums\LuckyWheel\LuckyWheelSpinFrequency;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Admin\LuckyWheelRewardRequest;
 use App\Http\Requests\Admin\LuckyWheelSettingsRequest;
@@ -38,19 +37,11 @@ class LuckyWheelController extends BaseController
             relations: ['translations'],
             dataLimit: getWebConfig(name: 'pagination_limit'),
         );
-        $selectionProbabilities = [];
-        foreach (LuckyWheelSpinFrequency::cases() as $spinFrequency) {
-            $selectionProbabilities[$spinFrequency->value] = $this->luckyWheelService->getSelectionProbabilities(
-                rewards: $this->luckyWheelService->getEligibleRewards(spinFrequency: $spinFrequency)
-            );
-        }
-
         return view('admin-views.lucky-wheel.index', [
             'rewards' => $rewards,
             'isEnabled' => $this->luckyWheelService->isEnabled(),
             'currentSpinFrequency' => $this->luckyWheelService->getSpinFrequency(),
             'minimumOrderAmount' => usdToDefaultCurrency(amount: (float)$this->luckyWheelService->getMinimumOrderAmount()),
-            'selectionProbabilities' => $selectionProbabilities,
         ]);
     }
 

@@ -189,15 +189,13 @@ class LuckyWheelSpinApiTest extends TestCase
         }
     }
 
-    public function test_every_active_reward_can_be_picked_with_an_equal_share(): void
+    public function test_every_active_reward_can_be_picked(): void
     {
         $this->createReward(name: '50g Salmon');
         $this->createReward(name: '250g Shrimp');
         $this->createReward(name: 'Try Again Tomorrow', type: LuckyWheelRewardType::NoPrize);
         $luckyWheelService = app(LuckyWheelService::class);
         $rewards = $luckyWheelService->getEligibleRewards(spinFrequency: LuckyWheelSpinFrequency::Daily);
-
-        $this->assertSame([33.33, 33.33, 33.33], array_values($luckyWheelService->getSelectionProbabilities(rewards: $rewards)));
 
         $pickedNames = collect(range(1, 300))->map(fn () => $luckyWheelService->selectReward(rewards: $rewards)->name)->unique()->sort()->values()->all();
         $this->assertSame(['250g Shrimp', '50g Salmon', 'Try Again Tomorrow'], $pickedNames);

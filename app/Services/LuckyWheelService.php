@@ -143,18 +143,6 @@ class LuckyWheelService
     }
 
     /**
-     * Every eligible reward has an equal share.
-     *
-     * @return array<int, float> Reward id => selection probability in percent.
-     */
-    public function getSelectionProbabilities(Collection $rewards): array
-    {
-        return $rewards->mapWithKeys(fn (LuckyWheelReward $reward) => [
-            $reward->id => round(100 / $rewards->count(), 2),
-        ])->all();
-    }
-
-    /**
      * @return array{is_enabled: bool, spin_frequency: string, can_spin: bool, has_spun_today: bool, has_ever_spun: bool, next_spin_at: string|null, reason: string|null, rewards: Collection}
      */
     public function getCustomerStatus(int $customerId): array

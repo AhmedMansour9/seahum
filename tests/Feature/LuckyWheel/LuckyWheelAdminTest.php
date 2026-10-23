@@ -139,8 +139,8 @@ class LuckyWheelAdminTest extends TestCase
         $luckyWheelService = app(LuckyWheelService::class);
         $this->assertSame([false, LuckyWheelSpinFrequency::Daily], $this->currentSettings());
         $this->assertSame(5, LuckyWheelReward::count());
-        $this->assertSame([20.0, 20.0, 20.0, 20.0, 20.0], array_values($luckyWheelService->getSelectionProbabilities(rewards: $luckyWheelService->getEligibleRewards(spinFrequency: LuckyWheelSpinFrequency::Daily))));
-        $this->assertSame([25.0, 25.0, 25.0, 25.0], array_values($luckyWheelService->getSelectionProbabilities(rewards: $luckyWheelService->getEligibleRewards(spinFrequency: LuckyWheelSpinFrequency::Once))));
+        $this->assertCount(5, $luckyWheelService->getEligibleRewards(spinFrequency: LuckyWheelSpinFrequency::Daily));
+        $this->assertCount(4, $luckyWheelService->getEligibleRewards(spinFrequency: LuckyWheelSpinFrequency::Once));
         $this->assertSame(
             ['50g Salmon', '100g Salmon Trimmings', '200g Minced Salmon', '250g Shrimp', 'Try Again Tomorrow'],
             $luckyWheelService->getEligibleRewards(spinFrequency: LuckyWheelSpinFrequency::Daily)->pluck('name')->all()
