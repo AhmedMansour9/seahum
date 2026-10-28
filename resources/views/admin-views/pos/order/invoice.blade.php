@@ -61,7 +61,7 @@ $orderTotalPriceSummary = \App\Utils\OrderManager::getOrderTotalPriceSummary(ord
                     <td>{{ $loop->iteration }}.</td>
                     <td colspan="2"></td>
                     <td class="text-wrap">
-                        <span> {{ Str::limit($detail->product['name'], 200) }}</span><br>
+                        <span> {{ Str::limit($detail->getInvoiceProductName(), 200) }}</span><br>
                         @php($detailVariationArray=json_decode($detail['variation'], true))
                         @php($detailVariationCount=0)
                         @foreach($detailVariationArray as $key1 => $variation)

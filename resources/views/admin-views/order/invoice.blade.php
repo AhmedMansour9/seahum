@@ -810,10 +810,9 @@ $orderTotalPriceSummary = \App\Utils\OrderManager::getOrderTotalPriceSummary(ord
             </thead>
             <tbody>
             @foreach($order->details as $key=>$details)
-                @php($productDetails = $details?->product ?? json_decode($details->product_details))
                 <tr>
                     <td class="px-2 pt-1 pb-1">
-                        <h6 class="m-0">{{$productDetails->name}}</h6>
+                        <h6 class="m-0">{{ $details->getInvoiceProductName() }}</h6>
                         @if($details['variant'])
                             <p class="m-0">{{ translate('variation')}} : {{$details['variant']}}</p>
                         @endif

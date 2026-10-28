@@ -96,6 +96,8 @@ return [
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
+    'invoice_product_name_locale' => env('APP_INVOICE_PRODUCT_NAME_LOCALE', 'eg'),
+
     /*
     |--------------------------------------------------------------------------
     | Encryption Key

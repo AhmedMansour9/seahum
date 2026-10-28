@@ -600,7 +600,7 @@ class OrderController extends BaseController
         $companyEmail = getWebConfig(name: 'company_email');
         $companyName = getWebConfig(name: 'company_name');
         $companyWebLogo = getWebConfig(name: 'company_web_logo');
-        $order = $this->orderRepo->getFirstWhere(params: ['id' => $id], relations: ['seller', 'shipping', 'details']);
+        $order = $this->orderRepo->getFirstWhere(params: ['id' => $id], relations: ['seller', 'shipping', 'details.invoiceProductNameTranslation']);
         $vendor = $this->vendorRepo->getFirstWhere(params: ['id' => $order['details']->first()->seller_id]);
         $invoiceSettings = getWebConfig(name: 'invoice_settings');
         if (is_null(getWebConfig(name: 'company_web_logo_png'))) {

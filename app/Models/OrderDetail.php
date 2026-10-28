@@ -6,6 +6,7 @@ use App\Traits\StorageTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -85,6 +86,21 @@ class OrderDetail extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class)->where('status', 1);
+    }
+
+    public function invoiceProductNameTranslation(): HasOne
+    {
+        return $this->hasOne(Translation::class, 'translationable_id', 'product_id')
+            ->where('translationable_type', Product::class)
+            ->where('key', 'name')
+            ->where('locale', config('app.invoice_product_name_locale'));
+    }
+
+    public function getInvoiceProductName(): ?string
+    {
+        return $this->invoiceProductNameTranslation?->value
+            ?? $this->product?->name
+            ?? json_decode($this->product_details)?->name;
     }
 
     //active_product
