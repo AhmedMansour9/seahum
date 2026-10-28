@@ -9,6 +9,7 @@ use App\Http\Requests\API\v2\DeliveryMan\DeliveryManUpdateInfoRequest;
 use App\Models\BusinessSetting;
 use App\Models\DeliveryHistory;
 use App\Models\DeliveryMan;
+use App\Models\DeliveryManDevice;
 use App\Models\DeliverymanNotification;
 use App\Models\DeliveryManTransaction;
 use App\Models\DeliverymanWallet;
@@ -422,6 +423,12 @@ class DeliveryManController extends Controller
         }
 
         $deliveryMan = $request['delivery_man'];
+        $device = $request['delivery_man_device'];
+        $device->update(['fcm_token' => $request['fcm_token']]);
+
+        /** Same push token means the same app install logged in again, so its older sessions are dead. */
+        DeliveryManDevice::where(['fcm_token' => $request['fcm_token']])->where('id', '!=', $device['id'])->delete();
+
         DeliveryMan::where(['id' => $deliveryMan['id']])->update([
             'fcm_token' => $request['fcm_token']
         ]);
