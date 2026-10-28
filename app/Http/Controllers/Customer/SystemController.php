@@ -55,11 +55,7 @@ class SystemController extends Controller
         if (session('coupon_code') && session('coupon_discount')) {
             $result = OrderManager::getTotalCouponAmount(request: $request, couponCode: session('coupon_code'));
             if (!$result['status']) {
-                session()->forget('coupon_code');
-                session()->forget('coupon_type');
-                session()->forget('coupon_bearer');
-                session()->forget('coupon_discount');
-                session()->forget('coupon_seller_id');
+                OrderManager::forgetSessionCoupon();
             }
         }
     }

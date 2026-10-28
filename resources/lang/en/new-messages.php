@@ -2797,4 +2797,6 @@ ____________________________________________________on_search_engines_and_see_th
 	"more_to_get_your_free_gift_with_this_order" => "more to get your free gift with this order",
 	"one_gift_per_order_your_other_gifts_stay_saved_for_your_next_orders" => "One gift per order. Your other gifts stay saved for your next orders.",
 	"too_many_attempts._please_try_again_after_" => "Too many attempts. please try again after ",
+	"discount_coupon_conflicts_with_lucky_wheel_gift" => "This discount coupon can't be combined with your Lucky Wheel gift. Please remove the coupon and try again.",
+	"your_discount_coupon_was_removed_because_this_order_gets_your_lucky_wheel_gift" => "Your discount coupon was removed because this order gets your free Lucky Wheel gift. Please review the updated total.",
 ];

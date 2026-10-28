@@ -84,6 +84,16 @@ class PaymentController extends Controller
             }
         }
 
+        if (in_array($request['payment_request_from'], ['app'])) {
+            $couponConflict = OrderManager::getLuckyWheelGiftCouponConflict(request: $request, couponCode: $request['coupon_code']);
+            if ($couponConflict) {
+                return response()->json(['errors' => [$couponConflict]], 403);
+            }
+        } elseif (OrderManager::forgetSessionCouponConflictingWithLuckyWheelGift(request: $request)) {
+            Toastr::warning(translate('your_discount_coupon_was_removed_because_this_order_gets_your_lucky_wheel_gift'));
+            return redirect()->route('checkout-payment');
+        }
+
         $cartGroupIds = CartManager::get_cart_group_ids(request: $request, type: 'checked');
         $carts = Cart::whereHas('product', function ($query) {
             return $query->active();

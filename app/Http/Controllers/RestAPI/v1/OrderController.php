@@ -123,6 +123,10 @@ class OrderController extends Controller
             return response()->json(['message' => translate('card_on_delivery_is_not_available')], 403);
         }
 
+        if ($couponConflictResponse = $this->getLuckyWheelGiftCouponConflictResponse(request: $request)) {
+            return $couponConflictResponse;
+        }
+
         $user = Helpers::getCustomerInformation($request);
         $newCustomerRegister = null;
         $cartGroupIds = CartManager::get_cart_group_ids(request: $request, type: 'checked');
@@ -217,6 +221,15 @@ class OrderController extends Controller
         ], 200);
     }
 
+    /**
+     * Refuses an order whose discount coupon conflicts with the customer's lucky wheel gift, before anything is saved.
+     */
+    private function getLuckyWheelGiftCouponConflictResponse(Request $request): ?JsonResponse
+    {
+        $couponConflict = OrderManager::getLuckyWheelGiftCouponConflict(request: $request, couponCode: $request['coupon_code']);
+        return $couponConflict ? response()->json(['errors' => [$couponConflict]], 403) : null;
+    }
+
     function addNewCustomer($request, $address): User
     {
         return User::create([
@@ -233,6 +246,10 @@ class OrderController extends Controller
 
     public function placeOrderByOfflinePayment(Request $request): JsonResponse
     {
+        if ($couponConflictResponse = $this->getLuckyWheelGiftCouponConflictResponse(request: $request)) {
+            return $couponConflictResponse;
+        }
+
         $user = Helpers::getCustomerInformation($request);
         $newCustomerRegister = null;
         $cartGroupIds = CartManager::get_cart_group_ids(request: $request, type: 'checked');
@@ -339,6 +356,10 @@ class OrderController extends Controller
 
     public function placeOrderByWallet(Request $request): JsonResponse
     {
+        if ($couponConflictResponse = $this->getLuckyWheelGiftCouponConflictResponse(request: $request)) {
+            return $couponConflictResponse;
+        }
+
         $cartGroupIds = CartManager::get_cart_group_ids(request: $request, type: 'checked');
         $carts = Cart::whereHas('product', function ($query) {
             return $query->active();

@@ -412,6 +412,72 @@ class OrderManager
             ->update(['customer_id' => $customerID, 'is_guest' => 0]);
     }
 
+    /**
+     * An order that takes a lucky wheel gift may not also use a discount coupon; free delivery coupons stay allowed.
+     */
+    private static function isCouponBlockedByLuckyWheelGift(object|array $user, iterable $cartList): bool
+    {
+        $itemSubtotal = 0;
+        foreach ($cartList as $cartItem) {
+            $itemSubtotal += ($cartItem['price'] - $cartItem['discount']) * $cartItem['quantity'];
+        }
+
+        return app(LuckyWheelService::class)->doesCheckoutTakeGift(
+            customerId: $user['id'],
+            itemSubtotal: $itemSubtotal,
+            referralDiscount: CustomerManager::getReferralDiscountAmount(user: $user, couponDiscount: 0),
+        );
+    }
+
+    /**
+     * Order-time coupon check: the lucky wheel conflict of a submitted coupon, so the order is refused instead of
+     * the discount being dropped. Null when the coupon applies or fails for any other reason (existing rules apply).
+     * The request locale is restored afterwards, because translate() switches it and later messages must stay localized.
+     *
+     * @return array{code: string, message: string}|null
+     */
+    public static function getLuckyWheelGiftCouponConflict(object|array $request, mixed $couponCode): ?array
+    {
+        if (empty($couponCode)) {
+            return null;
+        }
+
+        $requestLocale = app()->getLocale();
+        try {
+            $couponResult = self::getTotalCouponAmount(request: $request, couponCode: $couponCode);
+        } finally {
+            app()->setLocale($requestLocale);
+        }
+
+        if (($couponResult['code'] ?? null) !== LuckyWheelService::DISCOUNT_COUPON_CONFLICT) {
+            return null;
+        }
+
+        return [
+            'code' => LuckyWheelService::DISCOUNT_COUPON_CONFLICT,
+            'message' => $couponResult['messages'],
+        ];
+    }
+
+    /**
+     * Drops the web session coupon when a lucky wheel gift has made it invalid since it was applied,
+     * so the totals shown at checkout always match the order.
+     */
+    public static function forgetSessionCouponConflictingWithLuckyWheelGift(object|array $request): bool
+    {
+        if (!self::getLuckyWheelGiftCouponConflict(request: $request, couponCode: session('coupon_code'))) {
+            return false;
+        }
+
+        self::forgetSessionCoupon();
+        return true;
+    }
+
+    public static function forgetSessionCoupon(): void
+    {
+        session()->forget(['coupon_code', 'coupon_type', 'coupon_bearer', 'coupon_discount', 'coupon_seller_id']);
+    }
+
     public static function getTotalCouponAmount($request, $couponCode): array
     {
         $user = Helpers::getCustomerInformation($request);
@@ -543,6 +609,14 @@ class OrderManager
                     'messages' => translate('Not_applicable_for_current_shipping_cost')
                 ];
             }
+        }
+
+        if ($discount > 0 && $coupon->coupon_type != 'free_delivery' && self::isCouponBlockedByLuckyWheelGift(user: $user, cartList: $cartList)) {
+            return [
+                'status' => false,
+                'code' => LuckyWheelService::DISCOUNT_COUPON_CONFLICT,
+                'messages' => translate(LuckyWheelService::DISCOUNT_COUPON_CONFLICT)
+            ];
         }
 
         if ($discount > 0) {

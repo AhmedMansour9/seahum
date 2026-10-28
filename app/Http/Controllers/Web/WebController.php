@@ -27,6 +27,7 @@ use App\Models\Shop;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Models\Wishlist;
+use App\Services\LuckyWheelService;
 use App\Services\ProductService;
 use App\Services\RecaptchaService;
 use App\Services\ShopService;
@@ -335,6 +336,9 @@ class WebController extends Controller
             return theme_root_path() == 'default' ? redirect('customer/auth/login') : redirect('/');
         }
         ProductManager::updateProductPriceInCartList(request: $request);
+        if ($this->forgetCouponConflictingWithLuckyWheelGift(request: $request)) {
+            return redirect()->to($request->fullUrl());
+        }
 
         $response = OrderManager::checkValidationForCheckoutPages($request);
         if ($response['status'] == 0) {
@@ -416,6 +420,9 @@ class WebController extends Controller
             return $stockAvailabilityResponse['redirect'] ? redirect($stockAvailabilityResponse['redirect']) : redirect('/');
         }
 
+        if ($this->forgetCouponConflictingWithLuckyWheelGift(request: $request)) {
+            return redirect()->to($request->fullUrl());
+        }
         $vendorWiseCartList = OrderManager::processOrderGenerateData(data: [
             'coupon_code' => session('coupon_code') ?? '',
             'address_id' => session('address_id'),
@@ -521,6 +528,10 @@ class WebController extends Controller
             }
 
             return isset($response['redirect']) ? redirect($response['redirect']) : redirect('/');
+        }
+
+        if ($couponConflictResponse = $this->getLuckyWheelGiftCouponConflictResponse(request: $request)) {
+            return $couponConflictResponse;
         }
 
         $cartListQuery = CartManager::getCartListQuery(type: 'checked');
@@ -633,6 +644,44 @@ class WebController extends Controller
         return redirect(route('home'));
     }
 
+    /**
+     * A discount coupon applied before the customer won a lucky wheel gift no longer applies, so it is removed
+     * before the cart or checkout totals are shown. The caller reloads the page so the notice is shown exactly once.
+     */
+    private function forgetCouponConflictingWithLuckyWheelGift(Request $request): bool
+    {
+        if (! OrderManager::forgetSessionCouponConflictingWithLuckyWheelGift(request: $request)) {
+            return false;
+        }
+        Toastr::warning(translate('your_discount_coupon_was_removed_because_this_order_gets_your_lucky_wheel_gift'));
+
+        return true;
+    }
+
+    /**
+     * Refuses to place an order with a discount coupon that conflicts with the lucky wheel gift. The coupon is removed
+     * and the customer is sent back to review the corrected total instead of being charged a different amount.
+     */
+    private function getLuckyWheelGiftCouponConflictResponse(Request $request): JsonResponse|RedirectResponse|null
+    {
+        if (! OrderManager::forgetSessionCouponConflictingWithLuckyWheelGift(request: $request)) {
+            return null;
+        }
+
+        $message = translate('your_discount_coupon_was_removed_because_this_order_gets_your_lucky_wheel_gift');
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 0,
+                'code' => LuckyWheelService::DISCOUNT_COUPON_CONFLICT,
+                'message' => $message,
+                'redirect' => route('checkout-payment'),
+            ]);
+        }
+        Toastr::warning($message);
+
+        return redirect()->route('checkout-payment');
+    }
+
     public function getOrderPlaceView(Request $request): View
     {
         $isNewCustomerInSession = session('newCustomerRegister');
@@ -647,7 +696,7 @@ class WebController extends Controller
         ]);
     }
 
-    public function getOfflinePaymentCheckoutComplete(Request $request): View|RedirectResponse
+    public function getOfflinePaymentCheckoutComplete(Request $request): View|RedirectResponse|JsonResponse
     {
         if ($request['payment_method'] != 'offline_payment') {
             return back()->with('error', 'Something went wrong!');
@@ -666,6 +715,10 @@ class WebController extends Controller
             }
 
             return isset($response['redirect']) ? redirect($response['redirect']) : redirect('/');
+        }
+
+        if ($couponConflictResponse = $this->getLuckyWheelGiftCouponConflictResponse(request: $request)) {
+            return $couponConflictResponse;
         }
 
         $cartGroupIds = CartManager::get_cart_group_ids(request: $request, type: 'checked');
@@ -753,7 +806,7 @@ class WebController extends Controller
         return redirect(route('home'));
     }
 
-    public function checkout_complete_wallet(Request $request): View|RedirectResponse
+    public function checkout_complete_wallet(Request $request): View|RedirectResponse|JsonResponse
     {
         if (! session('address_id') && ! session('billing_address_id')) {
             Toastr::error(translate('Please_update_address_information'));
@@ -768,6 +821,10 @@ class WebController extends Controller
             }
 
             return isset($response['redirect']) ? redirect($response['redirect']) : redirect('/');
+        }
+
+        if ($couponConflictResponse = $this->getLuckyWheelGiftCouponConflictResponse(request: $request)) {
+            return $couponConflictResponse;
         }
 
         $vendorWiseCartList = OrderManager::processOrderGenerateData(data: [
@@ -852,6 +909,9 @@ class WebController extends Controller
             || (getWebConfig(name: 'guest_checkout') && session()->has('guest_id') && session('guest_id'))
         ) {
             ProductManager::updateProductPriceInCartList(request: $request);
+            if ($this->forgetCouponConflictingWithLuckyWheelGift(request: $request)) {
+                return redirect()->to($request->fullUrl());
+            }
             $topRatedShops = [];
             $newSellers = [];
             $currentDate = date('Y-m-d H:i:s');

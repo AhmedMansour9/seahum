@@ -184,6 +184,19 @@ class LuckyWheelMinimumOrderAmountTest extends TestCase
         $this->assertNull($this->luckyWheelService->getCheckoutGiftSummary(customerId: $this->createCustomer(email: 'nogifts@gmail.com')->id, itemSubtotal: '1000', productDiscount: 0, couponDiscount: 0, referralDiscount: 0));
     }
 
+    public function test_a_checkout_takes_the_gift_only_with_a_pending_gift_and_a_subtotal_at_the_minimum_before_coupons(): void
+    {
+        $customer = $this->createCustomerWithPendingGift();
+
+        $this->assertTrue($this->luckyWheelService->doesCheckoutTakeGift(customerId: $customer->id, itemSubtotal: '1000', referralDiscount: 0));
+        $this->assertTrue($this->luckyWheelService->doesCheckoutTakeGift(customerId: $customer->id, itemSubtotal: '1200', referralDiscount: 0));
+        $this->assertFalse($this->luckyWheelService->doesCheckoutTakeGift(customerId: $customer->id, itemSubtotal: '999.99', referralDiscount: 0));
+        $this->assertFalse($this->luckyWheelService->doesCheckoutTakeGift(customerId: $customer->id, itemSubtotal: '1200', referralDiscount: '300'));
+
+        $customerWithoutGifts = $this->createCustomer(email: 'nogifts@gmail.com');
+        $this->assertFalse($this->luckyWheelService->doesCheckoutTakeGift(customerId: $customerWithoutGifts->id, itemSubtotal: '5000', referralDiscount: 0));
+    }
+
     public function test_checkout_summary_api_returns_null_without_pending_gifts(): void
     {
         $this->actingAs($this->createCustomer(), 'api')

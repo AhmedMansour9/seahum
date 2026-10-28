@@ -23,6 +23,11 @@ class LuckyWheelService
     public const SPIN_FREQUENCY_SETTING = 'lucky_wheel_spin_frequency';
     public const MINIMUM_ORDER_AMOUNT_SETTING = 'lucky_wheel_minimum_order_amount';
 
+    /**
+     * Machine-readable reason, and translation key, for a discount coupon refused because the order takes a gift.
+     */
+    public const DISCOUNT_COUPON_CONFLICT = 'discount_coupon_conflicts_with_lucky_wheel_gift';
+
     private const MONEY_SCALE = 2;
 
     /**
@@ -119,6 +124,22 @@ class LuckyWheelService
             referralDiscount: $referralDiscount,
         );
         return [...$this->getGiftEligibility(qualifyingSubtotal: $qualifyingSubtotal), 'pending_gifts' => $pendingGifts, 'next_gift' => $pendingGifts->first()];
+    }
+
+    /**
+     * Whether a checkout will take the customer's next gift, judged before any coupon: a pending gift exists
+     * and the subtotal reaches the minimum. Such an order must not use a discount coupon.
+     */
+    public function doesCheckoutTakeGift(int $customerId, float|int|string $itemSubtotal, float|int|string $referralDiscount): bool
+    {
+        $checkoutGiftSummary = $this->getCheckoutGiftSummary(
+            customerId: $customerId,
+            itemSubtotal: $itemSubtotal,
+            productDiscount: 0,
+            couponDiscount: 0,
+            referralDiscount: $referralDiscount,
+        );
+        return $checkoutGiftSummary['is_eligible'] ?? false;
     }
 
     public function getBusinessNow(): Carbon
