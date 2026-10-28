@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\DeliveryMan;
+use App\Models\DeliveryManDevice;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -19,9 +19,10 @@ class DeliveryManAuth
     {
         $token = explode(' ', $request->header('authorization'));
         if (count($token) > 1 && strlen($token[1]) > 30) {
-            $d_man = DeliveryMan::where(['auth_token' => $token['1']])->first();
-            if (isset($d_man)) {
-                $request['delivery_man'] = $d_man;
+            $device = DeliveryManDevice::with('deliveryMan')->where(['auth_token' => $token['1']])->first();
+            if (isset($device?->deliveryMan)) {
+                $request['delivery_man'] = $device->deliveryMan;
+                $request['delivery_man_device'] = $device;
                 return $next($request);
             }
         }

@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\DeliveryMan;
 use App\Models\NotificationMessage;
 use App\Models\Order;
 use App\Models\ReferralCustomer;
@@ -100,7 +101,6 @@ trait PushNotificationTrait
 
             /** for delivery man*/
             if ($type == 'delivery_man') {
-                $fcmTokenDeliveryMan = $order->deliveryMan?->fcm_token;
                 $lang = $order->deliveryMan?->app_language ?? $lang;
                 $value_delivery_man = $this->pushNotificationMessage($key, 'delivery_man', $lang);
 
@@ -118,12 +118,27 @@ trait PushNotificationTrait
                     if ($order->delivery_man_id) {
                         self::add_deliveryman_push_notification($postData, $order->delivery_man_id);
                     }
-                    if ($fcmTokenDeliveryMan) {
-                        $this->sendPushNotificationToDevice($fcmTokenDeliveryMan, $postData);
+                    if ($order->deliveryMan) {
+                        $this->sendPushNotificationToDeliveryManDevices(deliveryMan: $order->deliveryMan, data: $postData);
                     }
                 }
             }
         } catch (Exception $e) {
+        }
+    }
+
+    /**
+     * Push to every device the delivery man is logged in on; tokens FCM reports as unregistered are dropped.
+     */
+    protected function sendPushNotificationToDeliveryManDevices(DeliveryMan $deliveryMan, array $data): void
+    {
+        $fcmTokens = $deliveryMan->devices()->whereNotNull('fcm_token')->where('fcm_token', '!=', '')->distinct()->pluck('fcm_token');
+
+        foreach ($fcmTokens as $fcmToken) {
+            $response = $this->sendPushNotificationToDevice($fcmToken, $data);
+            if (is_string($response) && data_get(json_decode($response, true), 'error.status') === 'NOT_FOUND') {
+                $deliveryMan->devices()->where('fcm_token', $fcmToken)->update(['fcm_token' => null]);
+            }
         }
     }
 
@@ -485,13 +500,14 @@ trait PushNotificationTrait
     {
         try {
             $key = (array)getWebConfig('push_notification_key');
-            if (isset($key['project_id'])) {
-                $url = 'https://fcm.googleapis.com/v1/projects/' . $key['project_id'] . '/messages:send';
-                $headers = [
-                    'Authorization' => 'Bearer ' . $this->getAccessToken($key),
-                    'Content-Type' => 'application/json',
-                ];
+            if (!isset($key['project_id'])) {
+                return false;
             }
+            $url = 'https://fcm.googleapis.com/v1/projects/' . $key['project_id'] . '/messages:send';
+            $headers = [
+                'Authorization' => 'Bearer ' . $this->getAccessToken($key),
+                'Content-Type' => 'application/json',
+            ];
             return Http::withHeaders($headers)->post($url, $data);
         } catch (Exception $exception) {
             return false;

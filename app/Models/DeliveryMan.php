@@ -87,6 +87,11 @@ class DeliveryMan extends Model
         return $this->hasMany(Order::class, 'delivery_man_id')->where('order_status', 'delivered');
     }
 
+    public function devices(): HasMany
+    {
+        return $this->hasMany(DeliveryManDevice::class);
+    }
+
     public function wallet(): HasOne
     {
         return $this->hasOne(DeliverymanWallet::class);
