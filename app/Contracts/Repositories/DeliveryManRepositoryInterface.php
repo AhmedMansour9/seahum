@@ -3,6 +3,7 @@
 namespace App\Contracts\Repositories;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 interface DeliveryManRepositoryInterface extends RepositoryInterface
@@ -32,4 +33,12 @@ interface DeliveryManRepositoryInterface extends RepositoryInterface
      * @return Collection|LengthAwarePaginator
      */
     public function getListWhereIn(array $orderBy = [], ?string $searchValue = null, array $filters = [], array $relations = [], array $nullFields = [], array $withCounts = [], int|string $dataLimit = DEFAULT_DATA_LIMIT, ?int $offset = null): Collection|LengthAwarePaginator;
+
+    /**
+     * Active delivery man of the given owner (0 = admin) with the fewest open orders; ties go to the lowest id.
+     *
+     * @param int|string $sellerId
+     * @return Model|null
+     */
+    public function getActiveWithFewestOpenOrders(int|string $sellerId): ?Model;
 }

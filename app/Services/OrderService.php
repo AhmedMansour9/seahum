@@ -66,4 +66,12 @@ class OrderService
         return $isOrderOnlyDigital;
     }
 
+    /**
+     * Owner of the delivery men who can deliver the order: the vendor under sellerwise shipping, otherwise the admin (0).
+     */
+    public function getDeliveryManOwnerId(object $order): int
+    {
+        return ($order['seller_is'] === 'seller' && $order['shipping_responsibility'] === 'sellerwise_shipping') ? (int)$order['seller_id'] : 0;
+    }
+
 }

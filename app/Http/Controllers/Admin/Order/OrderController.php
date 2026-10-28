@@ -548,7 +548,7 @@ class OrderController extends BaseController
             'order_status' => 'delivered',
             'order_type' => 'default_type',
         ]);
-        $sellerId = ($order['seller_is'] === 'seller' && $order['shipping_responsibility'] === 'sellerwise_shipping') ? $order['seller_id'] : 0;
+        $sellerId = $orderService->getDeliveryManOwnerId(order: $order);
 
         $deliveryMen = $this->deliveryManRepo->getListWhere(filters: ['is_active' => 1, 'seller_id' => $sellerId], dataLimit: 'all');
         $isOrderOnlyDigital = $orderService->getCheckIsOrderOnlyDigital(order: $order);

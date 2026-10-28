@@ -10,6 +10,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class DeliveryManRepository implements DeliveryManRepositoryInterface
 {
+    private const CLOSED_ORDER_STATUSES = ['delivered', 'canceled', 'returned', 'failed'];
+
     public function __construct(
         private readonly DeliveryMan $deliveryMan,
     )
@@ -150,5 +152,17 @@ class DeliveryManRepository implements DeliveryManRepositoryInterface
 
         $filters += ['searchValue' => $searchValue];
         return $dataLimit == 'all' ? $query->get() : $query->paginate($dataLimit)->appends($filters);
+    }
+
+    public function getActiveWithFewestOpenOrders(int|string $sellerId): ?Model
+    {
+        return $this->deliveryMan
+            ->where(['seller_id' => $sellerId, 'is_active' => 1])
+            ->withCount(['orders as open_orders_count' => function ($query) {
+                $query->whereNotIn('order_status', self::CLOSED_ORDER_STATUSES);
+            }])
+            ->orderBy('open_orders_count')
+            ->orderBy('id')
+            ->first();
     }
 }
