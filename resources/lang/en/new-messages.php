@@ -2797,4 +2797,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"more_to_get_your_free_gift_with_this_order" => "more to get your free gift with this order",
 	"one_gift_per_order_your_other_gifts_stay_saved_for_your_next_orders" => "One gift per order. Your other gifts stay saved for your next orders.",
 	"too_many_attempts._please_try_again_after_" => "Too many attempts. please try again after ",
+	"successfully_added!" => "Successfully added!",
 ];
