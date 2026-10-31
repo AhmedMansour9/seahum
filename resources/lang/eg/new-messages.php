@@ -9511,4 +9511,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"discount_coupon_conflicts_with_lucky_wheel_gift" => "لا يمكن الجمع بين كوبون الخصم وهدية عجلة الحظ. يرجى إزالة الكوبون والمحاولة مرة أخرى.",
 	"your_discount_coupon_was_removed_because_this_order_gets_your_lucky_wheel_gift" => "تمت إزالة كوبون الخصم لأن هذا الطلب يحصل على هدية عجلة الحظ المجانية. يرجى مراجعة الإجمالي المحدث.",
 	"remove_coupon" => "Remove coupon",
+	"withdraw_request_status_message" => "Withdraw request status message",
+	"Vendors_are_not_allowed_to_edit_orders_now." => "Vendors are not allowed to edit orders now.",
+	"This_order_was_placed_with_the_inhouse_shipping_method_and_must_be_delivered_using_the_shipping_option_selected_by_the_customer_during_checkout." => "This order was placed with the inhouse shipping method and must be delivered using the shipping option selected by the customer during checkout.",
 ];

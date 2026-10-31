@@ -203,6 +203,7 @@
                                 @foreach($order->details as $key=>$detail)
                                     @php($isProductUnavailable = $detail->productAllStatus === null)
                                     @php($productDetails = $detail?->productAllStatus ?? json_decode($detail->product_details, true))
+                                    @php($localizedProductName = $detail->getLocalizedProductName())
                                     @if($productDetails)
                                         <tr class="">
                                             <td>{{ ++$row }}</td>
@@ -222,12 +223,12 @@
                                                             <a target="_blank"
                                                                class="text-dark fs-12 fw-bold"
                                                                href="{{ route('admin.products.view', ['addedBy' => $productDetails['added_by'] == 'seller' ? 'vendor' : 'in-house', 'id' => $productDetails['id']]) }}"
-                                                               @if(!$isProductUnavailable && strlen($productDetails['name']) > 30)
+                                                               @if(!$isProductUnavailable && mb_strlen($localizedProductName) > 30)
                                                                    data-bs-toggle="tooltip"
-                                                               title="{{ $productDetails['name'] }}"
+                                                               title="{{ $localizedProductName }}"
                                                                 @endif
                                                             >
-                                                                {{ Str::limit($productDetails['name'], 30) }}
+                                                                {{ Str::limit($localizedProductName, 30) }}
                                                             </a>
 
                                                             <div class="fs-10">

@@ -2799,4 +2799,6 @@ ____________________________________________________on_search_engines_and_see_th
 	"too_many_attempts._please_try_again_after_" => "Too many attempts. please try again after ",
 	"discount_coupon_conflicts_with_lucky_wheel_gift" => "This discount coupon can't be combined with your Lucky Wheel gift. Please remove the coupon and try again.",
 	"your_discount_coupon_was_removed_because_this_order_gets_your_lucky_wheel_gift" => "Your discount coupon was removed because this order gets your free Lucky Wheel gift. Please review the updated total.",
+	"Vendors_are_not_allowed_to_edit_orders_now." => "Vendors are not allowed to edit orders now.",
+	"This_order_was_placed_with_the_inhouse_shipping_method_and_must_be_delivered_using_the_shipping_option_selected_by_the_customer_during_checkout." => "This order was placed with the inhouse shipping method and must be delivered using the shipping option selected by the customer during checkout.",
 ];

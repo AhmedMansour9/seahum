@@ -103,6 +103,18 @@ class OrderDetail extends Model
             ?? json_decode($this->product_details)?->name;
     }
 
+    /**
+     * Product name in the current panel language, falling back to the base name and then the name stored at order time.
+     */
+    public function getLocalizedProductName(): ?string
+    {
+        $product = $this->productAllStatus;
+
+        return $product?->translations->where('locale', getDefaultLanguage())->firstWhere('key', 'name')?->value
+            ?? $product?->getRawOriginal('name')
+            ?? json_decode($this->product_details)?->name;
+    }
+
     //active_product
     public function activeProduct(): BelongsTo
     {

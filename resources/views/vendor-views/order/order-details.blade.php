@@ -204,6 +204,7 @@
                                         } else {
                                             $productDetails = json_decode($detail->product_details);
                                         }
+                                        $localizedProductName = $detail->getLocalizedProductName();
                                         ?>
                                     @if($productDetails)
                                         <tr>
@@ -219,11 +220,11 @@
                                                         <div>
                                                             <a class="title-color fs-12"
                                                                href="{{ route('vendor.products.view', [$productDetails->id]) }}"
-                                                               @if(!$isProductUnavailable && strlen($productDetails->name) > 30)
+                                                               @if(!$isProductUnavailable && mb_strlen($localizedProductName) > 30)
                                                                    data-toggle="tooltip"
-                                                               title="{{ $productDetails->name }}" @endif
+                                                               title="{{ $localizedProductName }}" @endif
                                                             >
-                                                                {{ Str::limit($productDetails->name, 30) }}
+                                                                {{ Str::limit($localizedProductName, 30) }}
                                                             </a>
                                                             <div class="fs-10">
                                                                 <strong>{{translate('unit_price')}} :</strong>
