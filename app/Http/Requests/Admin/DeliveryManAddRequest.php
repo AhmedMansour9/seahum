@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Enums\DeliveryManAppRole;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use App\Traits\ResponseHandler;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Carbon;
@@ -46,6 +48,7 @@ class DeliveryManAddRequest extends FormRequest
                 maxSize: getFileUploadMaxSize(unit: 'kb'),
                 isDisallowed: true
             ),
+            'app_role' => ['nullable', Rule::in(DeliveryManAppRole::values())],
             'password' => 'required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)(?!.*\s).{8,}$/|same:confirm_password',
         ];
     }

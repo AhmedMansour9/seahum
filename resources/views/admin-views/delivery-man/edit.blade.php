@@ -84,6 +84,20 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
+                                        <label class="mb-2">{{ translate('app_role') }}</label>
+                                        <div class="select-wrapper">
+                                            <select name="app_role" class="form-select">
+                                                @foreach(\App\Enums\DeliveryManAppRole::cases() as $appRole)
+                                                    <option value="{{ $appRole->value }}" {{ $deliveryMan['app_role'] === $appRole ? 'selected' : '' }}>
+                                                        {{ translate('app_role_' . $appRole->value) }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
                                         <label class="mb-2">{{ translate('identity_Number') }}</label>
                                         <input type="text" name="identity_number"
                                                value="{{ $deliveryMan['identity_number'] }}" class="form-control"

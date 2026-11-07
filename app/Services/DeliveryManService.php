@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\DeliveryManAppRole;
 use App\Traits\CommonTrait;
 use App\Traits\FileManagerTrait;
 use Brian2694\Toastr\Facades\Toastr;
@@ -29,6 +30,7 @@ class DeliveryManService
             'full_phone' => $request['phone'],
             'identity_number' => $request['identity_number'],
             'identity_type' => $request['identity_type'],
+            'app_role' => $addedBy == 'admin' ? ($request['app_role'] ?? DeliveryManAppRole::DeliveryMan->value) : DeliveryManAppRole::DeliveryMan->value,
             'password' => bcrypt($request['password']),
             'created_at' => now(),
             'updated_at' => now(),

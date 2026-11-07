@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DeliveryManAppRole;
 use App\Traits\DemoMaskingTrait;
 use App\Traits\StorageTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,7 @@ use Illuminate\Support\Facades\DB;
  * @property string $auth_token
  * @property string $fcm_token
  * @property string $app_language
+ * @property DeliveryManAppRole $app_role
  */
 class DeliveryMan extends Model
 {
@@ -53,6 +55,7 @@ class DeliveryMan extends Model
         'auth_token',
         'fcm_token',
         'app_language',
+        'app_role',
     ];
 
     protected $casts = [
@@ -75,6 +78,7 @@ class DeliveryMan extends Model
         'auth_token' => 'string',
         'fcm_token' => 'string',
         'app_language' => 'string',
+        'app_role' => DeliveryManAppRole::class,
     ];
 
     public function orders(): HasMany

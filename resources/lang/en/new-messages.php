@@ -2804,4 +2804,11 @@ ____________________________________________________on_search_engines_and_see_th
 	"EasyOrders" => "EasyOrders",
 	"Only_EasyOrders_Orders" => "Only EasyOrders Orders",
 	"EasyOrders_orders_cannot_be_edited" => "EasyOrders orders cannot be edited",
+	"app_role" => "App role",
+	"app_role_delivery_man" => "Delivery man",
+	"app_role_customer_service" => "Customer service",
+	"app_role_admin" => "Admin",
+	"You_are_not_allowed_to_access_this_section" => "You are not allowed to access this section",
+	"Delivery_man_not_found" => "Delivery man not found",
+	"Delivery_man_assigned_successfully" => "Delivery man assigned successfully",
 ];

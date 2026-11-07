@@ -7,6 +7,7 @@ use App\Http\Middleware\APILocalizationMiddleware;
 use App\Http\Middleware\CustomerMiddleware;
 use App\Http\Middleware\DatabaseRefreshMiddleware;
 use App\Http\Middleware\DeliveryManAuth;
+use App\Http\Middleware\DeliveryManAppRoleMiddleware;
 use App\Http\Middleware\GuestMiddleware;
 use App\Http\Middleware\InstallationMiddleware;
 use App\Http\Middleware\MaintenanceModeMiddleware;
@@ -89,6 +90,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'api_lang' => APILocalizationMiddleware::class,
             'maintenance_mode' => MaintenanceModeMiddleware::class,
             'delivery_man_auth' => DeliveryManAuth::class,
+            'delivery_man_role' => DeliveryManAppRoleMiddleware::class,
             'seller_api_auth' => SellerApiAuthMiddleware::class,
             'guestCheck' => GuestMiddleware::class,
             'apiGuestCheck' => APIGuestMiddleware::class,

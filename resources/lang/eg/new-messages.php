@@ -9533,4 +9533,11 @@ ____________________________________________________on_search_engines_and_see_th
 	"EasyOrders" => "إيزي أوردرز",
 	"Only_EasyOrders_Orders" => "طلبات إيزي أوردرز فقط",
 	"EasyOrders_orders_cannot_be_edited" => "طلبات إيزي أوردرز مش بتتعدل من هنا",
+	"app_role" => "نوع الحساب في التطبيق",
+	"app_role_delivery_man" => "مندوب توصيل",
+	"app_role_customer_service" => "خدمة عملاء",
+	"app_role_admin" => "أدمن",
+	"You_are_not_allowed_to_access_this_section" => "مش مسموحلك تدخل على الجزء ده",
+	"Delivery_man_not_found" => "المندوب مش موجود",
+	"Delivery_man_assigned_successfully" => "تم تعيين المندوب بنجاح",
 ];

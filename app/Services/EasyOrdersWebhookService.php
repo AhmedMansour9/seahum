@@ -89,9 +89,9 @@ class EasyOrdersWebhookService
         });
     }
 
-    public function updateAdminOrderStatus(string|int $orderId, string $status, string|int $adminId): ?Order
+    public function updateAdminOrderStatus(string|int $orderId, string $status, string|int $adminId, string $userType = 'admin'): ?Order
     {
-        return DB::transaction(function () use ($orderId, $status, $adminId): ?Order {
+        return DB::transaction(function () use ($orderId, $status, $adminId, $userType): ?Order {
             $order = Order::where([
                 'id' => $orderId,
                 'order_source' => OrderSource::EasyOrders->value,
@@ -105,7 +105,7 @@ class EasyOrdersWebhookService
                 $this->applyStatusUpdate(
                     order: $order,
                     status: $status,
-                    userType: 'admin',
+                    userType: $userType,
                     userId: $adminId,
                 );
             }

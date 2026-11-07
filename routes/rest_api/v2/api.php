@@ -7,6 +7,7 @@ use App\Http\Controllers\RestAPI\v2\delivery_man\auth\LoginController as Deliver
 use App\Http\Controllers\RestAPI\v2\seller\auth\RegisterController;
 use App\Http\Controllers\RestAPI\v2\seller\ChatController as VendorChatController;
 use App\Http\Controllers\RestAPI\v2\delivery_man\DeliveryManController;
+use App\Http\Controllers\RestAPI\v2\delivery_man\StaffOrderController;
 use App\Http\Controllers\RestAPI\v2\delivery_man\WithdrawController;
 use App\Http\Controllers\RestAPI\v2\seller\BrandController;
 use App\Http\Controllers\RestAPI\v2\seller\OrderController;
@@ -173,6 +174,21 @@ Route::group(['namespace' => 'RestAPI\v2', 'prefix' => 'v2', 'middleware' => ['a
                 Route::post('verify-order-delivery-otp', 'verify_order_delivery_otp');
                 Route::post('resend-verification-code', 'resend_verification_code');
                 Route::post('order-delivery-verification', 'order_delivery_verification');
+            });
+
+            Route::group(['prefix' => 'staff', 'middleware' => ['delivery_man_role:admin,customer_service']], function () {
+                Route::controller(StaffOrderController::class)->group(function () {
+                    Route::get('orders', 'getOrders');
+                    Route::get('order-details', 'getOrderDetails');
+                    Route::put('update-order-status', 'updateOrderStatus');
+
+                    Route::group(['middleware' => ['delivery_man_role:admin']], function () {
+                        Route::put('update-payment-status', 'updatePaymentStatus');
+                        Route::put('assign-delivery-man', 'assignDeliveryMan');
+                        Route::get('delivery-men', 'getDeliveryMen');
+                        Route::get('dashboard-stats', 'getDashboardStats');
+                    });
+                });
             });
 
             Route::controller(WithdrawController::class)->group(function () {

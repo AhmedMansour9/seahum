@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Enums\DeliveryManAppRole;
 use App\Traits\ResponseHandler;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -45,6 +46,7 @@ class DeliveryManUpdateRequest extends FormRequest
                 Rule::unique('delivery_men', 'email')->ignore($this->route('id')),
             ],
             'phone' => 'required|max:20|min:4',
+            'app_role' => ['nullable', Rule::in(DeliveryManAppRole::values())],
             'country_code' => 'required',
             'image' => getRulesStringForImageValidation(
                 rules: ['nullable', 'image'],

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\DeliveryManAppRole;
 use App\Contracts\Repositories\DeliveryManRepositoryInterface;
 use App\Models\DeliveryMan;
 use Illuminate\Database\Eloquent\Collection;
@@ -56,6 +57,9 @@ class DeliveryManRepository implements DeliveryManRepositoryInterface
             })
             ->when(isset($filters['seller_id']), function ($query) use ($filters) {
                 $query->where('seller_id', $filters['seller_id']);
+            })
+            ->when(isset($filters['app_role']), function ($query) use ($filters) {
+                $query->where('app_role', $filters['app_role']);
             })
             ->when(in_array('review', $relations), function ($query) use ($filters, $relations) {
                 return $query->withCount('review')
@@ -157,7 +161,7 @@ class DeliveryManRepository implements DeliveryManRepositoryInterface
     public function getActiveWithFewestOpenOrders(int|string $sellerId): ?Model
     {
         return $this->deliveryMan
-            ->where(['seller_id' => $sellerId, 'is_active' => 1])
+            ->where(['seller_id' => $sellerId, 'is_active' => 1, 'app_role' => DeliveryManAppRole::DeliveryMan->value])
             ->withCount(['orders as open_orders_count' => function ($query) {
                 $query->whereNotIn('order_status', self::CLOSED_ORDER_STATUSES);
             }])
