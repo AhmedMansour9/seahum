@@ -40,6 +40,12 @@
                                                 {{ translate('Edited') }}
                                             </span>
                                         @endif
+
+                                        @if($order->order_source === \App\Enums\OrderSource::EasyOrders)
+                                            <span class="badge badge-primary text-bg-primary">
+                                                {{ translate('EasyOrders') }} #{{ $order->external_order_id }}
+                                            </span>
+                                        @endif
                                     </span>
                                 </h4>
                                 <div class="fs-12">
@@ -201,8 +207,9 @@
                                 @php($discount=0)
                                 @php($row=0)
                                 @foreach($order->details as $key=>$detail)
-                                    @php($isProductUnavailable = $detail->productAllStatus === null)
                                     @php($productDetails = $detail?->productAllStatus ?? json_decode($detail->product_details, true))
+                                    @php($isExternalProduct = ($productDetails['source'] ?? null) === \App\Enums\OrderSource::EasyOrders->value)
+                                    @php($isProductUnavailable = $detail->productAllStatus === null && !$isExternalProduct)
                                     @php($localizedProductName = $detail->getLocalizedProductName())
                                     @if($productDetails)
                                         <tr class="">
@@ -213,23 +220,46 @@
                                                      title="{{ $isProductUnavailable ? translate('This_product_has_been_deleted') : '' }}">
 
                                                     <div class="media align-items-center gap-10">
-                                                        <a target="_blank"
-                                                           href="{{ route('admin.products.view', ['addedBy' => $productDetails['added_by'] == 'seller' ? 'vendor' : 'in-house', 'id' => $productDetails['id']]) }}">
+                                                        @if($isExternalProduct)
                                                             <img class="avatar avatar-60 rounded img-fit"
-                                                                 src="{{ getStorageImages(path:$detail?->productAllStatus?->thumbnail_full_url, type: 'backend-product') }}"
+                                                                 src="{{ getStorageImages(path: null, type: 'backend-product') }}"
                                                                  alt="{{translate('image_Description')}}">
-                                                        </a>
-                                                        <div>
+                                                        @else
                                                             <a target="_blank"
-                                                               class="text-dark fs-12 fw-bold"
-                                                               href="{{ route('admin.products.view', ['addedBy' => $productDetails['added_by'] == 'seller' ? 'vendor' : 'in-house', 'id' => $productDetails['id']]) }}"
-                                                               @if(!$isProductUnavailable && mb_strlen($localizedProductName) > 30)
-                                                                   data-bs-toggle="tooltip"
-                                                               title="{{ $localizedProductName }}"
-                                                                @endif
-                                                            >
-                                                                {{ Str::limit($localizedProductName, 30) }}
+                                                               href="{{ route('admin.products.view', ['addedBy' => $productDetails['added_by'] == 'seller' ? 'vendor' : 'in-house', 'id' => $productDetails['id']]) }}">
+                                                                <img class="avatar avatar-60 rounded img-fit"
+                                                                     src="{{ getStorageImages(path:$detail?->productAllStatus?->thumbnail_full_url, type: 'backend-product') }}"
+                                                                     alt="{{translate('image_Description')}}">
                                                             </a>
+                                                        @endif
+                                                        <div>
+                                                            @if($isExternalProduct)
+                                                                <span class="text-dark fs-12 fw-bold"
+                                                                      @if(mb_strlen($localizedProductName) > 30)
+                                                                          data-bs-toggle="tooltip"
+                                                                      title="{{ $localizedProductName }}"
+                                                                    @endif
+                                                                >
+                                                                    {{ Str::limit($localizedProductName, 30) }}
+                                                                </span>
+                                                                @if(!empty($productDetails['sku']))
+                                                                    <div class="fs-10">
+                                                                        <strong>{{ translate('SKU') }} :</strong>
+                                                                        {{ $productDetails['sku'] }}
+                                                                    </div>
+                                                                @endif
+                                                            @else
+                                                                <a target="_blank"
+                                                                   class="text-dark fs-12 fw-bold"
+                                                                   href="{{ route('admin.products.view', ['addedBy' => $productDetails['added_by'] == 'seller' ? 'vendor' : 'in-house', 'id' => $productDetails['id']]) }}"
+                                                                   @if(!$isProductUnavailable && mb_strlen($localizedProductName) > 30)
+                                                                       data-bs-toggle="tooltip"
+                                                                   title="{{ $localizedProductName }}"
+                                                                    @endif
+                                                                >
+                                                                    {{ Str::limit($localizedProductName, 30) }}
+                                                                </a>
+                                                            @endif
 
                                                             <div class="fs-10">
                                                                 <strong>{{translate('unit_price')}} :</strong>

@@ -404,6 +404,9 @@ class OrderRepository implements OrderRepositoryInterface
             )->when(!empty($whereIn['order_type']), function ($query) use ($whereIn) {
                     $query->whereIn('order_type', $whereIn['order_type']);
                 }
+            )->when(!empty($whereIn['order_source']), function ($query) use ($whereIn) {
+                    $query->whereIn('order_source', $whereIn['order_source']);
+                }
             )->when(isset($filters['has_order_edit_settlement']), function ($query) use ($filters) {
                 $settlements = $filters['has_order_edit_settlement'];
                 $hasDue = in_array('due', $settlements, true);

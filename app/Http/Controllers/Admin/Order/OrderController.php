@@ -171,6 +171,11 @@ class OrderController extends BaseController
             $filterWhereIn['order_type'] = $orderTypes;
         }
 
+        $orderSources = $request['order_sources'] ?? [];
+        if (!empty($orderSources)) {
+            $filterWhereIn['order_source'] = $orderSources;
+        }
+
         $statusCounts = $this->orderRepo->getStatusCounts(
             filters: $filters,
             whereIn: $filterWhereIn,
@@ -233,6 +238,7 @@ class OrderController extends BaseController
             'orderStatus',
             'customers',
             'orderTypes',
+            'orderSources',
         ));
     }
 
@@ -410,6 +416,11 @@ class OrderController extends BaseController
         if (!empty($orderTypes)) {
             $filterWhereIn['order_type'] = $orderTypes;
             $filters['order_type'] = $orderTypes;
+        }
+
+        $orderSources = $request['order_sources'] ?? [];
+        if (!empty($orderSources)) {
+            $filterWhereIn['order_source'] = $orderSources;
         }
         $orderAmountSettlement = $request->input('order_amount_settlement', []);
 

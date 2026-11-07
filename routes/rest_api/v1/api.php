@@ -19,6 +19,7 @@ use App\Http\Controllers\RestAPI\v1\CustomerController;
 use App\Http\Controllers\RestAPI\v1\CustomerRestockRequestController;
 use App\Http\Controllers\RestAPI\v1\DealController;
 use App\Http\Controllers\RestAPI\v1\DealOfTheDayController;
+use App\Http\Controllers\RestAPI\v1\EasyOrdersWebhookController;
 use App\Http\Controllers\RestAPI\v1\FlashDealController;
 use App\Http\Controllers\RestAPI\v1\LuckyWheelController;
 use App\Http\Controllers\RestAPI\v1\GeneralController;
@@ -445,3 +446,5 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api_lang']], function () {
         Route::post('contact-us', 'contact_store');
     });
 });
+
+Route::post('v1/webhooks/easy-orders', [EasyOrdersWebhookController::class, 'handle'])->name('api.v1.webhooks.easy-orders');

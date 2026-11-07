@@ -9530,4 +9530,6 @@ ____________________________________________________on_search_engines_and_see_th
 	"Shop_does_not_exist" => "Shop does not exist",
 	"customer_not_found" => "Customer not found",
 	"100" => "100",
+	"EasyOrders" => "إيزي أوردرز",
+	"Only_EasyOrders_Orders" => "طلبات إيزي أوردرز فقط",
 ];

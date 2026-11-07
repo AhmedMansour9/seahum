@@ -105,6 +105,13 @@
                                     {{ translate('Only_Website_Orders') }}
                                 </label>
                             </div>
+                            <div class="d-flex gap-2 flex-grow-1">
+                                <input class="form-check-input checkbox--input m-0 cursor-pointer" type="checkbox"
+                                       id="inlineCheckboxEasyOrdersOrder" value="{{ \App\Enums\OrderSource::EasyOrders->value }}" name="order_sources[]" {{ in_array(\App\Enums\OrderSource::EasyOrders->value, $orderSources ?? []) ? 'checked' : '' }}>
+                                <label class="form-check-label fs-12 cursor-pointer" for="inlineCheckboxEasyOrdersOrder">
+                                    {{ translate('Only_EasyOrders_Orders') }}
+                                </label>
+                            </div>
                         </div>
                     @endif
                 </div>

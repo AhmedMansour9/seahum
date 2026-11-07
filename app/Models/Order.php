@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OrderSource;
 use App\Traits\DemoMaskingTrait;
 use Carbon\Carbon;
 use DateTime;
@@ -66,6 +67,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $delivery_type
  * @property string $delivery_service_name
  * @property string $third_party_delivery_tracking_id
+ * @property OrderSource $order_source
+ * @property string|null $external_order_id
  */
 class Order extends Model
 {
@@ -128,6 +131,8 @@ class Order extends Model
         'delivery_service_name',
         'third_party_delivery_tracking_id',
         'edited_status',
+        'order_source',
+        'external_order_id',
         'updated_at'
     ];
 
@@ -185,7 +190,8 @@ class Order extends Model
         'delivery_type' => 'string',
         'delivery_service_name' => 'string',
         'third_party_delivery_tracking_id' => 'string',
-        'edited_status' => 'integer'
+        'edited_status' => 'integer',
+        'order_source' => OrderSource::class,
     ];
 
 

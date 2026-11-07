@@ -89,6 +89,10 @@ class OrderManager
             foreach ($order->details as $detail) {
                 if ($detail['is_stock_decreased'] == 1) {
                     $product = Product::find($detail['product_id']);
+                    if (!$product) {
+                        OrderDetail::where(['id' => $detail['id']])->update(['delivery_status' => $status]);
+                        continue;
+                    }
                     $type = $detail['variant'];
                     $variationData = [];
                     foreach (json_decode($product['variation'], true) as $var) {
@@ -111,6 +115,10 @@ class OrderManager
             foreach ($order->details as $detail) {
                 if ($detail['is_stock_decreased'] == 0) {
                     $product = Product::find($detail['product_id']);
+                    if (!$product) {
+                        OrderDetail::where(['id' => $detail['id']])->update(['delivery_status' => $status]);
+                        continue;
+                    }
 
                     $type = $detail['variant'];
                     $variationData = [];

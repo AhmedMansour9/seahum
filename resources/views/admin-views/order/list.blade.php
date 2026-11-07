@@ -239,6 +239,9 @@
                                                    href="{{ route('admin.orders.details', ['id' => $order['id']]) }}">
                                                     {{ $order['id'] }}
                                                     {!! $order->order_type == 'POS' ? '<span class="text--primary">(POS)</span>' : '' !!}
+                                                    @if($order->order_source === \App\Enums\OrderSource::EasyOrders)
+                                                        <span class="text--primary">({{ translate('EasyOrders') }})</span>
+                                                    @endif
                                                 </a>
                                                 @if($order->edited_status == 1 && $order?->latestEditHistory?->order_due_payment_status == 'unpaid' && $order?->latestEditHistory?->order_due_payment_method != "offline_payment" && $order?->latestEditHistory?->order_due_payment_method != "cash_on_delivery" && $order?->latestEditHistory?->order_due_amount > 0)
                                                     <span class="flex-shrink-0" data-bs-toggle="tooltip"
