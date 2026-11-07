@@ -557,9 +557,15 @@ class OrderRepository implements OrderRepositoryInterface
             foreach ($order['details'] as $detail) {
                 if ($detail['is_stock_decreased'] == 1) {
                     $product = $detail?->product;
+                    if (!$product) {
+                        $this->orderDetail->where(['id' => $detail['id']])->update([
+                            'delivery_status' => $status,
+                        ]);
+                        continue;
+                    }
                     $type = $detail['variant'];
                     $variations = [];
-                    if ($product && $product['variation']) {
+                    if ($product['variation']) {
                         foreach (json_decode($product['variation'], true) as $variation) {
                             if ($type == $variation['type']) {
                                 $variation['qty'] += $detail['qty'];
@@ -567,16 +573,14 @@ class OrderRepository implements OrderRepositoryInterface
                             $variations[] = $variation;
                         }
                     }
-                    if ($product) {
-                        $this->product->where(['id' => $product['id']])->update([
-                            'variation' => json_encode($variations),
-                            'current_stock' => $product['current_stock'] + $detail['qty'],
-                        ]);
-                        $this->orderDetail->where(['id' => $detail['id']])->update([
-                            'is_stock_decreased' => 0,
-                            'delivery_status' => $status
-                        ]);
-                    }
+                    $this->product->where(['id' => $product['id']])->update([
+                        'variation' => json_encode($variations),
+                        'current_stock' => $product['current_stock'] + $detail['qty'],
+                    ]);
+                    $this->orderDetail->where(['id' => $detail['id']])->update([
+                        'is_stock_decreased' => 0,
+                        'delivery_status' => $status
+                    ]);
                 }
             }
         } else {
@@ -596,11 +600,15 @@ class OrderRepository implements OrderRepositoryInterface
                             'variation' => json_encode($variations),
                             'current_stock' => $product['current_stock'] - $detail['qty'],
                         ]);
+                        $this->orderDetail->where(['id' => $detail['id']])->update([
+                            'is_stock_decreased' => 1,
+                            'delivery_status' => $status
+                        ]);
+                    } else {
+                        $this->orderDetail->where(['id' => $detail['id']])->update([
+                            'delivery_status' => $status,
+                        ]);
                     }
-                    $this->orderDetail->where(['id' => $detail['id']])->update([
-                        'is_stock_decreased' => 1,
-                        'delivery_status' => $status
-                    ]);
                 }
             }
         }

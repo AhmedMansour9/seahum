@@ -14,6 +14,11 @@ class EasyOrdersWebhookService
     private const IN_HOUSE_SELLER_ID = 1;
     private const IN_HOUSE_SELLER_IS = 'admin';
 
+    public function __construct(
+        private readonly OrderStatusLifecycleService $orderStatusLifecycleService,
+    ) {
+    }
+
     public function isValidSecret(?string $secret): bool
     {
         $configuredSecret = (string)config('easy_orders.webhook_secret');
@@ -45,35 +50,48 @@ class EasyOrdersWebhookService
      */
     public function updateOrderStatus(array $payload): ?Order
     {
-        $order = $this->findOrder(externalOrderId: (string)$payload['order_id']);
-        if (!$order) {
-            return null;
-        }
+        return DB::transaction(function () use ($payload): ?Order {
+            $order = Order::where([
+                'order_source' => OrderSource::EasyOrders->value,
+                'external_order_id' => (string)$payload['order_id'],
+            ])->lockForUpdate()->first();
+            if (!$order) {
+                return null;
+            }
 
-        $newStatus = strtolower((string)$payload['new_status']);
-        $orderData = [];
-        $orderDetailData = [];
+            $newStatus = strtolower((string)$payload['new_status']);
+            $orderData = [];
+            $orderDetailData = [];
 
-        if (in_array($newStatus, config('easy_orders.paid_statuses'), true)) {
-            $orderData['payment_status'] = 'paid';
-            $orderData['transaction_ref'] = $payload['payment_ref_id'] ?? $order['transaction_ref'];
-            $orderDetailData['payment_status'] = 'paid';
-        }
+            if (in_array($newStatus, config('easy_orders.paid_statuses'), true)) {
+                $orderData['payment_status'] = 'paid';
+                $orderData['transaction_ref'] = $payload['payment_ref_id'] ?? $order['transaction_ref'];
+                $orderDetailData['payment_status'] = 'paid';
+            }
 
-        $mappedOrderStatus = $this->getMappedOrderStatus(easyOrdersStatus: $newStatus);
-        if ($mappedOrderStatus) {
-            $orderData['order_status'] = $mappedOrderStatus;
-            $orderDetailData['delivery_status'] = $mappedOrderStatus;
-        }
+            $mappedOrderStatus = $this->getMappedOrderStatus(easyOrdersStatus: $newStatus);
+            $orderStatusChanged = $mappedOrderStatus !== null && $mappedOrderStatus !== $order['order_status'];
 
-        if (!empty($orderData)) {
-            DB::transaction(function () use ($order, $orderData, $orderDetailData) {
+            if ($orderStatusChanged) {
+                $this->orderStatusLifecycleService->updateStatus(
+                    order: $order,
+                    status: $mappedOrderStatus,
+                    userType: 'easy_orders',
+                    userId: 0,
+                    receivedBy: 'admin',
+                );
+            }
+
+            if (!empty($orderData)) {
                 $order->update($orderData);
-                OrderDetail::where('order_id', $order['id'])->update($orderDetailData);
-            });
-        }
+                if (!empty($orderDetailData)) {
+                    OrderDetail::where('order_id', $order['id'])
+                        ->update($orderDetailData);
+                }
+            }
 
-        return $order->refresh();
+            return $order->refresh();
+        });
     }
 
     private function findOrder(string $externalOrderId): ?Order
@@ -89,6 +107,10 @@ class EasyOrdersWebhookService
         $orderStatus = $this->getMappedOrderStatus(easyOrdersStatus: (string)($payload['status'] ?? '')) ?? 'pending';
         $paymentStatus = in_array(strtolower((string)($payload['status'] ?? '')), config('easy_orders.paid_statuses'), true) ? 'paid' : 'unpaid';
         $paymentMethod = (string)($payload['payment_method'] ?? '');
+        $shippingCost = (float)($payload['shipping_cost'] ?? 0);
+        $orderCost = isset($payload['cost'])
+            ? (float)$payload['cost']
+            : max(0, (float)$payload['total_cost'] - $shippingCost);
 
         $order = Order::create([
             'id' => OrderManager::generateNewOrderID(),
@@ -103,9 +125,17 @@ class EasyOrdersWebhookService
             'order_status' => $orderStatus,
             'payment_status' => $paymentStatus,
             'payment_method' => config('easy_orders.payment_method_map.' . $paymentMethod, $paymentMethod ?: 'cash_on_delivery'),
-            'order_amount' => currencyConverter(amount: (float)$payload['total_cost']),
-            'init_order_amount' => currencyConverter(amount: (float)$payload['total_cost']),
-            'shipping_cost' => currencyConverter(amount: (float)($payload['shipping_cost'] ?? 0)),
+            'discount_amount' => 0,
+            'coupon_code' => '0',
+            'refer_and_earn_discount' => 0,
+            'admin_commission' => 0,
+            'total_tax_amount' => 0,
+            'shipping_responsibility' => 'inhouse_shipping',
+            'is_shipping_free' => 0,
+            'extra_discount' => 0,
+            'order_amount' => currencyConverter(amount: $orderCost),
+            'init_order_amount' => currencyConverter(amount: $orderCost),
+            'shipping_cost' => currencyConverter(amount: $shippingCost),
             'verification_code' => rand(100000, 999999),
             'shipping_address_data' => $this->getShippingAddressData(payload: $payload),
             'created_at' => now(),
