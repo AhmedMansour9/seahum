@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\Notification\NotificationController;
 use App\Http\Controllers\Admin\Notification\PushNotificationSettingsController;
 use App\Http\Controllers\Admin\Order\OrderController;
 use App\Http\Controllers\Admin\Order\OrderEditController;
+use App\Http\Controllers\Admin\Order\EasyOrdersOrderController;
 use App\Http\Controllers\Admin\Order\RefundController;
 use App\Http\Controllers\Admin\OrderReportController;
 use App\Http\Controllers\Admin\Payment\OfflinePaymentMethodController;
@@ -246,6 +247,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin', '
     });
 
     Route::group(['prefix' => 'orders', 'as' => 'orders.', 'middleware' => ['module:orders']], function () {
+        Route::get('easy-orders/export/{status}', [OrderController::class, 'exportEasyOrdersList'])->name('easy-orders.export-excel');
+        Route::get('easy-orders/{status?}', [OrderController::class, 'easyOrdersIndex'])->name('easy-orders');
+        Route::post('easy-orders/status', [EasyOrdersOrderController::class, 'updateStatus'])->name('easy-orders.status');
+        Route::post('easy-orders/payment-status', [EasyOrdersOrderController::class, 'updatePaymentStatus'])->name('easy-orders.payment-status');
+
         Route::controller(OrderController::class)->group(function () {
             Route::get('list/{status}', 'index')->name('list');
             Route::get('export-excel/{status}', 'exportList')->name('export-excel');

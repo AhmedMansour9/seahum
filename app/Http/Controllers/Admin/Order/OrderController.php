@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin\Order;
 
 use App\Enums\PaymentMethod;
+use App\Enums\OrderSource;
 use App\Contracts\Repositories\AdminWalletRepositoryInterface;
 use App\Contracts\Repositories\AuthorRepositoryInterface;
+use App\Contracts\Repositories\OrderDetailsRewardsRepositoryInterface;
 use App\Contracts\Repositories\OrderEditHistoryRepositoryInterface;
 use App\Contracts\Repositories\ProductRepositoryInterface;
 use App\Contracts\Repositories\PublishingHouseRepositoryInterface;
@@ -18,7 +20,6 @@ use App\Models\OrderEditHistory;
 use App\Services\CustomerWalletService;
 use App\Services\OrderEditReturnAmountService;
 use App\Services\OrderEditService;
-use App\Services\OrderStatusLifecycleService;
 use App\Services\ProductService;
 use App\Services\RefundStatusService;
 use App\Services\RefundTransactionService;
@@ -36,6 +37,7 @@ use App\Enums\GlobalConstant;
 use App\Traits\CustomerTrait;
 use App\Services\OrderService;
 use App\Events\OrderStatusEvent;
+use App\Models\ReferralCustomer;
 use App\Traits\FileManagerTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\View\View;
@@ -46,11 +48,14 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\BaseController;
 use App\Services\DeliveryManWalletService;
 use App\Repositories\DeliveryManRepository;
+use App\Services\OrderStatusHistoryService;
 use App\Services\DeliveryCountryCodeService;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Illuminate\Database\Eloquent\Collection;
+use App\Services\DeliveryManTransactionService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\View as PdfView;
+use App\Repositories\OrderTransactionRepository;
 use App\Contracts\Repositories\OrderRepositoryInterface;
 use App\Http\Requests\UploadDigitalFileAfterSellRequest;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -61,7 +66,10 @@ use App\Contracts\Repositories\BusinessSettingRepositoryInterface;
 use App\Contracts\Repositories\DeliveryZipCodeRepositoryInterface;
 use App\Contracts\Repositories\ShippingAddressRepositoryInterface;
 use App\Contracts\Repositories\DeliveryManWalletRepositoryInterface;
+use App\Contracts\Repositories\OrderStatusHistoryRepositoryInterface;
 use App\Contracts\Repositories\DeliveryCountryCodeRepositoryInterface;
+use App\Contracts\Repositories\DeliveryManTransactionRepositoryInterface;
+use App\Contracts\Repositories\LoyaltyPointTransactionRepositoryInterface;
 use App\Contracts\Repositories\OrderExpectedDeliveryHistoryRepositoryInterface;
 
 class OrderController extends BaseController
@@ -91,6 +99,11 @@ class OrderController extends BaseController
         private readonly ProductService                                  $productService,
         private readonly OrderEditService                                $orderEditService,
         private readonly PublishingHouseRepositoryInterface              $publishingHouseRepo,
+        private readonly DeliveryManTransactionRepositoryInterface       $deliveryManTransactionRepo,
+        private readonly OrderStatusHistoryRepositoryInterface           $orderStatusHistoryRepo,
+        private readonly OrderTransactionRepository                      $orderTransactionRepo,
+        private readonly LoyaltyPointTransactionRepositoryInterface      $loyaltyPointTransactionRepo,
+        private readonly OrderDetailsRewardsRepositoryInterface          $orderDetailsRewardsRepo,
         private readonly AdminWalletRepositoryInterface                  $adminWalletRepo,
         private readonly VendorWalletRepositoryInterface                 $vendorWalletRepo,
         private readonly WalletTransactionRepositoryInterface            $walletTransactionRepo,
@@ -228,6 +241,23 @@ class OrderController extends BaseController
             'orderTypes',
             'orderSources',
         ));
+    }
+
+    public function easyOrdersIndex(Request $request, string $status = 'all'): View|Collection|LengthAwarePaginator|null|callable|RedirectResponse|JsonResponse
+    {
+        $request->merge([
+            'order_sources' => [OrderSource::EasyOrders->value],
+            'status' => $status,
+        ]);
+
+        return $this->index($request, $status);
+    }
+
+    public function exportEasyOrdersList(Request $request, string $status): BinaryFileResponse|RedirectResponse
+    {
+        $request->merge(['order_sources' => [OrderSource::EasyOrders->value]]);
+
+        return $this->exportList($request, $status);
     }
 
     public function orderReturnAmountToCustomer(Request $request, CustomerWalletService $customerWalletService, OrderEditReturnAmountService $orderEditReturnAmountService): RedirectResponse
@@ -614,10 +644,16 @@ class OrderController extends BaseController
 
     public function updateStatus(
         Request                       $request,
-        OrderStatusLifecycleService   $orderStatusLifecycleService,
+        DeliveryManTransactionService $deliveryManTransactionService,
+        DeliveryManWalletService      $deliveryManWalletService,
+        OrderStatusHistoryService     $orderStatusHistoryService,
     ): JsonResponse
     {
         $order = $this->orderRepo->getFirstWhere(params: ['id' => $request['id']], relations: ['customer', 'seller.shop', 'deliveryMan', 'latestEditHistory']);
+
+        if ($order['order_source'] === OrderSource::EasyOrders) {
+            abort(404);
+        }
 
         if (!$order['is_guest'] && !isset($order['customer'])) {
             return response()->json([
@@ -668,8 +704,77 @@ class OrderController extends BaseController
                 }
             }
         }
-        $orderStatusLifecycleService->updateStatus(order: $order, status: $request['order_status']);
+        $this->orderRepo->updateStockOnOrderStatusChange($request['id'], $request['order_status']);
+        $this->orderRepo->update(id: $request['id'], data: ['order_status' => $request['order_status']]);
+        if ($request['order_status'] == 'delivered') {
+            $this->orderRepo->update(id: $request['id'], data: ['payment_status' => 'paid', 'is_pause' => 0]);
+            $this->orderDetailRepo->updateWhere(params: ['order_id' => $order['id']], data: ['delivery_status' => $request['order_status'], 'payment_status' => 'paid']);
+            $this->orderDetailRepo->updateWhere(params: ['order_id' => $order['id'], 'refund_started_at' => null], data: ['refund_started_at' => now()]);
+        }
+        event(new OrderStatusEvent(key: $request['order_status'], type: 'customer', order: $order));
+        if ($request['order_status'] == 'canceled') {
+            event(new OrderStatusEvent(key: 'canceled', type: 'delivery_man', order: $order));
+        }
+        if ($order['seller_is'] == 'seller') {
+            if ($request['order_status'] == 'canceled') {
+                event(new OrderStatusEvent(key: 'canceled', type: 'seller', order: $order));
+            } elseif ($request['order_status'] == 'delivered') {
+                event(new OrderStatusEvent(key: 'delivered', type: 'seller', order: $order));
+            }
+        }
 
+        $loyaltyPointStatus = getWebConfig(name: 'loyalty_point_status');
+        $loyaltyPointEachOrder = getWebConfig(name: 'loyalty_point_for_each_order');
+        $loyaltyPointEachOrder = !is_null($loyaltyPointEachOrder) ? $loyaltyPointEachOrder : $loyaltyPointStatus;
+        $orderDetailsRewards = $this->orderDetailsRewardsRepo->getFirstWhere(params: ['order_id' => $order['id'], 'reward_type' => 'loyalty_point']);
+
+        if ($orderDetailsRewards && $orderDetailsRewards['reward_delivered'] != 1 && $orderDetailsRewards['reward_amount'] > 0 && $loyaltyPointStatus == 1 && $loyaltyPointEachOrder == 1 && !$order['is_guest'] && $request['order_status'] == 'delivered') {
+            $this->loyaltyPointTransactionRepo->addLoyaltyPointTransaction(userId: $order['customer_id'], reference: $order['id'], amount: usdToDefaultCurrency(amount: $order['order_amount'] - $order['shipping_cost']), transactionType: 'order_place');
+            $this->orderDetailsRewardsRepo->update(id: $orderDetailsRewards['id'], data: ['reward_delivered' => 1]);
+        }
+
+        OrderManager::generateReferBonusForFirstOrder(orderId: $order['id']);
+
+        if ($order['delivery_man_id'] && $request->order_status == 'delivered') {
+            $deliverymanWallet = $this->deliveryManWalletRepo->getFirstWhere(params: ['delivery_man_id' => $order['delivery_man_id']]);
+            $cashInHand = $order['payment_method'] == 'cash_on_delivery' ? $order['order_amount'] : 0;
+            if (empty($deliverymanWallet)) {
+                $deliverymanWalletData = $deliveryManWalletService->getDeliveryManData(id: $order['delivery_man_id'], deliverymanCharge: $order['deliveryman_charge'], cashInHand: $cashInHand);
+                $this->deliveryManWalletRepo->add(data: $deliverymanWalletData);
+            } else {
+                $deliverymanWalletData = [
+                    'current_balance' => $deliverymanWallet['current_balance'] + $order['deliveryman_charge'] ?? 0,
+                    'cash_in_hand' => $deliverymanWallet['cash_in_hand'] + $cashInHand ?? 0,
+                ];
+                $this->deliveryManWalletRepo->updateWhere(params: ['delivery_man_id' => $order['delivery_man_id']], data: $deliverymanWalletData);
+            }
+            if ($order['deliveryman_charge'] && $request['order_status'] == 'delivered') {
+                $deliveryManTransactionData = $deliveryManTransactionService->getDeliveryManTransactionData(amount: $order['deliveryman_charge'], addedBy: 'admin', id: $order['delivery_man_id'], transactionType: 'deliveryman_charge');
+                $this->deliveryManTransactionRepo->add($deliveryManTransactionData);
+            }
+        }
+
+        $orderStatusHistoryData = $orderStatusHistoryService->getOrderHistoryData(orderId: $request['id'], userId: 0, userType: 'admin', status: $request['order_status']);
+        $this->orderStatusHistoryRepo->add($orderStatusHistoryData);
+        OrderManager::removeOldStatusHistory(orderId: $request['id'], orderStatus: $request['order_status']);
+
+        $transaction = $this->orderTransactionRepo->getFirstWhere(params: ['order_id' => $order['id']]);
+        if (isset($transaction) && $transaction['status'] == 'disburse') {
+            return response()->json([
+                'status' => 1,
+                'message' => translate('status_change_successfully'),
+            ]);
+        }
+        if ($request['order_status'] == 'delivered' && $order['seller_id'] != null) {
+            $this->orderRepo->manageWalletOnOrderStatusChange(order: $order, receivedBy: 'admin');
+        }
+        if ($request['order_status'] == 'delivered') {
+            $referredUser = ReferralCustomer::where('user_id', $order?->customer?->id)->first();
+            if ($referredUser?->delivered_notify != 1) {
+                event(new OrderStatusEvent(key: 'your_referred_customer_order_has_been_delivered', type: 'promoter', order: $order));
+                ReferralCustomer::where('user_id', $order?->customer?->id)->update(['delivered_notify' => 1]);
+            }
+        }
         return response()->json([
             'status' => 1,
             'message' => translate('status_change_successfully'),
@@ -804,6 +909,10 @@ class OrderController extends BaseController
     public function updatePaymentStatus(Request $request): JsonResponse
     {
         $order = $this->orderRepo->getFirstWhere(params: ['id' => $request['id']]);
+
+        if ($order['order_source'] === OrderSource::EasyOrders) {
+            abort(404);
+        }
 
         if ($order['is_guest'] == '0' && !isset($order['customer'])) {
             return response()->json([

@@ -166,7 +166,7 @@
             <div class="v2-ctx-group">
                 <div class="v2-ctx-group-head"><span>{{ translate('sales') }}</span></div>
 
-                <div class="v2-nav-item v2-has-children {{ Request::is('admin/orders/list*') ? 'v2-is-active' : '' }}" data-item="orders-all">
+                <div class="v2-nav-item v2-has-children {{ (Request::is('admin/orders/list*') || Request::is('admin/orders/easy-orders*')) ? 'v2-is-active' : '' }}" data-item="orders-all">
                     <a class="v2-nav-btn" href="{{ route('admin.orders.list', ['all']) }}">
                         <span class="v2-nav-label">{{ translate('orders') }}</span>
                     </a>
@@ -226,6 +226,10 @@
                         <span class="v2-nav-child-dot" data-tone="neutral"></span>
                         <span class="v2-nav-child-label">{{ translate('canceled') }}</span>
                         <span class="v2-nav-child-count" data-tone="danger">{{ $sidebarOrderCounts['canceled'] ?? 0 }}</span>
+                    </a>
+                    <a class="v2-nav-child {{ Request::is('admin/orders/easy-orders*') ? 'v2-is-on' : '' }}" href="{{ route('admin.orders.easy-orders') }}">
+                        <span class="v2-nav-child-dot" data-tone="primary"></span>
+                        <span class="v2-nav-child-label">{{ translate('EasyOrders') }}</span>
                     </a>
                 </div>
 

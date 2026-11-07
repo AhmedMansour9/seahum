@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\OrderSource;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\OrderStatusHistory;
 use App\Utils\OrderManager;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
@@ -13,11 +14,6 @@ class EasyOrdersWebhookService
 {
     private const IN_HOUSE_SELLER_ID = 1;
     private const IN_HOUSE_SELLER_IS = 'admin';
-
-    public function __construct(
-        private readonly OrderStatusLifecycleService $orderStatusLifecycleService,
-    ) {
-    }
 
     public function isValidSecret(?string $secret): bool
     {
@@ -73,12 +69,11 @@ class EasyOrdersWebhookService
             $orderStatusChanged = $mappedOrderStatus !== null && $mappedOrderStatus !== $order['order_status'];
 
             if ($orderStatusChanged) {
-                $this->orderStatusLifecycleService->updateStatus(
+                $this->applyStatusUpdate(
                     order: $order,
                     status: $mappedOrderStatus,
                     userType: 'easy_orders',
                     userId: 0,
-                    receivedBy: 'admin',
                 );
             }
 
@@ -92,6 +87,71 @@ class EasyOrdersWebhookService
 
             return $order->refresh();
         });
+    }
+
+    public function updateAdminOrderStatus(string|int $orderId, string $status, string|int $adminId): ?Order
+    {
+        return DB::transaction(function () use ($orderId, $status, $adminId): ?Order {
+            $order = Order::where([
+                'id' => $orderId,
+                'order_source' => OrderSource::EasyOrders->value,
+            ])->lockForUpdate()->first();
+
+            if (!$order) {
+                return null;
+            }
+
+            if ($status !== $order['order_status']) {
+                $this->applyStatusUpdate(
+                    order: $order,
+                    status: $status,
+                    userType: 'admin',
+                    userId: $adminId,
+                );
+            }
+
+            return $order->refresh();
+        });
+    }
+
+    public function updateAdminOrderPaymentStatus(string|int $orderId, string $paymentStatus): ?Order
+    {
+        return DB::transaction(function () use ($orderId, $paymentStatus): ?Order {
+            $order = Order::where([
+                'id' => $orderId,
+                'order_source' => OrderSource::EasyOrders->value,
+            ])->lockForUpdate()->first();
+
+            if (!$order) {
+                return null;
+            }
+
+            $order->update(['payment_status' => $paymentStatus]);
+            OrderDetail::where('order_id', $order['id'])->update(['payment_status' => $paymentStatus]);
+
+            return $order->refresh();
+        });
+    }
+
+    private function applyStatusUpdate(Order $order, string $status, string $userType, string|int $userId): void
+    {
+        $orderData = ['order_status' => $status];
+        $orderDetailData = ['delivery_status' => $status];
+
+        if ($status === 'delivered') {
+            $orderData['payment_status'] = 'paid';
+            $orderData['is_pause'] = 0;
+            $orderDetailData['payment_status'] = 'paid';
+        }
+
+        $order->update($orderData);
+        OrderDetail::where('order_id', $order['id'])->update($orderDetailData);
+        OrderStatusHistory::create([
+            'order_id' => $order['id'],
+            'user_id' => $userId,
+            'user_type' => $userType,
+            'status' => $status,
+        ]);
     }
 
     private function findOrder(string $externalOrderId): ?Order

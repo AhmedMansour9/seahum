@@ -162,6 +162,14 @@
                                 </span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ Request::is('admin/orders/easy-orders*') ? 'active' : '' }}"
+                               href="{{ route('admin.orders.easy-orders') }}" title="{{ translate('EasyOrders') }}">
+                                <span class="flex-grow-1 text-truncate">
+                                    {{ translate('EasyOrders') }}
+                                </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

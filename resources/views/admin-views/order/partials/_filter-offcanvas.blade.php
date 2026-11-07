@@ -1,5 +1,5 @@
 
-<form action="{{ route('admin.orders.list', ['status' => request('status')]) }}" id="form-data" method="GET">
+<form action="{{ request()->routeIs('admin.orders.easy-orders') ? route('admin.orders.easy-orders', ['status' => $status]) : route('admin.orders.list', ['status' => request('status')]) }}" id="form-data" method="GET">
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasOrderFilter" aria-labelledby="offcanvasOrderFilterLabel" style="--bs-offcanvas-width: 500px;">
         <div class="offcanvas-header bg-body">
             <h3 class="mb-0">{{ translate('Filter') }}</h3>
@@ -105,13 +105,15 @@
                                     {{ translate('Only_Website_Orders') }}
                                 </label>
                             </div>
-                            <div class="d-flex gap-2 flex-grow-1">
-                                <input class="form-check-input checkbox--input m-0 cursor-pointer" type="checkbox"
-                                       id="inlineCheckboxEasyOrdersOrder" value="{{ \App\Enums\OrderSource::EasyOrders->value }}" name="order_sources[]" {{ in_array(\App\Enums\OrderSource::EasyOrders->value, $orderSources ?? []) ? 'checked' : '' }}>
-                                <label class="form-check-label fs-12 cursor-pointer" for="inlineCheckboxEasyOrdersOrder">
-                                    {{ translate('Only_EasyOrders_Orders') }}
-                                </label>
-                            </div>
+                            @if (!request()->routeIs('admin.orders.easy-orders'))
+                                <div class="d-flex gap-2 flex-grow-1">
+                                    <input class="form-check-input checkbox--input m-0 cursor-pointer" type="checkbox"
+                                           id="inlineCheckboxEasyOrdersOrder" value="{{ \App\Enums\OrderSource::EasyOrders->value }}" name="order_sources[]" {{ in_array(\App\Enums\OrderSource::EasyOrders->value, $orderSources ?? []) ? 'checked' : '' }}>
+                                    <label class="form-check-label fs-12 cursor-pointer" for="inlineCheckboxEasyOrdersOrder">
+                                        {{ translate('Only_EasyOrders_Orders') }}
+                                    </label>
+                                </div>
+                            @endif
                         </div>
                     @endif
                 </div>
@@ -303,7 +305,7 @@
         <div class="offcanvas-footer shadow-popup">
             <div class="d-flex justify-content-center gap-3 bg-white px-4 py-3">
                 <a class="btn btn-secondary w-100"
-                   href="{{ route('admin.orders.list', ['status' => request('status'), 'delivery_man_id' => request('delivery_man_id')]) }}">
+                   href="{{ request()->routeIs('admin.orders.easy-orders') ? route('admin.orders.easy-orders', ['status' => $status]) : route('admin.orders.list', ['status' => request('status'), 'delivery_man_id' => request('delivery_man_id')]) }}">
                     {{ translate('Clear_Filter') }}
                 </a>
                 <button type="submit" class="btn btn-primary w-100">

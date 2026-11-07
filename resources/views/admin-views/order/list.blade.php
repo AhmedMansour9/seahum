@@ -5,12 +5,16 @@
 @section('content')
     <div class="content container-fluid">
         <div>
+            @php($isEasyOrdersList = request()->routeIs('admin.orders.easy-orders'))
+            @php($orderListRoute = $isEasyOrdersList ? 'admin.orders.easy-orders' : 'admin.orders.list')
             <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
                 <h2 class="h1 mb-0">
                     <img src="{{ dynamicAsset(path: 'public/assets/back-end/img/all-orders.png') }}" class="mb-1 mr-1"
                          alt="">
                     <span class="page-header-title">
-                        @if ($status == 'processing')
+                        @if ($isEasyOrdersList)
+                            {{ translate('EasyOrders') }} {{ translate('Orders') }}
+                        @elseif ($status == 'processing')
                             {{ translate('packaging_Orders') }}
                         @elseif($status == 'failed')
                             {{ translate('failed_to_Deliver_Orders') }}
@@ -30,7 +34,7 @@
                     <div class="row g-3">
                         <div class="col-lg-6 col-xl-3">
                             <a class="d-flex gap-3 align-items-center justify-content-between p-20 bg-section rounded"
-                               href="{{ route('admin.orders.list',['pending']) }}">
+                               href="{{ route($orderListRoute, ['status' => 'pending']) }}">
                                 <div class="d-flex gap-3 align-items-center">
                                     <img width="20"
                                          src="{{ dynamicAsset(path: 'public/assets/back-end/img/pending.png') }}"
@@ -44,7 +48,7 @@
                         </div>
                         <div class="col-lg-6 col-xl-3">
                             <a class="d-flex gap-3 align-items-center justify-content-between p-20 bg-section rounded order-stats_confirmed"
-                               href="{{ route('admin.orders.list',['confirmed']) }}">
+                               href="{{ route($orderListRoute, ['status' => 'confirmed']) }}">
                                 <div class="d-flex gap-3 align-items-center">
                                     <img width="20"
                                          src="{{ dynamicAsset(path: 'public/assets/back-end/img/confirmed.png') }}"
@@ -59,7 +63,7 @@
 
                         <div class="col-lg-6 col-xl-3">
                             <a class="d-flex gap-3 align-items-center justify-content-between p-20 bg-section rounded order-stats_packaging"
-                               href="{{ route('admin.orders.list',['processing']) }}">
+                               href="{{ route($orderListRoute, ['status' => 'processing']) }}">
                                 <div class="d-flex gap-3 align-items-center">
                                     <img width="20"
                                          src="{{ dynamicAsset(path: 'public/assets/back-end/img/packaging.png') }}"
@@ -74,7 +78,7 @@
 
                         <div class="col-lg-6 col-xl-3">
                             <a class="d-flex gap-3 align-items-center justify-content-between p-20 bg-section rounded order-stats_out-for-delivery"
-                               href="{{ route('admin.orders.list',['out_for_delivery']) }}">
+                               href="{{ route($orderListRoute, ['status' => 'out_for_delivery']) }}">
                                 <div class="d-flex gap-3 align-items-center">
                                     <img width="20"
                                          src="{{ dynamicAsset(path: 'public/assets/back-end/img/out-of-delivery.png') }}"
@@ -89,7 +93,7 @@
 
                         <div class="col-lg-6 col-xl-3">
                             <a class="d-flex gap-3 align-items-center justify-content-between p-20 bg-section rounded order-stats_delivered cursor-pointer"
-                               href="{{ route('admin.orders.list',['delivered']) }}">
+                               href="{{ route($orderListRoute, ['status' => 'delivered']) }}">
                                 <div class="d-flex gap-3 align-items-center">
                                     <img width="20"
                                          src="{{ dynamicAsset(path: 'public/assets/back-end/img/delivered.png') }}"
@@ -104,7 +108,7 @@
 
                         <div class="col-lg-6 col-xl-3">
                             <a class="d-flex gap-3 align-items-center justify-content-between p-20 bg-section rounded order-stats_canceled cursor-pointer"
-                               href="{{ route('admin.orders.list',['canceled']) }}">
+                               href="{{ route($orderListRoute, ['status' => 'canceled']) }}">
                                 <div class="d-flex gap-3 align-items-center">
                                     <img width="20"
                                          src="{{ dynamicAsset(path: 'public/assets/back-end/img/canceled.png') }}"
@@ -119,7 +123,7 @@
 
                         <div class="col-lg-6 col-xl-3">
                             <a class="d-flex gap-3 align-items-center justify-content-between p-20 bg-section rounded order-stats_returned cursor-pointer"
-                               href="{{ route('admin.orders.list',['returned']) }}">
+                               href="{{ route($orderListRoute, ['status' => 'returned']) }}">
                                 <div class="d-flex gap-3 align-items-center">
                                     <img width="20"
                                          src="{{ dynamicAsset(path: 'public/assets/back-end/img/returned.png') }}"
@@ -134,7 +138,7 @@
 
                         <div class="col-lg-6 col-xl-3">
                             <a class="d-flex gap-3 align-items-center justify-content-between p-20 bg-section rounded order-stats_failed cursor-pointer"
-                               href="{{ route('admin.orders.list',['failed']) }}">
+                               href="{{ route($orderListRoute, ['status' => 'failed']) }}">
                                 <div class="d-flex gap-3 align-items-center">
                                     <img width="20"
                                          src="{{ dynamicAsset(path: 'public/assets/back-end/img/failed-to-deliver.png') }}"
@@ -155,7 +159,7 @@
 
                     <div class="d-flex flex-wrap justify-content-between gap-3 align-items-center">
                         <h3 class="mb-0 d-flex gap-2 align-items-center">
-                            {{ translate('order_List') }}
+                            {{ $isEasyOrdersList ? translate('EasyOrders') . ' ' . translate('order_List') : translate('order_List') }}
                             <span class="badge text-dark bg-body-secondary fw-semibold rounded-45">
                                 {{ $orders->total() }}
                             </span>
@@ -178,7 +182,7 @@
                             </form>
 
                             <a type="button" class="btn btn-outline-primary"
-                               href="{{ route('admin.orders.export-excel', [
+                               href="{{ route($isEasyOrdersList ? 'admin.orders.easy-orders.export-excel' : 'admin.orders.export-excel', [
                                                     'delivery_man_id' => request('delivery_man_id'),
                                                     'status' => $status, 'from' => $from, 'to' => $to,
                                                     'filter' => $filter, 'searchValue' => $searchValue,

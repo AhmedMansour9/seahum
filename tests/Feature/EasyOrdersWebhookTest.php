@@ -4,13 +4,15 @@ namespace Tests\Feature;
 
 use App\Enums\OrderSource;
 use App\Events\OrderStatusEvent;
+use App\Models\Admin;
 use App\Models\AdminWallet;
 use App\Models\BusinessSetting;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderStatusHistory;
 use App\Models\OrderTransaction;
-use App\Models\Shop;
+use App\Services\EasyOrdersWebhookService;
+use App\Http\Middleware\ActivationCheckMiddleware;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
@@ -101,7 +103,6 @@ class EasyOrdersWebhookTest extends TestCase
     public function test_status_update_changes_order_and_line_statuses(): void
     {
         $this->postJson(self::ENDPOINT, $this->orderPayload(), self::SECRET_HEADER)->assertOk();
-        Shop::create(['author_type' => 'admin']);
         Event::fake([OrderStatusEvent::class]);
 
         $this->postJson(self::ENDPOINT, $this->statusPayload(newStatus: 'delivered'), self::SECRET_HEADER)->assertOk();
@@ -119,12 +120,9 @@ class EasyOrdersWebhookTest extends TestCase
         $this->assertSame('delivered', $history->status);
         $this->assertSame('easy_orders', $history->user_type);
         $this->assertSame(1, OrderStatusHistory::count());
-        $this->assertSame(1, OrderTransaction::where('order_id', $order->id)->count());
-        $this->assertSame(400.0, OrderTransaction::where('order_id', $order->id)->firstOrFail()->seller_amount);
-        $this->assertSame(400.0, AdminWallet::firstOrFail()->inhouse_earning);
-        $this->assertSame(50.0, AdminWallet::firstOrFail()->delivery_charge_earned);
-        Event::assertDispatchedTimes(OrderStatusEvent::class, 1);
-        Event::assertDispatched(OrderStatusEvent::class, fn (OrderStatusEvent $event): bool => $event->key === 'delivered' && $event->type === 'customer');
+        $this->assertSame(0, OrderTransaction::where('order_id', $order->id)->count());
+        $this->assertSame(0, AdminWallet::count());
+        Event::assertNotDispatched(OrderStatusEvent::class);
     }
 
     public function test_paid_status_update_marks_order_paid_and_keeps_order_status(): void
@@ -149,6 +147,73 @@ class EasyOrdersWebhookTest extends TestCase
         $detail = OrderDetail::firstOrFail();
         $this->assertSame('canceled', $detail->delivery_status);
         $this->assertSame(0, (int)$detail->is_stock_decreased);
+        Event::assertNotDispatched(OrderStatusEvent::class);
+    }
+
+    public function test_admin_status_update_uses_easy_orders_history_without_system_settlements(): void
+    {
+        $this->postJson(self::ENDPOINT, $this->orderPayload(), self::SECRET_HEADER)->assertOk();
+        $order = Order::firstOrFail();
+
+        $updatedOrder = app(EasyOrdersWebhookService::class)->updateAdminOrderStatus(
+            orderId: $order->id,
+            status: 'delivered',
+            adminId: 7,
+        );
+
+        $this->assertSame('delivered', $updatedOrder->order_status);
+        $this->assertSame('paid', $updatedOrder->payment_status);
+        $this->assertSame('delivered', OrderDetail::firstOrFail()->delivery_status);
+        $this->assertSame(7, OrderStatusHistory::firstOrFail()->user_id);
+        $this->assertSame('admin', OrderStatusHistory::firstOrFail()->user_type);
+        $this->assertSame(0, OrderTransaction::count());
+        $this->assertSame(0, AdminWallet::count());
+    }
+
+    public function test_admin_dashboard_status_route_uses_the_easy_orders_lifecycle(): void
+    {
+        $this->postJson(self::ENDPOINT, $this->orderPayload(), self::SECRET_HEADER)->assertOk();
+        $admin = $this->createAdmin();
+        Event::fake([OrderStatusEvent::class]);
+
+        $this->withoutMiddleware(ActivationCheckMiddleware::class)
+            ->actingAs($admin, 'admin')
+            ->postJson(route('admin.orders.easy-orders.status'), [
+                'id' => Order::firstOrFail()->id,
+                'order_status' => 'delivered',
+            ])
+            ->assertOk()
+            ->assertJsonPath('status', 1);
+
+        $this->assertSame('delivered', Order::firstOrFail()->order_status);
+        $this->assertSame('admin', OrderStatusHistory::firstOrFail()->user_type);
+        $this->assertSame(0, OrderTransaction::count());
+        $this->assertSame(0, AdminWallet::count());
+        Event::assertNotDispatched(OrderStatusEvent::class);
+    }
+
+    public function test_admin_payment_status_updates_only_easy_orders_records(): void
+    {
+        $this->postJson(self::ENDPOINT, $this->orderPayload(), self::SECRET_HEADER)->assertOk();
+        $order = Order::firstOrFail();
+        Event::fake([OrderStatusEvent::class]);
+
+        $updatedOrder = app(EasyOrdersWebhookService::class)->updateAdminOrderPaymentStatus(
+            orderId: $order->id,
+            paymentStatus: 'paid',
+        );
+
+        $this->assertSame('paid', $updatedOrder->payment_status);
+        $this->assertSame('paid', OrderDetail::firstOrFail()->payment_status);
+        $this->assertSame(0, OrderStatusHistory::count());
+        Event::assertNotDispatched(OrderStatusEvent::class);
+
+        $order->update(['order_source' => OrderSource::App]);
+        $this->assertNull(app(EasyOrdersWebhookService::class)->updateAdminOrderPaymentStatus(
+            orderId: $order->id,
+            paymentStatus: 'unpaid',
+        ));
+        $this->assertSame('paid', $order->fresh()->payment_status);
     }
 
     public function test_unknown_status_leaves_order_unchanged(): void
@@ -241,6 +306,14 @@ class EasyOrdersWebhookTest extends TestCase
             $table->string('order_type')->default('default_type');
             $table->timestamps();
         });
+        Schema::create('storages', function (Blueprint $table) {
+            $table->id();
+            $table->string('data_type');
+            $table->string('data_id', 100)->index();
+            $table->string('key')->nullable();
+            $table->string('value')->index();
+            $table->timestamps();
+        });
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_id');
@@ -268,24 +341,6 @@ class EasyOrdersWebhookTest extends TestCase
             $table->string('cause')->nullable();
             $table->timestamps();
         });
-        Schema::create('sellers', function (Blueprint $table) {
-            $table->id();
-        });
-        Schema::create('shops', function (Blueprint $table) {
-            $table->id();
-            $table->string('author_type')->nullable();
-            $table->timestamps();
-        });
-        Schema::create('order_edit_histories', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('order_id');
-            $table->decimal('order_due_amount', 40, 20)->default(0);
-            $table->string('order_due_payment_status')->nullable();
-            $table->string('order_due_payment_method')->nullable();
-            $table->decimal('order_return_amount', 40, 20)->default(0);
-            $table->string('order_return_payment_status')->nullable();
-            $table->timestamps();
-        });
         Schema::create('admin_wallets', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('admin_id');
@@ -294,18 +349,6 @@ class EasyOrdersWebhookTest extends TestCase
             $table->decimal('commission_earned', 40, 20)->default(0);
             $table->decimal('delivery_charge_earned', 40, 20)->default(0);
             $table->decimal('pending_amount', 40, 20)->default(0);
-            $table->decimal('total_tax_collected', 40, 20)->default(0);
-            $table->timestamps();
-        });
-        Schema::create('seller_wallets', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('seller_id');
-            $table->decimal('total_earning', 40, 20)->default(0);
-            $table->decimal('withdrawn', 40, 20)->default(0);
-            $table->decimal('commission_given', 40, 20)->default(0);
-            $table->decimal('pending_withdraw', 40, 20)->default(0);
-            $table->decimal('delivery_charge_earned', 40, 20)->default(0);
-            $table->decimal('collected_cash', 40, 20)->default(0);
             $table->decimal('total_tax_collected', 40, 20)->default(0);
             $table->timestamps();
         });
@@ -334,5 +377,36 @@ class EasyOrdersWebhookTest extends TestCase
         });
 
         $this->artisan('migrate', ['--path' => 'database/migrations/2026_11_07_180000_add_order_source_to_orders_table.php'])->assertSuccessful();
+    }
+
+    private function createAdmin(): Admin
+    {
+        Schema::create('admin_roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('module_access')->nullable();
+            $table->boolean('status')->default(1);
+            $table->timestamps();
+        });
+        Schema::create('admins', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->unsignedBigInteger('admin_role_id')->nullable();
+            $table->boolean('status')->default(1);
+            $table->timestamps();
+        });
+
+        \App\Models\AdminRole::create([
+            'name' => 'Test role',
+            'module_access' => json_encode(['orders']),
+            'status' => 1,
+        ]);
+
+        return Admin::forceCreate([
+            'id' => 1,
+            'name' => 'Test admin',
+            'admin_role_id' => 1,
+            'status' => 1,
+        ]);
     }
 }

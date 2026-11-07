@@ -124,18 +124,20 @@
                                         </div>
                                     @endif
 
-                                    @if($isOrderEditable['status'] === true)
-                                        <buton type="button" class="btn btn-outline-primary btn-sm"
-                                               data-bs-toggle="modal"
-                                               data-bs-target="#confirm-edit-order-modal">
-                                            <i class="fi fi-sr-pencil"></i> {{ translate('Edit_Products') }}
-                                        </buton>
-                                    @else
-                                        <buton type="button" class="btn btn-outline-primary btn-sm opacity-50"
-                                               data-bs-toggle="tooltip" data-bs-placement="top"
-                                               data-bs-title="{{ $isOrderEditable['message'] }}" disabled>
-                                            <i class="fi fi-sr-pencil"></i> {{ translate('Edit_Products') }}
-                                        </buton>
+                                    @if($order->order_source !== \App\Enums\OrderSource::EasyOrders)
+                                        @if($isOrderEditable['status'] === true)
+                                            <buton type="button" class="btn btn-outline-primary btn-sm"
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target="#confirm-edit-order-modal">
+                                                <i class="fi fi-sr-pencil"></i> {{ translate('Edit_Products') }}
+                                            </buton>
+                                        @else
+                                            <buton type="button" class="btn btn-outline-primary btn-sm opacity-50"
+                                                   data-bs-toggle="tooltip" data-bs-placement="top"
+                                                   data-bs-title="{{ $isOrderEditable['message'] }}" disabled>
+                                                <i class="fi fi-sr-pencil"></i> {{ translate('Edit_Products') }}
+                                            </buton>
+                                        @endif
                                     @endif
 
                                     <a class="btn btn-primary btn-sm" target="_blank"
@@ -2141,8 +2143,8 @@
           data-text="{{ translate("order_is_already_delivered_you_can_not_change_it") }}!"></span>
     <span id="message-order-status-paid-first-text"
           data-text="{{ translate("before_delivered_you_need_to_make_payment_status_paid") }}!"></span>
-    <span id="order-status-url" data-url="{{route('admin.orders.status')}}"></span>
-    <span id="payment-status-url" data-url="{{ route('admin.orders.payment-status') }}"></span>
+    <span id="order-status-url" data-url="{{ $order->order_source === \App\Enums\OrderSource::EasyOrders ? route('admin.orders.easy-orders.status') : route('admin.orders.status') }}"></span>
+    <span id="payment-status-url" data-url="{{ $order->order_source === \App\Enums\OrderSource::EasyOrders ? route('admin.orders.easy-orders.payment-status') : route('admin.orders.payment-status') }}"></span>
 
     <span id="message-deliveryman-add-success-text"
           data-text="{{ translate("delivery_man_successfully_assigned/changed") }}"></span>
