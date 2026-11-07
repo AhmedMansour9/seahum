@@ -140,6 +140,21 @@
                                         @endif
                                     @endif
 
+                                    @if($order->order_source === \App\Enums\OrderSource::EasyOrders)
+                                        @if(!in_array($order['order_status'], \App\Services\EasyOrdersOrderEditService::LOCKED_STATUSES, true))
+                                            <button type="button" class="btn btn-outline-primary btn-sm"
+                                                    data-bs-toggle="modal" data-bs-target="#easy-orders-edit-modal">
+                                                <i class="fi fi-sr-pencil"></i> {{ translate('Edit_order') }}
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn btn-outline-primary btn-sm opacity-50"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    data-bs-title="{{ translate('This_order_can_no_longer_be_edited') }}" disabled>
+                                                <i class="fi fi-sr-pencil"></i> {{ translate('Edit_order') }}
+                                            </button>
+                                        @endif
+                                    @endif
+
                                     <a class="btn btn-primary btn-sm" target="_blank"
                                        href={{ route('admin.orders.generate-invoice', [$order['id']]) }}>
                                         <img alt="" class="mr-1"
@@ -2134,6 +2149,8 @@
     @include('admin-views.order.partials.modal._confirm-edit-order')
     @if($order->order_source !== \App\Enums\OrderSource::EasyOrders)
         @include('admin-views.order.partials.offcanvas._edit-products-offcanvas', ['order' => $order])
+    @elseif(!in_array($order['order_status'], \App\Services\EasyOrdersOrderEditService::LOCKED_STATUSES, true))
+        @include('admin-views.order.partials.modal._easy-orders-edit-modal', ['order' => $order])
     @endif
 
     <span id="message-status-title-text"

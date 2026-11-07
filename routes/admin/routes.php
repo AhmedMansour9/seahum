@@ -251,6 +251,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin', '
         Route::get('easy-orders/{status?}', [OrderController::class, 'easyOrdersIndex'])->name('easy-orders');
         Route::post('easy-orders/status', [EasyOrdersOrderController::class, 'updateStatus'])->name('easy-orders.status');
         Route::post('easy-orders/payment-status', [EasyOrdersOrderController::class, 'updatePaymentStatus'])->name('easy-orders.payment-status');
+        Route::post('easy-orders/{id}/update', [EasyOrdersOrderController::class, 'update'])->name('easy-orders.update');
 
         Route::controller(OrderController::class)->group(function () {
             Route::get('list/{status}', 'index')->name('list');

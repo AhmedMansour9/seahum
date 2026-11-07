@@ -9541,4 +9541,12 @@ ____________________________________________________on_search_engines_and_see_th
 	"Delivery_man_not_found" => "المندوب مش موجود",
 	"Delivery_man_assigned_successfully" => "تم تعيين المندوب بنجاح",
 	"chat_on_whatsapp" => "كلّم العميل على واتساب",
+	"Edit_order" => "تعديل الأوردر",
+	"This_order_can_no_longer_be_edited" => "الأوردر ده مينفعش يتعدل بعد ما اتقفل",
+	"The_order_must_have_at_least_one_item" => "لازم الأوردر يكون فيه صنف واحد على الأقل",
+	"Order_updated_successfully" => "تم تعديل الأوردر بنجاح",
+	"Changes_are_saved_in_SEA_HUM_only_and_are_not_sent_back_to_EasyOrders" => "التعديلات بتتحفظ في SEA HUM بس ومش بتتبعت لـ EasyOrders",
+	"order_items" => "أصناف الأوردر",
+	"add_item" => "إضافة صنف",
+	"item_name" => "اسم الصنف",
 ];
