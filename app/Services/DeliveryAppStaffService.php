@@ -38,6 +38,7 @@ class DeliveryAppStaffService
                 });
             })
             ->latest()
+            ->orderByDesc('id')
             ->paginate(perPage: $limit, page: $offset);
     }
 

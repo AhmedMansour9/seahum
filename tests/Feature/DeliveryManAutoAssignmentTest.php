@@ -29,6 +29,7 @@ class DeliveryManAutoAssignmentTest extends TestCase
             $table->boolean('is_online')->default(1);
             $table->timestamps();
         });
+        (require base_path('database/migrations/2026_11_08_100000_add_app_role_to_delivery_men_table.php'))->up();
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('seller_id')->nullable();
