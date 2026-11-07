@@ -276,7 +276,13 @@
                                     </td>
                                     <td>
                                         @if ($order->is_guest)
-                                            <strong class="text-dark">{{ translate('guest_customer') }}</strong>
+                                            <strong class="text-dark">{{ $order->shipping_address_data?->contact_person_name ?? translate('guest_customer') }}</strong>
+                                            @if (getOrderCustomerPhone(order: $order))
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <a class="text-dark" href="tel:{{ getOrderCustomerPhone(order: $order) }}">{{ getOrderCustomerPhone(order: $order) }}</a>
+                                                    @include('admin-views.order.partials._whatsapp-chat-button', ['phone' => getOrderCustomerPhone(order: $order)])
+                                                </div>
+                                            @endif
                                         @elseif($order->customer_id == 0)
                                             <strong class="text-dark">{{ translate('Walk-In-Customer') }}</strong>
                                         @else
@@ -287,8 +293,11 @@
                                                         class="title-name fw-semibold">{{ $order->customer['f_name'] . ' ' . $order->customer['l_name'] }}</strong>
                                                 </a>
                                                 @if ($order->customer['phone'])
-                                                    <a class="d-block text-dark"
-                                                       href="tel:{{ $order->customer['phone'] }}">{{ $order->customer['phone'] }}</a>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <a class="text-dark"
+                                                           href="tel:{{ $order->customer['phone'] }}">{{ $order->customer['phone'] }}</a>
+                                                        @include('admin-views.order.partials._whatsapp-chat-button', ['phone' => $order->customer['phone']])
+                                                    </div>
                                                 @else
                                                     <a class="d-block text-dark"
                                                        href="mailto:{{ $order->customer['email'] }}">{{ $order->customer['email'] }}</a>

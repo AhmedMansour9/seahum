@@ -9540,4 +9540,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"You_are_not_allowed_to_access_this_section" => "مش مسموحلك تدخل على الجزء ده",
 	"Delivery_man_not_found" => "المندوب مش موجود",
 	"Delivery_man_assigned_successfully" => "تم تعيين المندوب بنجاح",
+	"chat_on_whatsapp" => "كلّم العميل على واتساب",
 ];

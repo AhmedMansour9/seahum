@@ -2811,4 +2811,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"You_are_not_allowed_to_access_this_section" => "You are not allowed to access this section",
 	"Delivery_man_not_found" => "Delivery man not found",
 	"Delivery_man_assigned_successfully" => "Delivery man assigned successfully",
+	"chat_on_whatsapp" => "Chat on WhatsApp",
 ];

@@ -1229,7 +1229,12 @@
                                 <tr>
                                     <td class="px-0 py-2 text-nowrap">{{translate('contact')}}</td>
                                     <td class="px-3 py-2">:</td>
-                                    <td class="fw-semibold px-0 py-2">{{$shippingAddress->phone}}</td>
+                                    <td class="fw-semibold px-0 py-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span>{{$shippingAddress->phone}}</span>
+                                            @include('admin-views.order.partials._whatsapp-chat-button', ['phone' => $shippingAddress->phone])
+                                        </div>
+                                    </td>
                                 </tr>
                                 @if ($order->is_guest && $shippingAddress->email)
                                     <tr>
@@ -1392,6 +1397,7 @@
                                            class="fw-semibold text-dark text-decoration-none">
                                             {{ $order->customer['phone'] }}
                                         </a>
+                                        @include('admin-views.order.partials._whatsapp-chat-button', ['phone' => $order->customer['phone']])
                                     </span>
                                         <span class="text-dark break-all fs-12">
                                         <a href="mailto:{{ $order->customer['email'] }}"
