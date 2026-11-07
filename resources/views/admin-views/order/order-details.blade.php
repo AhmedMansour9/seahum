@@ -2126,7 +2126,9 @@
     @include('admin-views.order.partials.modal.order-edit-due-amount-switch-to-cod', ['order' => $order])
     @include('admin-views.order.partials.modal.order-edit-return-amount-modal', ['order' => $order])
     @include('admin-views.order.partials.modal._confirm-edit-order')
-    @include('admin-views.order.partials.offcanvas._edit-products-offcanvas', ['order' => $order])
+    @if($order->order_source !== \App\Enums\OrderSource::EasyOrders)
+        @include('admin-views.order.partials.offcanvas._edit-products-offcanvas', ['order' => $order])
+    @endif
 
     <span id="message-status-title-text"
           data-text="{{!in_array($order['payment_method'], \App\Enums\PaymentMethod::PAY_ON_DELIVERY) && $order['order_status']=='delivered' ? translate("Order_is_already_delivered_and_transaction_amount_has_been_disbursed_changing_status_can_be_the_reason_of_miscalculation") : translate("are_you_sure_change_this") }}"></span>

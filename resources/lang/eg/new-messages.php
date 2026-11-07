@@ -9532,4 +9532,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"100" => "100",
 	"EasyOrders" => "إيزي أوردرز",
 	"Only_EasyOrders_Orders" => "طلبات إيزي أوردرز فقط",
+	"EasyOrders_orders_cannot_be_edited" => "طلبات إيزي أوردرز مش بتتعدل من هنا",
 ];

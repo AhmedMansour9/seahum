@@ -2803,4 +2803,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"This_order_was_placed_with_the_inhouse_shipping_method_and_must_be_delivered_using_the_shipping_option_selected_by_the_customer_during_checkout." => "This order was placed with the inhouse shipping method and must be delivered using the shipping option selected by the customer during checkout.",
 	"EasyOrders" => "EasyOrders",
 	"Only_EasyOrders_Orders" => "Only EasyOrders Orders",
+	"EasyOrders_orders_cannot_be_edited" => "EasyOrders orders cannot be edited",
 ];

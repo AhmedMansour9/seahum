@@ -593,15 +593,24 @@ class OrderController extends BaseController
             relations: $relations,
             dataLimit: 10
         );
-        $isOrderEditable = $this->orderEditService->checkIsOrderEditable(order: $order, type: 'admin');
         Session::forget($this->orderEditService->getOrderEditSessionKey(orderId: $order['id']));
 
-        $orderProductsSession = $this->orderEditService->getOrderEditSession(order: $order);
-        $editOrderSummary = $this->generateEditOrderSummary(order: $order, editedOrder: ($orderProductsSession['product_list'] ?? []), data: [
-            'edit_by' => 'admin',
-            'edited_user_id' => auth()->guard('admin')->id(),
-            'edited_user_name' => auth()->guard('admin')->user()->name,
-        ]);
+        if ($order['order_source'] === OrderSource::EasyOrders) {
+            $isOrderEditable = [
+                'status' => false,
+                'message' => translate('EasyOrders_orders_cannot_be_edited'),
+            ];
+            $orderProductsSession = ['product_list' => []];
+            $editOrderSummary = [];
+        } else {
+            $isOrderEditable = $this->orderEditService->checkIsOrderEditable(order: $order, type: 'admin');
+            $orderProductsSession = $this->orderEditService->getOrderEditSession(order: $order);
+            $editOrderSummary = $this->generateEditOrderSummary(order: $order, editedOrder: ($orderProductsSession['product_list'] ?? []), data: [
+                'edit_by' => 'admin',
+                'edited_user_id' => auth()->guard('admin')->id(),
+                'edited_user_name' => auth()->guard('admin')->user()->name,
+            ]);
+        }
 
         $orderEditPaymentHistory = $this->orderEditHistoryRepo->getListWhere(
             filters: ['order_id' => $order['id']],
