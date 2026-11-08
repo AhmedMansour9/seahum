@@ -7,6 +7,7 @@ use App\Enums\OrderSource;
 use App\Models\DeliveryMan;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Utils\OrderManager;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -23,7 +24,7 @@ class DeliveryAppStaffService
      */
     public function getOrders(array $filters, int $limit, int $offset): LengthAwarePaginator
     {
-        return Order::with(['customer:id,f_name,l_name,phone', 'deliveryMan:id,f_name,l_name,phone', 'shippingAddress'])
+        return Order::with(['customer:id,f_name,l_name,phone', 'deliveryMan:id,f_name,l_name,phone', 'shippingAddress', 'details'])
             ->where('order_type', 'default_type')
             ->when(!empty($filters['status']), fn ($query) => $query->where('order_status', $filters['status']))
             ->when(!empty($filters['order_source']), fn ($query) => $query->where('order_source', $filters['order_source']))
@@ -56,6 +57,7 @@ class DeliveryAppStaffService
             'payment_method' => $order['payment_method'],
             'order_amount' => (float)$order['order_amount'],
             'shipping_cost' => (float)$order['shipping_cost'],
+            'total_amount' => (float)OrderManager::getOrderTotalPriceSummary(order: $order)['totalAmount'],
             'customer' => $this->getCustomerData(order: $order),
             'delivery_man' => $order->deliveryMan ? [
                 'id' => $order->deliveryMan['id'],

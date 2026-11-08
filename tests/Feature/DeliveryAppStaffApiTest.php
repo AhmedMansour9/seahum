@@ -51,6 +51,7 @@ class DeliveryAppStaffApiTest extends TestCase
         $response->assertJsonPath('orders.0.id', $easyOrderId);
         $response->assertJsonPath('orders.0.order_source', OrderSource::EasyOrders->value);
         $response->assertJsonPath('orders.0.customer.name', 'Mona Adel');
+        $response->assertJsonPath('orders.0.total_amount', 450);
         $response->assertJsonPath('orders.1.delivery_man.id', $deliveryManId);
     }
 
