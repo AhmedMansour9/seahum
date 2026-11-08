@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\DeliveryAppStaffService;
 use App\Services\DeliveryManAssignmentService;
+use App\Services\EasyOrdersOrderEditService;
 use App\Services\EasyOrdersWebhookService;
 use App\Services\OrderStatusUpdateService;
 use App\Utils\Helpers;
@@ -106,6 +107,21 @@ class StaffOrderController extends Controller
             userId: $staff['id'],
             userType: 'delivery_man',
         ));
+    }
+
+    public function updateEasyOrdersOrder(Request $request, EasyOrdersOrderEditService $easyOrdersOrderEditService): JsonResponse
+    {
+        $validator = Validator::make($request->all(), ['order_id' => 'required|integer'] + EasyOrdersOrderEditService::getValidationRules());
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
+        }
+
+        $result = $easyOrdersOrderEditService->updateOrder(orderId: $request['order_id'], data: $validator->validated());
+        if (!$result['status']) {
+            return response()->json(['errors' => [['code' => 'order_id', 'message' => $result['message']]]], 403);
+        }
+
+        return response()->json(['status' => 1, 'message' => $result['message']]);
     }
 
     public function updatePaymentStatus(Request $request): JsonResponse

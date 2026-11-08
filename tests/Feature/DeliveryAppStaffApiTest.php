@@ -78,9 +78,56 @@ class DeliveryAppStaffApiTest extends TestCase
         $this->getJson(self::STAFF_ENDPOINT . 'order-details?order_id=' . $orderId, $this->authHeader($token))
             ->assertOk()
             ->assertJsonPath('items.0.name', 'Grilled Sea Bass')
-            ->assertJsonPath('items.0.qty', 2);
+            ->assertJsonPath('items.0.qty', 2)
+            ->assertJsonPath('is_editable', true)
+            ->assertJsonPath('whatsapp_message', fn (string $message): bool => str_contains($message, 'Mona Adel') && str_contains($message, 'Grilled Sea Bass'));
+
+        $appOrderId = $this->createOrder();
+        $this->getJson(self::STAFF_ENDPOINT . 'order-details?order_id=' . $appOrderId, $this->authHeader($token))
+            ->assertOk()
+            ->assertJsonPath('is_editable', false);
 
         $this->getJson(self::STAFF_ENDPOINT . 'order-details?order_id=999', $this->authHeader($token))->assertNotFound();
+    }
+
+    public function test_customer_service_edits_easy_orders_order_customer_items_and_note(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::CustomerService);
+        $orderId = $this->createOrder(source: OrderSource::EasyOrders, externalOrderId: 'eo-1');
+        $itemId = (int)DB::table('order_details')->where('order_id', $orderId)->value('id');
+
+        $this->putJson(self::STAFF_ENDPOINT . 'update-easy-orders-order', [
+            'order_id' => $orderId,
+            'contact_person_name' => 'Mona Ali',
+            'phone' => '01111111111',
+            'address' => 'Heliopolis',
+            'city' => 'Cairo',
+            'order_note' => 'Call before delivery',
+            'items' => [['id' => $itemId, 'qty' => 3, 'price' => 200]],
+            'new_items' => [['name' => 'Shrimp Soup', 'qty' => 1, 'price' => 90]],
+        ], $this->authHeader($token))
+            ->assertOk()
+            ->assertJsonPath('status', 1);
+
+        $order = Order::with('details')->findOrFail($orderId);
+        $this->assertSame('Mona Ali', $order->shipping_address_data->contact_person_name);
+        $this->assertSame('Call before delivery', $order->order_note);
+        $this->assertEquals(690, $order->order_amount);
+        $this->assertCount(2, $order->details);
+    }
+
+    public function test_staff_cannot_edit_app_orders(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::Admin);
+        $orderId = $this->createOrder();
+
+        $this->putJson(self::STAFF_ENDPOINT . 'update-easy-orders-order', [
+            'order_id' => $orderId,
+            'contact_person_name' => 'Mona Ali',
+            'phone' => '01111111111',
+        ], $this->authHeader($token))->assertForbidden();
+
+        $this->assertSame(450.0, (float)Order::findOrFail($orderId)->order_amount);
     }
 
     public function test_customer_service_status_change_on_easy_orders_order_uses_the_easy_orders_lifecycle(): void
@@ -352,6 +399,9 @@ class DeliveryAppStaffApiTest extends TestCase
             $table->integer('qty')->default(0);
             $table->decimal('price', 40, 20)->default(0);
             $table->decimal('discount', 40, 20)->default(0);
+            $table->decimal('tax', 40, 20)->default(0);
+            $table->string('tax_model')->nullable();
+            $table->text('variation')->nullable();
             $table->string('delivery_status')->default('pending');
             $table->string('payment_status')->default('unpaid');
             $table->string('variant')->nullable();

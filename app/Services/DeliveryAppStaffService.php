@@ -17,6 +17,10 @@ use Illuminate\Support\Collection;
  */
 class DeliveryAppStaffService
 {
+    public function __construct(private readonly EasyOrdersOrderEditService $easyOrdersOrderEditService)
+    {
+    }
+
     private const OPEN_ORDER_STATUSES = ['pending', 'confirmed', 'processing', 'out_for_delivery'];
 
     /**
@@ -84,6 +88,8 @@ class DeliveryAppStaffService
         return array_merge($this->formatOrderListItem(order: $order), [
             'order_note' => $order['order_note'],
             'discount_amount' => (float)$order['discount_amount'],
+            'is_editable' => $this->easyOrdersOrderEditService->isEditable(order: $order),
+            'whatsapp_message' => getOrderWhatsAppMessage(order: $order),
             'items' => $order->details->map(fn (OrderDetail $detail) => $this->formatOrderItem(detail: $detail))->values(),
         ]);
     }
