@@ -63,6 +63,12 @@ echo "Commit:   $(git rev-parse HEAD)"
 # otherwise `migrate` would build a schema the product does not ship with.
 # Checked before maintenance mode and composer so an unreachable database fails
 # with this message instead of an opaque composer/package:discover error.
+# A deploy resets and cleans the working tree, so make sure the runtime folders
+# Laravel needs exist before anything boots the framework (composer's
+# package:discover included). A missing views folder takes the whole site down.
+log "Ensuring runtime folders"
+mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
+
 log "Checking database state"
 if ! "$PHP_BIN" artisan migrate:status --no-interaction >/dev/null 2>&1; then
     echo "Database is unreachable or has never been initialised." >&2
