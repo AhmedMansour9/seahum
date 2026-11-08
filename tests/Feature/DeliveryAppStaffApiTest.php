@@ -70,6 +70,31 @@ class DeliveryAppStaffApiTest extends TestCase
             ->assertJsonPath('orders.0.id', $confirmedOrderId);
     }
 
+    public function test_admin_sees_the_orders_of_one_delivery_man_filtered_by_date_with_status_counts(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::Admin);
+        $deliveryManId = $this->createDeliveryMan(phone: '500000002');
+        $otherDeliveryManId = $this->createDeliveryMan(phone: '500000003');
+        $this->createOrder(deliveryManId: $deliveryManId, status: 'delivered', createdAt: '2026-10-10 12:00:00');
+        $deliveredInRangeId = $this->createOrder(deliveryManId: $deliveryManId, status: 'delivered', createdAt: '2026-11-02 23:30:00');
+        $this->createOrder(deliveryManId: $deliveryManId, status: 'out_for_delivery', createdAt: '2026-11-03 09:00:00');
+        $this->createOrder(deliveryManId: $otherDeliveryManId, status: 'delivered', createdAt: '2026-11-02 10:00:00');
+
+        $response = $this->getJson(self::STAFF_ENDPOINT . "orders?delivery_man_id={$deliveryManId}&date_from=2026-11-01&date_to=2026-11-03&status=delivered", $this->authHeader($token))->assertOk();
+
+        $response->assertJsonPath('total_size', 1);
+        $response->assertJsonPath('orders.0.id', $deliveredInRangeId);
+        $response->assertJsonPath('status_counts.delivered', 1);
+        $response->assertJsonPath('status_counts.out_for_delivery', 1);
+    }
+
+    public function test_date_range_must_end_after_it_starts(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::Admin);
+
+        $this->getJson(self::STAFF_ENDPOINT . 'orders?date_from=2026-11-03&date_to=2026-11-01', $this->authHeader($token))->assertForbidden();
+    }
+
     public function test_order_details_include_order_items(): void
     {
         $token = $this->createAccount(role: DeliveryManAppRole::CustomerService);
@@ -321,7 +346,7 @@ class DeliveryAppStaffApiTest extends TestCase
         ]);
     }
 
-    private function createOrder(OrderSource $source = OrderSource::App, ?string $externalOrderId = null, ?int $deliveryManId = null, string $status = 'pending'): int
+    private function createOrder(OrderSource $source = OrderSource::App, ?string $externalOrderId = null, ?int $deliveryManId = null, string $status = 'pending', ?string $createdAt = null): int
     {
         $orderId = DB::table('orders')->insertGetId([
             'is_guest' => 1,
@@ -337,7 +362,7 @@ class DeliveryAppStaffApiTest extends TestCase
             'order_source' => $source->value,
             'external_order_id' => $externalOrderId,
             'shipping_address_data' => json_encode(['contact_person_name' => 'Mona Adel', 'phone' => '01000000000', 'address' => 'Nasr City', 'city' => 'Cairo', 'latitude' => '30.0561', 'longitude' => $source === OrderSource::App ? '31.3301' : null]),
-            'created_at' => now(),
+            'created_at' => $createdAt ?? now(),
             'updated_at' => now(),
         ]);
         DB::table('order_details')->insert([

@@ -8,7 +8,9 @@ use App\Models\DeliveryMan;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Utils\OrderManager;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -27,15 +29,46 @@ class DeliveryAppStaffService
     private const OPEN_ORDER_STATUSES = ['pending', 'confirmed', 'processing', 'out_for_delivery'];
 
     /**
-     * @param array{status?: string|null, search?: string|null, order_source?: string|null, date_type?: string|null} $filters
+     * @param array{status?: string|null, search?: string|null, order_source?: string|null, date_type?: string|null, delivery_man_id?: string|int|null, date_from?: string|null, date_to?: string|null} $filters
      */
     public function getOrders(array $filters, int $limit, int $offset): LengthAwarePaginator
     {
-        return Order::with(['customer:id,f_name,l_name,phone', 'deliveryMan:id,f_name,l_name,phone', 'shippingAddress', 'details'])
+        return $this->getOrdersQuery(filters: $filters)
+            ->with(['customer:id,f_name,l_name,phone', 'deliveryMan:id,f_name,l_name,phone', 'shippingAddress', 'details'])
+            ->latest()
+            ->orderByDesc('id')
+            ->paginate(perPage: $limit, page: $offset);
+    }
+
+    /**
+     * Number of orders per status for the same filters, ignoring the status filter itself.
+     *
+     * @param array{search?: string|null, order_source?: string|null, date_type?: string|null, delivery_man_id?: string|int|null, date_from?: string|null, date_to?: string|null} $filters
+     * @return Collection<string, int>
+     */
+    public function getStatusCounts(array $filters): Collection
+    {
+        return $this->getOrdersQuery(filters: Arr::except($filters, ['status']))
+            ->selectRaw('order_status, count(*) as total')
+            ->groupBy('order_status')
+            ->pluck('total', 'order_status')
+            ->map(fn ($total) => (int)$total);
+    }
+
+    /**
+     * @param array<string, mixed> $filters
+     * @return Builder<Order>
+     */
+    private function getOrdersQuery(array $filters): Builder
+    {
+        return Order::query()
             ->where('order_type', 'default_type')
             ->when(!empty($filters['status']), fn ($query) => $query->where('order_status', $filters['status']))
             ->when(!empty($filters['order_source']), fn ($query) => $query->where('order_source', $filters['order_source']))
+            ->when(!empty($filters['delivery_man_id']), fn ($query) => $query->where('delivery_man_id', $filters['delivery_man_id']))
             ->when(($filters['date_type'] ?? null) === 'today', fn ($query) => $query->whereDate('created_at', Carbon::today()))
+            ->when(!empty($filters['date_from']), fn ($query) => $query->whereDate('created_at', '>=', $filters['date_from']))
+            ->when(!empty($filters['date_to']), fn ($query) => $query->whereDate('created_at', '<=', $filters['date_to']))
             ->when(!empty($filters['search']), function ($query) use ($filters) {
                 $search = $filters['search'];
                 $query->where(function ($query) use ($search) {
@@ -44,10 +77,7 @@ class DeliveryAppStaffService
                         ->orWhereHas('customer', fn ($query) => $query->where('phone', 'like', "%{$search}%"))
                         ->orWhere('shipping_address_data', 'like', "%{$search}%");
                 });
-            })
-            ->latest()
-            ->orderByDesc('id')
-            ->paginate(perPage: $limit, page: $offset);
+            });
     }
 
     /**

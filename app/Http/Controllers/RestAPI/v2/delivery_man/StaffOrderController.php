@@ -37,6 +37,9 @@ class StaffOrderController extends Controller
             'status' => ['nullable', Rule::in(getOrderStatusList())],
             'order_source' => ['nullable', Rule::in(array_column(OrderSource::cases(), 'value'))],
             'date_type' => 'nullable|in:today',
+            'delivery_man_id' => 'nullable|integer',
+            'date_from' => 'nullable|date_format:Y-m-d',
+            'date_to' => 'nullable|date_format:Y-m-d|after_or_equal:date_from',
             'search' => 'nullable|string|max:100',
             'limit' => 'nullable|integer|min:1|max:100',
             'offset' => 'nullable|integer|min:1',
@@ -47,16 +50,14 @@ class StaffOrderController extends Controller
 
         $limit = (int)($request['limit'] ?? 20);
         $offset = (int)($request['offset'] ?? 1);
-        $orders = $this->deliveryAppStaffService->getOrders(
-            filters: $request->only(['status', 'search', 'order_source', 'date_type']),
-            limit: $limit,
-            offset: $offset,
-        );
+        $filters = $request->only(['status', 'search', 'order_source', 'date_type', 'delivery_man_id', 'date_from', 'date_to']);
+        $orders = $this->deliveryAppStaffService->getOrders(filters: $filters, limit: $limit, offset: $offset);
 
         return response()->json([
             'total_size' => $orders->total(),
             'limit' => $limit,
             'offset' => $offset,
+            'status_counts' => $this->deliveryAppStaffService->getStatusCounts(filters: $filters),
             'orders' => $orders->getCollection()->map(fn (Order $order) => $this->deliveryAppStaffService->formatOrderListItem(order: $order))->values(),
         ]);
     }
