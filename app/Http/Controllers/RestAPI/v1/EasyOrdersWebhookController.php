@@ -43,6 +43,8 @@ class EasyOrdersWebhookController extends Controller
             'phone' => 'required|string',
             'government' => 'nullable|string',
             'address' => 'nullable|string',
+            'created_at' => 'nullable|date',
+            'updated_at' => 'nullable|date',
             'cart_items' => 'required|array|min:1',
             'cart_items.*.price' => 'required|numeric',
             'cart_items.*.quantity' => 'required|integer|min:1',

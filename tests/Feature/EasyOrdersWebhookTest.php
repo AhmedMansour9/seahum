@@ -235,6 +235,38 @@ class EasyOrdersWebhookTest extends TestCase
         $this->postJson(self::ENDPOINT, $this->statusPayload(newStatus: 'delivered'), self::SECRET_HEADER)->assertNotFound();
     }
 
+    public function test_resent_order_takes_the_newer_easy_orders_status_without_a_new_order_notification(): void
+    {
+        $this->postJson(self::ENDPOINT, $this->orderPayload(), self::SECRET_HEADER)->assertOk();
+        $this->mock(StaffNotificationService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('notifyNewOrder'));
+
+        $this->postJson(self::ENDPOINT, $this->orderPayload(['status' => 'waiting_for_pickup', 'updated_at' => now()->addMinute()->toIso8601String()]), self::SECRET_HEADER)->assertOk();
+
+        $this->assertSame(1, Order::count());
+        $this->assertSame('processing', Order::firstOrFail()->order_status);
+    }
+
+    public function test_late_retry_of_the_original_delivery_keeps_the_newer_local_status(): void
+    {
+        $this->postJson(self::ENDPOINT, $this->orderPayload(), self::SECRET_HEADER)->assertOk();
+        Order::query()->update(['order_status' => 'confirmed', 'updated_at' => now()->addMinutes(5)]);
+
+        $this->postJson(self::ENDPOINT, $this->orderPayload(['status' => 'pending', 'updated_at' => now()->toIso8601String()]), self::SECRET_HEADER)->assertOk();
+
+        $this->assertSame('confirmed', Order::firstOrFail()->order_status);
+    }
+
+    public function test_old_order_delivered_late_is_stored_on_its_day_without_a_new_order_notification(): void
+    {
+        $this->mock(StaffNotificationService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('notifyNewOrder'));
+
+        $this->postJson(self::ENDPOINT, $this->orderPayload(['status' => 'refunded', 'created_at' => '2026-10-03T10:00:00+02:00']), self::SECRET_HEADER)->assertOk();
+
+        $order = Order::firstOrFail();
+        $this->assertSame('returned', $order->order_status);
+        $this->assertSame('2026-10-03', $order->created_at->toDateString());
+    }
+
     public function test_import_creates_missing_orders_on_their_original_day_and_syncs_existing_statuses(): void
     {
         $this->postJson(self::ENDPOINT, $this->orderPayload(), self::SECRET_HEADER)->assertOk();

@@ -16,6 +16,11 @@ class EasyOrdersWebhookService
     private const IN_HOUSE_SELLER_ID = 1;
     private const IN_HOUSE_SELLER_IS = 'admin';
 
+    /**
+     * Orders placed longer ago than this (re-sent or imported old orders) do not push a new order notification.
+     */
+    private const NEW_ORDER_NOTIFICATION_WINDOW_MINUTES = 60;
+
     public function __construct(private readonly StaffNotificationService $staffNotificationService)
     {
     }
@@ -28,7 +33,9 @@ class EasyOrdersWebhookService
     }
 
     /**
-     * Stores an EasyOrders order once; a repeated delivery of the same order returns the stored one.
+     * Stores an EasyOrders order once. A repeated delivery of the same order returns the stored one,
+     * taking the EasyOrders status when the payload is newer than the last change made in SEA HUM
+     * (re-sent orders), so a late retry of the original delivery never reverts a newer status.
      *
      * @param array{id: string, status?: string, payment_method?: string, cost?: float, shipping_cost?: float, total_cost: float, full_name: string, phone: string, government?: string, address?: string, created_at?: string, cart_items: array<int, array<string, mixed>>} $payload
      */
@@ -36,12 +43,12 @@ class EasyOrdersWebhookService
     {
         $existingOrder = $this->findOrder(externalOrderId: (string)$payload['id']);
         if ($existingOrder) {
-            return $existingOrder;
+            return $this->syncResentOrderStatus(order: $existingOrder, payload: $payload);
         }
 
         try {
             $order = DB::transaction(fn () => $this->createOrder(payload: $payload));
-            if ($notifyStaff) {
+            if ($notifyStaff && $order['created_at']->greaterThan(now()->subMinutes(self::NEW_ORDER_NOTIFICATION_WINDOW_MINUTES))) {
                 $this->staffNotificationService->notifyNewOrder(order: $order);
             }
 
@@ -162,6 +169,16 @@ class EasyOrdersWebhookService
             'user_type' => $userType,
             'status' => $status,
         ]);
+    }
+
+    private function syncResentOrderStatus(Order $order, array $payload): Order
+    {
+        $status = strtolower((string)($payload['status'] ?? ''));
+        if ($status === '' || empty($payload['updated_at']) || !Carbon::parse($payload['updated_at'])->greaterThan($order['updated_at'])) {
+            return $order;
+        }
+
+        return $this->updateOrderStatus(payload: ['order_id' => (string)$payload['id'], 'new_status' => $status]) ?? $order;
     }
 
     public function findOrder(string $externalOrderId): ?Order
