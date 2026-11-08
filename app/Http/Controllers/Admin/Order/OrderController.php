@@ -179,7 +179,7 @@ class OrderController extends BaseController
         ];
 
         $orders = $this->orderRepo->getListWhereIn(
-            orderBy: ['id' => 'desc'],
+            orderBy: ['created_at' => 'desc'],
             searchValue: $searchValue,
             filters: $filters,
             whereIn: $filterWhereIn,
@@ -430,7 +430,7 @@ class OrderController extends BaseController
         if (!empty($orderAmountSettlement)) {
             $filters['has_order_edit_settlement'] = $orderAmountSettlement;
         }
-        $orders = $this->orderRepo->getListWhereIn(orderBy: ['id' => 'desc'], searchValue: $request['searchValue'], filters: $filters, whereIn: $filterWhereIn, relations: ['customer', 'seller.shop'], dataLimit: 'all');
+        $orders = $this->orderRepo->getListWhereIn(orderBy: ['created_at' => 'desc'], searchValue: $request['searchValue'], filters: $filters, whereIn: $filterWhereIn, relations: ['customer', 'seller.shop'], dataLimit: 'all');
 
         /** order status count  */
         $status_array = [
