@@ -199,7 +199,7 @@ class EasyOrdersWebhookService
             ? (float)$payload['cost']
             : max(0, (float)$payload['total_cost'] - $shippingCost);
 
-        $order = Order::create([
+        $order = new Order([
             'id' => OrderManager::generateNewOrderID(),
             'order_source' => OrderSource::EasyOrders,
             'external_order_id' => (string)$payload['id'],
@@ -225,9 +225,9 @@ class EasyOrdersWebhookService
             'shipping_cost' => currencyConverter(amount: $shippingCost),
             'verification_code' => rand(100000, 999999),
             'shipping_address_data' => $this->getShippingAddressData(payload: $payload),
-            'created_at' => $this->getPlacedAt(payload: $payload),
-            'updated_at' => now(),
         ]);
+        $order->created_at = $this->getPlacedAt(payload: $payload);
+        $order->save();
 
         foreach ($payload['cart_items'] as $cartItem) {
             OrderDetail::create($this->getOrderDetailData(
