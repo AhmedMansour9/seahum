@@ -271,8 +271,8 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div>{{ date('d M Y', strtotime($order['created_at'])) }},</div>
-                                        <div>{{ date('h:i A', strtotime($order['created_at'])) }}</div>
+                                        <div>{{ $order['created_at']->locale(app()->getLocale())->translatedFormat('d F Y') }},</div>
+                                        <div>{{ $order['created_at']->locale(app()->getLocale())->translatedFormat('h:i A') }}</div>
                                     </td>
                                     <td>
                                         @if ($order->is_guest)
