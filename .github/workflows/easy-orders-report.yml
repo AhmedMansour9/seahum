@@ -22,4 +22,4 @@ jobs:
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
           if [ -n "$SSH_KNOWN_HOSTS" ]; then printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts; else ssh-keyscan -p "${SSH_PORT:-22}" -H "$SSH_HOST" > ~/.ssh/known_hosts 2>/dev/null; fi
           ssh -i ~/.ssh/deploy_key -p "${SSH_PORT:-22}" -o BatchMode=yes "$SSH_USER@$SSH_HOST" \
-            "cd '$DEPLOY_PATH' && grep -hiE 'easy|webhook|SQLSTATE' storage/logs/laravel-2026-11-0*.log | cut -c1-400 | tail -n 40 | sed 's/^/LOGLINE /'"
+            "cd '$DEPLOY_PATH' && grep -h 'EasyOrders webhook order rejected' storage/logs/laravel-*.log | cut -c1-400 | tail -n 40 | sed 's/^/LOGLINE /'"
