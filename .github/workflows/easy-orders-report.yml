@@ -1,4 +1,4 @@
-name: EasyOrders orders report
+name: EasyOrders webhook log report
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Report
+      - name: Read webhook errors from the server log
         env:
           SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
           SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
@@ -21,4 +21,5 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
           if [ -n "$SSH_KNOWN_HOSTS" ]; then printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts; else ssh-keyscan -p "${SSH_PORT:-22}" -H "$SSH_HOST" > ~/.ssh/known_hosts 2>/dev/null; fi
-          ssh -i ~/.ssh/deploy_key -p "${SSH_PORT:-22}" -o BatchMode=yes "$SSH_USER@$SSH_HOST" "cd '$DEPLOY_PATH' && php artisan tinker --execute 'foreach (App\\Models\\Order::where(\"order_source\", \"easy_orders\")->selectRaw(\"order_status, payment_status, count(*) c, min(created_at) first_at\")->groupBy(\"order_status\", \"payment_status\")->get() as \$r) { echo \"REPORT \$r->order_status | \$r->payment_status | \$r->c | \$r->first_at\\n\"; }'"
+          ssh -i ~/.ssh/deploy_key -p "${SSH_PORT:-22}" -o BatchMode=yes "$SSH_USER@$SSH_HOST" \
+            "cd '$DEPLOY_PATH' && grep -hiE 'easy|webhook|SQLSTATE' storage/logs/laravel-2026-11-0*.log | cut -c1-400 | tail -n 40 | sed 's/^/LOGLINE /'"
