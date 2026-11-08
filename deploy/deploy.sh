@@ -109,7 +109,9 @@ log "Restarting queue workers"
 "$PHP_BIN" artisan queue:restart --no-interaction
 
 log "Fixing writable paths"
-chmod -R ug+rwX storage/framework storage/logs bootstrap/cache
+# Only files this user owns: sessions, logs and compiled views written by the web
+# server belong to it, and chmod on them fails with "Operation not permitted".
+find storage/framework storage/logs bootstrap/cache -user "$(id -u)" -exec chmod ug+rwX {} +
 
 log "Disabling maintenance mode"
 bring_application_up
