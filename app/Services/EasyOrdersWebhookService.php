@@ -15,6 +15,10 @@ class EasyOrdersWebhookService
     private const IN_HOUSE_SELLER_ID = 1;
     private const IN_HOUSE_SELLER_IS = 'admin';
 
+    public function __construct(private readonly StaffNotificationService $staffNotificationService)
+    {
+    }
+
     public function isValidSecret(?string $secret): bool
     {
         $configuredSecret = (string)config('easy_orders.webhook_secret');
@@ -35,7 +39,10 @@ class EasyOrdersWebhookService
         }
 
         try {
-            return DB::transaction(fn () => $this->createOrder(payload: $payload));
+            $order = DB::transaction(fn () => $this->createOrder(payload: $payload));
+            $this->staffNotificationService->notifyNewOrder(order: $order);
+
+            return $order;
         } catch (UniqueConstraintViolationException) {
             return $this->findOrder(externalOrderId: (string)$payload['id']);
         }

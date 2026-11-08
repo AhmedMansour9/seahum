@@ -12,10 +12,12 @@ use App\Models\OrderDetail;
 use App\Models\OrderStatusHistory;
 use App\Models\OrderTransaction;
 use App\Services\EasyOrdersWebhookService;
+use App\Services\StaffNotificationService;
 use App\Http\Middleware\ActivationCheckMiddleware;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class EasyOrdersWebhookTest extends TestCase
@@ -93,6 +95,8 @@ class EasyOrdersWebhookTest extends TestCase
 
     public function test_repeated_delivery_of_same_order_does_not_duplicate_it(): void
     {
+        $this->mock(StaffNotificationService::class, fn (MockInterface $mock) => $mock->shouldReceive('notifyNewOrder')->once());
+
         $this->postJson(self::ENDPOINT, $this->orderPayload(), self::SECRET_HEADER)->assertOk();
         $this->postJson(self::ENDPOINT, $this->orderPayload(), self::SECRET_HEADER)->assertOk();
 

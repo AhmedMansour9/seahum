@@ -2,6 +2,7 @@
 
 namespace App\Utils;
 
+use App\Services\StaffNotificationService;
 use App\Enums\PaymentMethod;
 use App\Events\OrderEditDuePaymentEvent;
 use App\Events\OrderStatusEvent;
@@ -1455,6 +1456,10 @@ class OrderManager
 
         foreach (Order::with('seller.shop', 'deliveryMan')->whereIn('id', $deliveryManAssignedOrderIds)->get() as $assignedOrder) {
             event(new OrderStatusEvent(key: 'new_order_assigned_message', type: 'delivery_man', order: $assignedOrder));
+        }
+
+        foreach (Order::with('details')->whereIn('id', $orderPlacedIds)->get() as $placedOrder) {
+            app(StaffNotificationService::class)->notifyNewOrder(order: $placedOrder);
         }
 
         CartManager::cartCleanByCartGroupIds(cartGroupIDs: collect($vendorWiseCartList)?->pluck('cart_group_id')->toArray() ?? []);
