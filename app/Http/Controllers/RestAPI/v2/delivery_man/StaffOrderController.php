@@ -238,7 +238,7 @@ class StaffOrderController extends Controller
             return response()->json(['errors' => [['code' => 'order', 'message' => $result['message']]]], 403);
         }
 
-        return response()->json(['status' => 1, ...$result]);
+        return response()->json([...$result, 'status' => 1]);
     }
 
     private function orderNotFoundResponse(): JsonResponse
