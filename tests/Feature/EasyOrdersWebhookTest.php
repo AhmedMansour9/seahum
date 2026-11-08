@@ -18,6 +18,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -51,8 +52,12 @@ class EasyOrdersWebhookTest extends TestCase
         $this->postJson(self::ENDPOINT, $this->orderPayload(), ['secret' => ''])->assertUnauthorized();
     }
 
-    public function test_returns_422_when_order_has_no_cart_items(): void
+    public function test_returns_422_and_logs_the_reason_when_order_has_no_cart_items(): void
     {
+        Log::shouldReceive('warning')->once()->with('EasyOrders webhook order rejected', \Mockery::on(
+            fn (array $context) => $context['external_order_id'] === 'eo-order-1' && isset($context['errors']['cart_items'])
+        ));
+
         $this->postJson(self::ENDPOINT, $this->orderPayload(['cart_items' => []]), self::SECRET_HEADER)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['cart_items']);
