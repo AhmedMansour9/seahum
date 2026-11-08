@@ -53,6 +53,9 @@ class DeliveryAppStaffApiTest extends TestCase
         $response->assertJsonPath('orders.0.customer.name', 'Mona Adel');
         $response->assertJsonPath('orders.0.total_amount', 450);
         $response->assertJsonPath('orders.1.delivery_man.id', $deliveryManId);
+        $response->assertJsonPath('orders.1.customer.latitude', 30.0561);
+        $response->assertJsonPath('orders.1.customer.longitude', 31.3301);
+        $response->assertJsonPath('orders.0.customer.longitude', null);
     }
 
     public function test_orders_can_be_filtered_by_status(): void
@@ -240,7 +243,7 @@ class DeliveryAppStaffApiTest extends TestCase
             'order_type' => 'default_type',
             'order_source' => $source->value,
             'external_order_id' => $externalOrderId,
-            'shipping_address_data' => json_encode(['contact_person_name' => 'Mona Adel', 'phone' => '01000000000', 'address' => 'Nasr City', 'city' => 'Cairo']),
+            'shipping_address_data' => json_encode(['contact_person_name' => 'Mona Adel', 'phone' => '01000000000', 'address' => 'Nasr City', 'city' => 'Cairo', 'latitude' => '30.0561', 'longitude' => $source === OrderSource::App ? '31.3301' : null]),
             'created_at' => now(),
             'updated_at' => now(),
         ]);

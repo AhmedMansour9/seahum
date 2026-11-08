@@ -143,7 +143,7 @@ class DeliveryAppStaffService
     }
 
     /**
-     * @return array{name: string|null, phone: string|null, address: string|null, city: string|null}
+     * @return array{name: string|null, phone: string|null, address: string|null, city: string|null, latitude: float|null, longitude: float|null}
      */
     private function getCustomerData(Order $order): array
     {
@@ -160,7 +160,14 @@ class DeliveryAppStaffService
             'phone' => $shippingAddress?->phone ?? $order->customer?->phone,
             'address' => $shippingAddress?->address ?? null,
             'city' => $shippingAddress?->city ?? null,
+            'latitude' => $this->getCoordinate(value: $shippingAddress?->latitude ?? null),
+            'longitude' => $this->getCoordinate(value: $shippingAddress?->longitude ?? null),
         ];
+    }
+
+    private function getCoordinate(mixed $value): ?float
+    {
+        return is_numeric($value) && (float)$value != 0.0 ? (float)$value : null;
     }
 
     /**
@@ -173,7 +180,7 @@ class DeliveryAppStaffService
         return [
             'id' => $detail['id'],
             'product_id' => $detail['product_id'],
-            'name' => $productDetails['name'] ?? null,
+            'name' => $detail->getInvoiceProductName() ?? $productDetails['name'] ?? null,
             'sku' => $productDetails['sku'] ?? $productDetails['code'] ?? null,
             'thumbnail_full_url' => $detail['product_id'] ? $detail?->productAllStatus?->thumbnail_full_url : null,
             'variant' => $detail['variant'],
