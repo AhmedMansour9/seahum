@@ -192,7 +192,7 @@ class EasyOrdersWebhookService
     private function createOrder(array $payload): Order
     {
         $orderStatus = $this->getMappedOrderStatus(easyOrdersStatus: (string)($payload['status'] ?? '')) ?? 'pending';
-        $paymentStatus = in_array(strtolower((string)($payload['status'] ?? '')), config('easy_orders.paid_statuses'), true) ? 'paid' : 'unpaid';
+        $paymentStatus = $orderStatus === 'delivered' || in_array(strtolower((string)($payload['status'] ?? '')), config('easy_orders.paid_statuses'), true) ? 'paid' : 'unpaid';
         $paymentMethod = (string)($payload['payment_method'] ?? '');
         $shippingCost = (float)($payload['shipping_cost'] ?? 0);
         $orderCost = isset($payload['cost'])

@@ -246,6 +246,15 @@ class EasyOrdersWebhookTest extends TestCase
         $this->assertSame('processing', Order::firstOrFail()->order_status);
     }
 
+    public function test_order_first_received_as_delivered_is_stored_as_paid(): void
+    {
+        $this->postJson(self::ENDPOINT, $this->orderPayload(['status' => 'delivered']), self::SECRET_HEADER)->assertOk();
+
+        $order = Order::with('details')->firstOrFail();
+        $this->assertSame('paid', $order->payment_status);
+        $this->assertSame('paid', $order->details->first()->payment_status);
+    }
+
     public function test_late_retry_of_the_original_delivery_keeps_the_newer_local_status(): void
     {
         $this->postJson(self::ENDPOINT, $this->orderPayload(), self::SECRET_HEADER)->assertOk();
@@ -264,6 +273,7 @@ class EasyOrdersWebhookTest extends TestCase
 
         $order = Order::firstOrFail();
         $this->assertSame('returned', $order->order_status);
+        $this->assertSame('unpaid', $order->payment_status);
         $this->assertSame('2026-10-03', $order->created_at->toDateString());
     }
 
@@ -280,6 +290,7 @@ class EasyOrdersWebhookTest extends TestCase
 
         $this->assertSame(2, Order::count());
         $this->assertSame('delivered', Order::where('external_order_id', 'eo-order-1')->value('order_status'));
+        $this->assertSame('paid', Order::where('external_order_id', 'eo-order-1')->value('payment_status'));
         $importedOrder = Order::where('external_order_id', 'eo-order-2')->firstOrFail();
         $this->assertSame('out_for_delivery', $importedOrder->order_status);
         $this->assertSame('2026-10-05', $importedOrder->created_at->toDateString());
