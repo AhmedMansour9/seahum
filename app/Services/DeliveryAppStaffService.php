@@ -17,7 +17,10 @@ use Illuminate\Support\Collection;
  */
 class DeliveryAppStaffService
 {
-    public function __construct(private readonly EasyOrdersOrderEditService $easyOrdersOrderEditService)
+    public function __construct(
+        private readonly EasyOrdersOrderEditService       $easyOrdersOrderEditService,
+        private readonly DeliveryAppStaffOrderEditService $deliveryAppStaffOrderEditService,
+    )
     {
     }
 
@@ -88,7 +91,7 @@ class DeliveryAppStaffService
         return array_merge($this->formatOrderListItem(order: $order), [
             'order_note' => $order['order_note'],
             'discount_amount' => (float)$order['discount_amount'],
-            'is_editable' => $this->easyOrdersOrderEditService->isEditable(order: $order),
+            ...$this->getEditState(order: $order),
             'whatsapp_message' => getOrderWhatsAppMessage(order: $order),
             'items' => $order->details->map(fn (OrderDetail $detail) => $this->formatOrderItem(detail: $detail))->values(),
         ]);
@@ -145,6 +148,32 @@ class DeliveryAppStaffService
             'open_orders' => (int)Order::where('order_type', 'default_type')->whereIn('order_status', self::OPEN_ORDER_STATUSES)->count(),
             'unassigned_open_orders' => (int)Order::where('order_type', 'default_type')->whereIn('order_status', self::OPEN_ORDER_STATUSES)->whereNull('delivery_man_id')->count(),
             'online_delivery_men' => (int)DeliveryMan::where(['seller_id' => 0, 'is_online' => 1, 'app_role' => DeliveryManAppRole::DeliveryMan->value])->count(),
+        ];
+    }
+
+    /**
+     * EasyOrders orders use the simple line editor, app orders use the catalog editor of the admin panel.
+     *
+     * @return array{is_editable: bool, edit_type: string|null, edit_blocked_reason: string|null}
+     */
+    private function getEditState(Order $order): array
+    {
+        if ($order['order_source'] === OrderSource::EasyOrders) {
+            $isEditable = $this->easyOrdersOrderEditService->isEditable(order: $order);
+
+            return [
+                'is_editable' => $isEditable,
+                'edit_type' => $isEditable ? 'easy_orders' : null,
+                'edit_blocked_reason' => $isEditable ? null : translate('This_order_can_no_longer_be_edited'),
+            ];
+        }
+
+        $editableState = $this->deliveryAppStaffOrderEditService->getEditableState(order: $order);
+
+        return [
+            'is_editable' => $editableState['status'],
+            'edit_type' => $editableState['status'] ? 'catalog' : null,
+            'edit_blocked_reason' => $editableState['status'] ? null : $editableState['message'],
         ];
     }
 

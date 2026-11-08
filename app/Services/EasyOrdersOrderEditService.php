@@ -97,21 +97,30 @@ class EasyOrdersOrderEditService
                 OrderDetail::create($this->getNewItemData(order: $order, item: $newItem));
             }
 
-            $shippingAddress = (array)($order['shipping_address_data'] ?? []);
             $order->update([
-                'shipping_address_data' => array_merge($shippingAddress, [
-                    'contact_person_name' => $data['contact_person_name'],
-                    'phone' => $data['phone'],
-                    'address' => $data['address'] ?? null,
-                    'city' => $data['city'] ?? null,
-                    'state' => $data['city'] ?? null,
-                ]),
+                'shipping_address_data' => self::mergeCustomerData(shippingAddress: (array)($order['shipping_address_data'] ?? []), data: $data),
                 'order_note' => $data['order_note'] ?? null,
                 'order_amount' => OrderDetail::where('order_id', $order['id'])->get()->sum(fn (OrderDetail $detail) => $detail['price'] * $detail['qty']),
             ]);
 
             return ['status' => true, 'message' => translate('Order_updated_successfully')];
         });
+    }
+
+    /**
+     * @param array<string, mixed> $shippingAddress
+     * @param array{contact_person_name: string, phone: string, address?: string|null, city?: string|null} $data
+     * @return array<string, mixed>
+     */
+    public static function mergeCustomerData(array $shippingAddress, array $data): array
+    {
+        return array_merge($shippingAddress, [
+            'contact_person_name' => $data['contact_person_name'],
+            'phone' => $data['phone'],
+            'address' => $data['address'] ?? null,
+            'city' => $data['city'] ?? null,
+            'state' => $data['city'] ?? null,
+        ]);
     }
 
     /**

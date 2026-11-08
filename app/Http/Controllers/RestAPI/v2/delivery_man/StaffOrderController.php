@@ -5,6 +5,7 @@ namespace App\Http\Controllers\RestAPI\v2\delivery_man;
 use App\Enums\OrderSource;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Services\DeliveryAppStaffOrderEditService;
 use App\Services\DeliveryAppStaffService;
 use App\Services\DeliveryManAssignmentService;
 use App\Services\EasyOrdersOrderEditService;
@@ -124,6 +125,48 @@ class StaffOrderController extends Controller
         return response()->json(['status' => 1, 'message' => $result['message']]);
     }
 
+    public function getEditProducts(Request $request, DeliveryAppStaffOrderEditService $deliveryAppStaffOrderEditService): JsonResponse
+    {
+        $validator = Validator::make($request->all(), ['search' => 'nullable|string|max:100']);
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
+        }
+
+        return response()->json($deliveryAppStaffOrderEditService->searchProducts(search: $request['search']));
+    }
+
+    public function previewOrderEdit(Request $request, DeliveryAppStaffOrderEditService $deliveryAppStaffOrderEditService): JsonResponse
+    {
+        $validator = Validator::make($request->all(), ['order_id' => 'required|integer'] + DeliveryAppStaffOrderEditService::getProductsValidationRules());
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
+        }
+
+        $result = $deliveryAppStaffOrderEditService->previewProducts(
+            orderId: $request['order_id'],
+            products: $request['products'],
+            staff: $request['delivery_man'],
+        );
+
+        return $this->orderEditResponse(result: $result);
+    }
+
+    public function updateOrder(Request $request, DeliveryAppStaffOrderEditService $deliveryAppStaffOrderEditService): JsonResponse
+    {
+        $validator = Validator::make($request->all(), DeliveryAppStaffOrderEditService::getValidationRules());
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
+        }
+
+        $result = $deliveryAppStaffOrderEditService->updateOrder(
+            orderId: $request['order_id'],
+            data: $validator->validated(),
+            staff: $request['delivery_man'],
+        );
+
+        return $this->orderEditResponse(result: $result);
+    }
+
     public function updatePaymentStatus(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
@@ -184,6 +227,18 @@ class StaffOrderController extends Controller
     public function getDashboardStats(): JsonResponse
     {
         return response()->json($this->deliveryAppStaffService->getTodayStats());
+    }
+
+    /**
+     * @param array{status: bool, message: string} $result
+     */
+    private function orderEditResponse(array $result): JsonResponse
+    {
+        if (!$result['status']) {
+            return response()->json(['errors' => [['code' => 'order', 'message' => $result['message']]]], 403);
+        }
+
+        return response()->json(['status' => 1, ...$result]);
     }
 
     private function orderNotFoundResponse(): JsonResponse
