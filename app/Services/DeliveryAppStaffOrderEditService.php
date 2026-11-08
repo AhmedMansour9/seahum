@@ -22,7 +22,7 @@ class DeliveryAppStaffOrderEditService
 {
     use OrderEditManager;
 
-    private const ORDER_RELATIONS = ['details.productAllStatus', 'verificationImages', 'shipping', 'seller.shop', 'offlinePayments', 'deliveryMan', 'customer', 'latestEditHistory'];
+    private const ORDER_RELATIONS = ['details', 'customer'];
 
     public function __construct(private readonly OrderEditService $orderEditService)
     {
