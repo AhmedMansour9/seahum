@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Services\EasyOrdersWebhookService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class EasyOrdersWebhookController extends Controller
 {
@@ -32,7 +34,7 @@ class EasyOrdersWebhookController extends Controller
 
     private function storeOrder(Request $request): JsonResponse
     {
-        $payload = $request->validate([
+        $validator = Validator::make($request->all(), [
             'id' => 'required',
             'status' => 'nullable|string',
             'payment_method' => 'nullable|string',
@@ -53,6 +55,12 @@ class EasyOrdersWebhookController extends Controller
             'cart_items.*.product' => 'nullable|array',
             'cart_items.*.variant' => 'nullable|array',
         ]);
+        if ($validator->fails()) {
+            Log::warning('EasyOrders webhook order rejected', ['external_order_id' => $request->input('id'), 'errors' => $validator->errors()->toArray()]);
+
+            return response()->json(['message' => 'Invalid order data', 'errors' => $validator->errors()], 422);
+        }
+        $payload = $validator->validated();
 
         $order = $this->easyOrdersWebhookService->storeOrder(payload: $payload);
 
