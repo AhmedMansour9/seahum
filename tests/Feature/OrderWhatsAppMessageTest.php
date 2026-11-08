@@ -42,6 +42,14 @@ class OrderWhatsAppMessageTest extends TestCase
             $table->string('variant')->nullable();
             $table->timestamps();
         });
+        Schema::create('storages', function (Blueprint $table) {
+            $table->id();
+            $table->string('data_type');
+            $table->string('data_id', 100)->index();
+            $table->string('key')->nullable();
+            $table->string('value')->nullable();
+            $table->timestamps();
+        });
         BusinessSetting::insert(['type' => 'currency_model', 'value' => 'single_currency']);
     }
 
