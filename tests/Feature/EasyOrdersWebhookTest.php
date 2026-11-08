@@ -255,6 +255,26 @@ class EasyOrdersWebhookTest extends TestCase
         $this->assertSame('paid', $order->details->first()->payment_status);
     }
 
+    public function test_order_first_received_as_canceled_is_not_stored_or_notified(): void
+    {
+        $this->mock(StaffNotificationService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('notifyNewOrder'));
+
+        $this->postJson(self::ENDPOINT, $this->orderPayload(['status' => 'canceled']), self::SECRET_HEADER)
+            ->assertOk()
+            ->assertJson(['order_id' => null]);
+
+        $this->assertSame(0, Order::count());
+    }
+
+    public function test_stored_order_resent_as_canceled_is_still_canceled(): void
+    {
+        $this->postJson(self::ENDPOINT, $this->orderPayload(), self::SECRET_HEADER)->assertOk();
+
+        $this->postJson(self::ENDPOINT, $this->orderPayload(['status' => 'canceled', 'updated_at' => now()->addMinute()->toIso8601String()]), self::SECRET_HEADER)->assertOk();
+
+        $this->assertSame('canceled', Order::firstOrFail()->order_status);
+    }
+
     public function test_late_retry_of_the_original_delivery_keeps_the_newer_local_status(): void
     {
         $this->postJson(self::ENDPOINT, $this->orderPayload(), self::SECRET_HEADER)->assertOk();
