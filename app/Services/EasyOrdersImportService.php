@@ -94,8 +94,8 @@ class EasyOrdersImportService
             return 'failed';
         }
 
-        $this->easyOrdersWebhookService->storeOrder(payload: $easyOrder, notifyStaff: false);
+        $storedOrder = $this->easyOrdersWebhookService->storeOrder(payload: $easyOrder, notifyStaff: false);
 
-        return 'created';
+        return $storedOrder ? 'created' : 'unchanged';
     }
 }

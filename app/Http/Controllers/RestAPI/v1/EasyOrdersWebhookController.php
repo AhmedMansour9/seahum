@@ -56,7 +56,7 @@ class EasyOrdersWebhookController extends Controller
 
         $order = $this->easyOrdersWebhookService->storeOrder(payload: $payload);
 
-        return response()->json(['order_id' => $order['id']], 200);
+        return response()->json(['order_id' => $order?->id], 200);
     }
 
     private function updateOrderStatus(Request $request): JsonResponse
@@ -72,6 +72,6 @@ class EasyOrdersWebhookController extends Controller
             return response()->json(['message' => 'Order not found'], 404);
         }
 
-        return response()->json(['order_id' => $order['id']], 200);
+        return response()->json(['order_id' => $order?->id], 200);
     }
 }

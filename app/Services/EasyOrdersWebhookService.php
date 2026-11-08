@@ -36,14 +36,19 @@ class EasyOrdersWebhookService
      * Stores an EasyOrders order once. A repeated delivery of the same order returns the stored one,
      * taking the EasyOrders status when the payload is newer than the last change made in SEA HUM
      * (re-sent orders), so a late retry of the original delivery never reverts a newer status.
+     * An order not stored yet that arrives canceled is ignored (null), since it was never worked on.
      *
      * @param array{id: string, status?: string, payment_method?: string, cost?: float, shipping_cost?: float, total_cost: float, full_name: string, phone: string, government?: string, address?: string, created_at?: string, cart_items: array<int, array<string, mixed>>} $payload
      */
-    public function storeOrder(array $payload, bool $notifyStaff = true): Order
+    public function storeOrder(array $payload, bool $notifyStaff = true): ?Order
     {
         $existingOrder = $this->findOrder(externalOrderId: (string)$payload['id']);
         if ($existingOrder) {
             return $this->syncResentOrderStatus(order: $existingOrder, payload: $payload);
+        }
+
+        if ($this->getMappedOrderStatus(easyOrdersStatus: strtolower((string)($payload['status'] ?? ''))) === 'canceled') {
+            return null;
         }
 
         try {
@@ -192,7 +197,7 @@ class EasyOrdersWebhookService
     private function createOrder(array $payload): Order
     {
         $orderStatus = $this->getMappedOrderStatus(easyOrdersStatus: (string)($payload['status'] ?? '')) ?? 'pending';
-        $paymentStatus = in_array(strtolower((string)($payload['status'] ?? '')), config('easy_orders.paid_statuses'), true) ? 'paid' : 'unpaid';
+        $paymentStatus = $orderStatus === 'delivered' || in_array(strtolower((string)($payload['status'] ?? '')), config('easy_orders.paid_statuses'), true) ? 'paid' : 'unpaid';
         $paymentMethod = (string)($payload['payment_method'] ?? '');
         $shippingCost = (float)($payload['shipping_cost'] ?? 0);
         $orderCost = isset($payload['cost'])
