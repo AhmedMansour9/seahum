@@ -15,6 +15,7 @@ use App\Services\EasyOrdersWebhookService;
 use App\Services\StaffNotificationService;
 use App\Http\Middleware\ActivationCheckMiddleware;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
@@ -273,6 +274,21 @@ class EasyOrdersWebhookTest extends TestCase
         $this->postJson(self::ENDPOINT, $this->orderPayload(['status' => 'canceled', 'updated_at' => now()->addMinute()->toIso8601String()]), self::SECRET_HEADER)->assertOk();
 
         $this->assertSame('canceled', Order::firstOrFail()->order_status);
+    }
+
+    public function test_placement_time_is_stored_in_the_store_timezone(): void
+    {
+        $previousTimezone = date_default_timezone_get();
+        date_default_timezone_set('Africa/Cairo');
+        config(['app.timezone' => 'Asia/Dhaka']);
+
+        try {
+            $this->postJson(self::ENDPOINT, $this->orderPayload(['created_at' => '2026-11-05T12:30:00Z']), self::SECRET_HEADER)->assertOk();
+        } finally {
+            date_default_timezone_set($previousTimezone);
+        }
+
+        $this->assertSame('2026-11-05 14:30:00', DB::table('orders')->value('created_at'));
     }
 
     public function test_late_retry_of_the_original_delivery_keeps_the_newer_local_status(): void

@@ -16,7 +16,7 @@ class ImportEasyOrdersCommand extends Command
 
     public function handle(EasyOrdersImportService $easyOrdersImportService): int
     {
-        $createdFrom = Carbon::parse($this->option('from'), config('app.timezone'))->startOfDay();
+        $createdFrom = Carbon::parse($this->option('from'), date_default_timezone_get())->startOfDay();
         $isDryRun = (bool)$this->option('dry-run');
 
         $this->info(($isDryRun ? '[DRY RUN] ' : '') . 'Importing EasyOrders orders since ' . $createdFrom->toDateTimeString());

@@ -253,6 +253,7 @@ class EasyOrdersWebhookService
 
     /**
      * Keeps the time the customer placed the order on EasyOrders, so imported past orders land on their real day.
+     * The store timezone is the PHP default one (set from the admin business settings), the same as every other order.
      */
     private function getPlacedAt(array $payload): Carbon
     {
@@ -260,7 +261,7 @@ class EasyOrdersWebhookService
             return now();
         }
 
-        return Carbon::parse($payload['created_at'])->setTimezone(config('app.timezone'));
+        return Carbon::parse($payload['created_at'])->setTimezone(date_default_timezone_get());
     }
 
     /**
