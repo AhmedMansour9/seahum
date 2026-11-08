@@ -71,7 +71,7 @@ if (!function_exists('getWhatsAppChatUrl')) {
     /**
      * wa.me link for a phone number. Local numbers (leading 0, or a 10 digit Egyptian mobile) get the default country code.
      */
-    function getWhatsAppChatUrl(?string $phone, string $defaultCountryCode = '20'): ?string
+    function getWhatsAppChatUrl(?string $phone, string $defaultCountryCode = '20', ?string $message = null): ?string
     {
         $digits = preg_replace('/\D+/', '', (string)$phone);
         if (str_starts_with($digits, '00')) {
@@ -82,6 +82,45 @@ if (!function_exists('getWhatsAppChatUrl')) {
             $digits = $defaultCountryCode . $digits;
         }
 
-        return strlen($digits) >= 8 ? 'https://wa.me/' . $digits : null;
+        if (strlen($digits) < 8) {
+            return null;
+        }
+
+        return 'https://wa.me/' . $digits . ($message ? '?text=' . rawurlencode($message) : '');
+    }
+}
+
+if (!function_exists('getOrderWhatsAppMessage')) {
+    /**
+     * Order confirmation message pre-filled in WhatsApp, built from config('order_whatsapp').
+     */
+    function getOrderWhatsAppMessage(\App\Models\Order $order): string
+    {
+        $shippingAddress = $order['shipping_address_data'];
+        if (is_string($shippingAddress)) {
+            $shippingAddress = json_decode($shippingAddress);
+        }
+
+        $customerName = $shippingAddress->contact_person_name
+            ?? trim(($order->customer['f_name'] ?? '') . ' ' . ($order->customer['l_name'] ?? ''));
+
+        $items = $order->details->map(function ($detail) {
+            $name = $detail->getInvoiceProductName() ?? translate('item');
+            if (!empty($detail['variant'])) {
+                $name .= ' - ' . $detail['variant'];
+            }
+
+            return strtr(config('order_whatsapp.item_line'), ['{name}' => $name, '{qty}' => $detail['qty']]);
+        })->implode("\n");
+
+        $totalAmount = \App\Utils\OrderManager::getOrderTotalPriceSummary(order: $order)['totalAmount'];
+        $deliveryTo = $shippingAddress->address ?? $shippingAddress->city ?? '';
+
+        return strtr(config('order_whatsapp.confirmation_message'), [
+            '{customer_name}' => $customerName,
+            '{items}' => rtrim($items),
+            '{total}' => number_format(usdToDefaultCurrency(amount: $totalAmount), 2) . ' ' . config('order_whatsapp.currency_label'),
+            '{delivery_to}' => $deliveryTo,
+        ]);
     }
 }

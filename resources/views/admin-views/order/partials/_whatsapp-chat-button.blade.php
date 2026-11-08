@@ -1,4 +1,4 @@
-@php($whatsAppChatUrl = getWhatsAppChatUrl(phone: $phone ?? null))
+@php($whatsAppChatUrl = getWhatsAppChatUrl(phone: $phone ?? null, message: isset($order) ? getOrderWhatsAppMessage(order: $order) : null))
 @if($whatsAppChatUrl)
     <a href="{{ $whatsAppChatUrl }}" target="_blank" rel="noopener noreferrer"
        class="d-inline-flex align-items-center flex-shrink-0"
