@@ -73,4 +73,21 @@ class PurgeCanceledEasyOrdersCommandTest extends TestCase
 
         $this->assertSame(3, DB::table('orders')->count());
     }
+
+    public function test_purge_orders_deletes_only_the_given_orders_with_their_related_rows(): void
+    {
+        $this->artisan('orders:purge', ['ids' => [1, 3], '--force' => true])->assertSuccessful();
+
+        $this->assertSame([2], DB::table('orders')->pluck('id')->all());
+        foreach (self::RELATED_TABLES as $relatedTable) {
+            $this->assertSame([2], DB::table($relatedTable)->pluck('order_id')->all(), $relatedTable);
+        }
+    }
+
+    public function test_purge_orders_fails_when_no_order_matches(): void
+    {
+        $this->artisan('orders:purge', ['ids' => [999], '--force' => true])->assertFailed();
+
+        $this->assertSame(3, DB::table('orders')->count());
+    }
 }

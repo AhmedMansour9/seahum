@@ -4,28 +4,18 @@ namespace App\Console\Commands;
 
 use App\Enums\OrderSource;
 use App\Models\Order;
+use App\Services\OrderPurgeService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class PurgeCanceledEasyOrdersCommand extends Command
 {
-    private const ORDER_RELATED_TABLES = [
-        'order_details',
-        'order_details_rewards',
-        'order_status_histories',
-        'order_edit_histories',
-        'order_transactions',
-        'order_expected_delivery_histories',
-        'delivery_histories',
-    ];
-
     protected $signature = 'easy-orders:purge-canceled
                             {--dry-run : Only count the orders, without deleting}
                             {--force : Delete without asking for confirmation}';
 
     protected $description = 'Permanently delete canceled EasyOrders orders (SEA HUM app orders are never touched)';
 
-    public function handle(): int
+    public function handle(OrderPurgeService $orderPurgeService): int
     {
         $orderIds = Order::where([
             'order_source' => OrderSource::EasyOrders->value,
@@ -41,15 +31,7 @@ class PurgeCanceledEasyOrdersCommand extends Command
             return self::FAILURE;
         }
 
-        DB::transaction(function () use ($orderIds): void {
-            foreach ($orderIds->chunk(500) as $chunk) {
-                foreach (self::ORDER_RELATED_TABLES as $table) {
-                    DB::table($table)->whereIn('order_id', $chunk)->delete();
-                }
-                Order::whereIn('id', $chunk)->delete();
-            }
-        });
-
+        $orderPurgeService->purge(orderIds: $orderIds);
         $this->info('Deleted ' . $orderIds->count() . ' orders.');
 
         return self::SUCCESS;
