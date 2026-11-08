@@ -36,7 +36,9 @@ class StaffNotificationServiceTest extends TestCase
         });
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->boolean('is_guest')->default(1);
             $table->decimal('shipping_cost', 40, 20)->default(0);
+            $table->decimal('discount_amount', 40, 20)->default(0);
             $table->text('shipping_address_data')->nullable();
             $table->string('order_type')->default('default_type');
             $table->timestamps();
@@ -44,11 +46,22 @@ class StaffNotificationServiceTest extends TestCase
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->longText('product_details')->nullable();
             $table->integer('qty')->default(1);
             $table->decimal('price', 40, 20)->default(0);
             $table->decimal('tax', 40, 20)->default(0);
             $table->decimal('discount', 40, 20)->default(0);
             $table->string('tax_model')->nullable();
+            $table->string('variant')->nullable();
+            $table->timestamps();
+        });
+        Schema::create('storages', function (Blueprint $table) {
+            $table->id();
+            $table->string('data_type');
+            $table->string('data_id', 100)->index();
+            $table->string('key')->nullable();
+            $table->string('value')->nullable();
             $table->timestamps();
         });
         (require base_path('database/migrations/2026_11_07_180000_add_order_source_to_orders_table.php'))->up();
