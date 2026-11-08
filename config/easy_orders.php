@@ -8,6 +8,13 @@ return [
     'webhook_secret' => env('EASY_ORDERS_WEBHOOK_SECRET'),
 
     /*
+     * Public API key (Account settings -> Public API) with the orders:read permission.
+     * Used only by the easy-orders:import command to copy past orders.
+     */
+    'api_key' => env('EASY_ORDERS_API_KEY'),
+    'api_base_url' => env('EASY_ORDERS_API_URL', 'https://api.easy-orders.net/api/v1/external-apps'),
+
+    /*
      * EasyOrders order status => SEA HUM order status. Unknown statuses leave the order unchanged.
      */
     'status_map' => [

@@ -16,6 +16,7 @@ use App\Services\StaffNotificationService;
 use App\Http\Middleware\ActivationCheckMiddleware;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -232,6 +233,62 @@ class EasyOrdersWebhookTest extends TestCase
     public function test_status_update_returns_404_for_unknown_order(): void
     {
         $this->postJson(self::ENDPOINT, $this->statusPayload(newStatus: 'delivered'), self::SECRET_HEADER)->assertNotFound();
+    }
+
+    public function test_import_creates_missing_orders_on_their_original_day_and_syncs_existing_statuses(): void
+    {
+        $this->postJson(self::ENDPOINT, $this->orderPayload(), self::SECRET_HEADER)->assertOk();
+        $this->mock(StaffNotificationService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('notifyNewOrder'));
+        $this->fakeEasyOrdersApi(orders: [
+            $this->orderPayload(['status' => 'delivered']),
+            $this->orderPayload(['id' => 'eo-order-2', 'status' => 'shipped', 'created_at' => '2026-10-05T14:30:00+02:00']),
+        ]);
+
+        $this->artisan('easy-orders:import', ['--from' => '2026-10-01'])->assertSuccessful();
+
+        $this->assertSame(2, Order::count());
+        $this->assertSame('delivered', Order::where('external_order_id', 'eo-order-1')->value('order_status'));
+        $importedOrder = Order::where('external_order_id', 'eo-order-2')->firstOrFail();
+        $this->assertSame('out_for_delivery', $importedOrder->order_status);
+        $this->assertSame('2026-10-05', $importedOrder->created_at->toDateString());
+
+        $this->artisan('easy-orders:import', ['--from' => '2026-10-01'])->assertSuccessful();
+        $this->assertSame(2, Order::count());
+        $this->assertSame(1, OrderStatusHistory::count());
+    }
+
+    public function test_import_dry_run_saves_nothing(): void
+    {
+        $this->fakeEasyOrdersApi(orders: [$this->orderPayload()]);
+
+        $this->artisan('easy-orders:import', ['--dry-run' => true])->assertSuccessful();
+
+        $this->assertSame(0, Order::count());
+    }
+
+    public function test_import_loads_the_full_order_when_the_list_has_no_items(): void
+    {
+        $fullOrder = $this->orderPayload(['id' => 'eo-order-3']);
+        $listOrder = array_diff_key($fullOrder, ['cart_items' => true]);
+        config(['easy_orders.api_key' => 'test-key', 'easy_orders.api_base_url' => 'https://easy.test']);
+        Http::fake([
+            'easy.test/orders/eo-order-3' => Http::response($fullOrder),
+            'easy.test/orders*' => Http::response(['data' => [$listOrder], 'pageCount' => 1]),
+        ]);
+
+        $this->artisan('easy-orders:import')->assertSuccessful();
+
+        $this->assertSame(1, Order::where('external_order_id', 'eo-order-3')->firstOrFail()->details()->count());
+        Http::assertSent(fn ($request) => $request->hasHeader('Api-Key', 'test-key'));
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $orders
+     */
+    private function fakeEasyOrdersApi(array $orders): void
+    {
+        config(['easy_orders.api_key' => 'test-key', 'easy_orders.api_base_url' => 'https://easy.test']);
+        Http::fake(['easy.test/orders*' => Http::response(['data' => $orders, 'pageCount' => 1])]);
     }
 
     private function orderPayload(array $overrides = []): array

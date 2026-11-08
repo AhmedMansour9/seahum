@@ -8,6 +8,7 @@ use App\Models\OrderDetail;
 use App\Models\OrderStatusHistory;
 use App\Utils\OrderManager;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class EasyOrdersWebhookService
@@ -31,7 +32,7 @@ class EasyOrdersWebhookService
      *
      * @param array{id: string, status?: string, payment_method?: string, cost?: float, shipping_cost?: float, total_cost: float, full_name: string, phone: string, government?: string, address?: string, created_at?: string, cart_items: array<int, array<string, mixed>>} $payload
      */
-    public function storeOrder(array $payload): Order
+    public function storeOrder(array $payload, bool $notifyStaff = true): Order
     {
         $existingOrder = $this->findOrder(externalOrderId: (string)$payload['id']);
         if ($existingOrder) {
@@ -40,7 +41,9 @@ class EasyOrdersWebhookService
 
         try {
             $order = DB::transaction(fn () => $this->createOrder(payload: $payload));
-            $this->staffNotificationService->notifyNewOrder(order: $order);
+            if ($notifyStaff) {
+                $this->staffNotificationService->notifyNewOrder(order: $order);
+            }
 
             return $order;
         } catch (UniqueConstraintViolationException) {
@@ -161,7 +164,7 @@ class EasyOrdersWebhookService
         ]);
     }
 
-    private function findOrder(string $externalOrderId): ?Order
+    public function findOrder(string $externalOrderId): ?Order
     {
         return Order::where([
             'order_source' => OrderSource::EasyOrders->value,
@@ -205,7 +208,7 @@ class EasyOrdersWebhookService
             'shipping_cost' => currencyConverter(amount: $shippingCost),
             'verification_code' => rand(100000, 999999),
             'shipping_address_data' => $this->getShippingAddressData(payload: $payload),
-            'created_at' => now(),
+            'created_at' => $this->getPlacedAt(payload: $payload),
             'updated_at' => now(),
         ]);
 
@@ -221,9 +224,21 @@ class EasyOrdersWebhookService
         return $order;
     }
 
-    private function getMappedOrderStatus(string $easyOrdersStatus): ?string
+    public function getMappedOrderStatus(string $easyOrdersStatus): ?string
     {
         return config('easy_orders.status_map.' . strtolower($easyOrdersStatus));
+    }
+
+    /**
+     * Keeps the time the customer placed the order on EasyOrders, so imported past orders land on their real day.
+     */
+    private function getPlacedAt(array $payload): Carbon
+    {
+        if (empty($payload['created_at'])) {
+            return now();
+        }
+
+        return Carbon::parse($payload['created_at'])->setTimezone(config('app.timezone'));
     }
 
     /**
