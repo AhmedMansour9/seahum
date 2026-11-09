@@ -5,6 +5,7 @@ namespace App\Http\Controllers\RestAPI\v2\delivery_man;
 use App\Enums\OrderSource;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Services\DeliveryAppStaffOrderCreateService;
 use App\Services\DeliveryAppStaffOrderEditService;
 use App\Services\DeliveryAppStaffService;
 use App\Services\DeliveryManAssignmentService;
@@ -124,6 +125,21 @@ class StaffOrderController extends Controller
         }
 
         return response()->json(['status' => 1, 'message' => $result['message']]);
+    }
+
+    public function createOrder(Request $request, DeliveryAppStaffOrderCreateService $deliveryAppStaffOrderCreateService): JsonResponse
+    {
+        $validator = Validator::make($request->all(), DeliveryAppStaffOrderCreateService::getValidationRules());
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
+        }
+
+        $result = $deliveryAppStaffOrderCreateService->createOrder(data: $validator->validated(), staff: $request['delivery_man']);
+        if (!$result['status']) {
+            return response()->json(['errors' => [['code' => 'products', 'message' => $result['message']]]], 403);
+        }
+
+        return response()->json(['status' => 1, 'message' => $result['message'], 'order_id' => $result['order_id']]);
     }
 
     public function getEditProducts(Request $request, DeliveryAppStaffOrderEditService $deliveryAppStaffOrderEditService): JsonResponse

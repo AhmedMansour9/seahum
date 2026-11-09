@@ -192,6 +192,30 @@ class DeliveryAppStaffApiTest extends TestCase
         $this->assertSame(30.0561, (float)Order::findOrFail($orderId)->shipping_address_data->latitude);
     }
 
+    public function test_create_order_is_limited_to_staff_and_needs_customer_and_products(): void
+    {
+        $deliveryManToken = $this->createAccount(role: DeliveryManAppRole::DeliveryMan);
+        $this->postJson(self::STAFF_ENDPOINT . 'create-order', [], $this->authHeader($deliveryManToken))->assertForbidden();
+
+        DB::table('delivery_man_devices')->delete();
+        DB::table('delivery_men')->delete();
+        $token = $this->createAccount(role: DeliveryManAppRole::CustomerService);
+
+        $this->postJson(self::STAFF_ENDPOINT . 'create-order', [
+            'contact_person_name' => 'Mona Ali',
+            'phone' => '01111111111',
+            'products' => [],
+        ], $this->authHeader($token))->assertStatus(403)->assertJsonStructure(['errors']);
+
+        $this->postJson(self::STAFF_ENDPOINT . 'create-order', [
+            'phone' => '01111111111',
+            'products' => [['id' => 1, 'quantity' => 1]],
+            'location_link' => 'not-a-url',
+        ], $this->authHeader($token))->assertStatus(403)->assertJsonStructure(['errors']);
+
+        $this->assertSame(0, Order::count());
+    }
+
     public function test_easy_orders_editor_rejects_app_orders(): void
     {
         $token = $this->createAccount(role: DeliveryManAppRole::Admin);
