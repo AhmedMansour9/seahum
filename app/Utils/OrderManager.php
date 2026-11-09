@@ -5,12 +5,10 @@ namespace App\Utils;
 use App\Services\StaffNotificationService;
 use App\Enums\PaymentMethod;
 use App\Events\OrderEditDuePaymentEvent;
-use App\Events\OrderStatusEvent;
 use App\Models\OrderDetailsRewards;
 use App\Models\OrderEditHistory;
 use App\Models\OrderStatusHistory;
 use App\Models\ShippingMethod;
-use App\Services\DeliveryManAssignmentService;
 use App\Services\LuckyWheelService;
 use Carbon\Carbon;
 use App\Models\Cart;
@@ -1303,7 +1301,6 @@ class OrderManager
         $orderPlacedIds = [];
         $orderPlacedNotificationEvents = [];
         $orderPlacedMailEvents = [];
-        $deliveryManAssignedOrderIds = [];
         $getCustomerInfo = OrderManager::getCustomerInfoForOrder(data: [
             'is_guest' => $data['is_guest'] ?? null,
             'guest_id' => $data['guest_id'] ?? null,
@@ -1387,10 +1384,6 @@ class OrderManager
             $order = Order::with('customer', 'seller.shop', 'details')->find($order_id);
             OrderManager::getAddOrderTransactionsOnGenerateOrder(order: $order, ordersData: $ordersData);
 
-            if (app(DeliveryManAssignmentService::class)->assignFirstAvailableDeliveryMan(order: $order)) {
-                $deliveryManAssignedOrderIds[] = $order_id;
-            }
-
             $orderPlacedNotificationEvents[] = OrderManager::getGenerateOrderNotificationInfo(
                 vendorType: $vendorWiseCart['seller_is'],
                 vendorId: $vendorWiseCart['seller_id'],
@@ -1452,10 +1445,6 @@ class OrderManager
                 } catch (Exception $exception) {
                 }
             }
-        }
-
-        foreach (Order::with('seller.shop', 'deliveryMan')->whereIn('id', $deliveryManAssignedOrderIds)->get() as $assignedOrder) {
-            event(new OrderStatusEvent(key: 'new_order_assigned_message', type: 'delivery_man', order: $assignedOrder));
         }
 
         foreach (Order::with('details')->whereIn('id', $orderPlacedIds)->get() as $placedOrder) {
