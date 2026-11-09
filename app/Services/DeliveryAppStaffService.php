@@ -208,7 +208,7 @@ class DeliveryAppStaffService
     }
 
     /**
-     * @return array{name: string|null, phone: string|null, address: string|null, city: string|null, latitude: float|null, longitude: float|null}
+     * @return array{name: string|null, phone: string|null, address: string|null, city: string|null, latitude: float|null, longitude: float|null, location_link: string|null}
      */
     private function getCustomerData(Order $order): array
     {
@@ -227,6 +227,7 @@ class DeliveryAppStaffService
             'city' => $shippingAddress?->city ?? null,
             'latitude' => $this->getCoordinate(value: $shippingAddress?->latitude ?? null),
             'longitude' => $this->getCoordinate(value: $shippingAddress?->longitude ?? null),
+            'location_link' => filled($shippingAddress?->location_link ?? null) ? trim($shippingAddress->location_link) : null,
         ];
     }
 
