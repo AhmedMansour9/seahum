@@ -28,6 +28,9 @@ class EasyOrdersOrderEditService
             'phone' => 'required|string|max:30',
             'address' => 'nullable|string|max:500',
             'city' => 'nullable|string|max:100',
+            'location_link' => 'nullable|url|max:500',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
             'order_note' => 'nullable|string|max:1000',
             'items' => 'nullable|array',
             'items.*.id' => 'required|integer',
@@ -109,18 +112,20 @@ class EasyOrdersOrderEditService
 
     /**
      * @param array<string, mixed> $shippingAddress
-     * @param array{contact_person_name: string, phone: string, address?: string|null, city?: string|null} $data
+     * @param array{contact_person_name: string, phone: string, address?: string|null, city?: string|null, location_link?: string|null, latitude?: float|string|null, longitude?: float|string|null} $data
      * @return array<string, mixed>
      */
     public static function mergeCustomerData(array $shippingAddress, array $data): array
     {
+        $locationData = array_intersect_key($data, array_flip(['location_link', 'latitude', 'longitude']));
+
         return array_merge($shippingAddress, [
             'contact_person_name' => $data['contact_person_name'],
             'phone' => $data['phone'],
             'address' => $data['address'] ?? null,
             'city' => $data['city'] ?? null,
             'state' => $data['city'] ?? null,
-        ]);
+        ], $locationData);
     }
 
     /**

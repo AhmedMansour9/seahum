@@ -39,6 +39,9 @@ class DeliveryAppStaffOrderEditService
             'phone' => 'required|string|max:30',
             'address' => 'nullable|string|max:500',
             'city' => 'nullable|string|max:100',
+            'location_link' => 'nullable|url|max:500',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
             'order_note' => 'nullable|string|max:1000',
             ...self::getProductsValidationRules(isRequired: false),
         ];

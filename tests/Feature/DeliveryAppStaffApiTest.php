@@ -148,6 +148,50 @@ class DeliveryAppStaffApiTest extends TestCase
         $this->assertCount(2, $order->details);
     }
 
+    public function test_staff_saves_location_link_and_coordinates_and_details_return_them(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::CustomerService);
+        $orderId = $this->createOrder(source: OrderSource::EasyOrders, externalOrderId: 'eo-location');
+        $itemId = (int)DB::table('order_details')->where('order_id', $orderId)->value('id');
+        $payload = [
+            'order_id' => $orderId,
+            'contact_person_name' => 'Mona Ali',
+            'phone' => '01111111111',
+            'items' => [['id' => $itemId, 'qty' => 1, 'price' => 100]],
+        ];
+
+        $this->putJson(self::STAFF_ENDPOINT . 'update-easy-orders-order', $payload + [
+            'location_link' => 'https://maps.app.goo.gl/abc123',
+            'latitude' => 30.1,
+            'longitude' => 31.2,
+        ], $this->authHeader($token))->assertOk();
+
+        $this->getJson(self::STAFF_ENDPOINT . 'order-details?order_id=' . $orderId, $this->authHeader($token))
+            ->assertJsonPath('customer.location_link', 'https://maps.app.goo.gl/abc123')
+            ->assertJsonPath('customer.latitude', 30.1)
+            ->assertJsonPath('customer.longitude', 31.2);
+
+        $this->putJson(self::STAFF_ENDPOINT . 'update-easy-orders-order', $payload + ['location_link' => null], $this->authHeader($token))->assertOk();
+
+        $this->getJson(self::STAFF_ENDPOINT . 'order-details?order_id=' . $orderId, $this->authHeader($token))
+            ->assertJsonPath('customer.location_link', null)
+            ->assertJsonPath('customer.latitude', 30.1);
+    }
+
+    public function test_staff_rejects_invalid_location_link_and_keeps_location_when_not_sent(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::CustomerService);
+        $orderId = $this->createOrder(status: 'confirmed');
+        $payload = ['order_id' => $orderId, 'contact_person_name' => 'Mona Ali', 'phone' => '01111111111'];
+
+        $this->putJson(self::STAFF_ENDPOINT . 'update-order', $payload + ['location_link' => 'not-a-url'], $this->authHeader($token))
+            ->assertStatus(403);
+
+        $this->putJson(self::STAFF_ENDPOINT . 'update-order', $payload, $this->authHeader($token))->assertOk();
+
+        $this->assertSame(30.0561, (float)Order::findOrFail($orderId)->shipping_address_data->latitude);
+    }
+
     public function test_easy_orders_editor_rejects_app_orders(): void
     {
         $token = $this->createAccount(role: DeliveryManAppRole::Admin);
