@@ -667,6 +667,7 @@ class OrderController extends BaseController
 
     public function updateAddress(Request $request): RedirectResponse
     {
+        $request->validate(['location_link' => 'nullable|url|max:2000']);
         $order = $this->orderRepo->getFirstWhere(params: ['id' => $request['order_id']], relations: ['seller.shop', 'deliveryMan']);
         $shippingAddressData = json_decode(json_encode($order['shipping_address_data']), true);
         $billingAddressData = json_decode(json_encode($order['billing_address_data']), true);
@@ -683,6 +684,7 @@ class OrderController extends BaseController
         ];
 
         if ($request['address_type'] == 'shipping') {
+            $commonAddressData['location_link'] = filled($request['location_link']) ? trim($request['location_link']) : null;
             $shippingAddressData = array_merge($shippingAddressData, $commonAddressData);
         } elseif ($request['address_type'] == 'billing') {
             $billingAddressData = array_merge($billingAddressData, $commonAddressData);

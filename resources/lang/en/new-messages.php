@@ -2831,4 +2831,6 @@ ____________________________________________________on_search_engines_and_see_th
 	"receipt_payment" => "Payment",
 	"receipt_note" => "Note",
 	"receipt_print" => "Print",
+	"location_link" => "Location link",
+	"open_in_google_maps" => "Open in Google Maps",
 ];

@@ -1294,12 +1294,18 @@
                     @endif
                 </div>
 
-                @if (getWebConfig('map_api_status') == 1 && isset($shippingAddress?->latitude) && isset($shippingAddress?->longitude))
+                @php($shippingLocationLink = trim($shippingAddress->location_link ?? ''))
+                @if ($shippingLocationLink !== '' || (getWebConfig('map_api_status') == 1 && isset($shippingAddress?->latitude) && isset($shippingAddress?->longitude)))
                     <div class="card card-body">
                         <div class="d-flex justify-content-between gap-3 align-items-center flex-wrap">
                             <h3 class="mb-0">{{ translate('Shipping_Location') }}</h3>
-                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-                                    data-bs-target="#locationModal">{{ translate('On_Map') }}</button>
+                            @if ($shippingLocationLink !== '')
+                                <a href="{{ $shippingLocationLink }}" target="_blank" rel="noopener noreferrer"
+                                   class="btn btn-outline-primary">{{ translate('open_in_google_maps') }}</a>
+                            @else
+                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#locationModal">{{ translate('On_Map') }}</button>
+                            @endif
                         </div>
                     </div>
                 @endif
@@ -1618,6 +1624,14 @@
                                             <textarea name="address" id="address" name="address" rows="3"
                                                       class="form-control"
                                                       placeholder="{{ translate('ex') }} : {{translate('street_1,_street_2,_street_3,_street_4')}}">{{$shippingAddress ? $shippingAddress->address : ''}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="location_link" class="form-label">{{translate('location_link')}}</label>
+                                            <input type="url" name="location_link" id="location_link" class="form-control"
+                                                   maxlength="2000" value="{{ $shippingAddress->location_link ?? '' }}"
+                                                   placeholder="https://maps.app.goo.gl/...">
                                         </div>
                                     </div>
                                     <input type="hidden" id="latitude"
