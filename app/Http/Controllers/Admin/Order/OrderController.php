@@ -16,6 +16,7 @@ use App\Events\OrderEditReturnPaymentEvent;
 use App\Events\RefundEvent;
 use App\Http\Requests\Admin\RefundStatusRequest;
 use App\Models\OrderEditHistory;
+use App\Services\EasyOrdersOrderEditService;
 use App\Services\CustomerWalletService;
 use App\Services\OrderEditReturnAmountService;
 use App\Services\OrderEditService;
@@ -589,7 +590,7 @@ class OrderController extends BaseController
             $orderProductsSession = ['product_list' => []];
             $editOrderSummary = [];
         } else {
-            $isOrderEditable = $this->orderEditService->checkIsOrderEditable(order: $order, type: 'admin');
+            $isOrderEditable = $this->orderEditService->checkIsOrderEditable(order: $order, type: 'admin', lockedStatuses: EasyOrdersOrderEditService::LOCKED_STATUSES, isOfflinePaymentConfirmationRequired: false);
             $orderProductsSession = $this->orderEditService->getOrderEditSession(order: $order);
             $editOrderSummary = $this->generateEditOrderSummary(order: $order, editedOrder: ($orderProductsSession['product_list'] ?? []), data: [
                 'edit_by' => 'admin',
