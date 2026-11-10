@@ -383,9 +383,9 @@ class OrderEditService
         return $id . '-' . (!empty($variant) ? $variant : 'single-variant');
     }
 
-    public function checkIsOrderEditable(object|array $order, string|null $type = 'admin'): array
+    public function checkIsOrderEditable(object|array $order, string|null $type = 'admin', array $lockedStatuses = ['processing', 'out_for_delivery', 'delivered', 'returned', 'failed', 'canceled']): array
     {
-        if (($order->order_type != 'default_type') || (!in_array($order->order_status, ['pending', 'confirmed']) && in_array($order->order_status, ['processing', 'out_for_delivery', 'delivered', 'returned', 'failed', 'canceled']))) {
+        if (($order->order_type != 'default_type') || in_array($order->order_status, $lockedStatuses)) {
             return [
                 'status' => false,
                 'message' => translate('Order can only be edited when the order status is Pending or Confirmed.'),
