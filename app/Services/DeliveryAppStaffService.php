@@ -173,7 +173,7 @@ class DeliveryAppStaffService
 
         return [
             'total_orders' => (int)(clone $todayOrders)->count(),
-            'total_amount' => (float)(clone $todayOrders)->whereNotIn('order_status', ['canceled', 'failed', 'returned'])->sum('order_amount'),
+            'total_amount' => (float)Order::where('order_type', 'default_type')->whereDate('created_at', Carbon::today())->whereNotIn('order_status', ['canceled', 'failed', 'returned'])->sum('order_amount'),
             'delivered_amount' => (float)(clone $todayOrders)->where('order_status', 'delivered')->sum('order_amount'),
             'easy_orders_count' => (int)(clone $todayOrders)->where('order_source', OrderSource::EasyOrders->value)->count(),
             'status_counts' => collect(getOrderStatusList())->mapWithKeys(fn (string $status) => [$status => (int)($statusCounts[$status] ?? 0)]),

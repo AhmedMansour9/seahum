@@ -507,6 +507,20 @@ class DeliveryAppStaffApiTest extends TestCase
             ->assertJsonPath('online_delivery_men', 1);
     }
 
+    public function test_dashboard_amounts_split_orders_created_today_from_orders_delivered_today(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::Admin);
+        $this->createOrder();
+        $oldOrderDeliveredTodayId = $this->createOrder(status: 'delivered', createdAt: '2026-10-01 10:00:00');
+        DB::table('orders')->where('id', $oldOrderDeliveredTodayId)->update(['updated_at' => now()]);
+        $this->createOrder(status: 'delivered', createdAt: '2026-10-02 10:00:00');
+
+        $this->getJson(self::STAFF_ENDPOINT . 'dashboard-stats', $this->authHeader($token))
+            ->assertOk()
+            ->assertJsonPath('total_amount', 450)
+            ->assertJsonPath('delivered_amount', 450);
+    }
+
     public function test_auto_assignment_never_picks_a_staff_account(): void
     {
         $this->createAccount(role: DeliveryManAppRole::CustomerService);
