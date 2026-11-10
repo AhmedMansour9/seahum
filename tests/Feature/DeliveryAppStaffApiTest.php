@@ -295,6 +295,20 @@ class DeliveryAppStaffApiTest extends TestCase
             ->assertJsonPath('1.id', $undatedOrderId);
     }
 
+    public function test_delivery_man_order_details_return_easy_orders_item_with_text_product_id(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::DeliveryMan, accountId: $deliveryManId);
+        $orderId = $this->createOrder(source: OrderSource::EasyOrders, externalOrderId: 'eo-7', deliveryManId: $deliveryManId);
+        DB::table('order_details')->where('order_id', $orderId)->update([
+            'product_details' => json_encode(['source' => 'easy_orders', 'id' => 'a1b2-c3d4', 'name' => 'Grilled Sea Bass']),
+        ]);
+
+        $this->getJson('/api/v2/delivery-man/order-details?order_id=' . $orderId, $this->authHeader($token))
+            ->assertOk()
+            ->assertJsonPath('0.product_details.name', 'Grilled Sea Bass')
+            ->assertJsonPath('0.product_details.id', null);
+    }
+
     public function test_easy_orders_editor_rejects_app_orders(): void
     {
         $token = $this->createAccount(role: DeliveryManAppRole::Admin);
