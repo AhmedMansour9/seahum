@@ -108,10 +108,11 @@ class DeliveryAppStaffService
     /**
      * @return array<string, mixed>|null
      */
-    public function getOrderDetails(string|int $orderId): ?array
+    public function getOrderDetails(string|int $orderId, string|int|null $deliveryManId = null): ?array
     {
         $order = Order::with(['customer:id,f_name,l_name,phone', 'deliveryMan:id,f_name,l_name,phone', 'shippingAddress', 'details'])
             ->where(['id' => $orderId, 'order_type' => 'default_type'])
+            ->when($deliveryManId, fn ($query) => $query->where('delivery_man_id', $deliveryManId))
             ->first();
 
         if (!$order) {

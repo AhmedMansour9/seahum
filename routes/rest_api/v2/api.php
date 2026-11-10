@@ -176,22 +176,25 @@ Route::group(['namespace' => 'RestAPI\v2', 'prefix' => 'v2', 'middleware' => ['a
                 Route::post('order-delivery-verification', 'order_delivery_verification');
             });
 
-            Route::group(['prefix' => 'staff', 'middleware' => ['delivery_man_role:admin,customer_service']], function () {
+            Route::group(['prefix' => 'staff'], function () {
                 Route::controller(StaffOrderController::class)->group(function () {
-                    Route::get('orders', 'getOrders');
                     Route::get('order-details', 'getOrderDetails');
-                    Route::put('update-order-status', 'updateOrderStatus');
-                    Route::put('update-easy-orders-order', 'updateEasyOrdersOrder');
-                    Route::get('edit-products', 'getEditProducts');
-                    Route::post('edit-order-preview', 'previewOrderEdit');
-                    Route::put('update-order', 'updateOrder');
-                    Route::post('create-order', 'createOrder');
 
-                    Route::group(['middleware' => ['delivery_man_role:admin']], function () {
-                        Route::put('update-payment-status', 'updatePaymentStatus');
-                        Route::put('assign-delivery-man', 'assignDeliveryMan');
-                        Route::get('delivery-men', 'getDeliveryMen');
-                        Route::get('dashboard-stats', 'getDashboardStats');
+                    Route::group(['middleware' => ['delivery_man_role:admin,customer_service']], function () {
+                        Route::get('orders', 'getOrders');
+                        Route::put('update-order-status', 'updateOrderStatus');
+                        Route::put('update-easy-orders-order', 'updateEasyOrdersOrder');
+                        Route::get('edit-products', 'getEditProducts');
+                        Route::post('edit-order-preview', 'previewOrderEdit');
+                        Route::put('update-order', 'updateOrder');
+                        Route::post('create-order', 'createOrder');
+
+                        Route::group(['middleware' => ['delivery_man_role:admin']], function () {
+                            Route::put('update-payment-status', 'updatePaymentStatus');
+                            Route::put('assign-delivery-man', 'assignDeliveryMan');
+                            Route::get('delivery-men', 'getDeliveryMen');
+                            Route::get('dashboard-stats', 'getDashboardStats');
+                        });
                     });
                 });
             });
