@@ -8,6 +8,7 @@ use App\Contracts\Repositories\DeliveryCountryCodeRepositoryInterface;
 use App\Contracts\Repositories\OrderEditHistoryRepositoryInterface;
 use App\Enums\GlobalConstant;
 use App\Http\Requests\Admin\VendorAddRequest;
+use App\Services\EasyOrdersOrderEditService;
 use App\Services\DeliveryCountryCodeService;
 use App\Services\OrderEditService;
 use App\Services\OrderService;
@@ -337,7 +338,7 @@ class VendorController extends BaseController
             relations: $relations,
             dataLimit: 'all'
         );
-        $isOrderEditable = $this->orderEditService->checkIsOrderEditable(order: $order, type: 'admin');
+        $isOrderEditable = $this->orderEditService->checkIsOrderEditable(order: $order, type: 'admin', lockedStatuses: EasyOrdersOrderEditService::LOCKED_STATUSES, isOfflinePaymentConfirmationRequired: false);
         Session::forget($this->orderEditService->getOrderEditSessionKey(orderId: $order['id']));
 
         $orderProductsSession = $this->orderEditService->getOrderEditSession(order: $order);
