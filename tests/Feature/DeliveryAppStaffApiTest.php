@@ -309,6 +309,19 @@ class DeliveryAppStaffApiTest extends TestCase
             ->assertJsonPath('0.product_details.id', null);
     }
 
+    public function test_delivery_man_total_includes_shipping_for_easy_orders_only(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::DeliveryMan, accountId: $deliveryManId);
+        $easyOrderId = $this->createOrder(source: OrderSource::EasyOrders, externalOrderId: 'eo-5', deliveryManId: $deliveryManId);
+        $appOrderId = $this->createOrder(deliveryManId: $deliveryManId);
+
+        $response = $this->getJson('/api/v2/delivery-man/all-orders', $this->authHeader($token))->assertOk();
+
+        $this->assertEquals(500, collect($response->json())->firstWhere('id', $easyOrderId)['order_amount']);
+        $this->assertEquals(450, collect($response->json())->firstWhere('id', $appOrderId)['order_amount']);
+        $this->assertDatabaseHas('orders', ['id' => $easyOrderId, 'order_amount' => 450]);
+    }
+
     public function test_easy_orders_editor_rejects_app_orders(): void
     {
         $token = $this->createAccount(role: DeliveryManAppRole::Admin);
