@@ -162,7 +162,7 @@ class DeliveryAppStaffService
     }
 
     /**
-     * Sales and delivered amounts include shipping, which EasyOrders orders keep outside order_amount.
+     * Sales are the orders delivered inside the period, with shipping, which EasyOrders orders keep outside order_amount.
      *
      * @return array<string, mixed>
      */
@@ -184,17 +184,15 @@ class DeliveryAppStaffService
                         ->whereDate('updated_at', '<=', $dateTo));
             });
 
+        $deliveredAmount = (float)(clone $deliveredOrders)
+            ->selectRaw("sum({$orderTotalExpression}) as total", [OrderSource::EasyOrders->value])
+            ->value('total');
+
         return [
             'total_orders' => (int)(clone $periodOrders)->count(),
-            'total_amount' => (float)Order::where('order_type', 'default_type')
-                ->whereDate('created_at', '>=', $dateFrom)
-                ->whereDate('created_at', '<=', $dateTo)
-                ->whereNotIn('order_status', ['canceled', 'failed', 'returned'])
-                ->selectRaw("sum({$orderTotalExpression}) as total", [OrderSource::EasyOrders->value])
-                ->value('total'),
-            'delivered_amount' => (float)$deliveredOrders
-                ->selectRaw("sum({$orderTotalExpression}) as total", [OrderSource::EasyOrders->value])
-                ->value('total'),
+            'total_amount' => $deliveredAmount,
+            'delivered_amount' => $deliveredAmount,
+            'delivered_orders_count' => (int)(clone $deliveredOrders)->count(),
             'easy_orders_count' => (int)(clone $periodOrders)->where('order_source', OrderSource::EasyOrders->value)->count(),
             'status_counts' => collect(getOrderStatusList())->mapWithKeys(fn (string $status) => [$status => (int)($statusCounts[$status] ?? 0)]),
             'open_orders' => (int)Order::where('order_type', 'default_type')->whereIn('order_status', self::OPEN_ORDER_STATUSES)->count(),

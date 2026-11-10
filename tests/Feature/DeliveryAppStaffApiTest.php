@@ -519,7 +519,7 @@ class DeliveryAppStaffApiTest extends TestCase
             ->assertJsonPath('online_delivery_men', 1);
     }
 
-    public function test_dashboard_amounts_split_orders_created_today_from_orders_delivered_today(): void
+    public function test_dashboard_sales_count_only_orders_delivered_today(): void
     {
         $token = $this->createAccount(role: DeliveryManAppRole::Admin);
         $this->createOrder();
@@ -530,7 +530,8 @@ class DeliveryAppStaffApiTest extends TestCase
         $this->getJson(self::STAFF_ENDPOINT . 'dashboard-stats', $this->authHeader($token))
             ->assertOk()
             ->assertJsonPath('total_amount', 450)
-            ->assertJsonPath('delivered_amount', 450);
+            ->assertJsonPath('delivered_amount', 450)
+            ->assertJsonPath('delivered_orders_count', 1);
     }
 
     public function test_dashboard_stats_follow_the_selected_day_and_count_shipping_of_easy_orders(): void
@@ -546,7 +547,8 @@ class DeliveryAppStaffApiTest extends TestCase
         $this->getJson(self::STAFF_ENDPOINT . 'dashboard-stats?date_from=2026-11-02&date_to=2026-11-02', $this->authHeader($token))
             ->assertOk()
             ->assertJsonPath('delivered_amount', 950)
-            ->assertJsonPath('total_amount', 0);
+            ->assertJsonPath('total_amount', 950)
+            ->assertJsonPath('delivered_orders_count', 2);
         $this->getJson(self::STAFF_ENDPOINT . 'dashboard-stats?date_from=2026-11-03&date_to=2026-11-02', $this->authHeader($token))->assertForbidden();
     }
 
