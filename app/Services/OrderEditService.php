@@ -383,7 +383,7 @@ class OrderEditService
         return $id . '-' . (!empty($variant) ? $variant : 'single-variant');
     }
 
-    public function checkIsOrderEditable(object|array $order, string|null $type = 'admin', array $lockedStatuses = ['processing', 'out_for_delivery', 'delivered', 'returned', 'failed', 'canceled']): array
+    public function checkIsOrderEditable(object|array $order, string|null $type = 'admin', array $lockedStatuses = ['processing', 'out_for_delivery', 'delivered', 'returned', 'failed', 'canceled'], bool $isOfflinePaymentConfirmationRequired = true): array
     {
         if (($order->order_type != 'default_type') || in_array($order->order_status, $lockedStatuses)) {
             return [
@@ -414,13 +414,13 @@ class OrderEditService
             ];
         }
 
-        if ($order['payment_method'] == 'offline_payment' && $order['payment_status'] == 'unpaid') {
+        if ($isOfflinePaymentConfirmationRequired && $order['payment_method'] == 'offline_payment' && $order['payment_status'] == 'unpaid') {
             return [
                 'status' => false,
                 'message' => translate('Please confirm the offline payment information before editing this order.'),
             ];
         }
-        if($order->edited_status == 1 && $order?->latestEditHistory?->order_due_payment_method == 'offline_payment' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid'){
+        if($isOfflinePaymentConfirmationRequired && $order->edited_status == 1 && $order?->latestEditHistory?->order_due_payment_method == 'offline_payment' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid'){
             return [
                 'status' => false,
                 'message' => translate('Please confirm the offline payment information of the due amount before editing this order.'),
