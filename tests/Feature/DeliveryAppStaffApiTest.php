@@ -192,6 +192,41 @@ class DeliveryAppStaffApiTest extends TestCase
         $this->assertSame(30.0561, (float)Order::findOrFail($orderId)->shipping_address_data->latitude);
     }
 
+    public function test_staff_edits_shipping_cost_of_easy_orders_and_app_orders(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::CustomerService);
+
+        $easyOrderId = $this->createOrder(source: OrderSource::EasyOrders, externalOrderId: 'eo-shipping');
+        $itemId = (int)DB::table('order_details')->where('order_id', $easyOrderId)->value('id');
+        $this->putJson(self::STAFF_ENDPOINT . 'update-easy-orders-order', [
+            'order_id' => $easyOrderId,
+            'contact_person_name' => 'Mona Ali',
+            'phone' => '01111111111',
+            'items' => [['id' => $itemId, 'qty' => 2, 'price' => 200]],
+            'shipping_cost' => 75,
+        ], $this->authHeader($token))->assertOk();
+        $this->assertEquals(75, Order::findOrFail($easyOrderId)->shipping_cost);
+
+        $appOrderId = $this->createOrder(status: 'confirmed');
+        $this->putJson(self::STAFF_ENDPOINT . 'update-order', [
+            'order_id' => $appOrderId,
+            'contact_person_name' => 'Mona Ali',
+            'phone' => '01111111111',
+            'shipping_cost' => 80,
+        ], $this->authHeader($token))->assertOk();
+
+        $appOrder = Order::findOrFail($appOrderId);
+        $this->assertEquals(80, $appOrder->shipping_cost);
+        $this->assertEquals(480, $appOrder->order_amount);
+
+        $this->putJson(self::STAFF_ENDPOINT . 'update-order', [
+            'order_id' => $appOrderId,
+            'contact_person_name' => 'Mona Ali',
+            'phone' => '01111111111',
+        ], $this->authHeader($token))->assertOk();
+        $this->assertEquals(80, Order::findOrFail($appOrderId)->shipping_cost);
+    }
+
     public function test_create_order_is_limited_to_staff_and_needs_customer_and_products(): void
     {
         $deliveryManToken = $this->createAccount(role: DeliveryManAppRole::DeliveryMan);
@@ -545,6 +580,12 @@ class DeliveryAppStaffApiTest extends TestCase
             $table->string('payment_status')->default('unpaid');
             $table->string('variant')->nullable();
             $table->boolean('is_stock_decreased')->default(1);
+            $table->timestamps();
+        });
+        Schema::create('order_transactions', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('order_id');
+            $table->decimal('delivery_charge', 40, 20)->default(0);
             $table->timestamps();
         });
         Schema::create('order_status_histories', function (Blueprint $table) {

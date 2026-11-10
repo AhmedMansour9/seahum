@@ -163,6 +163,7 @@ class StaffOrderController extends Controller
             orderId: $request['order_id'],
             products: $request['products'],
             staff: $request['delivery_man'],
+            shippingCost: $request['shipping_cost'],
         );
 
         return $this->orderEditResponse(result: $result);
