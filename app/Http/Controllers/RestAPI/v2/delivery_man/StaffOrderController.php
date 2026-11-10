@@ -15,6 +15,7 @@ use App\Services\OrderStatusUpdateService;
 use App\Utils\Helpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -246,9 +247,20 @@ class StaffOrderController extends Controller
         return response()->json($this->deliveryAppStaffService->getDeliveryMen());
     }
 
-    public function getDashboardStats(): JsonResponse
+    public function getDashboardStats(Request $request): JsonResponse
     {
-        return response()->json($this->deliveryAppStaffService->getTodayStats());
+        $validator = Validator::make($request->all(), [
+            'date_from' => 'nullable|date_format:Y-m-d',
+            'date_to' => 'nullable|date_format:Y-m-d|after_or_equal:date_from',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
+        }
+
+        $dateFrom = Carbon::parse($request['date_from'] ?? $request['date_to'] ?? 'today');
+        $dateTo = Carbon::parse($request['date_to'] ?? $request['date_from'] ?? 'today');
+
+        return response()->json($this->deliveryAppStaffService->getStats(dateFrom: $dateFrom, dateTo: $dateTo));
     }
 
     /**

@@ -533,6 +533,23 @@ class DeliveryAppStaffApiTest extends TestCase
             ->assertJsonPath('delivered_amount', 450);
     }
 
+    public function test_dashboard_stats_follow_the_selected_day_and_count_shipping_of_easy_orders(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::Admin);
+        $appOrderId = $this->createOrder(status: 'delivered', createdAt: '2026-10-01 10:00:00');
+        $easyOrderId = $this->createOrder(source: OrderSource::EasyOrders, externalOrderId: 'eo-8', status: 'delivered', createdAt: '2026-10-01 10:00:00');
+        $otherDayOrderId = $this->createOrder(status: 'delivered', createdAt: '2026-10-01 10:00:00');
+        foreach ([[$appOrderId, '2026-11-02 10:00:00'], [$easyOrderId, '2026-11-02 12:00:00'], [$otherDayOrderId, '2026-11-05 12:00:00']] as [$orderId, $deliveredAt]) {
+            DB::table('order_status_histories')->insert(['order_id' => $orderId, 'user_id' => 1, 'user_type' => 'admin', 'status' => 'delivered', 'created_at' => $deliveredAt, 'updated_at' => $deliveredAt]);
+        }
+
+        $this->getJson(self::STAFF_ENDPOINT . 'dashboard-stats?date_from=2026-11-02&date_to=2026-11-02', $this->authHeader($token))
+            ->assertOk()
+            ->assertJsonPath('delivered_amount', 950)
+            ->assertJsonPath('total_amount', 0);
+        $this->getJson(self::STAFF_ENDPOINT . 'dashboard-stats?date_from=2026-11-03&date_to=2026-11-02', $this->authHeader($token))->assertForbidden();
+    }
+
     public function test_auto_assignment_never_picks_a_staff_account(): void
     {
         $this->createAccount(role: DeliveryManAppRole::CustomerService);

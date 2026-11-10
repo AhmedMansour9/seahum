@@ -7,6 +7,7 @@ use App\Enums\OrderSource;
 use App\Models\DeliveryMan;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\OrderStatusHistory;
 use App\Utils\OrderManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -161,21 +162,40 @@ class DeliveryAppStaffService
     }
 
     /**
+     * Sales and delivered amounts include shipping, which EasyOrders orders keep outside order_amount.
+     *
      * @return array<string, mixed>
      */
-    public function getTodayStats(): array
+    public function getStats(Carbon $dateFrom, Carbon $dateTo): array
     {
-        $todayOrders = Order::where('order_type', 'default_type')->whereDate('updated_at', Carbon::today());
-        $statusCounts = (clone $todayOrders)
+        $orderTotalExpression = 'order_amount + (case when order_source = ? then shipping_cost else 0 end)';
+        $periodOrders = Order::where('order_type', 'default_type')->whereDate('updated_at', '>=', $dateFrom)->whereDate('updated_at', '<=', $dateTo);
+        $statusCounts = (clone $periodOrders)
             ->selectRaw('order_status, count(*) as total')
             ->groupBy('order_status')
             ->pluck('total', 'order_status');
+        $deliveredOrders = Order::where('order_type', 'default_type')
+            ->where('order_status', 'delivered')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                $query->whereIn('id', OrderStatusHistory::where('status', 'delivered')->whereDate('created_at', '>=', $dateFrom)->whereDate('created_at', '<=', $dateTo)->select('order_id'))
+                    ->orWhere(fn ($query) => $query
+                        ->whereNotIn('id', OrderStatusHistory::where('status', 'delivered')->select('order_id'))
+                        ->whereDate('updated_at', '>=', $dateFrom)
+                        ->whereDate('updated_at', '<=', $dateTo));
+            });
 
         return [
-            'total_orders' => (int)(clone $todayOrders)->count(),
-            'total_amount' => (float)Order::where('order_type', 'default_type')->whereDate('created_at', Carbon::today())->whereNotIn('order_status', ['canceled', 'failed', 'returned'])->sum('order_amount'),
-            'delivered_amount' => (float)(clone $todayOrders)->where('order_status', 'delivered')->sum('order_amount'),
-            'easy_orders_count' => (int)(clone $todayOrders)->where('order_source', OrderSource::EasyOrders->value)->count(),
+            'total_orders' => (int)(clone $periodOrders)->count(),
+            'total_amount' => (float)Order::where('order_type', 'default_type')
+                ->whereDate('created_at', '>=', $dateFrom)
+                ->whereDate('created_at', '<=', $dateTo)
+                ->whereNotIn('order_status', ['canceled', 'failed', 'returned'])
+                ->selectRaw("sum({$orderTotalExpression}) as total", [OrderSource::EasyOrders->value])
+                ->value('total'),
+            'delivered_amount' => (float)$deliveredOrders
+                ->selectRaw("sum({$orderTotalExpression}) as total", [OrderSource::EasyOrders->value])
+                ->value('total'),
+            'easy_orders_count' => (int)(clone $periodOrders)->where('order_source', OrderSource::EasyOrders->value)->count(),
             'status_counts' => collect(getOrderStatusList())->mapWithKeys(fn (string $status) => [$status => (int)($statusCounts[$status] ?? 0)]),
             'open_orders' => (int)Order::where('order_type', 'default_type')->whereIn('order_status', self::OPEN_ORDER_STATUSES)->count(),
             'unassigned_open_orders' => (int)Order::where('order_type', 'default_type')->whereIn('order_status', self::OPEN_ORDER_STATUSES)->whereNull('delivery_man_id')->count(),
