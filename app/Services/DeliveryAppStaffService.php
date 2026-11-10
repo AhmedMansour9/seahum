@@ -66,9 +66,9 @@ class DeliveryAppStaffService
             ->when(!empty($filters['status']), fn ($query) => $query->where('order_status', $filters['status']))
             ->when(!empty($filters['order_source']), fn ($query) => $query->where('order_source', $filters['order_source']))
             ->when(!empty($filters['delivery_man_id']), fn ($query) => $query->where('delivery_man_id', $filters['delivery_man_id']))
-            ->when(($filters['date_type'] ?? null) === 'today', fn ($query) => $query->whereDate('created_at', Carbon::today()))
-            ->when(!empty($filters['date_from']), fn ($query) => $query->whereDate('created_at', '>=', $filters['date_from']))
-            ->when(!empty($filters['date_to']), fn ($query) => $query->whereDate('created_at', '<=', $filters['date_to']))
+            ->when(($filters['date_type'] ?? null) === 'today', fn ($query) => $query->whereDate('updated_at', Carbon::today()))
+            ->when(!empty($filters['date_from']), fn ($query) => $query->whereDate('updated_at', '>=', $filters['date_from']))
+            ->when(!empty($filters['date_to']), fn ($query) => $query->whereDate('updated_at', '<=', $filters['date_to']))
             ->when(!empty($filters['search']), function ($query) use ($filters) {
                 $search = $filters['search'];
                 $query->where(function ($query) use ($search) {
@@ -102,6 +102,7 @@ class DeliveryAppStaffService
                 'phone' => $order->deliveryMan['phone'],
             ] : null,
             'created_at' => $order['created_at'],
+            'updated_at' => $order['updated_at'],
         ];
     }
 
@@ -164,7 +165,7 @@ class DeliveryAppStaffService
      */
     public function getTodayStats(): array
     {
-        $todayOrders = Order::where('order_type', 'default_type')->whereDate('created_at', Carbon::today());
+        $todayOrders = Order::where('order_type', 'default_type')->whereDate('updated_at', Carbon::today());
         $statusCounts = (clone $todayOrders)
             ->selectRaw('order_status, count(*) as total')
             ->groupBy('order_status')
@@ -172,7 +173,7 @@ class DeliveryAppStaffService
 
         return [
             'total_orders' => (int)(clone $todayOrders)->count(),
-            'total_amount' => (float)(clone $todayOrders)->whereNotIn('order_status', ['canceled', 'failed', 'returned'])->sum('order_amount'),
+            'total_amount' => (float)Order::where('order_type', 'default_type')->whereDate('created_at', Carbon::today())->whereNotIn('order_status', ['canceled', 'failed', 'returned'])->sum('order_amount'),
             'delivered_amount' => (float)(clone $todayOrders)->where('order_status', 'delivered')->sum('order_amount'),
             'easy_orders_count' => (int)(clone $todayOrders)->where('order_source', OrderSource::EasyOrders->value)->count(),
             'status_counts' => collect(getOrderStatusList())->mapWithKeys(fn (string $status) => [$status => (int)($statusCounts[$status] ?? 0)]),

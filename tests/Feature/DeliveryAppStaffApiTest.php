@@ -88,6 +88,19 @@ class DeliveryAppStaffApiTest extends TestCase
         $response->assertJsonPath('status_counts.out_for_delivery', 1);
     }
 
+    public function test_date_filters_follow_the_last_update_not_the_creation_date(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::CustomerService);
+        $oldOrderUpdatedTodayId = $this->createOrder(createdAt: '2026-10-01 10:00:00');
+        $this->createOrder(createdAt: '2026-10-02 10:00:00');
+        DB::table('orders')->where('id', $oldOrderUpdatedTodayId)->update(['updated_at' => now()]);
+
+        $response = $this->getJson(self::STAFF_ENDPOINT . 'orders?date_type=today', $this->authHeader($token))->assertOk();
+
+        $response->assertJsonPath('total_size', 1);
+        $response->assertJsonPath('orders.0.id', $oldOrderUpdatedTodayId);
+    }
+
     public function test_date_range_must_end_after_it_starts(): void
     {
         $token = $this->createAccount(role: DeliveryManAppRole::Admin);
@@ -494,6 +507,20 @@ class DeliveryAppStaffApiTest extends TestCase
             ->assertJsonPath('online_delivery_men', 1);
     }
 
+    public function test_dashboard_amounts_split_orders_created_today_from_orders_delivered_today(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::Admin);
+        $this->createOrder();
+        $oldOrderDeliveredTodayId = $this->createOrder(status: 'delivered', createdAt: '2026-10-01 10:00:00');
+        DB::table('orders')->where('id', $oldOrderDeliveredTodayId)->update(['updated_at' => now()]);
+        $this->createOrder(status: 'delivered', createdAt: '2026-10-02 10:00:00');
+
+        $this->getJson(self::STAFF_ENDPOINT . 'dashboard-stats', $this->authHeader($token))
+            ->assertOk()
+            ->assertJsonPath('total_amount', 450)
+            ->assertJsonPath('delivered_amount', 450);
+    }
+
     public function test_auto_assignment_never_picks_a_staff_account(): void
     {
         $this->createAccount(role: DeliveryManAppRole::CustomerService);
@@ -550,7 +577,7 @@ class DeliveryAppStaffApiTest extends TestCase
             'external_order_id' => $externalOrderId,
             'shipping_address_data' => json_encode(['contact_person_name' => 'Mona Adel', 'phone' => '01000000000', 'address' => 'Nasr City', 'city' => 'Cairo', 'latitude' => '30.0561', 'longitude' => $source === OrderSource::App ? '31.3301' : null]),
             'created_at' => $createdAt ?? now(),
-            'updated_at' => now(),
+            'updated_at' => $createdAt ?? now(),
         ]);
         DB::table('order_details')->insert([
             'order_id' => $orderId,
