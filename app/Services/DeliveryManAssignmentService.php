@@ -16,6 +16,15 @@ class DeliveryManAssignmentService
     /**
      * Assign a delivery man chosen by an admin to an order and notify the delivery man (and the vendor for vendor orders).
      */
+    public function unassignDeliveryMan(string|int $orderId): void
+    {
+        $this->orderRepo->update(id: $orderId, data: [
+            'delivery_man_id' => null,
+            'delivery_type' => null,
+            'deliveryman_assigned_at' => null,
+        ]);
+    }
+
     public function assignDeliveryMan(string|int $orderId, string|int $deliveryManId): Order
     {
         $order = $this->orderRepo->getFirstWhere(params: ['id' => $orderId]);

@@ -483,6 +483,21 @@ class DeliveryAppStaffApiTest extends TestCase
         Event::assertDispatched(OrderStatusEvent::class, fn (OrderStatusEvent $event): bool => $event->key === 'new_order_assigned_message');
     }
 
+    public function test_admin_removes_the_delivery_man_from_an_order_unless_it_is_delivered(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::Admin);
+        $deliveryManId = $this->createDeliveryMan(phone: '500000004');
+        $orderId = $this->createOrder(deliveryManId: $deliveryManId, status: 'out_for_delivery');
+        $deliveredOrderId = $this->createOrder(deliveryManId: $deliveryManId, status: 'delivered');
+
+        $this->putJson(self::STAFF_ENDPOINT . 'assign-delivery-man', ['order_id' => $orderId, 'delivery_man_id' => null], $this->authHeader($token))->assertOk();
+        $this->putJson(self::STAFF_ENDPOINT . 'assign-delivery-man', ['order_id' => $deliveredOrderId, 'delivery_man_id' => null], $this->authHeader($token))->assertForbidden();
+        $this->putJson(self::STAFF_ENDPOINT . 'assign-delivery-man', ['order_id' => $orderId], $this->authHeader($token))->assertForbidden();
+
+        $this->assertNull(Order::findOrFail($orderId)->delivery_man_id);
+        $this->assertSame($deliveryManId, (int)Order::findOrFail($deliveredOrderId)->delivery_man_id);
+    }
+
     public function test_admin_updates_payment_status(): void
     {
         $token = $this->createAccount(role: DeliveryManAppRole::Admin);

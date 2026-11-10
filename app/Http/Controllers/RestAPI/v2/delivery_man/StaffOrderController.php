@@ -221,14 +221,24 @@ class StaffOrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'order_id' => 'required|integer',
-            'delivery_man_id' => 'required|integer',
+            'delivery_man_id' => 'present|nullable|integer',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
         }
 
-        if (!Order::where(['id' => $request['order_id'], 'order_type' => 'default_type'])->exists()) {
+        $order = Order::where(['id' => $request['order_id'], 'order_type' => 'default_type'])->first();
+        if (!$order) {
             return $this->orderNotFoundResponse();
+        }
+
+        if (blank($request['delivery_man_id'])) {
+            if ($order['order_status'] === 'delivered') {
+                return response()->json(['errors' => [['code' => 'order', 'message' => translate('This_order_can_no_longer_be_edited')]]], 403);
+            }
+            $this->deliveryManAssignmentService->unassignDeliveryMan(orderId: $order['id']);
+
+            return response()->json(['status' => 1, 'message' => translate('Delivery_man_removed_successfully')]);
         }
 
         if (!$this->deliveryAppStaffService->isAssignableDeliveryMan(deliveryManId: $request['delivery_man_id'])) {
