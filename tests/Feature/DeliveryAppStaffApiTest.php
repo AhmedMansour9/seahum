@@ -647,6 +647,12 @@ class DeliveryAppStaffApiTest extends TestCase
             $table->decimal('delivery_charge', 40, 20)->default(0);
             $table->timestamps();
         });
+        Schema::create('colors', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('code');
+            $table->timestamps();
+        });
         Schema::create('order_edit_histories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_id');
