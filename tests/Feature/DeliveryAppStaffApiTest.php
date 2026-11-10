@@ -251,6 +251,50 @@ class DeliveryAppStaffApiTest extends TestCase
         $this->assertSame(0, Order::count());
     }
 
+    public function test_delivery_man_sees_guest_order_address_and_phone_in_the_shipping_address_block(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::DeliveryMan, accountId: $deliveryManId);
+        $orderId = $this->createOrder(source: OrderSource::EasyOrders, externalOrderId: 'eo-9', deliveryManId: $deliveryManId);
+
+        $currentOrders = $this->getJson('/api/v2/delivery-man/current-orders', $this->authHeader($token))->assertOk();
+        $currentOrders->assertJsonPath('0.id', $orderId);
+        $currentOrders->assertJsonPath('0.shipping_address.contact_person_name', 'Mona Adel');
+        $currentOrders->assertJsonPath('0.shipping_address.phone', '01000000000');
+        $currentOrders->assertJsonPath('0.shipping_address.latitude', '30.0561');
+
+        $this->getJson('/api/v2/delivery-man/all-orders?search=01000000000', $this->authHeader($token))
+            ->assertOk()
+            ->assertJsonPath('0.shipping_address.address', 'Nasr City');
+
+        $this->getJson('/api/v2/delivery-man/order-item?id=' . $orderId, $this->authHeader($token))
+            ->assertOk()
+            ->assertJsonPath('shipping_address.city', 'Cairo');
+    }
+
+    public function test_delivery_man_search_never_returns_orders_of_other_delivery_men(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::DeliveryMan, accountId: $deliveryManId);
+        $otherDeliveryManId = $this->createDeliveryMan(phone: '500000009');
+        $this->createOrder(deliveryManId: $otherDeliveryManId);
+
+        $this->getJson('/api/v2/delivery-man/all-orders?search=01000000000', $this->authHeader($token))
+            ->assertOk()
+            ->assertExactJson([]);
+    }
+
+    public function test_current_orders_put_undated_orders_after_dated_ones(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::DeliveryMan, accountId: $deliveryManId);
+        $undatedOrderId = $this->createOrder(deliveryManId: $deliveryManId);
+        $datedOrderId = $this->createOrder(deliveryManId: $deliveryManId);
+        DB::table('orders')->where('id', $datedOrderId)->update(['expected_delivery_date' => now()->addDay()]);
+
+        $this->getJson('/api/v2/delivery-man/current-orders', $this->authHeader($token))
+            ->assertOk()
+            ->assertJsonPath('0.id', $datedOrderId)
+            ->assertJsonPath('1.id', $undatedOrderId);
+    }
+
     public function test_easy_orders_editor_rejects_app_orders(): void
     {
         $token = $this->createAccount(role: DeliveryManAppRole::Admin);
@@ -556,6 +600,7 @@ class DeliveryAppStaffApiTest extends TestCase
             $table->string('delivery_service_name')->nullable();
             $table->string('third_party_delivery_tracking_id')->nullable();
             $table->timestamp('deliveryman_assigned_at')->nullable();
+            $table->timestamp('expected_delivery_date')->nullable();
             $table->unsignedBigInteger('seller_id')->nullable();
             $table->string('seller_is')->nullable();
             $table->unsignedBigInteger('shipping_address')->nullable();

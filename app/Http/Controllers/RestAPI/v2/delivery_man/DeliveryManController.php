@@ -21,6 +21,7 @@ use App\Models\OrderEditHistory;
 use App\Models\Review;
 use App\Traits\CommonTrait;
 use App\Models\User;
+use App\Services\DeliveryManOrderAddressService;
 use App\Utils\CustomerManager;
 use App\Utils\Helpers;
 use App\Utils\ImageManager;
@@ -38,6 +39,7 @@ class DeliveryManController extends Controller
 
     public function __construct(
         private Order $order,
+        private DeliveryManOrderAddressService $deliveryManOrderAddressService,
     )
     {
 
@@ -78,9 +80,11 @@ class DeliveryManController extends Controller
         $orders = Order::with(['shippingAddress', 'customer', 'seller.shop'])
             ->whereIn('order_status', ['pending', 'processing', 'out_for_delivery', 'confirmed'])
             ->where(['delivery_man_id' => $deliveryMan['id']])
+            ->orderByRaw('expected_delivery_date is null')
             ->orderBy('expected_delivery_date', 'asc')
+            ->latest()
             ->get();
-        return response()->json($orders, 200);
+        return response()->json($this->deliveryManOrderAddressService->fillGuestAddresses(orders: $orders), 200);
     }
 
     public function record_location_data(Request $request)
@@ -316,12 +320,13 @@ class DeliveryManController extends Controller
         $orders = Order::with(['shippingAddress', 'customer', 'seller.shop'])
             ->where(['delivery_man_id' => $deliveryMan->id])
             ->when(!empty($request->search), function ($query) use ($request, $deliveryMan) {
-                return $query->where('id', 'like', "%{$request['search']}%")
-                    ->orWhere(function ($query) use ($request, $deliveryMan) {
-                        return $query->whereHas('customer', function ($query) use ($request) {
+                return $query->where(function ($query) use ($request) {
+                    return $query->where('id', 'like', "%{$request['search']}%")
+                        ->orWhere('shipping_address_data', 'like', "%{$request['search']}%")
+                        ->orWhereHas('customer', function ($query) use ($request) {
                             return $query->where('phone', 'like', "%{$request['search']}%");
-                        })->whereNotNull('delivery_man_id')->where(['delivery_man_id' => $deliveryMan->id]);
-                    });
+                        });
+                });
             })
             ->when(isset($request['status']) && !empty($request['status']), function ($query) use ($request) {
                 return $query->where('order_status', $request['status']);
@@ -350,13 +355,13 @@ class DeliveryManController extends Controller
             })
             ->latest()->get();
 
-        return response()->json($orders, 200);
+        return response()->json($this->deliveryManOrderAddressService->fillGuestAddresses(orders: $orders), 200);
     }
 
     public function getOrderItem(Request $request): JsonResponse
     {
         $order = Order::with(['shippingAddress', 'customer', 'seller.shop'])->where(['id' => $request['id']])->first();
-        return response()->json($order, 200);
+        return response()->json($this->deliveryManOrderAddressService->fillGuestAddress(order: $order), 200);
     }
 
     public function get_last_location(Request $request)
