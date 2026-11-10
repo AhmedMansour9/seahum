@@ -126,8 +126,14 @@ class DeliveryAppStaffApiTest extends TestCase
             ->assertJsonPath('is_editable', true)
             ->assertJsonPath('edit_type', 'catalog');
 
-        $processingOrderId = $this->createOrder(status: 'processing');
-        $this->getJson(self::STAFF_ENDPOINT . 'order-details?order_id=' . $processingOrderId, $this->authHeader($token))
+        $outForDeliveryOrderId = $this->createOrder(status: 'out_for_delivery');
+        $this->getJson(self::STAFF_ENDPOINT . 'order-details?order_id=' . $outForDeliveryOrderId, $this->authHeader($token))
+            ->assertOk()
+            ->assertJsonPath('is_editable', true)
+            ->assertJsonPath('edit_type', 'catalog');
+
+        $deliveredOrderId = $this->createOrder(status: 'delivered');
+        $this->getJson(self::STAFF_ENDPOINT . 'order-details?order_id=' . $deliveredOrderId, $this->authHeader($token))
             ->assertOk()
             ->assertJsonPath('is_editable', false)
             ->assertJsonPath('edit_type', null);
@@ -387,18 +393,18 @@ class DeliveryAppStaffApiTest extends TestCase
         $this->assertSame(450.0, (float)$order->order_amount);
     }
 
-    public function test_app_order_editor_rejects_easy_orders_and_orders_past_confirmation(): void
+    public function test_app_order_editor_rejects_easy_orders_and_finished_orders(): void
     {
         $token = $this->createAccount(role: DeliveryManAppRole::Admin);
         $easyOrderId = $this->createOrder(source: OrderSource::EasyOrders, externalOrderId: 'eo-1');
-        $processingOrderId = $this->createOrder(status: 'processing');
+        $deliveredOrderId = $this->createOrder(status: 'delivered');
         $payload = ['contact_person_name' => 'Mona Ali', 'phone' => '01111111111'];
 
         $this->putJson(self::STAFF_ENDPOINT . 'update-order', ['order_id' => $easyOrderId] + $payload, $this->authHeader($token))->assertForbidden();
-        $this->putJson(self::STAFF_ENDPOINT . 'update-order', ['order_id' => $processingOrderId] + $payload, $this->authHeader($token))->assertForbidden();
-        $this->postJson(self::STAFF_ENDPOINT . 'edit-order-preview', ['order_id' => $processingOrderId, 'products' => [['id' => 1, 'quantity' => 1]]], $this->authHeader($token))->assertForbidden();
+        $this->putJson(self::STAFF_ENDPOINT . 'update-order', ['order_id' => $deliveredOrderId] + $payload, $this->authHeader($token))->assertForbidden();
+        $this->postJson(self::STAFF_ENDPOINT . 'edit-order-preview', ['order_id' => $deliveredOrderId, 'products' => [['id' => 1, 'quantity' => 1]]], $this->authHeader($token))->assertForbidden();
 
-        $this->assertSame('Mona Adel', Order::findOrFail($processingOrderId)->shipping_address_data->contact_person_name);
+        $this->assertSame('Mona Adel', Order::findOrFail($deliveredOrderId)->shipping_address_data->contact_person_name);
     }
 
     public function test_customer_service_status_change_on_easy_orders_order_uses_the_easy_orders_lifecycle(): void
