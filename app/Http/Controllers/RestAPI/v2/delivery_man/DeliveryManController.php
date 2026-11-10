@@ -21,7 +21,7 @@ use App\Models\OrderEditHistory;
 use App\Models\Review;
 use App\Traits\CommonTrait;
 use App\Models\User;
-use App\Services\DeliveryManOrderAddressService;
+use App\Services\DeliveryManOrderDisplayService;
 use App\Utils\CustomerManager;
 use App\Utils\Helpers;
 use App\Utils\ImageManager;
@@ -39,7 +39,7 @@ class DeliveryManController extends Controller
 
     public function __construct(
         private Order $order,
-        private DeliveryManOrderAddressService $deliveryManOrderAddressService,
+        private DeliveryManOrderDisplayService $deliveryManOrderDisplayService,
     )
     {
 
@@ -84,7 +84,7 @@ class DeliveryManController extends Controller
             ->orderBy('expected_delivery_date', 'asc')
             ->latest()
             ->get();
-        return response()->json($this->deliveryManOrderAddressService->fillGuestAddresses(orders: $orders), 200);
+        return response()->json($this->deliveryManOrderDisplayService->prepareOrders(orders: $orders), 200);
     }
 
     public function record_location_data(Request $request)
@@ -356,13 +356,13 @@ class DeliveryManController extends Controller
             })
             ->latest()->get();
 
-        return response()->json($this->deliveryManOrderAddressService->fillGuestAddresses(orders: $orders), 200);
+        return response()->json($this->deliveryManOrderDisplayService->prepareOrders(orders: $orders), 200);
     }
 
     public function getOrderItem(Request $request): JsonResponse
     {
         $order = Order::with(['shippingAddress', 'customer', 'seller.shop'])->where(['id' => $request['id']])->first();
-        return response()->json($this->deliveryManOrderAddressService->fillGuestAddress(order: $order), 200);
+        return response()->json($this->deliveryManOrderDisplayService->prepareOrder(order: $order), 200);
     }
 
     public function get_last_location(Request $request)

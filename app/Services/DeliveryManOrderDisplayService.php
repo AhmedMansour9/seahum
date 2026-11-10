@@ -2,24 +2,34 @@
 
 namespace App\Services;
 
+use App\Enums\OrderSource;
 use App\Models\Order;
 use App\Models\ShippingAddress;
 use Illuminate\Support\Collection;
 
-class DeliveryManOrderAddressService
+class DeliveryManOrderDisplayService
 {
     /**
      * @param Collection<int, Order> $orders
      * @return Collection<int, Order>
      */
-    public function fillGuestAddresses(Collection $orders): Collection
+    public function prepareOrders(Collection $orders): Collection
     {
-        return $orders->each(fn (Order $order) => $this->fillGuestAddress(order: $order));
+        return $orders->each(fn (Order $order) => $this->prepareOrder(order: $order));
     }
 
-    public function fillGuestAddress(?Order $order): ?Order
+    public function prepareOrder(?Order $order): ?Order
     {
-        if (!$order || $order->shippingAddress || !$order['shipping_address_data']) {
+        if (!$order) {
+            return $order;
+        }
+
+        return $this->fillEasyOrdersTotal(order: $this->fillGuestAddress(order: $order));
+    }
+
+    public function fillGuestAddress(Order $order): Order
+    {
+        if ($order->shippingAddress || !$order['shipping_address_data']) {
             return $order;
         }
 
@@ -41,6 +51,15 @@ class DeliveryManOrderAddressService
         ]);
 
         return $order->setRelation('shippingAddress', $shippingAddress);
+    }
+
+    private function fillEasyOrdersTotal(Order $order): Order
+    {
+        if ($order['order_source'] === OrderSource::EasyOrders) {
+            $order->setAttribute('order_amount', (float)$order['order_amount'] + (float)$order['shipping_cost']);
+        }
+
+        return $order;
     }
 
     private function getCoordinateText(mixed $value): ?string
