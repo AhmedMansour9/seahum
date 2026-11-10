@@ -336,23 +336,23 @@ class DeliveryManController extends Controller
                 return $query->where('is_pause', $request['is_pause']);
             })
             ->when(isset($request['date_type']) && $request['date_type'] == "today", function ($query) {
-                return $query->whereDate('created_at', Carbon::today());
+                return $query->whereDate('updated_at', Carbon::today());
             })
             ->when(isset($request['date_type']) && $request['date_type'] == "this_week", function ($query) {
-                $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                $query->whereBetween('updated_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
             })
             ->when(isset($request['date_type']) && $request['date_type'] == "this_month", function ($query) {
-                $query->whereMonth('created_at', Carbon::now()->month)
-                    ->whereYear('created_at', Carbon::now()->year);
+                $query->whereMonth('updated_at', Carbon::now()->month)
+                    ->whereYear('updated_at', Carbon::now()->year);
             })
             ->when(isset($request['date_type']) && $request['date_type'] == "this_year", function ($query) {
-                $query->whereYear('created_at', Carbon::now()->year);
+                $query->whereYear('updated_at', Carbon::now()->year);
             })
             ->when(isset($request['date_type']) && $request['date_type'] == "custom_date" && !empty($request->start_date) && !empty($request->end_date), function ($query) use ($request) {
                 $start_date = Carbon::parse($request['start_date'])->format('Y-m-d 00:00:00');
                 $end_data = Carbon::parse($request['end_date'])->format('Y-m-d 23:59:59');
 
-                return $query->whereBetween('created_at', [$start_date, $end_data]);
+                return $query->whereBetween('updated_at', [$start_date, $end_data]);
             })
             ->latest()->get();
 
