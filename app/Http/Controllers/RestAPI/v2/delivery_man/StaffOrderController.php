@@ -65,7 +65,11 @@ class StaffOrderController extends Controller
 
     public function getOrderDetails(Request $request): JsonResponse
     {
-        $order = $this->deliveryAppStaffService->getOrderDetails(orderId: (int)$request['order_id']);
+        $staff = $request['delivery_man'];
+        $order = $this->deliveryAppStaffService->getOrderDetails(
+            orderId: (int)$request['order_id'],
+            deliveryManId: $staff->app_role->isStaff() ? null : $staff['id'],
+        );
         if (!$order) {
             return $this->orderNotFoundResponse();
         }

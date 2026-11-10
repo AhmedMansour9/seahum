@@ -309,6 +309,19 @@ class DeliveryAppStaffApiTest extends TestCase
             ->assertJsonPath('0.product_details.id', null);
     }
 
+    public function test_delivery_man_reads_the_admin_view_of_his_own_orders_only(): void
+    {
+        $token = $this->createAccount(role: DeliveryManAppRole::DeliveryMan, accountId: $deliveryManId);
+        $ownOrderId = $this->createOrder(source: OrderSource::EasyOrders, externalOrderId: 'eo-3', deliveryManId: $deliveryManId);
+        $otherOrderId = $this->createOrder(deliveryManId: $this->createDeliveryMan(phone: '500000008'));
+
+        $this->getJson(self::STAFF_ENDPOINT . 'order-details?order_id=' . $ownOrderId, $this->authHeader($token))
+            ->assertOk()
+            ->assertJsonPath('customer.name', 'Mona Adel')
+            ->assertJsonPath('total_amount', 450);
+        $this->getJson(self::STAFF_ENDPOINT . 'order-details?order_id=' . $otherOrderId, $this->authHeader($token))->assertNotFound();
+    }
+
     public function test_easy_orders_editor_rejects_app_orders(): void
     {
         $token = $this->createAccount(role: DeliveryManAppRole::Admin);
