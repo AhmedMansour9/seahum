@@ -386,7 +386,7 @@
                                             </a>
                                             <a class="btn btn-outline-success btn-outline-success-dark icon-btn"
                                                target="_blank" title="{{ translate('invoice') }}"
-                                               href="{{ route('admin.orders.generate-invoice', [$order['id']]) }}">
+                                               href="{{ route('admin.orders.print-receipt', [$order['id']]) }}">
                                                 <i class="fi fi-sr-down-to-line d-flex"></i>
                                             </a>
                                         </div>

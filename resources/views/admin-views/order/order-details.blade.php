@@ -156,7 +156,7 @@
                                     @endif
 
                                     <a class="btn btn-primary btn-sm" target="_blank"
-                                       href={{ route('admin.orders.generate-invoice', [$order['id']]) }}>
+                                       href={{ route('admin.orders.print-receipt', [$order['id']]) }}>
                                         <img alt="" class="mr-1"
                                              src="{{ dynamicAsset(path: 'public/assets/new/back-end/img/icons/uil_invoice.svg') }}">
                                         {{translate('print_Invoice')}}
