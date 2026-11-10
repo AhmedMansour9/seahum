@@ -305,6 +305,7 @@ class DeliveryManController extends Controller
 
             $product = is_array($data['product_details']) ? $data['product_details'] : json_decode($data['product_details'], true);
             $product['thumbnail_full_url'] = $detail?->productAllStatus?->thumbnail_full_url;
+            $product['id'] = is_numeric($product['id'] ?? null) ? (int)$product['id'] : null;
             $data['product_details'] = Helpers::product_data_formatting_for_json_data($product);
 
             return $data;
