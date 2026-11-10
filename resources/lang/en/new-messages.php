@@ -2822,4 +2822,13 @@ ____________________________________________________on_search_engines_and_see_th
 	"item_name" => "Item name",
 	"unit_price" => "Unit price",
 	"remove" => "Remove",
+	"receipt" => "Receipt",
+	"receipt_order" => "Order",
+	"receipt_subtotal" => "Subtotal",
+	"receipt_discount" => "Discount",
+	"receipt_shipping" => "Shipping",
+	"receipt_total" => "Total",
+	"receipt_payment" => "Payment",
+	"receipt_note" => "Note",
+	"receipt_print" => "Print",
 ];

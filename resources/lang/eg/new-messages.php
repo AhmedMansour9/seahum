@@ -9549,4 +9549,13 @@ ____________________________________________________on_search_engines_and_see_th
 	"order_items" => "أصناف الأوردر",
 	"add_item" => "إضافة صنف",
 	"item_name" => "اسم الصنف",
+	"receipt" => "إيصال",
+	"receipt_order" => "أوردر",
+	"receipt_subtotal" => "المجموع",
+	"receipt_discount" => "الخصم",
+	"receipt_shipping" => "الشحن",
+	"receipt_total" => "الإجمالي",
+	"receipt_payment" => "الدفع",
+	"receipt_note" => "ملاحظة",
+	"receipt_print" => "طباعة",
 ];

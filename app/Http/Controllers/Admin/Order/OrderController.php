@@ -39,6 +39,7 @@ use App\Services\OrderService;
 use App\Events\OrderStatusEvent;
 use App\Traits\FileManagerTrait;
 use Illuminate\Http\JsonResponse;
+use App\Utils\OrderManager;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -634,6 +635,19 @@ class OrderController extends BaseController
             compact('order', 'vendor', 'companyPhone', 'companyEmail', 'companyName', 'companyWebLogo', 'invoiceSettings')
         );
         $this->generatePdf(view: $mpdfView, filePrefix: 'order_invoice_', filePostfix: $order['id'], pdfType: 'invoice');
+    }
+
+    public function printReceipt(string|int $id): View
+    {
+        $order = $this->orderRepo->getFirstWhere(params: ['id' => $id], relations: ['deliveryMan', 'customer', 'details.invoiceProductNameTranslation']);
+        abort_if(is_null($order), 404);
+
+        return view('admin-views.order.print-receipt', [
+            'order' => $order,
+            'companyName' => getWebConfig(name: 'company_name'),
+            'companyPhone' => getWebConfig(name: 'company_phone'),
+            'priceSummary' => OrderManager::getOrderTotalPriceSummary(order: $order),
+        ]);
     }
 
     public function updateStatus(Request $request, OrderStatusUpdateService $orderStatusUpdateService): JsonResponse
