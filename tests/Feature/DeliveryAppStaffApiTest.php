@@ -132,6 +132,12 @@ class DeliveryAppStaffApiTest extends TestCase
             ->assertJsonPath('is_editable', true)
             ->assertJsonPath('edit_type', 'catalog');
 
+        $offlinePaymentOrderId = $this->createOrder();
+        DB::table('orders')->where('id', $offlinePaymentOrderId)->update(['payment_method' => 'offline_payment', 'payment_status' => 'unpaid']);
+        $this->getJson(self::STAFF_ENDPOINT . 'order-details?order_id=' . $offlinePaymentOrderId, $this->authHeader($token))
+            ->assertOk()
+            ->assertJsonPath('is_editable', true);
+
         $deliveredOrderId = $this->createOrder(status: 'delivered');
         $this->getJson(self::STAFF_ENDPOINT . 'order-details?order_id=' . $deliveredOrderId, $this->authHeader($token))
             ->assertOk()

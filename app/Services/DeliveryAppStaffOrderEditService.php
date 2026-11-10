@@ -63,7 +63,7 @@ class DeliveryAppStaffOrderEditService
     }
 
     /**
-     * Same rules as the admin panel, except app orders stay editable until they are delivered, canceled, returned or failed, like EasyOrders orders.
+     * Same rules as the admin panel, except app orders stay editable until they are delivered, canceled, returned or failed, like EasyOrders orders, and unconfirmed offline payments do not lock them.
      *
      * @return array{status: bool, message: string}
      */
@@ -73,7 +73,7 @@ class DeliveryAppStaffOrderEditService
             return ['status' => false, 'message' => translate('Order_not_found')];
         }
 
-        $editableState = $this->orderEditService->checkIsOrderEditable(order: $order, type: 'admin', lockedStatuses: EasyOrdersOrderEditService::LOCKED_STATUSES);
+        $editableState = $this->orderEditService->checkIsOrderEditable(order: $order, type: 'admin', lockedStatuses: EasyOrdersOrderEditService::LOCKED_STATUSES, isOfflinePaymentConfirmationRequired: false);
         if (!$editableState['status'] && in_array($order['order_status'], EasyOrdersOrderEditService::LOCKED_STATUSES, true)) {
             $editableState['message'] = translate('This_order_can_no_longer_be_edited');
         }
