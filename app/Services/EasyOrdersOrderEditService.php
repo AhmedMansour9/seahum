@@ -32,6 +32,7 @@ class EasyOrdersOrderEditService
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
             'order_note' => 'nullable|string|max:1000',
+            'shipping_cost' => 'nullable|numeric|min:0',
             'items' => 'nullable|array',
             'items.*.id' => 'required|integer',
             'items.*.qty' => 'required|integer|min:1',
@@ -57,6 +58,7 @@ class EasyOrdersOrderEditService
      *     address?: string|null,
      *     city?: string|null,
      *     order_note?: string|null,
+     *     shipping_cost?: float|string|null,
      *     items?: array<int, array{id: int|string, qty: int|string, price: float|string, remove?: bool|string|null}>,
      *     new_items?: array<int, array{name?: string|null, qty?: int|string|null, price?: float|string|null}>
      * } $data
@@ -103,6 +105,7 @@ class EasyOrdersOrderEditService
             $order->update([
                 'shipping_address_data' => self::mergeCustomerData(shippingAddress: (array)($order['shipping_address_data'] ?? []), data: $data),
                 'order_note' => $data['order_note'] ?? null,
+                ...(isset($data['shipping_cost']) ? ['shipping_cost' => currencyConverter(amount: (float)$data['shipping_cost'])] : []),
                 'order_amount' => OrderDetail::where('order_id', $order['id'])->get()->sum(fn (OrderDetail $detail) => $detail['price'] * $detail['qty']),
             ]);
 

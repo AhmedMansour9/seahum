@@ -6,6 +6,7 @@ use App\Enums\OrderSource;
 use App\Models\Color;
 use App\Models\DeliveryMan;
 use App\Models\Order;
+use App\Models\OrderTransaction;
 use App\Models\Product;
 use App\Models\Translation;
 use App\Traits\OrderEditManager;
@@ -57,6 +58,7 @@ class DeliveryAppStaffOrderEditService
             'products.*.id' => 'required|integer',
             'products.*.quantity' => 'required|integer|min:1',
             'products.*.variant' => 'nullable|string|max:191',
+            'shipping_cost' => 'nullable|numeric|min:0',
         ];
     }
 
@@ -127,11 +129,14 @@ class DeliveryAppStaffOrderEditService
      * @param array<int, array{id: int|string, quantity: int|string, variant?: string|null}> $products
      * @return array{status: bool, message: string, order_amount?: float, current_order_amount?: float, edit_due_amount?: float, order_return_amount?: float}
      */
-    public function previewProducts(string|int $orderId, array $products, DeliveryMan $staff): array
+    public function previewProducts(string|int $orderId, array $products, DeliveryMan $staff, float|string|null $shippingCost = null): array
     {
         $order = $this->findEditableOrder(orderId: $orderId);
         if (!$order['status']) {
             return $order;
+        }
+        if ($shippingCost !== null) {
+            $order['order']['shipping_cost'] = (float)$shippingCost;
         }
 
         $editedOrder = $this->getEditedOrderProducts(order: $order['order'], products: $products);
@@ -168,6 +173,11 @@ class DeliveryAppStaffOrderEditService
                 return $order;
             }
 
+            $shippingCost = isset($data['shipping_cost']) ? (float)$data['shipping_cost'] : null;
+            if ($shippingCost !== null) {
+                $order['order']['shipping_cost'] = $shippingCost;
+            }
+
             if (!empty($data['products'])) {
                 $editedOrder = $this->getEditedOrderProducts(order: $order['order'], products: $data['products']);
                 if (!$editedOrder['status']) {
@@ -181,6 +191,9 @@ class DeliveryAppStaffOrderEditService
             }
 
             $freshOrder = Order::findOrFail($order['order']['id']);
+            if ($shippingCost !== null && empty($data['products'])) {
+                $this->updateShippingCost(order: $freshOrder, shippingCost: $shippingCost);
+            }
             $freshOrder->update([
                 'shipping_address_data' => EasyOrdersOrderEditService::mergeCustomerData(
                     shippingAddress: (array)($freshOrder['shipping_address_data'] ?? []),
@@ -191,6 +204,19 @@ class DeliveryAppStaffOrderEditService
 
             return ['status' => true, 'message' => translate('Order_updated_successfully')];
         });
+    }
+
+    /**
+     * Shipping only edit: the amount the customer pays moves by the same difference.
+     */
+    private function updateShippingCost(Order $order, float $shippingCost): void
+    {
+        $difference = $shippingCost - (float)$order['shipping_cost'];
+        $order->update([
+            'shipping_cost' => $shippingCost,
+            'order_amount' => (float)$order['order_amount'] + $difference,
+        ]);
+        OrderTransaction::where('order_id', $order['id'])->update(['delivery_charge' => $shippingCost - (float)$order['extra_discount']]);
     }
 
     /**
