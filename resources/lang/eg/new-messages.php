@@ -9558,4 +9558,6 @@ ____________________________________________________on_search_engines_and_see_th
 	"receipt_payment" => "الدفع",
 	"receipt_note" => "ملاحظة",
 	"receipt_print" => "طباعة",
+	"location_link" => "لينك اللوكيشن",
+	"open_in_google_maps" => "فتح في خرائط جوجل",
 ];
