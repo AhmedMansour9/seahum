@@ -43,6 +43,7 @@ class EasyOrdersCustomerLinkTest extends TestCase
             $table->bigInteger('order_id');
             $table->string('delivery_status')->nullable();
             $table->string('payment_status')->nullable();
+            $table->timestamps();
         });
         Schema::create('order_status_histories', function ($table) {
             $table->id();
