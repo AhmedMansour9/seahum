@@ -19,6 +19,7 @@ class StaffNotificationService
     use PushNotificationTrait;
 
     public const NEW_ORDER_TYPE = 'staff_new_order';
+    public const POSTPONED_TODAY_TYPE = 'staff_postponed_today';
 
     /**
      * Notifies every active staff account about a newly placed order.
@@ -38,6 +39,33 @@ class StaffNotificationService
         } catch (Throwable $exception) {
             Log::warning('Staff new order notification failed', ['order_id' => $order['id'], 'error' => $exception->getMessage()]);
         }
+    }
+
+    /**
+     * Tells every active staff account how many postponed orders are due today; returns that count.
+     */
+    public function notifyPostponedOrdersDueToday(): int
+    {
+        $dueTodayCount = Order::postponed()
+            ->where('order_type', 'default_type')
+            ->whereDate('scheduled_for', today())
+            ->count();
+        if ($dueTodayCount === 0) {
+            return 0;
+        }
+
+        $data = [
+            'title' => 'أوردرات مؤجلة لليوم',
+            'description' => $dueTodayCount . ' أوردر مؤجل لتاريخ النهارده',
+            'image' => '',
+            'order_id' => 0,
+            'type' => self::POSTPONED_TODAY_TYPE,
+        ];
+        foreach ($this->getStaffAccounts() as $staffAccount) {
+            $this->sendPushNotificationToDeliveryManDevices(deliveryMan: $staffAccount, data: $data);
+        }
+
+        return $dueTodayCount;
     }
 
     /**

@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use App\Models\Order;
+use App\Services\DeliveryAppStaffOrderCreateService;
 use App\Services\DeliveryAppStaffService;
+use App\Services\StaffNotificationService;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
 class ScheduledOrdersTest extends TestCase
@@ -25,6 +28,13 @@ class ScheduledOrdersTest extends TestCase
             $table->unsignedBigInteger('delivery_man_id')->nullable();
             $table->text('shipping_address_data')->nullable();
             $table->date('scheduled_for')->nullable();
+            $table->timestamps();
+        });
+        Schema::create('delivery_men', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('seller_id')->default(0);
+            $table->boolean('is_active')->default(1);
+            $table->string('app_role')->default('delivery_man');
             $table->timestamps();
         });
     }
@@ -81,5 +91,32 @@ class ScheduledOrdersTest extends TestCase
 
         $this->assertSame(1, $service->getPostponedCount(filters: []));
         $this->assertSame(1, $service->getPostponedCount(filters: ['status' => 'delivered', 'postponed' => '1']));
+    }
+
+    public function test_staff_create_order_accepts_only_today_or_later_scheduled_day(): void
+    {
+        $rules = ['scheduled_for' => DeliveryAppStaffOrderCreateService::getValidationRules()['scheduled_for']];
+
+        $this->assertTrue(Validator::make(['scheduled_for' => now()->addDay()->format('Y-m-d')], $rules)->passes());
+        $this->assertTrue(Validator::make(['scheduled_for' => null], $rules)->passes());
+        $this->assertTrue(Validator::make(['scheduled_for' => now()->subDay()->format('Y-m-d')], $rules)->fails());
+    }
+
+    public function test_scheduled_day_is_serialized_as_plain_date_for_the_apps(): void
+    {
+        $orderId = $this->createOrder(status: 'pending', scheduledFor: '2026-11-16');
+
+        $this->assertSame('2026-11-16', Order::findOrFail($orderId)->toArray()['scheduled_for']);
+    }
+
+    public function test_due_today_notification_counts_only_open_orders_scheduled_for_today(): void
+    {
+        $this->createOrder(status: 'pending', scheduledFor: today()->format('Y-m-d'));
+        $this->createOrder(status: 'confirmed', scheduledFor: today()->format('Y-m-d'));
+        $this->createOrder(status: 'delivered', scheduledFor: today()->format('Y-m-d'));
+        $this->createOrder(status: 'pending', scheduledFor: today()->addDay()->format('Y-m-d'));
+        $this->createOrder(status: 'pending', scheduledFor: today()->format('Y-m-d'), type: 'POS');
+
+        $this->assertSame(2, app(StaffNotificationService::class)->notifyPostponedOrdersDueToday());
     }
 }

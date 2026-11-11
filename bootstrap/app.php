@@ -98,6 +98,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'detectMobile' => \App\Http\Middleware\DetectMobile::class,
         ]);
     })
+    ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
+        $schedule->command('orders:notify-postponed-due-today')->dailyAt('08:00')->timezone('Africa/Cairo');
+    })
     ->withExceptions(function (Exceptions $exceptions) {
         // You can customize exception handling here if needed
     })
