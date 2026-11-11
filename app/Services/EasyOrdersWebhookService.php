@@ -21,7 +21,10 @@ class EasyOrdersWebhookService
      */
     private const NEW_ORDER_NOTIFICATION_WINDOW_MINUTES = 60;
 
-    public function __construct(private readonly StaffNotificationService $staffNotificationService)
+    public function __construct(
+        private readonly StaffNotificationService       $staffNotificationService,
+        private readonly EasyOrdersCustomerLinkService  $customerLinkService,
+    )
     {
     }
 
@@ -204,13 +207,15 @@ class EasyOrdersWebhookService
             ? (float)$payload['cost']
             : max(0, (float)$payload['total_cost'] - $shippingCost);
 
+        $customerId = $this->customerLinkService->findCustomerIdByPhone(phone: (string)$payload['phone']);
+
         $order = new Order([
             'id' => OrderManager::generateNewOrderID(),
             'order_source' => OrderSource::EasyOrders,
             'external_order_id' => (string)$payload['id'],
             'order_type' => 'default_type',
-            'customer_id' => null,
-            'is_guest' => 1,
+            'customer_id' => $customerId,
+            'is_guest' => $customerId ? 0 : 1,
             'customer_type' => 'customer',
             'seller_id' => self::IN_HOUSE_SELLER_ID,
             'seller_is' => self::IN_HOUSE_SELLER_IS,

@@ -12,6 +12,7 @@ use App\Utils\Helpers;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Illuminate\Http\JsonResponse;
+use App\Services\EasyOrdersCustomerLinkService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -27,7 +28,7 @@ class PassportAuthController extends Controller
     {
     }
 
-    public function register(Request $request)
+    public function register(Request $request, EasyOrdersCustomerLinkService $easyOrdersCustomerLinkService)
     {
         $validator = Validator::make($request->all(), [
             'f_name' => 'required',
@@ -71,11 +72,13 @@ class PassportAuthController extends Controller
             return response()->json(['temporary_token' => $temporary_token], 200);
         }
 
+        $easyOrdersCustomerLinkService->linkOrdersToCustomer(customer: $user);
+
         $token = $user->createToken('LaravelAuthApp')->accessToken;
         return response()->json(['token' => $token], 200);
     }
 
-    public function login(Request $request): JsonResponse
+    public function login(Request $request, EasyOrdersCustomerLinkService $easyOrdersCustomerLinkService): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'email_or_phone' => 'required',
@@ -137,6 +140,8 @@ class PassportAuthController extends Controller
                 if ($type == 'email' && $emailVerification && $user->email_verified_at == null) {
                     return response()->json(['temporary_token' => $temporaryToken, 'status' => false], 200);
                 }
+
+                $easyOrdersCustomerLinkService->linkOrdersToCustomer(customer: $user);
 
                 $token = auth()->user()->createToken('LaravelAuthApp')->accessToken;
 
