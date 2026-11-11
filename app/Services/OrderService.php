@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\OrderSource;
 use Modules\TaxModule\app\Traits\VatTaxManagement;
 
 class OrderService
@@ -47,6 +48,25 @@ class OrderService
     /**
      * Whether the order belongs to the given registered customer (isGuest false) or guest id (isGuest true).
      */
+    /**
+     * EasyOrders products have text ids, but the customer app reads the product id as a number and fails to open the order.
+     * The original id is kept as external_id.
+     *
+     * @param array<string, mixed> $productDetails
+     * @return array<string, mixed>
+     */
+    public function getCustomerAppProductDetails(array $productDetails): array
+    {
+        if (($productDetails['source'] ?? null) !== OrderSource::EasyOrders->value || is_int($productDetails['id'] ?? null)) {
+            return $productDetails;
+        }
+
+        $productDetails['external_id'] = $productDetails['id'] ?? null;
+        $productDetails['id'] = null;
+
+        return $productDetails;
+    }
+
     public function isOrderOwner(object $order, int $customerId, bool $isGuest): bool
     {
         return (int)$order['customer_id'] === $customerId && (bool)$order['is_guest'] === $isGuest;

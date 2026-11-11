@@ -426,7 +426,7 @@ class CustomerController extends Controller
         return response()->json($orders, 200);
     }
 
-    public function get_order_details(Request $request): JsonResponse
+    public function get_order_details(Request $request, OrderService $orderService): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'order_id' => 'required',
@@ -448,12 +448,12 @@ class CustomerController extends Controller
             ->where(['order_id' => $request['order_id']])
             ->get();
 
-        $detailsList->map(function ($query) use ($user) {
+        $detailsList->map(function ($query) use ($user, $orderService) {
             $query['variation'] = is_array($query['variation']) ? $query['variation'] : json_decode($query['variation'], true);
             $currentProduct = Product::with(['digitalVariation', 'clearanceSale' => function ($query) {
                 return $query->active();
             }])->where('id', $query['product_id'])->first();
-            $product = json_decode($query['product_details'], true);
+            $product = $orderService->getCustomerAppProductDetails(productDetails: json_decode($query['product_details'], true));
             $product['thumbnail_full_url'] = $currentProduct?->thumbnail_full_url;
             if (isset($product['product_type']) && $product['product_type'] == 'digital' && $product['digital_product_type'] == 'ready_product' && $product['digital_file_ready']) {
                 $checkFilePath = storageLink('product/digital-product', $product['digital_file_ready'], ($product['storage_path'] ?? 'public'));
