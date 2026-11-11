@@ -541,12 +541,12 @@ class OrderManager
             ];
         }
 
-        if ($coupon->category_id) {
-            $cartList = self::filterCartItemsByCouponCategory(coupon: $coupon, cartItems: $cartList);
+        if ($coupon->excluded_category_id) {
+            $cartList = self::excludeCartItemsOfCouponExcludedCategory(coupon: $coupon, cartItems: $cartList);
             if ($cartList->isEmpty()) {
                 return [
                     'status' => false,
-                    'messages' => translate('coupon_applicable_to_selected_category_products_only')
+                    'messages' => translate('coupon_not_applicable_to_excluded_category_products')
                 ];
             }
         }
@@ -662,23 +662,23 @@ class OrderManager
     }
 
     /**
-     * Keeps only the cart items whose product belongs to the coupon's category. Coupons without a category keep every item.
+     * Drops the cart items whose product belongs to the coupon's excluded category. Coupons without an excluded category keep every item.
      */
-    public static function filterCartItemsByCouponCategory(Coupon $coupon, Collection $cartItems): Collection
+    public static function excludeCartItemsOfCouponExcludedCategory(Coupon $coupon, Collection $cartItems): Collection
     {
-        if (!$coupon->category_id) {
+        if (!$coupon->excluded_category_id) {
             return $cartItems;
         }
 
-        $eligibleProductIds = Product::whereIn('id', $cartItems->pluck('product_id')->unique()->all())
+        $excludedProductIds = Product::whereIn('id', $cartItems->pluck('product_id')->unique()->all())
             ->where(function ($query) use ($coupon) {
-                $query->where('category_ids', 'like', '%"id":"' . $coupon->category_id . '"%')
-                    ->orWhere('category_ids', 'like', '%"id":' . $coupon->category_id . ',%')
-                    ->orWhere('category_ids', 'like', '%"id":' . $coupon->category_id . '}%');
+                $query->where('category_ids', 'like', '%"id":"' . $coupon->excluded_category_id . '"%')
+                    ->orWhere('category_ids', 'like', '%"id":' . $coupon->excluded_category_id . ',%')
+                    ->orWhere('category_ids', 'like', '%"id":' . $coupon->excluded_category_id . '}%');
             })
             ->pluck('id');
 
-        return $cartItems->filter(fn($cartItem) => $eligibleProductIds->contains($cartItem['product_id']))->values();
+        return $cartItems->reject(fn($cartItem) => $excludedProductIds->contains($cartItem['product_id']))->values();
     }
 
     public static function getGroupWiseCouponArray($request, $couponCode, $applicableAmount, $discountAmount, $groupId, $cartListGroup): array
@@ -721,7 +721,7 @@ class OrderManager
         if ($discountOnPurchaseCoupon) {
             foreach ($cartListGroup as $cartListGroupKey => $cartList) {
                 if ($cartListGroupKey == $groupId) {
-                    foreach (self::filterCartItemsByCouponCategory(coupon: $coupon, cartItems: $cartList) as $cartItem) {
+                    foreach (self::excludeCartItemsOfCouponExcludedCategory(coupon: $coupon, cartItems: $cartList) as $cartItem) {
                         if (($coupon->seller_id == '0') || (is_null($coupon->seller_id) && $cartItem['seller_is'] == 'admin') || ($coupon->seller_id == $cartItem['seller_id'] && $cartItem['seller_is'] == 'seller')) {
                             $onlyProductTotalAmount += ($cartItem['price'] - $cartItem['discount']) * $cartItem['quantity'];
                         }

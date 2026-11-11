@@ -9,14 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('coupons', function (Blueprint $table) {
-            $table->unsignedBigInteger('category_id')->nullable()->after('seller_id')->comment('NULL = all categories');
+            $table->unsignedBigInteger('excluded_category_id')->nullable()->after('seller_id')->comment('Products of this category get no discount; NULL = none excluded');
         });
     }
 
     public function down(): void
     {
         Schema::table('coupons', function (Blueprint $table) {
-            $table->dropColumn('category_id');
+            $table->dropColumn('excluded_category_id');
         });
     }
 };

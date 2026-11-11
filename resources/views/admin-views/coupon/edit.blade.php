@@ -73,11 +73,11 @@
                                 </select>
                             </div>
                             <div class="col-md-6 col-lg-4 first_order">
-                                <label for="category_id" class="form-label">{{translate('category')}}</label>
-                                <select class="custom-select" name="category_id" id="category_id">
-                                    <option value="">{{translate('all_categories')}}</option>
+                                <label for="excluded_category_id" class="form-label">{{translate('excluded_category')}}</label>
+                                <select class="custom-select" name="excluded_category_id" id="excluded_category_id">
+                                    <option value="">{{translate('no_category_excluded')}}</option>
                                     @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ $coupon['category_id'] == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                        <option value="{{ $category->id }}" {{ $coupon['excluded_category_id'] == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
