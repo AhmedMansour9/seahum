@@ -9561,4 +9561,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"location_link" => "لينك اللوكيشن",
 	"open_in_google_maps" => "فتح في خرائط جوجل",
 	"Delivery_man_removed_successfully" => "تم إزالة المندوب من الطلب",
+	"coupon_applicable_to_selected_category_products_only" => "الكوبون ده لمنتجات تصنيف معين بس",
 ];

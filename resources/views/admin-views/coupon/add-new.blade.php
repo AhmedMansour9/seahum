@@ -71,6 +71,15 @@
                                     </select>
                                 </div>
 
+                                <div class="col-md-6 col-lg-4 first_order">
+                                    <label for="category_id" class="form-label">{{translate('category')}}</label>
+                                    <select class="custom-select" name="category_id" id="category_id">
+                                        <option value="">{{translate('all_categories')}}</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="col-md-6 col-lg-4 coupon_type first_order">
                                     <label for="name"
                                            class="form-label d-flex">{{translate('customer')}} <span class="text-danger">*</span></label>

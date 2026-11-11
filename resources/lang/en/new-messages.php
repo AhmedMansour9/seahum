@@ -2834,4 +2834,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"location_link" => "Location link",
 	"open_in_google_maps" => "Open in Google Maps",
 	"Delivery_man_removed_successfully" => "Delivery man removed successfully",
+	"coupon_applicable_to_selected_category_products_only" => "This coupon applies to products of its category only",
 ];

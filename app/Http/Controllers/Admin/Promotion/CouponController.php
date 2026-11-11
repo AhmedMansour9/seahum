@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Promotion;
 
+use App\Contracts\Repositories\CategoryRepositoryInterface;
 use App\Contracts\Repositories\CouponRepositoryInterface;
 use App\Contracts\Repositories\CustomerRepositoryInterface;
 use App\Contracts\Repositories\VendorRepositoryInterface;
@@ -27,11 +28,13 @@ class CouponController extends BaseController
      * @param CouponRepositoryInterface $couponRepo
      * @param CustomerRepositoryInterface $customerRepo
      * @param VendorRepositoryInterface $vendorRepo
+     * @param CategoryRepositoryInterface $categoryRepo
      */
     public function __construct(
         private readonly CouponRepositoryInterface   $couponRepo,
         private readonly CustomerRepositoryInterface $customerRepo,
         private readonly VendorRepositoryInterface   $vendorRepo,
+        private readonly CategoryRepositoryInterface $categoryRepo,
     )
     {
     }
@@ -50,7 +53,8 @@ class CouponController extends BaseController
     {
         $coupons = $this->couponRepo->getListWhere(searchValue: $request['searchValue'], filters: ['added_by' => 'admin'], dataLimit: getWebConfig(name: 'pagination_limit'));
         $customers = $this->customerRepo->getListWhereNotIn([0]);
-        return view('admin-views.coupon.add-new', compact('coupons', 'customers'));
+        $categories = $this->categoryRepo->getListWhere(filters: ['position' => 0], dataLimit: 'all');
+        return view('admin-views.coupon.add-new', compact('coupons', 'customers', 'categories'));
     }
 
     public function add(CouponAddRequest $request, CouponService $couponService): JsonResponse
@@ -83,7 +87,8 @@ class CouponController extends BaseController
         $customers = $this->customerRepo->getListWhereNotIn([0]);
         $coupon = $this->couponRepo->getFirstWhere(['id' => $id]);
         if ($coupon) {
-            return view('admin-views.coupon.edit', compact('coupon', 'customers', 'sellers'));
+            $categories = $this->categoryRepo->getListWhere(filters: ['position' => 0], dataLimit: 'all');
+            return view('admin-views.coupon.edit', compact('coupon', 'customers', 'sellers', 'categories'));
         }
         ToastMagic::error(translate('invalid_Coupon'));
         return redirect()->route('admin.coupon.add');

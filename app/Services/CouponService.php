@@ -42,6 +42,7 @@ class CouponService
             'expire_date' => $request['expire_date'],
             'status' => 1,
             'min_purchase' => currencyConverter(amount: $request['min_purchase']),
+            'category_id' => $request['coupon_type'] == 'discount_on_purchase' ? ($request['category_id'] ?: null) : null,
         ];
 
         if ($request['coupon_type'] == 'discount_on_purchase' || $request['coupon_type'] == 'free_delivery') {
@@ -75,6 +76,7 @@ class CouponService
             'expire_date' => $request['expire_date'],
             'status' => 1,
             'min_purchase' => currencyConverter(amount: $request['min_purchase']),
+            'category_id' => $request['coupon_type'] == 'discount_on_purchase' ? ($request['category_id'] ?: null) : null,
         ];
         if ($request['coupon_type'] == 'discount_on_purchase' || $request['coupon_type'] == 'free_delivery') {
             $data += [
