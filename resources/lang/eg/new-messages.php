@@ -9567,5 +9567,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"postponed" => "مؤجل",
 	"postponed_to" => "مؤجل لتاريخ (اليوم اللي العميل طلبه)",
 	"only_postponed_orders" => "الأوردرات المؤجلة بس",
-	"only_governorate_orders" => "أوردرات المحافظات بس (خارج القاهرة الكبرى)",
+	"only_governorate_orders" => "أوردرات المحافظات بس",
+	"governorate" => "المحافظة",
+	"not_a_governorate_order" => "مش أوردر محافظة",
 ];

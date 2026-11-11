@@ -56,6 +56,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property float $deliveryman_charge
  * @property DateTime $expected_delivery_date
  * @property Carbon|null $scheduled_for
+ * @property string|null $governorate
  * @property string $order_note
  * @property int $billing_address
  * @property object $billing_address_data
@@ -120,6 +121,7 @@ class Order extends Model
         'deliveryman_charge',
         'expected_delivery_date',
         'scheduled_for',
+        'governorate',
         'order_note',
         'billing_address',
         'billing_address_data',
@@ -274,29 +276,14 @@ class Order extends Model
     }
 
     /**
-     * Orders shipped outside Greater Cairo: city/state is filled and matches no Greater Cairo keyword.
+     * Orders the admin or customer service assigned to a governorate.
      *
      * @param Builder<Order> $query
      * @return Builder<Order>
      */
     public function scopeGovernorate(Builder $query): Builder
     {
-        $greaterCairoKeywords = config('order_regions.greater_cairo_keywords');
-        $addressFields = ['shipping_address_data->city', 'shipping_address_data->state'];
-
-        return $query
-            ->where(function (Builder $query) use ($addressFields) {
-                foreach ($addressFields as $field) {
-                    $query->orWhere(fn (Builder $query) => $query->whereNotNull($field)->whereNotIn($field, ['', 'null']));
-                }
-            })
-            ->where(function (Builder $query) use ($addressFields, $greaterCairoKeywords) {
-                foreach ($addressFields as $field) {
-                    foreach ($greaterCairoKeywords as $keyword) {
-                        $query->where(fn (Builder $query) => $query->whereNull($field)->orWhere($field, 'not like', "%{$keyword}%"));
-                    }
-                }
-            });
+        return $query->whereNotNull('governorate');
     }
 
     /* order_status_history -> orderStatusHistory */

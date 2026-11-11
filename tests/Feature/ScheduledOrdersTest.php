@@ -28,6 +28,7 @@ class ScheduledOrdersTest extends TestCase
             $table->unsignedBigInteger('delivery_man_id')->nullable();
             $table->text('shipping_address_data')->nullable();
             $table->date('scheduled_for')->nullable();
+            $table->string('governorate', 100)->nullable();
             $table->timestamps();
         });
         Schema::create('delivery_men', function (Blueprint $table) {
@@ -120,20 +121,36 @@ class ScheduledOrdersTest extends TestCase
         $this->assertSame(2, app(StaffNotificationService::class)->notifyPostponedOrdersDueToday());
     }
 
-    public function test_governorate_scope_returns_only_orders_outside_greater_cairo(): void
+    public function test_governorate_scope_returns_only_orders_with_an_assigned_governorate(): void
     {
-        config(['order_regions.greater_cairo_keywords' => ['cairo', 'القاهرة', 'nasr']]);
-        $insert = fn (?array $address) => DB::table('orders')->insertGetId(['shipping_address_data' => $address === null ? null : json_encode($address, JSON_UNESCAPED_UNICODE)]);
+        $alexandria = DB::table('orders')->insertGetId(['governorate' => 'الإسكندرية']);
+        $this->createOrder(status: 'pending', scheduledFor: null);
+        $aswan = DB::table('orders')->insertGetId(['governorate' => 'أسوان']);
 
-        $alexandria = $insert(['city' => 'Alexandria', 'state' => 'Alexandria']);
-        $mansoura = $insert(['city' => 'المنصورة', 'state' => null]);
-        $insert(['city' => 'Cairo', 'state' => 'Cairo']);
-        $insert(['city' => 'القاهرة', 'state' => 'القاهرة']);
-        $insert(['city' => 'Nasr City', 'state' => null]);
-        $insert(['city' => '', 'state' => '']);
-        $insert(['city' => null, 'state' => null]);
-        $insert(null);
+        $this->assertSame([$alexandria, $aswan], Order::governorate()->orderBy('id')->pluck('id')->all());
+    }
 
-        $this->assertSame([$alexandria, $mansoura], Order::governorate()->orderBy('id')->pluck('id')->all());
+    public function test_staff_service_assigns_and_clears_governorate_but_ignores_pos_orders(): void
+    {
+        $orderId = $this->createOrder(status: 'pending', scheduledFor: null);
+        $posOrderId = $this->createOrder(status: 'pending', scheduledFor: null, type: 'POS');
+        $service = app(DeliveryAppStaffService::class);
+
+        $service->updateGovernorate(orderId: $orderId, governorate: 'الإسكندرية');
+        $service->updateGovernorate(orderId: $posOrderId, governorate: 'الإسكندرية');
+        $this->assertSame('الإسكندرية', Order::findOrFail($orderId)['governorate']);
+        $this->assertNull(Order::findOrFail($posOrderId)['governorate']);
+
+        $service->updateGovernorate(orderId: $orderId, governorate: null);
+        $this->assertNull(Order::findOrFail($orderId)['governorate']);
+    }
+
+    public function test_governorate_options_exclude_greater_cairo(): void
+    {
+        $options = config('order_regions.governorates');
+
+        $this->assertContains('الإسكندرية', $options);
+        $this->assertNotContains('القاهرة', $options);
+        $this->assertNotContains('الجيزة', $options);
     }
 }

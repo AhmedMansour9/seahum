@@ -270,6 +270,11 @@
                                                         {{ translate('Edited') }}
                                                     </span>
                                             @endif
+                                            @if($order['governorate'])
+                                                <span class="badge text-bg-info w-max-content">
+                                                        {{ $order['governorate'] }}
+                                                    </span>
+                                            @endif
                                             @if($order['scheduled_for'])
                                                 <span class="badge text-bg-warning w-max-content">
                                                         {{ translate('postponed') }}: {{ $order['scheduled_for']->locale(app()->getLocale())->translatedFormat('d F Y') }}
