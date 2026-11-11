@@ -142,7 +142,7 @@ class Order extends Model
     protected $casts = [
         'customer_id' => 'integer',
         'is_guest' => 'boolean',
-        'scheduled_for' => 'date',
+        'scheduled_for' => 'date:Y-m-d',
         'customer_type' => 'string',
         'payment_status' => 'string',
         'order_status' => 'string',

@@ -93,4 +93,11 @@ class ScheduledOrdersTest extends TestCase
         $this->assertTrue(Validator::make(['scheduled_for' => null], $rules)->passes());
         $this->assertTrue(Validator::make(['scheduled_for' => now()->subDay()->format('Y-m-d')], $rules)->fails());
     }
+
+    public function test_scheduled_day_is_serialized_as_plain_date_for_the_apps(): void
+    {
+        $orderId = $this->createOrder(status: 'pending', scheduledFor: '2026-11-16');
+
+        $this->assertSame('2026-11-16', Order::findOrFail($orderId)->toArray()['scheduled_for']);
+    }
 }
