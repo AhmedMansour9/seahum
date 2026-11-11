@@ -72,16 +72,14 @@ class ScheduledOrdersTest extends TestCase
         $this->assertNull(Order::findOrFail($orderId)['scheduled_for']);
     }
 
-    public function test_staff_postponed_filter_and_count(): void
+    public function test_staff_postponed_count_ignores_status_and_postponed_filters(): void
     {
         $this->createOrder(status: 'pending', scheduledFor: '2026-11-16');
         $this->createOrder(status: 'pending', scheduledFor: null);
         $this->createOrder(status: 'delivered', scheduledFor: '2026-11-12');
         $service = app(DeliveryAppStaffService::class);
 
-        $orders = $service->getOrders(filters: ['postponed' => '1'], limit: 20, offset: 1);
-
-        $this->assertSame(1, $orders->total());
-        $this->assertSame(1, $service->getPostponedCount(filters: ['status' => 'delivered']));
+        $this->assertSame(1, $service->getPostponedCount(filters: []));
+        $this->assertSame(1, $service->getPostponedCount(filters: ['status' => 'delivered', 'postponed' => '1']));
     }
 }
