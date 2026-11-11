@@ -58,6 +58,7 @@ class DeliveryAppStaffOrderEditService
             'products.*.id' => 'required|integer',
             'products.*.quantity' => 'required|integer|min:1',
             'products.*.variant' => 'nullable|string|max:191',
+            'products.*.price' => 'nullable|numeric|min:0',
             'shipping_cost' => 'nullable|numeric|min:0',
         ];
     }
@@ -131,7 +132,7 @@ class DeliveryAppStaffOrderEditService
     }
 
     /**
-     * @param array<int, array{id: int|string, quantity: int|string, variant?: string|null}> $products
+     * @param array<int, array{id: int|string, quantity: int|string, variant?: string|null, price?: float|string|null}> $products
      * @return array{status: bool, message: string, order_amount?: float, current_order_amount?: float, edit_due_amount?: float, order_return_amount?: float}
      */
     public function previewProducts(string|int $orderId, array $products, DeliveryMan $staff, float|string|null $shippingCost = null): array
@@ -230,7 +231,7 @@ class DeliveryAppStaffOrderEditService
     private function findEditableOrder(string|int $orderId): array
     {
         $order = Order::with(self::ORDER_RELATIONS)
-            ->where(['id' => $orderId, 'order_type' => 'default_type'])
+            ->where(['id' => $orderId])
             ->where(fn ($query) => $query->whereNull('order_source')->orWhere('order_source', '!=', OrderSource::EasyOrders->value))
             ->first();
         if (!$order) {
@@ -248,12 +249,12 @@ class DeliveryAppStaffOrderEditService
     /**
      * Converts the app's final item list into the format of the admin panel edit engine and checks stock.
      *
-     * @param array<int, array{id: int|string, quantity: int|string, variant?: string|null}> $products
+     * @param array<int, array{id: int|string, quantity: int|string, variant?: string|null, price?: float|string|null}> $products
      * @return array{status: bool, message: string, product_list?: array<string, array<string, mixed>>}
      */
     private function getEditedOrderProducts(Order $order, array $products): array
     {
-        $catalogProducts = $this->getInHouseProductsQuery()->whereIn('id', collect($products)->pluck('id'))->get()->keyBy('id');
+        $catalogProducts = Product::where(['added_by' => 'admin', 'status' => 1])->whereIn('id', collect($products)->pluck('id'))->get()->keyBy('id');
         $requestProducts = [];
 
         foreach ($products as $item) {
@@ -265,6 +266,7 @@ class DeliveryAppStaffOrderEditService
                 'id' => $product['id'],
                 'quantity' => (int)$item['quantity'],
                 'variant' => !empty($item['variant']) ? $item['variant'] : null,
+                'price' => $item['price'] ?? null,
                 ...$this->getVariationChoices(product: $product, variant: $item['variant'] ?? null),
             ];
         }
