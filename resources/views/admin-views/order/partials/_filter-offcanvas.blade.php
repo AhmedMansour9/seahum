@@ -91,6 +91,13 @@
 
                     <div class="p-12 p-sm-20 bg-section rounded d-flex gap-2 mt-20">
                         <input class="form-check-input checkbox--input m-0 cursor-pointer" type="checkbox"
+                               id="inlineCheckboxGovernorates" value="1" name="governorates" {{ request()->boolean('governorates') ? 'checked' : '' }}>
+                        <label class="form-check-label fs-12 cursor-pointer" for="inlineCheckboxGovernorates">
+                            {{ translate('only_governorate_orders') }}
+                        </label>
+                    </div>
+                    <div class="p-12 p-sm-20 bg-section rounded d-flex gap-2 mt-20">
+                        <input class="form-check-input checkbox--input m-0 cursor-pointer" type="checkbox"
                                id="inlineCheckboxPostponed" value="1" name="postponed" {{ request()->boolean('postponed') ? 'checked' : '' }}>
                         <label class="form-check-label fs-12 cursor-pointer" for="inlineCheckboxPostponed">
                             {{ translate('only_postponed_orders') }}

@@ -119,4 +119,21 @@ class ScheduledOrdersTest extends TestCase
 
         $this->assertSame(2, app(StaffNotificationService::class)->notifyPostponedOrdersDueToday());
     }
+
+    public function test_governorate_scope_returns_only_orders_outside_greater_cairo(): void
+    {
+        config(['order_regions.greater_cairo_keywords' => ['cairo', 'القاهرة', 'nasr']]);
+        $insert = fn (?array $address) => DB::table('orders')->insertGetId(['shipping_address_data' => $address === null ? null : json_encode($address, JSON_UNESCAPED_UNICODE)]);
+
+        $alexandria = $insert(['city' => 'Alexandria', 'state' => 'Alexandria']);
+        $mansoura = $insert(['city' => 'المنصورة', 'state' => null]);
+        $insert(['city' => 'Cairo', 'state' => 'Cairo']);
+        $insert(['city' => 'القاهرة', 'state' => 'القاهرة']);
+        $insert(['city' => 'Nasr City', 'state' => null]);
+        $insert(['city' => '', 'state' => '']);
+        $insert(['city' => null, 'state' => null]);
+        $insert(null);
+
+        $this->assertSame([$alexandria, $mansoura], Order::governorate()->orderBy('id')->pluck('id')->all());
+    }
 }

@@ -37,6 +37,7 @@ class DeliveryAppStaffService
         return $this->getOrdersQuery(filters: $filters)
             ->with(['customer:id,f_name,l_name,phone', 'deliveryMan:id,f_name,l_name,phone', 'shippingAddress', 'details'])
             ->when(!empty($filters['postponed']), fn ($query) => $query->orderBy('scheduled_for'))
+            ->when(!empty($filters['governorates']), fn ($query) => $query->orderBy('shipping_address_data->city'))
             ->latest()
             ->orderByDesc('id')
             ->paginate(perPage: $limit, page: $offset);
@@ -64,8 +65,20 @@ class DeliveryAppStaffService
      */
     public function getPostponedCount(array $filters): int
     {
-        return $this->getOrdersQuery(filters: Arr::except($filters, ['status', 'postponed']))
+        return $this->getOrdersQuery(filters: Arr::except($filters, ['status', 'postponed', 'governorates']))
             ->postponed()
+            ->count();
+    }
+
+    /**
+     * Number of governorate orders for the same filters, ignoring the status, postponed and governorates filters themselves.
+     *
+     * @param array<string, mixed> $filters
+     */
+    public function getGovernoratesCount(array $filters): int
+    {
+        return $this->getOrdersQuery(filters: Arr::except($filters, ['status', 'postponed', 'governorates']))
+            ->governorate()
             ->count();
     }
 
@@ -85,6 +98,7 @@ class DeliveryAppStaffService
             ->where('order_type', 'default_type')
             ->when(!empty($filters['status']), fn ($query) => $query->where('order_status', $filters['status']))
             ->when(!empty($filters['postponed']), fn ($query) => $query->postponed())
+            ->when(!empty($filters['governorates']), fn ($query) => $query->governorate())
             ->when(!empty($filters['order_source']), fn ($query) => $query->where('order_source', $filters['order_source']))
             ->when(!empty($filters['delivery_man_id']), fn ($query) => $query->where('delivery_man_id', $filters['delivery_man_id']))
             ->when(($filters['date_type'] ?? null) === 'today', fn ($query) => $query->whereDate('updated_at', Carbon::today()))

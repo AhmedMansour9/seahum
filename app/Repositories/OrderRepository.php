@@ -278,6 +278,9 @@ class OrderRepository implements OrderRepositoryInterface
             )->when(!empty($filters['postponed']), function ($query) {
                     $query->postponed();
                 }
+            )->when(!empty($filters['governorates']), function ($query) {
+                    $query->governorate();
+                }
             )->when($searchValue, function ($mainQuery) use ($searchValue) {
                 $keywords = explode(' ', trim($searchValue));
                 return $mainQuery->where(function ($query) use ($keywords, $searchValue) {
@@ -403,6 +406,9 @@ class OrderRepository implements OrderRepositoryInterface
                 }
             )->when(!empty($filters['postponed']), function ($query) {
                     $query->postponed();
+                }
+            )->when(!empty($filters['governorates']), function ($query) {
+                    $query->governorate();
                 }
             )->when(!empty($whereIn['payment_status']), function ($query) use ($whereIn) {
                     $query->whereIn('payment_status', $whereIn['payment_status']);

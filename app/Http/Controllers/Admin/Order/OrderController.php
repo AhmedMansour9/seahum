@@ -142,6 +142,7 @@ class OrderController extends BaseController
             'seller_id' => $vendorId,
             'seller_is' => $vendorIs,
             'postponed' => $request->boolean('postponed'),
+            'governorates' => $request->boolean('governorates'),
         ];
         $orderAmountSettlement = $request->input('order_amount_settlement', []);
 
@@ -182,7 +183,7 @@ class OrderController extends BaseController
         ];
 
         $orders = $this->orderRepo->getListWhereIn(
-            orderBy: ['created_at' => 'desc'],
+            orderBy: $filters['governorates'] ? ['shipping_address_data->city' => 'asc', 'created_at' => 'desc'] : ['created_at' => 'desc'],
             searchValue: $searchValue,
             filters: $filters,
             whereIn: $filterWhereIn,
@@ -408,6 +409,7 @@ class OrderController extends BaseController
             'seller_id' => $vendorId,
             'seller_is' => $vendorIs,
             'postponed' => $request->boolean('postponed'),
+            'governorates' => $request->boolean('governorates'),
         ];
 
         $dateType = $request['date_type'];
