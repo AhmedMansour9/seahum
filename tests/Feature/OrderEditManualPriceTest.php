@@ -12,7 +12,7 @@ class OrderEditManualPriceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->orderEditService = new OrderEditService();
+        $this->orderEditService = app(OrderEditService::class);
     }
 
     public function test_stored_line_without_discount_and_other_than_catalog_price_is_a_manual_price(): void
