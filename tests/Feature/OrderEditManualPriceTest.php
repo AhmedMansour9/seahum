@@ -3,6 +3,9 @@
 namespace Tests\Feature;
 
 use App\Services\OrderEditService;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class OrderEditManualPriceTest extends TestCase
@@ -12,6 +15,15 @@ class OrderEditManualPriceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        config(['database.default' => 'sqlite', 'database.connections.sqlite.database' => ':memory:']);
+        DB::purge('sqlite');
+        Schema::create('business_settings', function (Blueprint $table) {
+            $table->id();
+            $table->string('type');
+            $table->longText('value')->nullable();
+            $table->timestamps();
+        });
+
         $this->orderEditService = app(OrderEditService::class);
     }
 
