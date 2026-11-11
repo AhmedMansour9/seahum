@@ -38,4 +38,19 @@ class OrderEditManualPriceTest extends TestCase
         $this->assertSame(100.0, $line['discounted_price']);
         $this->assertSame(2, $line['qty']);
     }
+
+    public function test_digital_only_and_pos_orders_are_editable_for_admin_but_not_for_vendors(): void
+    {
+        $order = (object)[
+            'order_type' => 'POS',
+            'order_status' => 'pending',
+            'details' => collect([(object)['product_details' => json_encode(['product_type' => 'digital'])]]),
+        ];
+
+        $adminResult = $this->orderEditService->checkIsOrderEditable(order: $order, type: 'admin', isOfflinePaymentConfirmationRequired: false);
+        $vendorResult = $this->orderEditService->checkIsOrderEditable(order: $order, type: 'vendor', isOfflinePaymentConfirmationRequired: false);
+
+        $this->assertTrue($adminResult['status']);
+        $this->assertFalse($vendorResult['status']);
+    }
 }

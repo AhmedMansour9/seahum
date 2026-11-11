@@ -435,7 +435,8 @@ class OrderEditService
 
     public function checkIsOrderEditable(object|array $order, string|null $type = 'admin', array $lockedStatuses = ['processing', 'out_for_delivery', 'delivered', 'returned', 'failed', 'canceled'], bool $isOfflinePaymentConfirmationRequired = true): array
     {
-        if (($order->order_type != 'default_type') || in_array($order->order_status, $lockedStatuses)) {
+        $isVendorEdit = $type == 'vendor';
+        if (($isVendorEdit && $order->order_type != 'default_type') || in_array($order->order_status, $lockedStatuses)) {
             return [
                 'status' => false,
                 'message' => translate('Order can only be edited when the order status is Pending or Confirmed.'),
@@ -450,7 +451,7 @@ class OrderEditService
             }
         }
 
-        if (!$physicalProductExist) {
+        if ($isVendorEdit && !$physicalProductExist) {
             return [
                 'status' => false,
                 'message' => translate('Orders containing only digital products cannot be edited.'),

@@ -43,13 +43,9 @@
                             </div>
                             <div class="d-flex gap-2 align-items-center lh-1">
                                 <span class="text-body">{{ translate('Unit_Price') }} : </span>
-                                @if($detail['product_type'] != 'digital')
-                                    <input type="number" min="0" step="any" class="form-control form-control-sm w-100px product-unit-price"
-                                           name="products[{{ $key }}][price]"
-                                           value="{{ round(usdToDefaultCurrency(amount: $detail['price']), 2) }}">
-                                @else
-                                    <span>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $detail['price'])) }}</span>
-                                @endif
+                                <input type="number" min="0" step="any" class="form-control form-control-sm w-100px product-unit-price"
+                                       name="products[{{ $key }}][price]"
+                                       value="{{ round(usdToDefaultCurrency(amount: $detail['price']), 2) }}">
                             </div>
                             @if($detail['discount'] > 0)
                                 <div class="d-flex gap-2 align-items-center lh-1">
