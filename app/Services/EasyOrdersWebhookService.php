@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\OrderSource;
+use App\Events\OrderStatusEvent;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderStatusHistory;
@@ -177,6 +178,10 @@ class EasyOrdersWebhookService
             'user_type' => $userType,
             'status' => $status,
         ]);
+
+        if ($order['customer_id']) {
+            event(new OrderStatusEvent(key: $status, type: 'customer', order: $order));
+        }
     }
 
     private function syncResentOrderStatus(Order $order, array $payload): Order

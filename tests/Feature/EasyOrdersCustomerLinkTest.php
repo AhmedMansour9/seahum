@@ -2,7 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Events\OrderStatusEvent;
 use App\Models\Order;
+use App\Services\EasyOrdersWebhookService;
+use Illuminate\Support\Facades\Event;
 use App\Models\User;
 use App\Services\EasyOrdersCustomerLinkService;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +33,24 @@ class EasyOrdersCustomerLinkTest extends TestCase
             $table->bigInteger('customer_id')->nullable();
             $table->boolean('is_guest')->default(0);
             $table->text('shipping_address_data')->nullable();
+            $table->string('order_status')->default('pending');
+            $table->string('payment_status')->default('unpaid');
+            $table->boolean('is_pause')->default(0);
+            $table->timestamps();
+        });
+        Schema::create('order_details', function ($table) {
+            $table->id();
+            $table->bigInteger('order_id');
+            $table->string('delivery_status')->nullable();
+            $table->string('payment_status')->nullable();
+        });
+        Schema::create('order_status_histories', function ($table) {
+            $table->id();
+            $table->bigInteger('order_id');
+            $table->bigInteger('user_id')->nullable();
+            $table->string('user_type')->nullable();
+            $table->string('status')->nullable();
+            $table->timestamps();
         });
 
         $this->linkService = new EasyOrdersCustomerLinkService();
@@ -84,5 +105,19 @@ class EasyOrdersCustomerLinkTest extends TestCase
 
         $this->assertSame($customerId, $this->linkService->findCustomerIdByPhone(phone: '+201001234567'));
         $this->assertNull($this->linkService->findCustomerIdByPhone(phone: '01111111111'));
+    }
+
+    public function test_status_change_notifies_only_orders_linked_to_a_customer(): void
+    {
+        Event::fake([OrderStatusEvent::class]);
+        $this->createOrder(id: 10, phone: '01001234567', customerId: 5);
+        $this->createOrder(id: 11, phone: '01001234567');
+
+        $webhookService = app(EasyOrdersWebhookService::class);
+        $webhookService->updateAdminOrderStatus(orderId: 10, status: 'confirmed', adminId: 1);
+        $webhookService->updateAdminOrderStatus(orderId: 11, status: 'confirmed', adminId: 1);
+
+        Event::assertDispatchedTimes(OrderStatusEvent::class, 1);
+        Event::assertDispatched(OrderStatusEvent::class, fn(OrderStatusEvent $event) => $event->key === 'confirmed' && $event->type === 'customer' && $event->order['id'] == 10);
     }
 }
