@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Order;
 use App\Services\DeliveryAppStaffOrderCreateService;
 use App\Services\DeliveryAppStaffService;
+use App\Services\StaffNotificationService;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -27,6 +28,13 @@ class ScheduledOrdersTest extends TestCase
             $table->unsignedBigInteger('delivery_man_id')->nullable();
             $table->text('shipping_address_data')->nullable();
             $table->date('scheduled_for')->nullable();
+            $table->timestamps();
+        });
+        Schema::create('delivery_men', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('seller_id')->default(0);
+            $table->boolean('is_active')->default(1);
+            $table->string('app_role')->default('delivery_man');
             $table->timestamps();
         });
     }
@@ -99,5 +107,16 @@ class ScheduledOrdersTest extends TestCase
         $orderId = $this->createOrder(status: 'pending', scheduledFor: '2026-11-16');
 
         $this->assertSame('2026-11-16', Order::findOrFail($orderId)->toArray()['scheduled_for']);
+    }
+
+    public function test_due_today_notification_counts_only_open_orders_scheduled_for_today(): void
+    {
+        $this->createOrder(status: 'pending', scheduledFor: today()->format('Y-m-d'));
+        $this->createOrder(status: 'confirmed', scheduledFor: today()->format('Y-m-d'));
+        $this->createOrder(status: 'delivered', scheduledFor: today()->format('Y-m-d'));
+        $this->createOrder(status: 'pending', scheduledFor: today()->addDay()->format('Y-m-d'));
+        $this->createOrder(status: 'pending', scheduledFor: today()->format('Y-m-d'), type: 'POS');
+
+        $this->assertSame(2, app(StaffNotificationService::class)->notifyPostponedOrdersDueToday());
     }
 }
