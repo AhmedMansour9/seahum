@@ -75,6 +75,15 @@
                                                     id="clear-scheduled-for">{{ translate('clear') }}</button>
                                         </div>
                                     </div>
+                                    <div class="bg-info bg-opacity-10 px-12 py-10 rounded">
+                                        <label class="form-label fw-semibold fs-12 mb-2" for="order_governorate">{{ translate('governorate') }}</label>
+                                        <select id="order_governorate" name="governorate" class="form-select" data-order-id="{{ $order['id'] }}">
+                                            <option value="">{{ translate('not_a_governorate_order') }}</option>
+                                            @foreach(config('order_regions.governorates') as $governorateName)
+                                                <option value="{{ $governorateName }}" {{ $order['governorate'] === $governorateName ? 'selected' : '' }}>{{ $governorateName }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     @if (!is_null($order['order_note']) && !empty($order['order_note']))
                                         <div
                                             class="bg-section fs-12 px-12 py-10 text-dark rounded d-flex gap-2 align-items-center">
@@ -2211,6 +2220,7 @@
     <span id="message-deliveryman-charge-invalid-text" data-text="{{ translate("add_valid_data") }}"></span>
     <span id="add-date-update-url" data-url="{{route('admin.orders.amount-date-update')}}"></span>
     <span id="update-scheduled-for-url" data-url="{{route('admin.orders.update-scheduled-for')}}"></span>
+    <span id="update-governorate-url" data-url="{{route('admin.orders.update-governorate')}}"></span>
 
     <span id="customer-name" data-text="{{$order->customer['f_name']??""}} {{$order->customer['l_name']??""}}}"></span>
     <span id="is-shipping-exist" data-status="{{$shippingAddress ? 'true':'false'}}"></span>

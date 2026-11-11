@@ -282,6 +282,21 @@ function updateScheduledFor(orderId, scheduledFor) {
     });
 }
 
+$("#order_governorate").on('change', function () {
+    $.ajax({
+        url: $("#update-governorate-url").data('url'),
+        method: 'POST',
+        headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')},
+        data: {order_id: $(this).data('order-id'), governorate: $(this).val()},
+        success: function (response) {
+            toastMagic.success(response.message);
+        },
+        error: function () {
+            toastMagic.error($("#message-deliveryman-charge-invalid-text").data('text'));
+        }
+    });
+});
+
 $("#scheduled_for").on('change', function () {
     updateScheduledFor($(this).data('order-id'), $(this).val());
 });

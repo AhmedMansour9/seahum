@@ -34,6 +34,7 @@ use App\Exports\OrderExport;
 use App\Traits\PdfGenerator;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Enums\GlobalConstant;
 use App\Traits\CustomerTrait;
 use App\Services\OrderService;
@@ -183,7 +184,7 @@ class OrderController extends BaseController
         ];
 
         $orders = $this->orderRepo->getListWhereIn(
-            orderBy: $filters['governorates'] ? ['shipping_address_data->city' => 'asc', 'created_at' => 'desc'] : ['created_at' => 'desc'],
+            orderBy: $filters['governorates'] ? ['governorate' => 'asc', 'created_at' => 'desc'] : ['created_at' => 'desc'],
             searchValue: $searchValue,
             filters: $filters,
             whereIn: $filterWhereIn,
@@ -725,6 +726,18 @@ class OrderController extends BaseController
         ]);
 
         $this->orderRepo->update(id: $validated['order_id'], data: ['scheduled_for' => $validated['scheduled_for'] ?? null]);
+
+        return response()->json(['status' => true, 'message' => translate('successfully_updated')]);
+    }
+
+    public function updateGovernorate(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'governorate' => ['nullable', Rule::in(config('order_regions.governorates'))],
+        ]);
+
+        $this->orderRepo->update(id: $validated['order_id'], data: ['governorate' => $validated['governorate'] ?? null]);
 
         return response()->json(['status' => true, 'message' => translate('successfully_updated')]);
     }

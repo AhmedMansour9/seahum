@@ -82,6 +82,25 @@ class StaffOrderController extends Controller
         return response()->json($order);
     }
 
+    public function updateGovernorate(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'order_id' => 'required|integer',
+            'governorate' => ['nullable', Rule::in(config('order_regions.governorates'))],
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
+        }
+
+        if (!Order::where(['id' => $request['order_id'], 'order_type' => 'default_type'])->exists()) {
+            return $this->orderNotFoundResponse();
+        }
+
+        $this->deliveryAppStaffService->updateGovernorate(orderId: $request['order_id'], governorate: $request['governorate']);
+
+        return response()->json(['status' => 1, 'message' => translate('successfully_updated')]);
+    }
+
     public function updateScheduledFor(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [

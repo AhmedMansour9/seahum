@@ -2840,5 +2840,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"postponed" => "Postponed",
 	"postponed_to" => "Postponed to (customer's requested day)",
 	"only_postponed_orders" => "Only postponed orders",
-	"only_governorate_orders" => "Only governorate orders (outside Greater Cairo)",
+	"only_governorate_orders" => "Only governorate orders",
+	"governorate" => "Governorate",
+	"not_a_governorate_order" => "Not a governorate order",
 ];

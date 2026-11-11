@@ -37,7 +37,7 @@ class DeliveryAppStaffService
         return $this->getOrdersQuery(filters: $filters)
             ->with(['customer:id,f_name,l_name,phone', 'deliveryMan:id,f_name,l_name,phone', 'shippingAddress', 'details'])
             ->when(!empty($filters['postponed']), fn ($query) => $query->orderBy('scheduled_for'))
-            ->when(!empty($filters['governorates']), fn ($query) => $query->orderBy('shipping_address_data->city'))
+            ->when(!empty($filters['governorates']), fn ($query) => $query->orderBy('governorate'))
             ->latest()
             ->orderByDesc('id')
             ->paginate(perPage: $limit, page: $offset);
@@ -80,6 +80,12 @@ class DeliveryAppStaffService
         return $this->getOrdersQuery(filters: Arr::except($filters, ['status', 'postponed', 'governorates']))
             ->governorate()
             ->count();
+    }
+
+    public function updateGovernorate(string|int $orderId, ?string $governorate): bool
+    {
+        return (bool)Order::where(['id' => $orderId, 'order_type' => 'default_type'])
+            ->update(['governorate' => $governorate]);
     }
 
     public function updateScheduledFor(string|int $orderId, ?string $scheduledFor): bool
@@ -137,6 +143,7 @@ class DeliveryAppStaffService
                 'phone' => $order->deliveryMan['phone'],
             ] : null,
             'scheduled_for' => $order['scheduled_for']?->format('Y-m-d'),
+            'governorate' => $order['governorate'],
             'is_postponed' => $order['scheduled_for'] !== null && in_array($order['order_status'], self::OPEN_ORDER_STATUSES, true),
             'created_at' => $order['created_at'],
             'updated_at' => $order['updated_at'],
@@ -159,6 +166,7 @@ class DeliveryAppStaffService
 
         return array_merge($this->formatOrderListItem(order: $order), [
             'order_note' => $order['order_note'],
+            'governorate_options' => config('order_regions.governorates'),
             'discount_amount' => (float)$order['discount_amount'],
             ...$this->getEditState(order: $order),
             'whatsapp_message' => getOrderWhatsAppMessage(order: $order),
