@@ -6,6 +6,7 @@ use App\Enums\OrderSource;
 use App\Traits\DemoMaskingTrait;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -54,6 +55,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon|null $deliveryman_assigned_at
  * @property float $deliveryman_charge
  * @property DateTime $expected_delivery_date
+ * @property Carbon|null $scheduled_for
  * @property string $order_note
  * @property int $billing_address
  * @property object $billing_address_data
@@ -117,6 +119,7 @@ class Order extends Model
         'deliveryman_assigned_at',
         'deliveryman_charge',
         'expected_delivery_date',
+        'scheduled_for',
         'order_note',
         'billing_address',
         'billing_address_data',
@@ -139,6 +142,7 @@ class Order extends Model
     protected $casts = [
         'customer_id' => 'integer',
         'is_guest' => 'boolean',
+        'scheduled_for' => 'date',
         'customer_type' => 'string',
         'payment_status' => 'string',
         'order_status' => 'string',
@@ -255,6 +259,18 @@ class Order extends Model
     public function coupon(): BelongsTo
     {
         return $this->belongsTo(Coupon::class, 'coupon_code', 'code');
+    }
+
+    /**
+     * Orders the customer asked to receive on a later day and that are still open.
+     *
+     * @param Builder<Order> $query
+     * @return Builder<Order>
+     */
+    public function scopePostponed(Builder $query): Builder
+    {
+        return $query->whereNotNull('scheduled_for')
+            ->whereIn('order_status', ['pending', 'confirmed', 'processing', 'out_for_delivery']);
     }
 
     /* order_status_history -> orderStatusHistory */

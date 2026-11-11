@@ -275,6 +275,9 @@ class OrderRepository implements OrderRepositoryInterface
             )->when(isset($filters['delivery_man_id']), function ($query) use ($filters) {
                     $query->where('delivery_man_id', $filters['delivery_man_id']);
                 }
+            )->when(!empty($filters['postponed']), function ($query) {
+                    $query->postponed();
+                }
             )->when($searchValue, function ($mainQuery) use ($searchValue) {
                 $keywords = explode(' ', trim($searchValue));
                 return $mainQuery->where(function ($query) use ($keywords, $searchValue) {
@@ -397,6 +400,9 @@ class OrderRepository implements OrderRepositoryInterface
             )->when(isset($filters['date_type']) && $filters['date_type'] === 'custom_date' && isset($filters['from'], $filters['to']), function ($query) use ($filters) {
                     $query->whereDate('created_at', '>=', $filters['from'])
                         ->whereDate('created_at', '<=', $filters['to']);
+                }
+            )->when(!empty($filters['postponed']), function ($query) {
+                    $query->postponed();
                 }
             )->when(!empty($whereIn['payment_status']), function ($query) use ($whereIn) {
                     $query->whereIn('payment_status', $whereIn['payment_status']);

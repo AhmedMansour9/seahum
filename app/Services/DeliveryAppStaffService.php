@@ -36,6 +36,7 @@ class DeliveryAppStaffService
     {
         return $this->getOrdersQuery(filters: $filters)
             ->with(['customer:id,f_name,l_name,phone', 'deliveryMan:id,f_name,l_name,phone', 'shippingAddress', 'details'])
+            ->when(!empty($filters['postponed']), fn ($query) => $query->orderBy('scheduled_for'))
             ->latest()
             ->orderByDesc('id')
             ->paginate(perPage: $limit, page: $offset);
@@ -57,6 +58,24 @@ class DeliveryAppStaffService
     }
 
     /**
+     * Number of postponed orders for the same filters, ignoring the status and postponed filters themselves.
+     *
+     * @param array<string, mixed> $filters
+     */
+    public function getPostponedCount(array $filters): int
+    {
+        return $this->getOrdersQuery(filters: Arr::except($filters, ['status', 'postponed']))
+            ->postponed()
+            ->count();
+    }
+
+    public function updateScheduledFor(string|int $orderId, ?string $scheduledFor): bool
+    {
+        return (bool)Order::where(['id' => $orderId, 'order_type' => 'default_type'])
+            ->update(['scheduled_for' => $scheduledFor]);
+    }
+
+    /**
      * @param array<string, mixed> $filters
      * @return Builder<Order>
      */
@@ -65,6 +84,7 @@ class DeliveryAppStaffService
         return Order::query()
             ->where('order_type', 'default_type')
             ->when(!empty($filters['status']), fn ($query) => $query->where('order_status', $filters['status']))
+            ->when(!empty($filters['postponed']), fn ($query) => $query->postponed())
             ->when(!empty($filters['order_source']), fn ($query) => $query->where('order_source', $filters['order_source']))
             ->when(!empty($filters['delivery_man_id']), fn ($query) => $query->where('delivery_man_id', $filters['delivery_man_id']))
             ->when(($filters['date_type'] ?? null) === 'today', fn ($query) => $query->whereDate('updated_at', Carbon::today()))
@@ -102,6 +122,8 @@ class DeliveryAppStaffService
                 'name' => trim($order->deliveryMan['f_name'] . ' ' . $order->deliveryMan['l_name']),
                 'phone' => $order->deliveryMan['phone'],
             ] : null,
+            'scheduled_for' => $order['scheduled_for']?->format('Y-m-d'),
+            'is_postponed' => $order['scheduled_for'] !== null && in_array($order['order_status'], self::OPEN_ORDER_STATUSES, true),
             'created_at' => $order['created_at'],
             'updated_at' => $order['updated_at'],
         ];

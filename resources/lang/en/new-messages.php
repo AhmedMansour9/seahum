@@ -2837,4 +2837,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"coupon_not_applicable_to_excluded_category_products" => "This coupon does not apply to products of the excluded category",
 	"excluded_category" => "Excluded category",
 	"no_category_excluded" => "No category excluded",
+	"postponed" => "Postponed",
+	"postponed_to" => "Postponed to (customer's requested day)",
+	"only_postponed_orders" => "Only postponed orders",
 ];

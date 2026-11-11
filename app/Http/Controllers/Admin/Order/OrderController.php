@@ -141,6 +141,7 @@ class OrderController extends BaseController
             'customer_id' => $request['customer_id'],
             'seller_id' => $vendorId,
             'seller_is' => $vendorIs,
+            'postponed' => $request->boolean('postponed'),
         ];
         $orderAmountSettlement = $request->input('order_amount_settlement', []);
 
@@ -406,6 +407,7 @@ class OrderController extends BaseController
             'customer_id' => $request['customer_id'],
             'seller_id' => $vendorId,
             'seller_is' => $vendorIs,
+            'postponed' => $request->boolean('postponed'),
         ];
 
         $dateType = $request['date_type'];
@@ -711,6 +713,18 @@ class OrderController extends BaseController
 
         ToastMagic::success(translate('successfully_updated'));
         return back();
+    }
+
+    public function updateScheduledFor(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'scheduled_for' => 'nullable|date_format:Y-m-d',
+        ]);
+
+        $this->orderRepo->update(id: $validated['order_id'], data: ['scheduled_for' => $validated['scheduled_for'] ?? null]);
+
+        return response()->json(['status' => true, 'message' => translate('successfully_updated')]);
     }
 
     public function updateDeliverInfo(Request $request): RedirectResponse

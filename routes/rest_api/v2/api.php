@@ -183,6 +183,7 @@ Route::group(['namespace' => 'RestAPI\v2', 'prefix' => 'v2', 'middleware' => ['a
                     Route::group(['middleware' => ['delivery_man_role:admin,customer_service']], function () {
                         Route::get('orders', 'getOrders');
                         Route::put('update-order-status', 'updateOrderStatus');
+                        Route::put('update-scheduled-for', 'updateScheduledFor');
                         Route::put('update-easy-orders-order', 'updateEasyOrdersOrder');
                         Route::get('edit-products', 'getEditProducts');
                         Route::post('edit-order-preview', 'previewOrderEdit');

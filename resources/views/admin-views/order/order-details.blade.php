@@ -65,6 +65,16 @@
                                             @endforeach
                                         @endif
                                     </div>
+                                    <div class="bg-warning bg-opacity-10 px-12 py-10 rounded">
+                                        <label class="form-label fw-semibold fs-12 mb-2" for="scheduled_for">{{ translate('postponed_to') }}</label>
+                                        <div class="d-flex gap-2 align-items-center">
+                                            <input type="date" id="scheduled_for" name="scheduled_for"
+                                                   class="form-control" data-order-id="{{ $order['id'] }}"
+                                                   value="{{ $order['scheduled_for']?->format('Y-m-d') }}">
+                                            <button type="button" class="btn btn-outline-danger flex-shrink-0 {{ $order['scheduled_for'] ? '' : 'd-none' }}"
+                                                    id="clear-scheduled-for">{{ translate('clear') }}</button>
+                                        </div>
+                                    </div>
                                     @if (!is_null($order['order_note']) && !empty($order['order_note']))
                                         <div
                                             class="bg-section fs-12 px-12 py-10 text-dark rounded d-flex gap-2 align-items-center">
@@ -2200,6 +2210,7 @@
           data-text="{{ translate("failed_to_add_deliveryman_charge") }}"></span>
     <span id="message-deliveryman-charge-invalid-text" data-text="{{ translate("add_valid_data") }}"></span>
     <span id="add-date-update-url" data-url="{{route('admin.orders.amount-date-update')}}"></span>
+    <span id="update-scheduled-for-url" data-url="{{route('admin.orders.update-scheduled-for')}}"></span>
 
     <span id="customer-name" data-text="{{$order->customer['f_name']??""}} {{$order->customer['l_name']??""}}}"></span>
     <span id="is-shipping-exist" data-status="{{$shippingAddress ? 'true':'false'}}"></span>

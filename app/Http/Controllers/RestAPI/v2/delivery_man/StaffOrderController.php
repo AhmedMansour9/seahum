@@ -39,6 +39,7 @@ class StaffOrderController extends Controller
             'status' => ['nullable', Rule::in(getOrderStatusList())],
             'order_source' => ['nullable', Rule::in(array_column(OrderSource::cases(), 'value'))],
             'date_type' => 'nullable|in:today',
+            'postponed' => 'nullable|boolean',
             'delivery_man_id' => 'nullable|integer',
             'date_from' => 'nullable|date_format:Y-m-d',
             'date_to' => 'nullable|date_format:Y-m-d|after_or_equal:date_from',
@@ -52,7 +53,7 @@ class StaffOrderController extends Controller
 
         $limit = (int)($request['limit'] ?? 20);
         $offset = (int)($request['offset'] ?? 1);
-        $filters = $request->only(['status', 'search', 'order_source', 'date_type', 'delivery_man_id', 'date_from', 'date_to']);
+        $filters = $request->only(['status', 'search', 'order_source', 'date_type', 'delivery_man_id', 'date_from', 'date_to', 'postponed']);
         $orders = $this->deliveryAppStaffService->getOrders(filters: $filters, limit: $limit, offset: $offset);
 
         return response()->json([
@@ -60,6 +61,7 @@ class StaffOrderController extends Controller
             'limit' => $limit,
             'offset' => $offset,
             'status_counts' => $this->deliveryAppStaffService->getStatusCounts(filters: $filters),
+            'postponed_count' => $this->deliveryAppStaffService->getPostponedCount(filters: $filters),
             'orders' => $orders->getCollection()->map(fn (Order $order) => $this->deliveryAppStaffService->formatOrderListItem(order: $order))->values(),
         ]);
     }
@@ -76,6 +78,25 @@ class StaffOrderController extends Controller
         }
 
         return response()->json($order);
+    }
+
+    public function updateScheduledFor(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'order_id' => 'required|integer',
+            'scheduled_for' => 'nullable|date_format:Y-m-d',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
+        }
+
+        if (!Order::where(['id' => $request['order_id'], 'order_type' => 'default_type'])->exists()) {
+            return $this->orderNotFoundResponse();
+        }
+
+        $this->deliveryAppStaffService->updateScheduledFor(orderId: $request['order_id'], scheduledFor: $request['scheduled_for']);
+
+        return response()->json(['status' => 1, 'message' => translate('successfully_updated')]);
     }
 
     public function updateOrderStatus(Request $request): JsonResponse
