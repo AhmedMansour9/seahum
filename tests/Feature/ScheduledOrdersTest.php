@@ -3,10 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\Order;
+use App\Services\DeliveryAppStaffOrderCreateService;
 use App\Services\DeliveryAppStaffService;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
 class ScheduledOrdersTest extends TestCase
@@ -81,5 +83,14 @@ class ScheduledOrdersTest extends TestCase
 
         $this->assertSame(1, $service->getPostponedCount(filters: []));
         $this->assertSame(1, $service->getPostponedCount(filters: ['status' => 'delivered', 'postponed' => '1']));
+    }
+
+    public function test_staff_create_order_accepts_only_today_or_later_scheduled_day(): void
+    {
+        $rules = ['scheduled_for' => DeliveryAppStaffOrderCreateService::getValidationRules()['scheduled_for']];
+
+        $this->assertTrue(Validator::make(['scheduled_for' => now()->addDay()->format('Y-m-d')], $rules)->passes());
+        $this->assertTrue(Validator::make(['scheduled_for' => null], $rules)->passes());
+        $this->assertTrue(Validator::make(['scheduled_for' => now()->subDay()->format('Y-m-d')], $rules)->fails());
     }
 }

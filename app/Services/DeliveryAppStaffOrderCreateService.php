@@ -36,6 +36,7 @@ class DeliveryAppStaffOrderCreateService
             'latitude' => ['nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'order_note' => ['nullable', 'string', 'max:1000'],
+            'scheduled_for' => ['nullable', 'date_format:Y-m-d', 'after_or_equal:today'],
             'shipping_cost' => ['nullable', 'numeric', 'min:0'],
             'products' => ['required', 'array', 'min:1'],
             'products.*.id' => ['required', 'integer'],
@@ -46,7 +47,7 @@ class DeliveryAppStaffOrderCreateService
     }
 
     /**
-     * @param array{contact_person_name: string, phone: string, address?: string|null, city?: string|null, location_link?: string|null, latitude?: float|string|null, longitude?: float|string|null, order_note?: string|null, shipping_cost?: float|string|null, products: array<int, array{id: int|string, quantity: int|string, variant?: string|null, price?: float|string|null}>} $data
+     * @param array{contact_person_name: string, phone: string, address?: string|null, city?: string|null, location_link?: string|null, latitude?: float|string|null, longitude?: float|string|null, order_note?: string|null, scheduled_for?: string|null, shipping_cost?: float|string|null, products: array<int, array{id: int|string, quantity: int|string, variant?: string|null, price?: float|string|null}>} $data
      * @return array{status: bool, message: string, order_id?: int}
      */
     public function createOrder(array $data, DeliveryMan $staff): array
@@ -85,6 +86,7 @@ class DeliveryAppStaffOrderCreateService
                 'shipping_cost' => $shippingCost,
                 'verification_code' => rand(100000, 999999),
                 'order_note' => $data['order_note'] ?? null,
+                'scheduled_for' => $data['scheduled_for'] ?? null,
                 'shipping_address_data' => $this->getShippingAddressData(data: $data),
             ]);
 
