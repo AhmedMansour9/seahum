@@ -40,6 +40,7 @@ class StaffOrderController extends Controller
             'order_source' => ['nullable', Rule::in(array_column(OrderSource::cases(), 'value'))],
             'date_type' => 'nullable|in:today',
             'postponed' => 'nullable|boolean',
+            'governorates' => 'nullable|boolean',
             'delivery_man_id' => 'nullable|integer',
             'date_from' => 'nullable|date_format:Y-m-d',
             'date_to' => 'nullable|date_format:Y-m-d|after_or_equal:date_from',
@@ -53,7 +54,7 @@ class StaffOrderController extends Controller
 
         $limit = (int)($request['limit'] ?? 20);
         $offset = (int)($request['offset'] ?? 1);
-        $filters = $request->only(['status', 'search', 'order_source', 'date_type', 'delivery_man_id', 'date_from', 'date_to', 'postponed']);
+        $filters = $request->only(['status', 'search', 'order_source', 'date_type', 'delivery_man_id', 'date_from', 'date_to', 'postponed', 'governorates']);
         $orders = $this->deliveryAppStaffService->getOrders(filters: $filters, limit: $limit, offset: $offset);
 
         return response()->json([
@@ -62,6 +63,7 @@ class StaffOrderController extends Controller
             'offset' => $offset,
             'status_counts' => $this->deliveryAppStaffService->getStatusCounts(filters: $filters),
             'postponed_count' => $this->deliveryAppStaffService->getPostponedCount(filters: $filters),
+            'governorates_count' => $this->deliveryAppStaffService->getGovernoratesCount(filters: $filters),
             'orders' => $orders->getCollection()->map(fn (Order $order) => $this->deliveryAppStaffService->formatOrderListItem(order: $order))->values(),
         ]);
     }

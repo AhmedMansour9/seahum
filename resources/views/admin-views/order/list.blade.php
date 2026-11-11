@@ -192,13 +192,14 @@
                                                     'payment_status' => request('payment_status'),
                                                     'order_current_status' => request('order_current_status'),
                                                     'order_amount_settlement' => request('order_amount_settlement'),
-                                                    'postponed' => request('postponed')
+                                                    'postponed' => request('postponed'),
+                                                    'governorates' => request('governorates')
                                                     ]) }}">
                                 <i class="fi fi-sr-inbox-in"></i>
                                 <span class="fs-12">{{ translate('export') }}</span>
                             </a>
                             <div class="position-relative">
-                                @if((request('delivery_man_id') || $from || $to || $filter || $searchValue || $vendorId || $customerId || $dateType || request('postponed')))
+                                @if((request('delivery_man_id') || $from || $to || $filter || $searchValue || $vendorId || $customerId || $dateType || request('postponed') || request('governorates')))
                                     <div
                                         class="position-absolute inset-inline-end-0 top-0 mt-n1 me-n1 btn-circle bg-danger border border-white border-2"
                                         style="--size: 12px;"></div>

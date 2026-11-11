@@ -273,6 +273,32 @@ class Order extends Model
             ->whereIn('order_status', ['pending', 'confirmed', 'processing', 'out_for_delivery']);
     }
 
+    /**
+     * Orders shipped outside Greater Cairo: city/state is filled and matches no Greater Cairo keyword.
+     *
+     * @param Builder<Order> $query
+     * @return Builder<Order>
+     */
+    public function scopeGovernorate(Builder $query): Builder
+    {
+        $greaterCairoKeywords = config('order_regions.greater_cairo_keywords');
+        $addressFields = ['shipping_address_data->city', 'shipping_address_data->state'];
+
+        return $query
+            ->where(function (Builder $query) use ($addressFields) {
+                foreach ($addressFields as $field) {
+                    $query->orWhere(fn (Builder $query) => $query->whereNotNull($field)->whereNotIn($field, ['', 'null']));
+                }
+            })
+            ->where(function (Builder $query) use ($addressFields, $greaterCairoKeywords) {
+                foreach ($addressFields as $field) {
+                    foreach ($greaterCairoKeywords as $keyword) {
+                        $query->where(fn (Builder $query) => $query->whereNull($field)->orWhere($field, 'not like', "%{$keyword}%"));
+                    }
+                }
+            });
+    }
+
     /* order_status_history -> orderStatusHistory */
     public function orderStatusHistory(): HasMany
     {
