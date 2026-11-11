@@ -266,6 +266,31 @@ $("#expected_delivery_date").on('change', function () {
     amountDateUpdate(this);
 });
 
+function updateScheduledFor(orderId, scheduledFor) {
+    $.ajax({
+        url: $("#update-scheduled-for-url").data('url'),
+        method: 'POST',
+        headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')},
+        data: {order_id: orderId, scheduled_for: scheduledFor},
+        success: function (response) {
+            toastMagic.success(response.message);
+            $("#clear-scheduled-for").toggleClass('d-none', !scheduledFor);
+        },
+        error: function () {
+            toastMagic.error($("#message-deliveryman-charge-invalid-text").data('text'));
+        }
+    });
+}
+
+$("#scheduled_for").on('change', function () {
+    updateScheduledFor($(this).data('order-id'), $(this).val());
+});
+
+$("#clear-scheduled-for").on('click', function () {
+    $("#scheduled_for").val('');
+    updateScheduledFor($("#scheduled_for").data('order-id'), '');
+});
+
 function amountDateUpdate(t){
     let field_name = $(t).attr('name');
     let field_val = $(t).val();

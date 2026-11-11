@@ -191,13 +191,14 @@
                                                     'date_type' => $dateType,
                                                     'payment_status' => request('payment_status'),
                                                     'order_current_status' => request('order_current_status'),
-                                                    'order_amount_settlement' => request('order_amount_settlement')
+                                                    'order_amount_settlement' => request('order_amount_settlement'),
+                                                    'postponed' => request('postponed')
                                                     ]) }}">
                                 <i class="fi fi-sr-inbox-in"></i>
                                 <span class="fs-12">{{ translate('export') }}</span>
                             </a>
                             <div class="position-relative">
-                                @if((request('delivery_man_id') || $from || $to || $filter || $searchValue || $vendorId || $customerId || $dateType))
+                                @if((request('delivery_man_id') || $from || $to || $filter || $searchValue || $vendorId || $customerId || $dateType || request('postponed')))
                                     <div
                                         class="position-absolute inset-inline-end-0 top-0 mt-n1 me-n1 btn-circle bg-danger border border-white border-2"
                                         style="--size: 12px;"></div>
@@ -266,6 +267,11 @@
                                             @if($order->edited_status == 1)
                                                 <span class="badge badge-info text-bg-info w-max-content">
                                                         {{ translate('Edited') }}
+                                                    </span>
+                                            @endif
+                                            @if($order['scheduled_for'])
+                                                <span class="badge text-bg-warning w-max-content">
+                                                        {{ translate('postponed') }}: {{ $order['scheduled_for']->locale(app()->getLocale())->translatedFormat('d F Y') }}
                                                     </span>
                                             @endif
                                         </div>
