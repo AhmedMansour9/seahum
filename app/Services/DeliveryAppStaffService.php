@@ -36,6 +36,7 @@ class DeliveryAppStaffService
     {
         return $this->getOrdersQuery(filters: $filters)
             ->with(['customer:id,f_name,l_name,phone', 'deliveryMan:id,f_name,l_name,phone', 'shippingAddress', 'details'])
+            ->when(!empty($filters['postponed']), fn ($query) => $query->orderBy('scheduled_for'))
             ->latest()
             ->orderByDesc('id')
             ->paginate(perPage: $limit, page: $offset);
