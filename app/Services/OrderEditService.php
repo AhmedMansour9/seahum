@@ -151,6 +151,13 @@ class OrderEditService
             $discount = $activeProduct ? getProductPriceByType(product: $activeProduct, type: 'discounted_amount', result: 'value', price: $details['price']) : (getProductPriceByType(product: $product, type: 'discounted_amount', result: 'value', price: $details['price']) ?? 0);
             $discountedPrice = $activeProduct ? getProductPriceByType(product: $activeProduct, type: 'discounted_unit_price', result: 'value', price: $details['price']) : (getProductPriceByType(product: $product, type: 'discount', result: 'value', price: $details['price']) ?? 0);
 
+            $customUnitPrice = $this->getStoredCustomUnitPrice(detail: $details, catalogUnitPrice: (float)$unitPrice);
+            if ($customUnitPrice !== null) {
+                $unitPrice = $customUnitPrice;
+                $discount = 0;
+                $discountedPrice = $customUnitPrice;
+            }
+
 
             $checkActiveProduct = $productList?->firstWhere('id', $details['product_id']);
             $isQuantityEditable = (bool)($checkActiveProduct);
@@ -364,6 +371,9 @@ class OrderEditService
             foreach ($requestProducts as $requestKey => $requestItem) {
                 if ($requestKey == $key) {
                     $productListItem['qty'] = $requestItem['qty'];
+                    if (isset($requestItem['price']) && $requestItem['price'] !== '' && $this->isUnitPriceChanged(line: $productListItem, requestedPrice: (float)$requestItem['price'])) {
+                        $productListItem = $this->applyCustomUnitPrice(line: $productListItem, unitPrice: (float)currencyConverter(amount: (float)$requestItem['price']));
+                    }
                     $filteredProducts[$key] = $productListItem;
                 }
             }
@@ -376,6 +386,46 @@ class OrderEditService
             'status' => 'success',
             'message' => translate('product_update_successfully'),
         ];
+    }
+
+    /**
+     * The unit price a line was manually set to: a stored line without discount whose price differs from the catalog price.
+     * Lines priced by the catalog (with or without a product discount) return null.
+     */
+    public function getStoredCustomUnitPrice(object|array|null $detail, float $catalogUnitPrice): ?float
+    {
+        if (!$detail) {
+            return null;
+        }
+
+        $isPricedByCatalog = (float)$detail['discount'] > 0 || abs((float)$detail['price'] - $catalogUnitPrice) < 0.0001;
+
+        return $isPricedByCatalog ? null : (float)$detail['price'];
+    }
+
+    /**
+     * The form posts the shown unit price of every line, so only a price that differs from the shown one is a manual change.
+     *
+     * @param array<string, mixed> $line
+     */
+    private function isUnitPriceChanged(array $line, float $requestedPrice): bool
+    {
+        return abs($requestedPrice - round((float)usdToDefaultCurrency(amount: (float)$line['price']), 2)) > 0.01;
+    }
+
+    /**
+     * A manual price replaces the catalog price and the product discount for the line.
+     *
+     * @param array<string, mixed> $line
+     * @return array<string, mixed>
+     */
+    public function applyCustomUnitPrice(array $line, float $unitPrice): array
+    {
+        $line['price'] = $unitPrice;
+        $line['discount'] = 0;
+        $line['discounted_price'] = $unitPrice;
+
+        return $line;
     }
 
     private function generateProductIndex(mixed $id, ?string $variant = null): string
@@ -501,6 +551,15 @@ class OrderEditService
                 });
 
             $taxConfig = self::getTaxSystemType();
+
+            $customUnitPrice = isset($productItem['price']) && $productItem['price'] !== ''
+                ? (float)currencyConverter(amount: (float)$productItem['price'])
+                : $this->getStoredCustomUnitPrice(detail: $searchProductInDetails, catalogUnitPrice: (float)$unitPrice);
+            if ($customUnitPrice !== null) {
+                $unitPrice = $customUnitPrice;
+                $discount = 0;
+                $discountedPrice = $customUnitPrice;
+            }
 
             $productList[$this->generateProductIndex(id: $product['id'], variant: $productItem['variant'])] = [
                 'current_stock' => $currentStock,

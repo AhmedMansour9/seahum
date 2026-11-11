@@ -275,6 +275,10 @@ $(document).on('input', '.update-order-product-form .product-qty', function () {
     updateOrderProductForm(this);
 });
 
+$(document).on('change', '.update-order-product-form .product-unit-price', function () {
+    updateOrderProductForm(this);
+});
+
 $(document).on('click', '.update-order-product-form .qty-count', function () {
     updateOrderProductForm(this);
 });
