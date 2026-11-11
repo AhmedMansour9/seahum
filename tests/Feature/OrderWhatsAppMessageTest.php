@@ -71,6 +71,8 @@ class OrderWhatsAppMessageTest extends TestCase
         $this->assertStringContainsString("Smoked Salmon:\nعدد القطع: 2", $message);
         $this->assertStringContainsString('*الإجمالي:* 235.50 ج.م', $message);
         $this->assertStringContainsString('*التوصيل إلى:* ain shams', $message);
+        $this->assertStringContainsString('تطبيق SEA HUM', $message);
+        $this->assertStringContainsString('WELCOME200', $message);
         $this->assertStringNotContainsString('{', $message);
     }
 
