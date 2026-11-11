@@ -27,6 +27,7 @@ use App\Models\Transaction;
 use App\Traits\CommonTrait;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use App\Models\CartShipping;
 use App\Models\SellerWallet;
@@ -540,6 +541,16 @@ class OrderManager
             ];
         }
 
+        if ($coupon->excluded_category_id) {
+            $cartList = self::excludeCartItemsOfCouponExcludedCategory(coupon: $coupon, cartItems: $cartList);
+            if ($cartList->isEmpty()) {
+                return [
+                    'status' => false,
+                    'messages' => translate('coupon_not_applicable_to_excluded_category_products')
+                ];
+            }
+        }
+
         $couponType = $coupon?->coupon_type ?? null;
         $couponDiscountType = $coupon?->discount_type ?? null;
         $couponDiscount = $coupon?->discount ?? 0;
@@ -650,6 +661,26 @@ class OrderManager
         ];
     }
 
+    /**
+     * Drops the cart items whose product belongs to the coupon's excluded category. Coupons without an excluded category keep every item.
+     */
+    public static function excludeCartItemsOfCouponExcludedCategory(Coupon $coupon, Collection $cartItems): Collection
+    {
+        if (!$coupon->excluded_category_id) {
+            return $cartItems;
+        }
+
+        $excludedProductIds = Product::whereIn('id', $cartItems->pluck('product_id')->unique()->all())
+            ->where(function ($query) use ($coupon) {
+                $query->where('category_ids', 'like', '%"id":"' . $coupon->excluded_category_id . '"%')
+                    ->orWhere('category_ids', 'like', '%"id":' . $coupon->excluded_category_id . ',%')
+                    ->orWhere('category_ids', 'like', '%"id":' . $coupon->excluded_category_id . '}%');
+            })
+            ->pluck('id');
+
+        return $cartItems->reject(fn($cartItem) => $excludedProductIds->contains($cartItem['product_id']))->values();
+    }
+
     public static function getGroupWiseCouponArray($request, $couponCode, $applicableAmount, $discountAmount, $groupId, $cartListGroup): array
     {
         $user = Helpers::getCustomerInformation($request);
@@ -690,7 +721,7 @@ class OrderManager
         if ($discountOnPurchaseCoupon) {
             foreach ($cartListGroup as $cartListGroupKey => $cartList) {
                 if ($cartListGroupKey == $groupId) {
-                    foreach ($cartList as $cartItem) {
+                    foreach (self::excludeCartItemsOfCouponExcludedCategory(coupon: $coupon, cartItems: $cartList) as $cartItem) {
                         if (($coupon->seller_id == '0') || (is_null($coupon->seller_id) && $cartItem['seller_is'] == 'admin') || ($coupon->seller_id == $cartItem['seller_id'] && $cartItem['seller_is'] == 'seller')) {
                             $onlyProductTotalAmount += ($cartItem['price'] - $cartItem['discount']) * $cartItem['quantity'];
                         }

@@ -32,6 +32,7 @@ class Coupon extends Model
         'coupon_bearer',
         'customer_id',
         'seller_id',
+        'excluded_category_id',
         'title',
         'code',
         'start_date',

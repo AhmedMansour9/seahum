@@ -71,6 +71,15 @@
                                     </select>
                                 </div>
 
+                                <div class="col-md-6 col-lg-4 first_order">
+                                    <label for="excluded_category_id" class="form-label">{{translate('excluded_category')}}</label>
+                                    <select class="custom-select" name="excluded_category_id" id="excluded_category_id">
+                                        <option value="">{{translate('no_category_excluded')}}</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="col-md-6 col-lg-4 coupon_type first_order">
                                     <label for="name"
                                            class="form-label d-flex">{{translate('customer')}} <span class="text-danger">*</span></label>
