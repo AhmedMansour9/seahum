@@ -32,6 +32,18 @@ class CouponService
         ];
     }
 
+    /**
+     * The excluded category only makes sense for coupons that discount products: discount on purchase and first order.
+     */
+    public function getExcludedCategoryId(object $request): ?int
+    {
+        if (!in_array($request['coupon_type'], ['discount_on_purchase', 'first_order'], true)) {
+            return null;
+        }
+
+        return $request['excluded_category_id'] ? (int)$request['excluded_category_id'] : null;
+    }
+
     public function getAddData(object $request): array
     {
         $data = [
@@ -42,7 +54,7 @@ class CouponService
             'expire_date' => $request['expire_date'],
             'status' => 1,
             'min_purchase' => currencyConverter(amount: $request['min_purchase']),
-            'excluded_category_id' => $request['coupon_type'] == 'discount_on_purchase' ? ($request['excluded_category_id'] ?: null) : null,
+            'excluded_category_id' => $this->getExcludedCategoryId(request: $request),
         ];
 
         if ($request['coupon_type'] == 'discount_on_purchase' || $request['coupon_type'] == 'free_delivery') {
@@ -76,7 +88,7 @@ class CouponService
             'expire_date' => $request['expire_date'],
             'status' => 1,
             'min_purchase' => currencyConverter(amount: $request['min_purchase']),
-            'excluded_category_id' => $request['coupon_type'] == 'discount_on_purchase' ? ($request['excluded_category_id'] ?: null) : null,
+            'excluded_category_id' => $this->getExcludedCategoryId(request: $request),
         ];
         if ($request['coupon_type'] == 'discount_on_purchase' || $request['coupon_type'] == 'free_delivery') {
             $data += [

@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\Coupon;
 use App\Models\Product;
+use App\Services\CouponService;
+use Illuminate\Http\Request;
 use App\Utils\OrderManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -61,5 +63,16 @@ class CouponExcludedCategoryTest extends TestCase
         $eligible = OrderManager::excludeCartItemsOfCouponExcludedCategory(coupon: $coupon, cartItems: $this->cartItems([1, 2, 3, 4]));
 
         $this->assertCount(4, $eligible);
+    }
+
+    public function test_excluded_category_is_kept_for_first_order_and_discount_coupons_but_not_free_delivery(): void
+    {
+        $service = new CouponService();
+        $request = fn (string $couponType) => new Request(['coupon_type' => $couponType, 'excluded_category_id' => '7']);
+
+        $this->assertSame(7, $service->getExcludedCategoryId(request: $request('first_order')));
+        $this->assertSame(7, $service->getExcludedCategoryId(request: $request('discount_on_purchase')));
+        $this->assertNull($service->getExcludedCategoryId(request: $request('free_delivery')));
+        $this->assertNull($service->getExcludedCategoryId(request: new Request(['coupon_type' => 'first_order', 'excluded_category_id' => ''])));
     }
 }
