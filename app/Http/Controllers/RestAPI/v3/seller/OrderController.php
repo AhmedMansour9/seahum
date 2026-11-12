@@ -282,10 +282,6 @@ class OrderController extends Controller
             return response()->json(['success' => 0, 'message' => translate("Customer_account_has_been_deleted") . ' ' . translate("you_cant_update_status")], 202);
         }
 
-        if ($order['payment_method'] == 'offline_payment' && $order['payment_status'] == 'unpaid') {
-            return response()->json(['status' => 0, 'message' => translate('Please confirm the offline payment information before changing the order status.')], 202);
-        }
-
         if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid') {
             return response()->json(['status' => 0, 'message' => translate('After admin confirm the due amount payment as paid then you can change this status.')], 202);
         }
@@ -503,10 +499,6 @@ class OrderController extends Controller
         if (isset($order)) {
             if ($order['payment_status'] == 'paid' && $request['payment_status'] != 'paid') {
                 return response()->json(['success' => 0, 'message' => translate('when_payment_status_paid_then_you_can_not_change_payment_status_paid_to_unpaid.')], 403);
-            }
-
-            if ($order['payment_method'] == 'offline_payment' && $order['payment_status'] == 'unpaid') {
-                return response()->json(['status' => 0, 'message' => translate('Please confirm the offline payment information before changing the order status.')], 403);
             }
 
             if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid') {
