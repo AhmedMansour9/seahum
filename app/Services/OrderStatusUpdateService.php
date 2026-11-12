@@ -124,14 +124,6 @@ class OrderStatusUpdateService
             return translate('account_has_been_deleted_you_can_not_change_the_status');
         }
 
-        if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid') {
-            return translate('Please confirm the due payment has been paid before changing the order status.');
-        }
-
-        if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['edit_return_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_return_payment_status == 'pending') {
-            return translate('Please return the amount first before changing the order status.');
-        }
-
         if ($order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method == 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid' && $status == 'delivered') {
             return translate('Please mark as paid before delivered this order.');
         }
