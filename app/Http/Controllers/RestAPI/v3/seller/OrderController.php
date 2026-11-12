@@ -282,10 +282,6 @@ class OrderController extends Controller
             return response()->json(['success' => 0, 'message' => translate("Customer_account_has_been_deleted") . ' ' . translate("you_cant_update_status")], 202);
         }
 
-        if ($order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method == 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid' && $order['shipping_responsibility'] == 'inhouse_shipping' && $request['order_status'] == 'delivered') {
-            return response()->json(['status' => 0, 'message' => translate('Please mark as paid before delivered this order.')], 202);
-        }
-
         $walletStatus = getWebConfig(name: 'wallet_status');
         $loyaltyPointStatus = getWebConfig(name: 'loyalty_point_status');
 
@@ -491,13 +487,6 @@ class OrderController extends Controller
         if (isset($order)) {
             if ($order['payment_status'] == 'paid' && $request['payment_status'] != 'paid') {
                 return response()->json(['success' => 0, 'message' => translate('when_payment_status_paid_then_you_can_not_change_payment_status_paid_to_unpaid.')], 403);
-            }
-
-            if ($order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method == 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid' && $order['shipping_responsibility'] == 'inhouse_shipping' && $request['order_status'] == 'delivered') {
-                return response()->json([
-                    'status' => 0,
-                    'message' => translate('Please mark as paid before delivered this order.'),
-                ], 403);
             }
 
             if ($request['order_status'] == 'delivered') {

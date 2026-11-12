@@ -124,10 +124,6 @@ class OrderStatusUpdateService
             return translate('account_has_been_deleted_you_can_not_change_the_status');
         }
 
-        if ($order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method == 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid' && $status == 'delivered') {
-            return translate('Please mark as paid before delivered this order.');
-        }
-
         if ($status == 'delivered') {
             foreach ($order['details'] as $orderDetail) {
                 $productDetails = json_decode($orderDetail?->product_details ?? '', true);

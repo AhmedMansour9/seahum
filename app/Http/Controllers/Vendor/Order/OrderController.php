@@ -567,13 +567,6 @@ class OrderController extends BaseController
             ]);
         }
 
-        if ($order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method == 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid' && $order['shipping_responsibility'] == 'inhouse_shipping' && $request['order_status'] == 'delivered') {
-            return response()->json([
-                'status' => 0,
-                'message' => translate('Please mark as paid before delivered this order.'),
-            ]);
-        }
-
         if ($order['order_status'] == 'delivered') {
             return response()->json(['status' => 0, 'message' => translate('order_is_already_delivered.')], 200);
         }
