@@ -560,31 +560,10 @@ class OrderController extends BaseController
             ]);
         }
 
-        if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid') {
-            return response()->json([
-                'status' => 0,
-                'message' => translate('Please confirm the due payment has been paid before changing the order status.'),
-            ]);
-        }
-
-        if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['edit_return_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_return_payment_status == 'pending') {
-            return response()->json([
-                'status' => 0,
-                'message' => translate('Please return the amount first before changing the order status.'),
-            ]);
-        }
-
         if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $request['order_status'] == 'delivered' && $order['payment_status'] != 'paid') {
             return response()->json([
                 'status' => 0,
                 'message' => translate('Please_update_the_payment_status_first'),
-            ]);
-        }
-
-        if ($order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method == 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid' && $order['shipping_responsibility'] == 'inhouse_shipping' && $request['order_status'] == 'delivered') {
-            return response()->json([
-                'status' => 0,
-                'message' => translate('Please mark as paid before delivered this order.'),
             ]);
         }
 
