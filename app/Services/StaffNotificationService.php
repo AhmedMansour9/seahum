@@ -48,7 +48,7 @@ class StaffNotificationService
     {
         $dueTodayCount = Order::postponed()
             ->where('order_type', 'default_type')
-            ->whereDate('scheduled_for', today())
+            ->whereDate('scheduled_for', now(config('order_regions.timezone'))->toDateString())
             ->count();
         if ($dueTodayCount === 0) {
             return 0;

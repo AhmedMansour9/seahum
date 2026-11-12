@@ -99,9 +99,9 @@ class ScheduledOrdersTest extends TestCase
     {
         $rules = ['scheduled_for' => DeliveryAppStaffOrderCreateService::getValidationRules()['scheduled_for']];
 
-        $this->assertTrue(Validator::make(['scheduled_for' => now()->addDay()->format('Y-m-d')], $rules)->passes());
+        $this->assertTrue(Validator::make(['scheduled_for' => now(config('order_regions.timezone'))->addDay()->format('Y-m-d')], $rules)->passes());
         $this->assertTrue(Validator::make(['scheduled_for' => null], $rules)->passes());
-        $this->assertTrue(Validator::make(['scheduled_for' => now()->subDay()->format('Y-m-d')], $rules)->fails());
+        $this->assertTrue(Validator::make(['scheduled_for' => now(config('order_regions.timezone'))->subDay()->format('Y-m-d')], $rules)->fails());
     }
 
     public function test_scheduled_day_is_serialized_as_plain_date_for_the_apps(): void
@@ -113,11 +113,11 @@ class ScheduledOrdersTest extends TestCase
 
     public function test_due_today_notification_counts_only_open_orders_scheduled_for_today(): void
     {
-        $this->createOrder(status: 'pending', scheduledFor: today()->format('Y-m-d'));
-        $this->createOrder(status: 'confirmed', scheduledFor: today()->format('Y-m-d'));
-        $this->createOrder(status: 'delivered', scheduledFor: today()->format('Y-m-d'));
-        $this->createOrder(status: 'pending', scheduledFor: today()->addDay()->format('Y-m-d'));
-        $this->createOrder(status: 'pending', scheduledFor: today()->format('Y-m-d'), type: 'POS');
+        $this->createOrder(status: 'pending', scheduledFor: now(config('order_regions.timezone'))->format('Y-m-d'));
+        $this->createOrder(status: 'confirmed', scheduledFor: now(config('order_regions.timezone'))->format('Y-m-d'));
+        $this->createOrder(status: 'delivered', scheduledFor: now(config('order_regions.timezone'))->format('Y-m-d'));
+        $this->createOrder(status: 'pending', scheduledFor: now(config('order_regions.timezone'))->addDay()->format('Y-m-d'));
+        $this->createOrder(status: 'pending', scheduledFor: now(config('order_regions.timezone'))->format('Y-m-d'), type: 'POS');
 
         $this->assertSame(2, app(StaffNotificationService::class)->notifyPostponedOrdersDueToday());
     }
@@ -157,11 +157,11 @@ class ScheduledOrdersTest extends TestCase
 
     public function test_only_governorate_orders_postponed_to_today_and_waiting_are_started(): void
     {
-        $today = today()->format('Y-m-d');
+        $today = now(config('order_regions.timezone'))->format('Y-m-d');
         $pending = DB::table('orders')->insertGetId(['governorate' => 'أسوان', 'scheduled_for' => $today, 'order_status' => 'pending']);
         $confirmed = DB::table('orders')->insertGetId(['governorate' => 'الإسكندرية', 'scheduled_for' => $today, 'order_status' => 'confirmed']);
         DB::table('orders')->insert(['governorate' => 'أسوان', 'scheduled_for' => $today, 'order_status' => 'out_for_delivery']);
-        DB::table('orders')->insert(['governorate' => 'أسوان', 'scheduled_for' => today()->addDay()->format('Y-m-d'), 'order_status' => 'pending']);
+        DB::table('orders')->insert(['governorate' => 'أسوان', 'scheduled_for' => now(config('order_regions.timezone'))->addDay()->format('Y-m-d'), 'order_status' => 'pending']);
         DB::table('orders')->insert(['governorate' => null, 'scheduled_for' => $today, 'order_status' => 'pending']);
         DB::table('orders')->insert(['governorate' => 'أسوان', 'scheduled_for' => $today, 'order_status' => 'pending', 'order_type' => 'POS']);
 
