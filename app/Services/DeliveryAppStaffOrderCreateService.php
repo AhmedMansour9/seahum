@@ -36,7 +36,7 @@ class DeliveryAppStaffOrderCreateService
             'latitude' => ['nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'order_note' => ['nullable', 'string', 'max:1000'],
-            'scheduled_for' => ['nullable', 'date_format:Y-m-d', 'after_or_equal:today'],
+            'scheduled_for' => ['nullable', 'date_format:Y-m-d', 'after_or_equal:' . now(config('order_regions.timezone'))->toDateString()],
             'shipping_cost' => ['nullable', 'numeric', 'min:0'],
             'products' => ['required', 'array', 'min:1'],
             'products.*.id' => ['required', 'integer'],

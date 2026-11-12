@@ -23,7 +23,7 @@ class ScheduledOrderStatusService
     {
         return Order::governorate()
             ->where('order_type', 'default_type')
-            ->whereDate('scheduled_for', today())
+            ->whereDate('scheduled_for', now(config('order_regions.timezone'))->toDateString())
             ->whereIn('order_status', ['pending', 'confirmed'])
             ->get();
     }
