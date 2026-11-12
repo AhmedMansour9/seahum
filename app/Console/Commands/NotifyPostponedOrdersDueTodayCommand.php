@@ -13,8 +13,7 @@ class NotifyPostponedOrdersDueTodayCommand extends Command
 
     public function handle(StaffNotificationService $staffNotificationService): int
     {
-        $dueTodayCount = $staffNotificationService->notifyPostponedOrdersDueToday();
-        $this->info($dueTodayCount . ' postponed orders due today.');
+        $this->info($staffNotificationService->notifyPostponedOrdersDueToday() . ' postponed orders due today.');
 
         return self::SUCCESS;
     }

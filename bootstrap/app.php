@@ -99,6 +99,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
+        $schedule->command('orders:start-postponed-governorate')->dailyAt('01:00')->timezone('Africa/Cairo');
         $schedule->command('orders:notify-postponed-due-today')->dailyAt('08:00')->timezone('Africa/Cairo');
     })
     ->withExceptions(function (Exceptions $exceptions) {

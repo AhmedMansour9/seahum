@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Order;
 use App\Services\DeliveryAppStaffOrderCreateService;
 use App\Services\DeliveryAppStaffService;
+use App\Services\ScheduledOrderStatusService;
 use App\Services\StaffNotificationService;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -152,5 +153,20 @@ class ScheduledOrdersTest extends TestCase
         $this->assertContains('الإسكندرية', $options);
         $this->assertNotContains('القاهرة', $options);
         $this->assertNotContains('الجيزة', $options);
+    }
+
+    public function test_only_governorate_orders_postponed_to_today_and_waiting_are_started(): void
+    {
+        $today = today()->format('Y-m-d');
+        $pending = DB::table('orders')->insertGetId(['governorate' => 'أسوان', 'scheduled_for' => $today, 'order_status' => 'pending']);
+        $confirmed = DB::table('orders')->insertGetId(['governorate' => 'الإسكندرية', 'scheduled_for' => $today, 'order_status' => 'confirmed']);
+        DB::table('orders')->insert(['governorate' => 'أسوان', 'scheduled_for' => $today, 'order_status' => 'out_for_delivery']);
+        DB::table('orders')->insert(['governorate' => 'أسوان', 'scheduled_for' => today()->addDay()->format('Y-m-d'), 'order_status' => 'pending']);
+        DB::table('orders')->insert(['governorate' => null, 'scheduled_for' => $today, 'order_status' => 'pending']);
+        DB::table('orders')->insert(['governorate' => 'أسوان', 'scheduled_for' => $today, 'order_status' => 'pending', 'order_type' => 'POS']);
+
+        $ids = app(ScheduledOrderStatusService::class)->getOrdersToStartToday()->pluck('id')->sort()->values()->all();
+
+        $this->assertSame([$pending, $confirmed], $ids);
     }
 }
