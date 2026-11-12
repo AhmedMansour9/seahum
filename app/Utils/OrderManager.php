@@ -12,6 +12,7 @@ use App\Models\ShippingMethod;
 use App\Services\LuckyWheelService;
 use Carbon\Carbon;
 use App\Models\Cart;
+use App\Models\Category;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Admin;
@@ -546,7 +547,7 @@ class OrderManager
             if ($cartList->isEmpty()) {
                 return [
                     'status' => false,
-                    'messages' => translate('coupon_not_applicable_to_excluded_category_products')
+                    'messages' => str_replace(':category', Category::find($coupon->excluded_category_id)?->name ?? '', translate('coupon_not_applicable_to_excluded_category_products'))
                 ];
             }
         }
