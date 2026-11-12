@@ -72,7 +72,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-6 col-lg-4 first_order">
+                            <div class="col-md-6 col-lg-4 free_delivery">
                                 <label for="excluded_category_id" class="form-label">{{translate('excluded_category')}}</label>
                                 <select class="custom-select" name="excluded_category_id" id="excluded_category_id">
                                     <option value="">{{translate('no_category_excluded')}}</option>

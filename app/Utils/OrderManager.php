@@ -711,7 +711,7 @@ class OrderManager
         if ($firstOrderCoupon) {
             foreach ($cartListGroup as $cartListGroupKey => $cartList) {
                 if ($cartListGroupKey == $groupId) {
-                    foreach ($cartList as $cartItem) {
+                    foreach (self::excludeCartItemsOfCouponExcludedCategory(coupon: $coupon, cartItems: $cartList) as $cartItem) {
                         $onlyProductTotalAmount += ($cartItem['price'] - $cartItem['discount']) * $cartItem['quantity'];
                     }
                 }
