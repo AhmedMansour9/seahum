@@ -560,13 +560,6 @@ class OrderController extends BaseController
             ]);
         }
 
-        if ($order['payment_method'] == 'offline_payment' && $order['payment_status'] == 'unpaid') {
-            return response()->json([
-                'status' => 0,
-                'message' => translate('Please confirm the offline payment information before changing the order status.'),
-            ]);
-        }
-
         if (!in_array($order['payment_method'], PaymentMethod::PAY_ON_DELIVERY) && $order['edit_due_amount'] > 0 && $order?->latestEditHistory?->order_due_payment_method !== 'cash_on_delivery' && $order?->latestEditHistory?->order_due_payment_status == 'unpaid') {
             return response()->json([
                 'status' => 0,
