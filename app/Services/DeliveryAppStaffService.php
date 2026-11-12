@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderStatusHistory;
 use App\Utils\OrderManager;
+use App\Utils\BusinessDay;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
@@ -107,7 +108,7 @@ class DeliveryAppStaffService
             ->when(!empty($filters['governorates']), fn ($query) => $query->governorate())
             ->when(!empty($filters['order_source']), fn ($query) => $query->where('order_source', $filters['order_source']))
             ->when(!empty($filters['delivery_man_id']), fn ($query) => $query->where('delivery_man_id', $filters['delivery_man_id']))
-            ->when(($filters['date_type'] ?? null) === 'today', fn ($query) => $query->whereDate('updated_at', Carbon::today()))
+            ->when(($filters['date_type'] ?? null) === 'today', fn ($query) => $query->whereBetween('updated_at', BusinessDay::todayRange()))
             ->when(!empty($filters['date_from']), fn ($query) => $query->whereDate('updated_at', '>=', $filters['date_from']))
             ->when(!empty($filters['date_to']), fn ($query) => $query->whereDate('updated_at', '<=', $filters['date_to']))
             ->when(!empty($filters['search']), function ($query) use ($filters) {

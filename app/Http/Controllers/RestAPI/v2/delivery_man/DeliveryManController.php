@@ -26,6 +26,7 @@ use App\Utils\CustomerManager;
 use App\Utils\Helpers;
 use App\Utils\ImageManager;
 use App\Utils\OrderManager;
+use App\Utils\BusinessDay;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -336,7 +337,7 @@ class DeliveryManController extends Controller
                 return $query->where('is_pause', $request['is_pause']);
             })
             ->when(isset($request['date_type']) && $request['date_type'] == "today", function ($query) {
-                return $query->whereDate('updated_at', Carbon::today());
+                return $query->whereBetween('updated_at', BusinessDay::todayRange());
             })
             ->when(isset($request['date_type']) && $request['date_type'] == "this_week", function ($query) {
                 $query->whereBetween('updated_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);

@@ -15,6 +15,7 @@ use App\Models\SellerWallet;
 use App\Models\Shop;
 use App\Models\Transaction;
 use App\Services\LuckyWheelService;
+use App\Utils\BusinessDay;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -107,7 +108,7 @@ class OrderRepository implements OrderRepositoryInterface
                     });
             })
             ->when(isset($filters['date_type']) && $filters['date_type'] == "today", function ($query) {
-                return $query->whereDate('created_at', Carbon::today());
+                return $query->whereBetween('created_at', BusinessDay::todayRange());
             })
             ->when(isset($filters['date_type']) && $filters['date_type'] == "this_year", function ($query) {
                 $current_start_year = date('Y-01-01');
@@ -256,7 +257,7 @@ class OrderRepository implements OrderRepositoryInterface
                     });
                 }
             })->when(isset($filters['date_type']) && $filters['date_type'] === 'today', function ($query) {
-                    $query->whereDate('created_at', Carbon::today());
+                    $query->whereBetween('created_at', BusinessDay::todayRange());
                 }
             )->when(isset($filters['date_type']) && $filters['date_type'] === 'this_week', function ($query) {
                     $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek(),]);
@@ -385,7 +386,7 @@ class OrderRepository implements OrderRepositoryInterface
                     $query->where('delivery_man_id', $filters['delivery_man_id']);
                 }
             )->when(isset($filters['date_type']) && $filters['date_type'] === 'today', function ($query) {
-                    $query->whereDate('created_at', Carbon::today());
+                    $query->whereBetween('created_at', BusinessDay::todayRange());
                 }
             )->when(isset($filters['date_type']) && $filters['date_type'] === 'this_week', function ($query) {
                     $query->whereBetween('created_at', [
@@ -452,7 +453,7 @@ class OrderRepository implements OrderRepositoryInterface
                 $query->where(['seller_is' => 'seller', 'seller_id' => $filters['seller_id']]);
             })
             ->when($dateType == 'today', function ($query) {
-                $query->whereDate('created_at', Carbon::today());
+                $query->whereBetween('created_at', BusinessDay::todayRange());
             })
             ->when($dateType == 'this_week', function ($query) {
                 $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
