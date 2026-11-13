@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property float $discount
  * @property string $discount_type
  * @property integer $limit
+ * @property int|null $excluded_category_id
+ * @property int|null $required_category_id
  */
 class Coupon extends Model
 {
@@ -33,6 +35,7 @@ class Coupon extends Model
         'customer_id',
         'seller_id',
         'excluded_category_id',
+        'required_category_id',
         'title',
         'code',
         'start_date',
