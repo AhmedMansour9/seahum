@@ -542,6 +542,13 @@ class OrderManager
             ];
         }
 
+        if (!self::doesCartMeetCouponRequiredCategory(coupon: $coupon, cartItems: $cartList)) {
+            return [
+                'status' => false,
+                'messages' => str_replace(':category', Category::find($coupon->required_category_id)?->name ?? '', translate('coupon_requires_required_category_product_with_another_category_product'))
+            ];
+        }
+
         if ($coupon->excluded_category_id) {
             $cartList = self::excludeCartItemsOfCouponExcludedCategory(coupon: $coupon, cartItems: $cartList);
             if ($cartList->isEmpty()) {
@@ -671,15 +678,37 @@ class OrderManager
             return $cartItems;
         }
 
-        $excludedProductIds = Product::whereIn('id', $cartItems->pluck('product_id')->unique()->all())
-            ->where(function ($query) use ($coupon) {
-                $query->where('category_ids', 'like', '%"id":"' . $coupon->excluded_category_id . '"%')
-                    ->orWhere('category_ids', 'like', '%"id":' . $coupon->excluded_category_id . ',%')
-                    ->orWhere('category_ids', 'like', '%"id":' . $coupon->excluded_category_id . '}%');
-            })
-            ->pluck('id');
+        $excludedProductIds = self::getProductIdsOfCategory(categoryId: $coupon->excluded_category_id, productIds: $cartItems->pluck('product_id')->unique()->all());
 
         return $cartItems->reject(fn($cartItem) => $excludedProductIds->contains($cartItem['product_id']))->values();
+    }
+
+    /**
+     * A coupon with a required category only applies when the cart holds a product of that category
+     * together with at least one product outside it (e.g. caviar + anything else). Coupons without one always pass.
+     */
+    public static function doesCartMeetCouponRequiredCategory(Coupon $coupon, Collection $cartItems): bool
+    {
+        if (!$coupon->required_category_id) {
+            return true;
+        }
+
+        $cartProductIds = $cartItems->pluck('product_id')->unique()->values();
+        $requiredCategoryProductIds = self::getProductIdsOfCategory(categoryId: $coupon->required_category_id, productIds: $cartProductIds->all());
+
+        return $requiredCategoryProductIds->isNotEmpty()
+            && $cartProductIds->contains(fn($productId) => !$requiredCategoryProductIds->contains($productId));
+    }
+
+    private static function getProductIdsOfCategory(int $categoryId, array $productIds): Collection
+    {
+        return Product::whereIn('id', $productIds)
+            ->where(function ($query) use ($categoryId) {
+                $query->where('category_ids', 'like', '%"id":"' . $categoryId . '"%')
+                    ->orWhere('category_ids', 'like', '%"id":' . $categoryId . ',%')
+                    ->orWhere('category_ids', 'like', '%"id":' . $categoryId . '}%');
+            })
+            ->pluck('id');
     }
 
     public static function getGroupWiseCouponArray($request, $couponCode, $applicableAmount, $discountAmount, $groupId, $cartListGroup): array

@@ -44,6 +44,18 @@ class CouponService
         return $request['excluded_category_id'] ? (int)$request['excluded_category_id'] : null;
     }
 
+    /**
+     * The required category (anchor product + a product of another category) only applies to coupons that discount products.
+     */
+    public function getRequiredCategoryId(object $request): ?int
+    {
+        if (!in_array($request['coupon_type'], ['discount_on_purchase', 'first_order'], true)) {
+            return null;
+        }
+
+        return $request['required_category_id'] ? (int)$request['required_category_id'] : null;
+    }
+
     public function getAddData(object $request): array
     {
         $data = [
@@ -55,6 +67,7 @@ class CouponService
             'status' => 1,
             'min_purchase' => currencyConverter(amount: $request['min_purchase']),
             'excluded_category_id' => $this->getExcludedCategoryId(request: $request),
+            'required_category_id' => $this->getRequiredCategoryId(request: $request),
         ];
 
         if ($request['coupon_type'] == 'discount_on_purchase' || $request['coupon_type'] == 'free_delivery') {
@@ -89,6 +102,7 @@ class CouponService
             'status' => 1,
             'min_purchase' => currencyConverter(amount: $request['min_purchase']),
             'excluded_category_id' => $this->getExcludedCategoryId(request: $request),
+            'required_category_id' => $this->getRequiredCategoryId(request: $request),
         ];
         if ($request['coupon_type'] == 'discount_on_purchase' || $request['coupon_type'] == 'free_delivery') {
             $data += [

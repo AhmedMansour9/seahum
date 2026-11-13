@@ -80,6 +80,16 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="col-md-6 col-lg-4 free_delivery">
+                                    <label for="required_category_id" class="form-label">{{translate('required_category')}}</label>
+                                    <select class="custom-select" name="required_category_id" id="required_category_id">
+                                        <option value="">{{translate('no_required_category')}}</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <small class="text-muted d-block mt-1">{{translate('coupon_applies_only_with_a_product_of_this_category_and_another_category')}}</small>
+                                </div>
                                 <div class="col-md-6 col-lg-4 coupon_type first_order">
                                     <label for="name"
                                            class="form-label d-flex">{{translate('customer')}} <span class="text-danger">*</span></label>
