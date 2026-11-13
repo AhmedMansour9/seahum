@@ -9570,4 +9570,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"only_governorate_orders" => "أوردرات المحافظات بس",
 	"governorate" => "المحافظة",
 	"not_a_governorate_order" => "مش أوردر محافظة",
+	"combo_offer_discount" => "خصم عرض الكافيار",
 ];

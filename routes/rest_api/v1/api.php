@@ -120,6 +120,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api_lang']], function () {
             Route::post('select-cart-items', 'updateCheckedCartItems');
             Route::post('product-restock-request', 'addProductRestockRequest');
             Route::post('get-referral-discount-redeem', 'getReferralDiscountRedeem');
+            Route::get('category-combo-discount', 'getCategoryComboDiscount');
             Route::post('get-merge-guest-cart', 'getMergeGuestCart');
         });
     });

@@ -2843,4 +2843,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"only_governorate_orders" => "Only governorate orders",
 	"governorate" => "Governorate",
 	"not_a_governorate_order" => "Not a governorate order",
+	"combo_offer_discount" => "Combo offer discount",
 ];

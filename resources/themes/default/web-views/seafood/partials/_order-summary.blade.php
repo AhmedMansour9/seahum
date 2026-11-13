@@ -19,7 +19,8 @@
         : 0;
     $couponDiscount = session()->has('coupon_discount') ? session('coupon_discount') : 0;
     $taxAmount = $totalTax['item_tax'] + $totalTax['shipping_cost_tax'];
-    $totalAmount = $subTotal + $taxAmount + $totalShippingCost - $couponDiscount - $totalDiscountOnProduct;
+    $categoryComboDiscount = app(\App\Services\CategoryComboDiscountService::class)->calculateDiscount(cartItems: $summaryCart);
+    $totalAmount = $subTotal + $taxAmount + $totalShippingCost - $couponDiscount - $totalDiscountOnProduct - $categoryComboDiscount;
     $referralAmount = \App\Utils\CustomerManager::getReferralDiscountAmount(
         user: auth('customer')->check() ? auth('customer')->user() : null,
         couponDiscount: $couponDiscount,
@@ -27,7 +28,8 @@
 
     $totalSavedAmount = $totalDiscountOnProduct
         + ($couponDiscount > 0 && !$isFreeDeliveryCoupon ? $couponDiscount : 0)
-        + max($shippingCostSavedForFreeDelivery, 0);
+        + max($shippingCostSavedForFreeDelivery, 0)
+        + $categoryComboDiscount;
     $isTaxShownSeparately = $systemTaxConfig['SystemTaxVat']['is_active'] && !$systemTaxConfig['is_included'];
     $isCheckoutDisabled = $summaryCart->count() <= 0;
     $luckyWheelCheckout = $summaryStep !== 'cart' && auth('customer')->check()
@@ -113,6 +115,12 @@
                 <dt>{{ translate('discount_on_product') }}</dt>
                 <dd class="is-negative">− @include('web-views.seafood.partials._price', ['amount' => $totalDiscountOnProduct])</dd>
             </div>
+            @if($categoryComboDiscount > 0)
+                <div class="sf-summary-row">
+                    <dt>{{ translate('combo_offer_discount') }}</dt>
+                    <dd class="is-negative">− @include('web-views.seafood.partials._price', ['amount' => $categoryComboDiscount])</dd>
+                </div>
+            @endif
             @if($isTaxShownSeparately)
                 <div class="sf-summary-row">
                     <dt>{{ translate('tax') }}</dt>

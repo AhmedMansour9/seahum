@@ -9,6 +9,7 @@ use App\Models\OrderDetailsRewards;
 use App\Models\OrderEditHistory;
 use App\Models\OrderStatusHistory;
 use App\Models\ShippingMethod;
+use App\Services\CategoryComboDiscountService;
 use App\Services\LuckyWheelService;
 use Carbon\Carbon;
 use App\Models\Cart;
@@ -943,12 +944,14 @@ class OrderManager
 
             $shippingMethod = CartShipping::where(['cart_group_id' => $groupId])->first();
             $shippingMethodId = isset($shippingMethod) ? $shippingMethod->shipping_method_id : 0;
-            $cartGroupOrderAmount = $cartGroupGrandTotal - ($couponInfo['discount'] ?? 0) - $freeShippingDiscount;
+            $categoryComboDiscountShares = app(CategoryComboDiscountService::class)->getCartItemDiscountShares(cartItems: $cartListQueryGroupItem);
+            $categoryComboDiscount = array_sum($categoryComboDiscountShares);
+            $cartGroupOrderAmount = $cartGroupGrandTotal - ($couponInfo['discount'] ?? 0) - $freeShippingDiscount - $categoryComboDiscount;
 
             $referAndEarnDiscount = OrderManager::redeemReferralDiscount(
                 referralCustomer: $checkReferralDiscount,
                 totalAmount: $onlyProductPriceGrandTotal - $totalCouponDiscount,
-                groupAmount: $onlyGroupPriceGrandTotal - ($couponInfo['discount'] ?? 0),
+                groupAmount: $onlyGroupPriceGrandTotal - ($couponInfo['discount'] ?? 0) - $categoryComboDiscount,
             );
 
             $vendorWiseCartList[$groupId] = [
@@ -970,6 +973,8 @@ class OrderManager
                 'extra_discount_type' => $extraDiscountType,
                 'free_delivery_bearer' => $firstCartItem['seller_is'] == 'seller' ? $freeDeliveryBearer : 'admin',
                 'refer_and_earn_discount' => $referAndEarnDiscount,
+                'category_combo_discount' => $categoryComboDiscount,
+                'category_combo_discount_shares' => $categoryComboDiscountShares,
                 'cart_list' => $cartListQueryGroupItem,
                 'cart_group_id' => $groupId,
             ];
@@ -994,9 +999,9 @@ class OrderManager
         foreach ($vendorWiseCartList as $vendorWiseGroupId => $vendorWiseCart) {
 
             if ($vendorWiseCart['is_shipping_free'] == 1) {
-                $totalDiscountOnProduct = $vendorWiseCart['coupon_discount'] + $vendorWiseCart['refer_and_earn_discount'];
+                $totalDiscountOnProduct = $vendorWiseCart['coupon_discount'] + $vendorWiseCart['refer_and_earn_discount'] + $vendorWiseCart['category_combo_discount'];
             } else {
-                $totalDiscountOnProduct = $vendorWiseCart['coupon_discount'] + $vendorWiseCart['free_delivery_discount'] + $vendorWiseCart['refer_and_earn_discount'];
+                $totalDiscountOnProduct = $vendorWiseCart['coupon_discount'] + $vendorWiseCart['free_delivery_discount'] + $vendorWiseCart['refer_and_earn_discount'] + $vendorWiseCart['category_combo_discount'];
             }
 
             $totalDiscountProductPrice = 0;
@@ -1159,7 +1164,7 @@ class OrderManager
                 'product_details' => json_encode($product),
                 'qty' => $cartSingleItem['quantity'],
                 'price' => $cartSingleItem['price'],
-                'discount' => $productDiscount * $cartSingleItem['quantity'],
+                'discount' => $productDiscount * $cartSingleItem['quantity'] + ($vendorCart['category_combo_discount_shares'][$cartSingleItem['id']] ?? 0),
                 'discount_type' => 'discount_on_product',
                 'variant' => $cartSingleItem['variant'],
                 'variation' => $cartSingleItem['variations'],

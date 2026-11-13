@@ -13,6 +13,7 @@ use App\Models\Color;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ShippingType;
+use App\Services\CategoryComboDiscountService;
 use App\Services\RestockProductService;
 use App\Utils\CartManager;
 use App\Utils\CustomerManager;
@@ -315,6 +316,13 @@ class CartController extends Controller
 
         return response()->json([
             'amount' => $referralDiscount,
+        ]);
+    }
+
+    public function getCategoryComboDiscount(CategoryComboDiscountService $categoryComboDiscountService): JsonResponse
+    {
+        return response()->json([
+            'amount' => $categoryComboDiscountService->calculateDiscount(cartItems: CartManager::getCartListQuery(type: 'checked')),
         ]);
     }
 
