@@ -81,6 +81,7 @@ class DeliveryManController extends Controller
         $orders = Order::with(['shippingAddress', 'customer', 'seller.shop'])
             ->whereIn('order_status', ['pending', 'processing', 'out_for_delivery', 'confirmed'])
             ->where(['delivery_man_id' => $deliveryMan['id']])
+            ->manuallyRanked()
             ->orderByRaw('expected_delivery_date is null')
             ->orderBy('expected_delivery_date', 'asc')
             ->latest()
@@ -355,6 +356,7 @@ class DeliveryManController extends Controller
 
                 return $query->whereBetween('updated_at', [$start_date, $end_data]);
             })
+            ->manuallyRanked()
             ->latest()->get();
 
         return response()->json($this->deliveryManOrderDisplayService->prepareOrders(orders: $orders), 200);

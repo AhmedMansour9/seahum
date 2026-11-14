@@ -57,6 +57,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property DateTime $expected_delivery_date
  * @property Carbon|null $scheduled_for
  * @property string|null $governorate
+ * @property int|null $manual_rank
  * @property string $order_note
  * @property int $billing_address
  * @property object $billing_address_data
@@ -122,6 +123,7 @@ class Order extends Model
         'expected_delivery_date',
         'scheduled_for',
         'governorate',
+        'manual_rank',
         'order_note',
         'billing_address',
         'billing_address_data',
@@ -145,6 +147,7 @@ class Order extends Model
         'customer_id' => 'integer',
         'is_guest' => 'boolean',
         'scheduled_for' => 'date:Y-m-d',
+        'manual_rank' => 'integer',
         'customer_type' => 'string',
         'payment_status' => 'string',
         'order_status' => 'string',
@@ -273,6 +276,17 @@ class Order extends Model
     {
         return $query->whereNotNull('scheduled_for')
             ->whereIn('order_status', ['pending', 'confirmed', 'processing', 'out_for_delivery']);
+    }
+
+    /**
+     * Orders arranged by staff come first by their rank; the rest keep the order of the query.
+     *
+     * @param Builder<Order> $query
+     * @return Builder<Order>
+     */
+    public function scopeManuallyRanked(Builder $query): Builder
+    {
+        return $query->orderByRaw('manual_rank is null')->orderBy('manual_rank');
     }
 
     /**

@@ -185,6 +185,7 @@ Route::group(['namespace' => 'RestAPI\v2', 'prefix' => 'v2', 'middleware' => ['a
                         Route::put('update-order-status', 'updateOrderStatus');
                         Route::put('update-scheduled-for', 'updateScheduledFor');
                         Route::put('update-governorate', 'updateGovernorate');
+                        Route::put('update-order-ranks', 'updateOrderRanks');
                         Route::put('update-easy-orders-order', 'updateEasyOrdersOrder');
                         Route::get('edit-products', 'getEditProducts');
                         Route::post('edit-order-preview', 'previewOrderEdit');
