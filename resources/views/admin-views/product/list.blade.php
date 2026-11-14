@@ -109,6 +109,7 @@
                                         </div>
                                     </div>
                                 </th>
+                                <th class="text-center">{{ translate('show_in_offers') }}</th>
                                 <th class="text-center">{{ translate('status') }}
 
                                 </th>
@@ -207,6 +208,13 @@
                                                 {{ $product['featured'] == 1 ? 'checked' : '' }}
                                                 {{ $isDisabled ? 'disabled' : '' }}>
                                         </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox"
+                                               class="product-status-checkbox form-check-input checkbox--input checkbox--input_lg"
+                                               data-id="{{ $product['id'] }}"
+                                               data-action="{{ route('admin.products.show-in-offers') }}"
+                                            {{ $product['show_in_offers'] ? 'checked' : '' }}>
                                     </td>
 
                                     <td class="text-center">

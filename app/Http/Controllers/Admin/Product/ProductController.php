@@ -526,6 +526,16 @@ class ProductController extends BaseController
         ]);
     }
 
+    public function updateShowInOffers(Request $request): JsonResponse
+    {
+        $this->productRepo->update(id: $request['id'], data: ['show_in_offers' => (bool)$request['status']]);
+
+        return response()->json([
+            'status' => true,
+            'message' => translate('Product_offers_status_updated_successfully')
+        ]);
+    }
+
     public function updateStatus(Request $request): JsonResponse
     {
         $status = $request->get('status', 0);

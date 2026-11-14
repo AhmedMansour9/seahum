@@ -2847,4 +2847,6 @@ ____________________________________________________on_search_engines_and_see_th
 	"no_required_category" => "No required category",
 	"coupon_applies_only_with_a_product_of_this_category_and_another_category" => "The coupon only works when the order has a product of this category plus a product of any other category.",
 	"coupon_requires_required_category_product_with_another_category_product" => "This coupon needs a :category product plus a product from any other category in your cart.",
+	"show_in_offers" => "Show in offers",
+	"Product_offers_status_updated_successfully" => "Product offers status updated successfully",
 ];

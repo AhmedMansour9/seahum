@@ -9574,4 +9574,6 @@ ____________________________________________________on_search_engines_and_see_th
 	"no_required_category" => "مفيش تصنيف مطلوب",
 	"coupon_applies_only_with_a_product_of_this_category_and_another_category" => "الكوبون مش هيشتغل غير لو الطلب فيه منتج من التصنيف ده ومعاه منتج من أي تصنيف تاني.",
 	"coupon_requires_required_category_product_with_another_category_product" => "الكوبون ده محتاج يكون في السلة منتج من :category ومعاه منتج من أي تصنيف تاني.",
+	"show_in_offers" => "يظهر في العروض",
+	"Product_offers_status_updated_successfully" => "تم تحديث ظهور المنتج في العروض",
 ];
