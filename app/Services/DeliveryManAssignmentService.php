@@ -22,6 +22,7 @@ class DeliveryManAssignmentService
             'delivery_man_id' => null,
             'delivery_type' => null,
             'deliveryman_assigned_at' => null,
+            'manual_rank' => null,
         ]);
     }
 
@@ -37,6 +38,7 @@ class DeliveryManAssignmentService
 
         if ($order['delivery_man_id'] != $deliveryManId) {
             $data['deliveryman_assigned_at'] = Carbon::now();
+            $data['manual_rank'] = null;
         }
 
         $this->orderRepo->update(id: $orderId, data: $data);

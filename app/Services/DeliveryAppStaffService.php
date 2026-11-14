@@ -40,7 +40,7 @@ class DeliveryAppStaffService
             ->with(['customer:id,f_name,l_name,phone', 'deliveryMan:id,f_name,l_name,phone', 'shippingAddress', 'details'])
             ->when(!empty($filters['postponed']), fn ($query) => $query->orderBy('scheduled_for'))
             ->when(!empty($filters['governorates']), fn ($query) => $query->orderBy('governorate'))
-            ->manuallyRanked()
+            ->when(!empty($filters['delivery_man_id']), fn ($query) => $query->manuallyRanked())
             ->latest()
             ->orderByDesc('id')
             ->paginate(perPage: $limit, page: $offset);
