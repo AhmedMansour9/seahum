@@ -15,6 +15,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Read models for the admin and customer service screens of the delivery man app.
@@ -39,6 +40,7 @@ class DeliveryAppStaffService
             ->with(['customer:id,f_name,l_name,phone', 'deliveryMan:id,f_name,l_name,phone', 'shippingAddress', 'details'])
             ->when(!empty($filters['postponed']), fn ($query) => $query->orderBy('scheduled_for'))
             ->when(!empty($filters['governorates']), fn ($query) => $query->orderBy('governorate'))
+            ->manuallyRanked()
             ->latest()
             ->orderByDesc('id')
             ->paginate(perPage: $limit, page: $offset);
@@ -87,6 +89,31 @@ class DeliveryAppStaffService
     {
         return (bool)Order::where(['id' => $orderId, 'order_type' => 'default_type'])
             ->update(['governorate' => $governorate]);
+    }
+
+    /**
+     * Puts [$orderedIds] first in the given order, keeps the orders already ranked elsewhere after them
+     * and clears the rank of [$removedIds]. Ranks are renumbered 1..n.
+     *
+     * @param array<int, int> $orderedIds
+     * @param array<int, int> $removedIds
+     */
+    public function updateManualRanks(array $orderedIds, array $removedIds = []): void
+    {
+        DB::transaction(function () use ($orderedIds, $removedIds) {
+            $keptIds = Order::query()
+                ->whereNotNull('manual_rank')
+                ->whereNotIn('id', [...$orderedIds, ...$removedIds])
+                ->orderBy('manual_rank')
+                ->pluck('id')
+                ->all();
+
+            Order::query()->whereNotNull('manual_rank')->update(['manual_rank' => null]);
+
+            foreach ([...$orderedIds, ...$keptIds] as $index => $orderId) {
+                Order::where(['id' => $orderId, 'order_type' => 'default_type'])->update(['manual_rank' => $index + 1]);
+            }
+        });
     }
 
     public function updateScheduledFor(string|int $orderId, ?string $scheduledFor): bool
@@ -145,6 +172,7 @@ class DeliveryAppStaffService
             ] : null,
             'scheduled_for' => $order['scheduled_for']?->format('Y-m-d'),
             'governorate' => $order['governorate'],
+            'manual_rank' => $order['manual_rank'],
             'is_postponed' => $order['scheduled_for'] !== null && in_array($order['order_status'], self::OPEN_ORDER_STATUSES, true),
             'created_at' => $order['created_at'],
             'updated_at' => $order['updated_at'],

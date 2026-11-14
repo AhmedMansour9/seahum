@@ -101,6 +101,26 @@ class StaffOrderController extends Controller
         return response()->json(['status' => 1, 'message' => translate('successfully_updated')]);
     }
 
+    public function updateOrderRanks(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'order_ids' => 'present|array|max:300',
+            'order_ids.*' => 'integer|distinct',
+            'removed_order_ids' => 'nullable|array|max:300',
+            'removed_order_ids.*' => 'integer',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
+        }
+
+        $this->deliveryAppStaffService->updateManualRanks(
+            orderedIds: array_map('intval', $request['order_ids']),
+            removedIds: array_map('intval', $request['removed_order_ids'] ?? []),
+        );
+
+        return response()->json(['status' => 1, 'message' => translate('successfully_updated')]);
+    }
+
     public function updateScheduledFor(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
