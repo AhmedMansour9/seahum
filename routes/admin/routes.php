@@ -211,6 +211,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin', '
             Route::post('digital-variation-combination', 'getDigitalVariationCombinationView')->name('digital-variation-combination');
             Route::post('digital-variation-file-delete', 'deleteDigitalVariationFile')->name('digital-variation-file-delete');
             Route::post('featured-status', 'updateFeaturedStatus')->name('featured-status');
+            Route::post('show-in-offers', 'updateShowInOffers')->name('show-in-offers');
             Route::get('get-categories', 'getCategories')->name('get-categories');
             Route::post('status-update', 'updateStatus')->name('status-update');
             Route::get('barcode/{id}', 'getBarcodeView')->name('barcode');

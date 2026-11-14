@@ -850,22 +850,13 @@ class ProductManager
     {
         $user = Helpers::getCustomerInformation($request);
 
-        $stockClearanceProductIds = StockClearanceProduct::active()->pluck('product_id')->toArray();
-
-        //change review to ratting
         $paginator = Product::with(['rating', 'reviews', 'tags', 'clearanceSale' => function ($query) {
             return $query->active();
         }])->active()
             ->withCount(['reviews', 'wishList' => function ($query) use ($user) {
                 $query->where('customer_id', $user != 'offline' ? $user->id : '0');
             }])
-            ->where(function ($subQuery) use ($stockClearanceProductIds) {
-                return $subQuery->where(function ($query) {
-                    return $query->where('discount', '!=', 0);
-                })->orWhere(function ($query) use ($stockClearanceProductIds) {
-                    return $query->whereIn('id', $stockClearanceProductIds);
-                });
-            })
+            ->where('show_in_offers', true)
             ->orderBy('id', 'desc')
             ->paginate($limit, ['*'], 'page', $offset);
 
