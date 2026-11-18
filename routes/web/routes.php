@@ -23,6 +23,7 @@ use App\Http\Controllers\Payment_Methods\RazorPayController;
 use App\Http\Controllers\Payment_Methods\SenangPayController;
 use App\Http\Controllers\Payment_Methods\SslCommerzPaymentController;
 use App\Http\Controllers\Payment_Methods\StripePaymentController;
+use App\Http\Controllers\Web\AppDownloadController;
 use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\ChattingController;
 use App\Http\Controllers\Web\CouponController;
@@ -65,6 +66,8 @@ Route::get('/image-proxy', function () {
         ->header('Content-Type', $response->header('Content-Type'))
         ->header('Access-Control-Allow-Origin', '*');
 });
+
+Route::get('/app', AppDownloadController::class)->name('app-download');
 
 Route::controller(WebController::class)->group(function () {
     Route::get('maintenance-mode', 'maintenance_mode')->name('maintenance-mode');

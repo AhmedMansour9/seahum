@@ -2849,4 +2849,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"coupon_requires_required_category_product_with_another_category_product" => "This coupon needs a :category product plus a product from any other category in your cart.",
 	"show_in_offers" => "Show in offers",
 	"Product_offers_status_updated_successfully" => "Product offers status updated successfully",
+	"Download_the_SEA_HUM_app" => "Download the SEA HUM app",
+	"Android" => "Android",
+	"iPhone" => "iPhone",
 ];

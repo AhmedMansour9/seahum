@@ -9576,4 +9576,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"coupon_requires_required_category_product_with_another_category_product" => "الكوبون ده محتاج يكون في السلة منتج من :category ومعاه منتج من أي تصنيف تاني.",
 	"show_in_offers" => "يظهر في العروض",
 	"Product_offers_status_updated_successfully" => "تم تحديث ظهور المنتج في العروض",
+	"Download_the_SEA_HUM_app" => "حمّل تطبيق SEA HUM",
+	"Android" => "أندرويد",
+	"iPhone" => "آيفون",
 ];
