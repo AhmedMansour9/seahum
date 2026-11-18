@@ -69,6 +69,10 @@ Route::get('/image-proxy', function () {
 
 Route::get('/app', AppDownloadController::class)->name('app-download');
 
+if (config('app_download.domain')) {
+    Route::domain(config('app_download.domain'))->get('/', AppDownloadController::class);
+}
+
 Route::controller(WebController::class)->group(function () {
     Route::get('maintenance-mode', 'maintenance_mode')->name('maintenance-mode');
 });
