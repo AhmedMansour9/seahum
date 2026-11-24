@@ -9415,7 +9415,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"increase_quantity" => "Increase quantity",
 	"select_all_items_from" => "Select all items from",
 	"use_a_different_address_for_this_order" => "Use a different address for this order",
-	"pay_when_your_order_arrives" => "Pay when your order arrives",
+	"pay_when_your_order_arrives" => "ادفع عند استلام الطلب",
 	"add_new_method" => "Add new method",
 	"no_payment_method_list" => "No payment method list",
 	"card_on_delivery" => "الدفع بالبطاقة عند الاستلام",

@@ -1,6 +1,6 @@
 @extends('layouts.front-end.seafood')
 
-@section('title', translate('shipping_Address'))
+@section('title', translate('checkout'))
 
 @push('css_or_js')
     @include('web-views.seafood.partials._styles')
@@ -27,7 +27,7 @@
                 @include('web-views.seafood.partials._breadcrumb', [
                     'breadcrumbItems' => [
                         ['label' => translate('shopping_cart'), 'url' => route('shop-cart')],
-                        ['label' => translate('shipping_Address')],
+                        ['label' => translate('checkout')],
                     ],
                 ])
 
@@ -35,7 +35,7 @@
 
                 <div class="sf-checkout-layout">
                     <div class="sf-checkout-main">
-                        <h1 class="sf-page-title">{{ translate('shipping_Address') }}</h1>
+                        <h1 class="sf-page-title">{{ translate('checkout') }}</h1>
 
                         @if($physical_product_view)
                             <input type="hidden" id="physical_product" name="physical_product" value="yes">
@@ -80,9 +80,11 @@
                                 @include('web-views.seafood.partials._checkout-guest-account')
                             @endif
                         @endif
+
+                        @include('web-views.seafood.partials._checkout-payment-methods')
                     </div>
 
-                    @include('web-views.seafood.partials._order-summary', ['summaryStep' => 'shipping'])
+                    @include('web-views.seafood.partials._order-summary', ['summaryStep' => 'checkout'])
                 </div>
             </section>
         </main>
