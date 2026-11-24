@@ -30,6 +30,7 @@
         + max($shippingCostSavedForFreeDelivery, 0);
     $isTaxShownSeparately = $systemTaxConfig['SystemTaxVat']['is_active'] && !$systemTaxConfig['is_included'];
     $isCheckoutDisabled = $summaryCart->count() <= 0;
+    $isPlaceOrderStep = in_array($summaryStep, ['checkout', 'payment'], true);
     $luckyWheelCheckout = $summaryStep !== 'cart' && auth('customer')->check()
         ? app(\App\Services\LuckyWheelService::class)->getCheckoutGiftSummary(
             customerId: auth('customer')->id(),
@@ -142,7 +143,7 @@
             </div>
         </dl>
 
-        @if($summaryStep === 'payment')
+        @if($isPlaceOrderStep)
             <label class="sf-check sf-summary-terms">
                 <input type="checkbox" class="sf-payment-terms" checked>
                 <span class="sf-check-box" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>
@@ -155,8 +156,8 @@
         @endif
 
         <button type="button" class="sf-btn-block sf-checkout-proceed" data-step="{{ $summaryStep }}"
-                @disabled($isCheckoutDisabled || $summaryStep === 'payment')>
-            {{ $summaryStep === 'payment' ? translate('place_order') : translate('proceed_to_Checkout') }}
+                @disabled($isCheckoutDisabled)>
+            {{ $isPlaceOrderStep ? translate('place_order') : translate('proceed_to_Checkout') }}
         </button>
 
         <a href="{{ route('home') }}" class="sf-summary-continue">
@@ -172,7 +173,7 @@
         <strong class="sf-summary-total">@include('web-views.seafood.partials._price', ['amount' => $totalAmount - $referralAmount, 'symbolSize' => '13px'])</strong>
     </span>
     <button type="button" class="sf-btn-sm sf-btn-sm-primary sf-checkout-proceed" data-step="{{ $summaryStep }}"
-            @disabled($isCheckoutDisabled || $summaryStep === 'payment')>
-        {{ $summaryStep === 'payment' ? translate('place_order') : translate('proceed_to_Checkout') }}
+            @disabled($isCheckoutDisabled)>
+        {{ $isPlaceOrderStep ? translate('place_order') : translate('proceed_to_Checkout') }}
     </button>
 </div>

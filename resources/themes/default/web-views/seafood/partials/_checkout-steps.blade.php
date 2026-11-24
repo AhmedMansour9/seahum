@@ -2,14 +2,9 @@
     $checkoutStep = $checkoutStep ?? 1;
     $checkoutSteps = [
         1 => ['label' => translate('cart'), 'url' => route('shop-cart')],
-        2 => [
-            'label' => getWebConfig(name: 'billing_input_by_customer') == 1 ? translate('shipping_and_billing') : translate('shipping'),
-            'url' => $checkoutStep >= 2 ? route('checkout-details') : null,
-        ],
-        3 => ['label' => translate('payment'), 'url' => null],
+        2 => ['label' => translate('checkout'), 'url' => null],
     ];
 @endphp
-
 <ol class="sf-steps" aria-label="{{ translate('checkout_steps') }}">
     @foreach($checkoutSteps as $stepNumber => $stepItem)
         @php $stepState = $stepNumber < $checkoutStep ? 'done' : ($stepNumber === $checkoutStep ? 'current' : 'upcoming'); @endphp

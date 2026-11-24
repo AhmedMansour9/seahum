@@ -88,6 +88,7 @@
         .sf-choice-title { font-family: var(--sh-font-display); font-size: 14.5px; font-weight: 700; color: var(--sh-navy); text-transform: capitalize; }
         .sf-choice-text { font-size: 13px; line-height: 1.7; color: var(--sh-muted); overflow-wrap: anywhere; }
         .sf-choice-media { width: 32px; height: 32px; flex-shrink: 0; object-fit: contain; }
+        .sf-offline-method.is-active { background: var(--sh-sea-50); border-color: var(--sh-sea); color: var(--sh-navy); }
 
         @media (max-width: 979px) {
             .sf-cart-layout, .sf-checkout-layout { grid-template-columns: minmax(0, 1fr); }

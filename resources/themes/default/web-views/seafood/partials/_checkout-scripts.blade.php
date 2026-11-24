@@ -7,7 +7,6 @@
       data-order-note-url="{{ route('order_note') }}"
       data-choose-address-url="{{ route('customer.choose-shipping-address-other') }}"
       data-checkout-details-url="{{ route('checkout-details') }}"
-      data-checkout-payment-url="{{ route('checkout-payment') }}"
       data-message-minimum-quantity="{{ translate('minimum_order_quantity_cannot_be_less_than_') }}"
       data-message-item-removed="{{ translate('item_has_been_removed_from_cart') }}"
       data-message-coupon-required="{{ translate('please_provide_coupon_code') }}"
@@ -205,16 +204,30 @@
         return isComplete;
     }
 
-    function proceedSeafoodFromShipping() {
+    function focusFirstInvalidSeafoodField() {
+        const firstInvalidField = $('.sf-checkout-main .is-invalid').first();
+        if (firstInvalidField.length) {
+            firstInvalidField[0].scrollIntoView({behavior: 'smooth', block: 'center'});
+            firstInvalidField.trigger('focus');
+        }
+    }
+
+    /* Saves the delivery address to the session; resolves only when the server accepted it. */
+    function saveSeafoodCheckoutAddress() {
         const hasPhysicalProduct = $('#physical_product').val() === 'yes';
         const sameAsShipping = hasPhysicalProduct;
         const createAccountToggle = $('#is_check_create_account');
 
-        areSeafoodRequiredFieldsFilled(document.getElementById('address-form'));
+        let isComplete = areSeafoodRequiredFieldsFilled(document.getElementById('address-form'));
         if (!sameAsShipping) {
-            areSeafoodRequiredFieldsFilled(document.getElementById('billing-address-form'));
+            isComplete = areSeafoodRequiredFieldsFilled(document.getElementById('billing-address-form')) && isComplete;
+        }
+        if (!isComplete) {
+            focusFirstInvalidSeafoodField();
+            return $.Deferred().reject().promise();
         }
 
+        const request = $.Deferred();
         $.post({
             url: seafoodCheckoutUrl('choose-address-url'),
             data: {
@@ -231,21 +244,81 @@
                 if (response.errors) {
                     showSeafoodCheckoutErrors(response);
                     setSeafoodCheckoutBusy(false);
+                    request.reject();
                     return;
                 }
-                location.href = seafoodCheckoutUrl('checkout-payment-url');
+                request.resolve();
             },
             error: function (response) {
                 showSeafoodCheckoutErrors(response.responseJSON);
                 setSeafoodCheckoutBusy(false);
+                request.reject();
+            },
+        });
+        return request.promise();
+    }
+
+    /* ---- Payment choice ---- */
+    function getSelectedSeafoodPaymentMethod() {
+        return $('input[name="sf_payment_method"]:checked').val();
+    }
+
+    function updateSeafoodPaymentState() {
+        const selectedMethod = getSelectedSeafoodPaymentMethod();
+        const hasAcceptedTerms = $('.sf-payment-terms').length === $('.sf-payment-terms:checked').length;
+        const hasPaymentChoice = $('input[name="sf_payment_method"]').length > 0;
+
+        $('.sf-payment-extra').each(function () {
+            $(this).prop('hidden', $(this).data('payment-extra') !== selectedMethod);
+        });
+        if (hasPaymentChoice || $('.sf-payment-terms').length) {
+            $('.sf-checkout-proceed[data-step="checkout"], .sf-checkout-proceed[data-step="payment"]')
+                .prop('disabled', !(hasAcceptedTerms && selectedMethod));
+        }
+    }
+
+    $(document).on('change', 'input[name="sf_payment_method"]', updateSeafoodPaymentState);
+
+    $(document).on('change', '.sf-payment-terms', function () {
+        $('.sf-payment-terms').prop('checked', this.checked);
+        updateSeafoodPaymentState();
+    });
+
+    function openSeafoodOfflinePayment(methodId) {
+        $('#pay_offline_method').val(methodId);
+        $.get({
+            url: $('#route-pay-offline-method-list').data('url') + '?method_id=' + encodeURIComponent(methodId),
+            success: function (response) {
+                $('#payment_method_field').html(response.methodHtml);
+                openSeafoodModal('sf-offline-payment-modal');
+            },
+            error: function () {
+                toastr.error(seafoodCheckoutUrl('message-something-wrong'));
             },
         });
     }
 
-    function proceedSeafoodFromPayment() {
-        const selectedMethod = $('input[name="sf_payment_method"]:checked');
-        const paymentForm = $('#' + selectedMethod.val() + '_form');
-        if (!selectedMethod.length || !paymentForm.length) {
+    $(document).on('click', '.sf-offline-method', function () {
+        $('.sf-offline-method').removeClass('is-active').attr('aria-pressed', 'false');
+        $(this).addClass('is-active').attr('aria-pressed', 'true');
+        $('#pay_offline_method').val($(this).data('method-id'));
+    });
+
+    $(document).on('change', '#pay_offline_method', function () {
+        openSeafoodOfflinePayment(this.value);
+    });
+
+    function submitSeafoodSelectedPayment() {
+        const selectedMethod = getSelectedSeafoodPaymentMethod();
+        if (selectedMethod === 'pay_offline') {
+            setSeafoodCheckoutBusy(false);
+            const chosenOfflineMethod = $('.sf-offline-method.is-active').data('method-id') ?? $('.sf-offline-method').first().data('method-id');
+            openSeafoodOfflinePayment(chosenOfflineMethod);
+            return;
+        }
+        const paymentForm = $('#' + selectedMethod + '_form');
+        if (!paymentForm.length) {
+            setSeafoodCheckoutBusy(false);
             return;
         }
         $('.sf-checkout-proceed').prop('disabled', true);
@@ -253,14 +326,24 @@
         paymentForm.trigger('submit');
     }
 
+    function placeSeafoodOrderFromCheckout() {
+        if (!getSelectedSeafoodPaymentMethod()) {
+            document.getElementById('sf-payment-methods')?.scrollIntoView({behavior: 'smooth', block: 'center'});
+            return;
+        }
+        saveSeafoodCheckoutAddress().done(submitSeafoodSelectedPayment);
+    }
+
     $(document).on('click', '.sf-checkout-proceed', function () {
         const step = $(this).data('step');
         if (step === 'cart') {
             proceedSeafoodFromCart();
-        } else if (step === 'shipping') {
-            proceedSeafoodFromShipping();
+        } else if (step === 'checkout') {
+            placeSeafoodOrderFromCheckout();
         } else if (step === 'payment') {
-            proceedSeafoodFromPayment();
+            submitSeafoodSelectedPayment();
         }
     });
+
+    updateSeafoodPaymentState();
 </script>

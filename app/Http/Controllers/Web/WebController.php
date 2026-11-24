@@ -369,7 +369,14 @@ class WebController extends Controller
             $countriesCode[] = $country['code'];
         }
 
+        $paymentOptions = $this->getCheckoutPaymentOptions(
+            isPayOnDeliveryAllowed: $this->isPayOnDeliveryAllowedForCheckedCart(),
+            orderAmount: CartManager::cart_grand_total(type: 'checked') - (session('coupon_discount') ?? 0),
+            couponDiscount: session('coupon_discount') ?? 0,
+        );
+
         return view(VIEW_FILE_NAMES['order_shipping'], [
+            ...$paymentOptions,
             'physical_product_view' => $response['physical_product_view'],
             'zip_codes' => $zipCodes,
             'country_restrict_status' => $countryRestrictStatus,
@@ -440,66 +447,68 @@ class WebController extends Controller
             }
             $isPhysicalProductExistArray[$groupId] = $isPhysicalProductExist;
         }
-        $cashOnDeliveryBtnShow = ! in_array(false, $isPhysicalProductExistArray);
 
         $vendorWiseCartListCollection = collect($vendorWiseCartList);
-        $couponDiscount = $vendorWiseCartListCollection?->sum('coupon_discount') ?? 0;
-        $amount = $vendorWiseCartListCollection?->sum('order_amount_with_tax') ?? 0;
-
-        $inr = Currency::where(['symbol' => '₹'])->first();
-        $usd = Currency::where(['code' => 'USD'])->first();
-        $myr = Currency::where(['code' => 'MYR'])->first();
-
-        $offlinePaymentMethods = OfflinePaymentMethod::where('status', 1)->get();
-        $paymentGatewayPublishedStatus = config('get_payment_publish_status') ?? 0;
-        $offlinePaymentStatus = getWebConfig(name: 'offline_payment');
-
-        $availablePaymentMethod = [];
-
-        $cashOnDeliveryStatus = getWebConfig(name: 'cash_on_delivery');
-        if ($cashOnDeliveryStatus && $cashOnDeliveryStatus['status'] && $cashOnDeliveryBtnShow) {
-            $availablePaymentMethod = ['cash_on_delivery'];
-        }
-
-        $isCardOnDeliveryEnabled = OrderManager::isCardOnDeliveryEnabled();
-        if ($isCardOnDeliveryEnabled && $cashOnDeliveryBtnShow) {
-            $availablePaymentMethod = ['card_on_delivery'];
-        }
-
-        if (getWebConfig(name: 'digital_payment') && count(payment_gateways()) > 0) {
-            $availablePaymentMethod = ['payment_gateways'];
-        }
-
-        if ($offlinePaymentStatus && $offlinePaymentStatus['status'] == 1 && count($offlinePaymentMethods) > 0) {
-            $availablePaymentMethod = ['offline_payment'];
-        }
-        if (auth('customer')->check() && getWebConfig(name: 'wallet_status')) {
-            $availablePaymentMethod = ['wallet_status'];
-        }
 
         if (session()->has('address_id') && session()->has('billing_address_id')) {
-            return view(VIEW_FILE_NAMES['payment_details'], [
-                'cashOnDeliveryBtnShow' => $cashOnDeliveryBtnShow,
-                'cash_on_delivery' => $cashOnDeliveryStatus,
-                'isCardOnDeliveryEnabled' => $isCardOnDeliveryEnabled,
-                'digital_payment' => getWebConfig(name: 'digital_payment'),
-                'wallet_status' => getWebConfig(name: 'wallet_status'),
-                'offline_payment' => $offlinePaymentStatus,
-                'coupon_discount' => $couponDiscount,
-                'amount' => $amount,
-                'inr' => $inr,
-                'usd' => $usd,
-                'myr' => $myr,
-                'paymentGatewayPublishedStatus' => $paymentGatewayPublishedStatus,
-                'payment_gateways_list' => payment_gateways(),
-                'offline_payment_methods' => $offlinePaymentMethods,
-                'activeMinimumMethods' => count($availablePaymentMethod) > 0,
-            ]);
+            return view(VIEW_FILE_NAMES['payment_details'], $this->getCheckoutPaymentOptions(
+                isPayOnDeliveryAllowed: ! in_array(false, $isPhysicalProductExistArray),
+                orderAmount: $vendorWiseCartListCollection->sum('order_amount_with_tax'),
+                couponDiscount: $vendorWiseCartListCollection->sum('coupon_discount'),
+            ));
         }
 
         Toastr::error(translate('incomplete_info'));
 
         return back();
+    }
+
+    /**
+     * Payment methods offered at checkout, shared by the payment page and the one-page checkout.
+     *
+     * @return array<string, mixed>
+     */
+    private function getCheckoutPaymentOptions(bool $isPayOnDeliveryAllowed, float|int $orderAmount, float|int $couponDiscount): array
+    {
+        $offlinePaymentMethods = OfflinePaymentMethod::where('status', 1)->get();
+        $offlinePaymentStatus = getWebConfig(name: 'offline_payment');
+        $cashOnDeliveryStatus = getWebConfig(name: 'cash_on_delivery');
+        $isCardOnDeliveryEnabled = OrderManager::isCardOnDeliveryEnabled();
+        $paymentGateways = payment_gateways();
+
+        $hasActivePaymentMethod = ($cashOnDeliveryStatus && $cashOnDeliveryStatus['status'] && $isPayOnDeliveryAllowed)
+            || ($isCardOnDeliveryEnabled && $isPayOnDeliveryAllowed)
+            || (getWebConfig(name: 'digital_payment') && count($paymentGateways) > 0)
+            || ($offlinePaymentStatus && $offlinePaymentStatus['status'] == 1 && count($offlinePaymentMethods) > 0)
+            || (auth('customer')->check() && getWebConfig(name: 'wallet_status'));
+
+        return [
+            'cashOnDeliveryBtnShow' => $isPayOnDeliveryAllowed,
+            'cash_on_delivery' => $cashOnDeliveryStatus,
+            'isCardOnDeliveryEnabled' => $isCardOnDeliveryEnabled,
+            'digital_payment' => getWebConfig(name: 'digital_payment'),
+            'wallet_status' => getWebConfig(name: 'wallet_status'),
+            'offline_payment' => $offlinePaymentStatus,
+            'coupon_discount' => $couponDiscount,
+            'amount' => $orderAmount,
+            'inr' => Currency::where(['symbol' => '₹'])->first(),
+            'usd' => Currency::where(['code' => 'USD'])->first(),
+            'myr' => Currency::where(['code' => 'MYR'])->first(),
+            'paymentGatewayPublishedStatus' => config('get_payment_publish_status') ?? 0,
+            'payment_gateways_list' => $paymentGateways,
+            'offline_payment_methods' => $offlinePaymentMethods,
+            'activeMinimumMethods' => $hasActivePaymentMethod,
+        ];
+    }
+
+    /**
+     * Pay-on-delivery needs a physical item in every vendor group of the checked cart.
+     */
+    private function isPayOnDeliveryAllowedForCheckedCart(): bool
+    {
+        return collect(CartManager::getCartListQuery(type: 'checked'))
+            ->groupBy('cart_group_id')
+            ->every(fn ($groupCartList) => $groupCartList->contains('product_type', 'physical'));
     }
 
     public function getCashOnDeliveryCheckoutComplete(Request $request): View|RedirectResponse|JsonResponse

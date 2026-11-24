@@ -50,6 +50,7 @@
         .sf-crumb-link:hover { color: var(--sh-sea-700); }
 
         .sf-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 20px; }
+        .sf-form-grid[hidden] { display: none; }
         .sf-form-grid > .sf-form-full { grid-column: 1 / -1; }
         .sf-filter-field.is-valid { border: 1.5px solid var(--sh-sea-100); }
         textarea.sf-filter-field { height: auto; min-height: 150px; padding: 12px 14px; line-height: 1.85; resize: vertical; }
