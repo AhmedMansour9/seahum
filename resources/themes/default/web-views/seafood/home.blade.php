@@ -300,7 +300,7 @@
                     <div>
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <span style="font-size: 13.5px; font-weight: 800; color: var(--sh-sea-300); letter-spacing: .5px; white-space: nowrap;">{{ translate('why_us') }}</span>
-                            <span class="sh-wave" aria-hidden="true"></span>
+                            <span style="height: 2px; width: 46px; background: var(--sh-salmon); display: inline-block;"></span>
                         </div>
                         <h2 style="font-family: var(--sh-font-display); font-weight: 900; font-size: clamp(26px, 3.6vw, 42px); line-height: 1.3; margin: 14px 0 0; color: #FFFFFF; text-wrap: balance;">
                             {{ translate('everything_we_do_is_about_freshness_and_trust') }}
@@ -330,7 +330,7 @@
             <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-bottom: 40px;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 11px;">
-                        <span class="sh-wave" aria-hidden="true"></span>
+                        <span style="height: 2px; width: 40px; background: var(--sh-salmon); display: inline-block;"></span>
                         <span style="font-size: 13.5px; font-weight: 800; color: var(--sh-sea-700); letter-spacing: .5px;">{{ translate('easy_and_fast') }}</span>
                     </div>
                     <h2 style="font-family: var(--sh-font-display); font-weight: 800; font-size: clamp(26px, 3.4vw, 38px); margin: 12px 0 0; color: var(--sh-navy);">{{ translate('how_to_order_in_4_steps') }}</h2>
@@ -365,7 +365,7 @@
         <section id="faq" style="background: var(--sh-abyss); margin-top: clamp(52px, 7vw, 86px); padding: clamp(42px, 6.5vw, 84px) 0;">
             <div class="sf-gutter" style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
                 <div style="display: flex; align-items: center; gap: 11px;">
-                    <span class="sh-wave" aria-hidden="true"></span>
+                    <span style="height: 2px; width: 40px; background: var(--sh-salmon); display: inline-block;"></span>
                     <span style="font-size: 13.5px; font-weight: 800; color: var(--sh-sea-300); letter-spacing: .5px;">{{ translate('faq') }}</span>
                 </div>
                 <h2 style="font-family: var(--sh-font-display); font-weight: 900; font-size: clamp(26px, 3.6vw, 40px); margin: 14px 0 34px; color: #FFFFFF;">{{ translate('questions_we_get_a_lot') }}</h2>

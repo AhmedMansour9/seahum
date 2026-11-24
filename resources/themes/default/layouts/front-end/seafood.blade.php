@@ -18,7 +18,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ theme_asset(path: 'public/assets/back-end/css/toastr.css') }}"/>
     <link rel="stylesheet" href="{{ theme_asset(path: 'public/assets/front-end/css/font-awesome.min.css') }}"/>
 
@@ -79,8 +79,8 @@
             --sh-shadow-card: 0 10px 26px -24px rgba(var(--sh-navy-rgb), .9);
             --sh-shadow-cta: 0 16px 32px -14px rgba(var(--sh-salmon-rgb), .95);
 
-            --sh-font-body: 'IBM Plex Sans Arabic', 'Segoe UI', sans-serif;
-            --sh-font-display: 'Readex Pro', 'IBM Plex Sans Arabic', sans-serif;
+            --sh-font-body: Tajawal, "Segoe UI", sans-serif;
+            --sh-font-display: Cairo, sans-serif;
         }
         html, body { margin: 0; padding: 0; }
         body {
@@ -94,8 +94,6 @@
         a:hover { color: var(--sh-navy); }
         img { max-width: 100%; }
         ::selection { background: rgba(var(--sh-salmon-rgb), .28); color: var(--sh-navy); }
-        .sh-wave { display: inline-block; flex-shrink: 0; width: 46px; height: 10px; background: var(--sh-grad-catch); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 10'%3E%3Cpath d='M1 7c6-5 11-5 16-1s10 4 15 0 9-4 13-2' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 10'%3E%3Cpath d='M1 7c6-5 11-5 16-1s10 4 15 0 9-4 13-2' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
-        [dir="rtl"] .sh-wave { transform: scaleX(-1); }
         @keyframes marqueeTicker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         @keyframes marqueeTickerRtl { from { transform: translateX(0); } to { transform: translateX(50%); } }
         .sf-ticker-track { animation: marqueeTicker 38s linear infinite; }
