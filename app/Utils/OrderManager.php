@@ -1664,22 +1664,25 @@ class OrderManager
 
             $vendor = $vendorType == 'admin' ? Admin::find($vendorId) : Seller::find($vendorId);
 
-            $orderPlacedMailEvents[] = [
-                'email' => $email,
-                'data' => [
-                    'subject' => translate('order_placed'),
-                    'title' => translate('order_placed'),
-                    'userName' => $userName,
-                    'userType' => 'customer',
-                    'templateName' => 'order-place',
-                    'order' => $order,
-                    'orderId' => $order['id'],
-                    'shopName' => $vendorType == 'admin' ? getInHouseShopConfig(key: 'name') : $vendor?->shop?->name ?? getWebConfig('company_name'),
-                    'vendorName' => $vendorType == 'admin' ? getInHouseShopConfig(key: 'name') : $vendor?->shop?->name ?? getWebConfig('company_name'),
-                    'shopId' => $vendor?->shop?->id ?? 0,
-                    'attachmentPath' => self::storeInvoice($order['id']),
-                ]
-            ];
+            // Guests may order without an email; there is then no customer copy to send.
+            if (! empty($email)) {
+                $orderPlacedMailEvents[] = [
+                    'email' => $email,
+                    'data' => [
+                        'subject' => translate('order_placed'),
+                        'title' => translate('order_placed'),
+                        'userName' => $userName,
+                        'userType' => 'customer',
+                        'templateName' => 'order-place',
+                        'order' => $order,
+                        'orderId' => $order['id'],
+                        'shopName' => $vendorType == 'admin' ? getInHouseShopConfig(key: 'name') : $vendor?->shop?->name ?? getWebConfig('company_name'),
+                        'vendorName' => $vendorType == 'admin' ? getInHouseShopConfig(key: 'name') : $vendor?->shop?->name ?? getWebConfig('company_name'),
+                        'shopId' => $vendor?->shop?->id ?? 0,
+                        'attachmentPath' => self::storeInvoice($order['id']),
+                    ],
+                ];
+            }
 
             $orderPlacedMailEvents[] = [
                 'email' => $vendor['email'],

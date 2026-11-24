@@ -101,11 +101,11 @@ class SystemController extends Controller
                 'contact_person_name' => $shipping['contact_person_name'],
                 'address_type' => $shipping['address_type'],
                 'address' => $shipping['address'],
-                'city' => $shipping['city'],
+                'city' => $shipping['city'] ?? null,
                 'zip' => $shipping['zip'],
                 'country' => $shipping['country'],
                 'phone' => $shipping['phone'],
-                'email' => auth('customer')->check() ? null : $shipping['email'],
+                'email' => auth('customer')->check() ? null : ($shipping['email'] ?? null),
                 'latitude' => $shipping['latitude'],
                 'longitude' => $shipping['longitude'],
                 'is_billing' => 0,
@@ -138,11 +138,11 @@ class SystemController extends Controller
                 'contact_person_name' => $shipping['contact_person_name'],
                 'address_type' => $shipping['address_type'],
                 'address' => $shipping['address'],
-                'city' => $shipping['city'],
+                'city' => $shipping['city'] ?? null,
                 'zip' => $shipping['zip'],
                 'country' => $shipping['country'],
                 'phone' => $shipping['phone'],
-                'email' => auth('customer')->check() ? null : $shipping['email'],
+                'email' => auth('customer')->check() ? null : ($shipping['email'] ?? null),
                 'latitude' => $shipping['latitude'],
                 'longitude' => $shipping['longitude'],
                 'is_billing' => 0,
@@ -301,13 +301,8 @@ class SystemController extends Controller
 
         if (!auth('customer')->check()) {
 
-            if (empty($shipping['email'])) {
-                return response()->json([
-                    'errors' => translate('Shipping email is required.'),
-                ], 403);
-            }
-
-            if (!filter_var($shipping['email'], FILTER_VALIDATE_EMAIL)) {
+            // Guests order with a name, a phone and a map location; an email is optional.
+            if (!empty($shipping['email']) && !filter_var($shipping['email'], FILTER_VALIDATE_EMAIL)) {
                 return response()->json([
                     'errors' => translate('Shipping email must be a valid email address.'),
                 ], 403);
@@ -369,7 +364,7 @@ class SystemController extends Controller
         $addressId = $shipping['shipping_method_id'] ?? 0;
 
         if (isset($shipping['shipping_method_id'])) {
-            if ($shipping['contact_person_name'] == null || !isset($shipping['address_type']) || $shipping['address'] == null || $shipping['city'] == null || ($zipRestrictStatus && empty($shipping['zip'])) || !isset($shipping['country']) || $shipping['country'] == null || $shipping['phone'] == null || ($isGuestCustomer && $shipping['email'] == null)) {
+            if ($shipping['contact_person_name'] == null || !isset($shipping['address_type']) || $shipping['address'] == null || ($zipRestrictStatus && empty($shipping['zip'])) || !isset($shipping['country']) || $shipping['country'] == null || $shipping['phone'] == null) {
                 return response()->json([
                     'errors' => translate('Fill_all_required_fields_of_shipping_address')
                 ], 403);
@@ -391,13 +386,13 @@ class SystemController extends Controller
                 'contact_person_name' => $shipping['contact_person_name'],
                 'address_type' => $shipping['address_type'],
                 'address' => $shipping['address'],
-                'city' => $shipping['city'],
+                'city' => $shipping['city'] ?? null,
                 'zip' => $shipping['zip'],
                 'country' => $shipping['country'],
                 'phone' => $shipping['phone'],
                 'latitude' => $shipping['latitude'] ?? "",
                 'longitude' => $shipping['longitude'] ?? "",
-                'email' => auth('customer')->check() ? null : $shipping['email'],
+                'email' => auth('customer')->check() ? null : ($shipping['email'] ?? null),
                 'is_billing' => 0,
             ]);
 
@@ -406,7 +401,7 @@ class SystemController extends Controller
             $getShipping->contact_person_name = $shipping['contact_person_name'];
             $getShipping->address_type = $shipping['address_type'];
             $getShipping->address = $shipping['address'];
-            $getShipping->city = $shipping['city'];
+            $getShipping->city = $shipping['city'] ?? null;
             $getShipping->zip = $shipping['zip'];
             $getShipping->country = $shipping['country'];
             $getShipping->phone = $shipping['phone'];
@@ -421,11 +416,11 @@ class SystemController extends Controller
                 'contact_person_name' => $shipping['contact_person_name'],
                 'address_type' => $shipping['address_type'],
                 'address' => $shipping['address'],
-                'city' => $shipping['city'],
+                'city' => $shipping['city'] ?? null,
                 'zip' => $shipping['zip'],
                 'country' => $shipping['country'],
                 'phone' => $shipping['phone'],
-                'email' => auth('customer')->check() ? null : $shipping['email'],
+                'email' => auth('customer')->check() ? null : ($shipping['email'] ?? null),
                 'latitude' => $shipping['latitude'] ?? '',
                 'longitude' => $shipping['longitude'] ?? '',
                 'is_billing' => 0,
@@ -524,7 +519,7 @@ class SystemController extends Controller
             if ($request['shipping']) {
                 $newCustomerAddress = [
                     'name' => $shipping['contact_person_name'],
-                    'email' => $shipping['email'],
+                    'email' => $shipping['email'] ?? null,
                     'phone' => $shipping['phone'],
                     'password' => $request['customer_password'],
                 ];
@@ -537,7 +532,10 @@ class SystemController extends Controller
                 ];
             }
 
-            if (User::where(['email' => $newCustomerAddress['email']])->orWhere(['phone' => $newCustomerAddress['phone']])->first()) {
+            $isAlreadyRegistered = User::where('phone', $newCustomerAddress['phone'])
+                ->when(!empty($newCustomerAddress['email']), fn ($query) => $query->orWhere('email', $newCustomerAddress['email']))
+                ->exists();
+            if ($isAlreadyRegistered) {
                 return response()->json(['errors' => translate('Already_registered')], 403);
             }else{
                 $newCustomerRegister = self::getRegisterNewCustomer(request: $request, address: $newCustomerAddress);

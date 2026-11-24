@@ -49,10 +49,6 @@
                                     'zipCodes' => $zip_codes,
                                 ])
                             </form>
-
-                            @if($isGuestCheckout)
-                                @include('web-views.seafood.partials._checkout-guest-account')
-                            @endif
                         @endif
 
                         {{-- Orders with physical items are always billed to the shipping address, so the billing form is only asked for digital-only carts. --}}
@@ -106,8 +102,11 @@
 
         const deliveryRestrictedCountries = @json($countriesName);
         const seafoodDefaultLocation = {
-            lat: {{ (float) ($default_location['lat'] ?? -33.8688) }},
-            lng: {{ (float) ($default_location['lng'] ?? 151.2195) }},
+            lat: {{ (float) ($default_location['lat'] ?? 30.0444) }},
+            lng: {{ (float) ($default_location['lng'] ?? 31.2357) }},
+        };
+        const seafoodLocationMessages = {
+            unavailable: @json(translate('we_could_not_get_your_location_tap_the_map_instead')),
         };
 
         /* Field ids per form: they mirror the names SystemController reads. */
@@ -124,6 +123,15 @@
             },
         };
 
+        /* Set once the shipping map is ready; lets a chosen saved address move the pin. */
+        let seafoodShippingLocationSetter = null;
+
+        function showSeafoodPickedLocation(addressText) {
+            const label = $('.sf-location-picked-text');
+            label.text(addressText || label.data('empty-text'));
+            $('#sf-location-picker').toggleClass('has-location', Boolean(addressText)).removeClass('is-invalid');
+        }
+
         function applySeafoodAddressChoice(choice) {
             const fields = seafoodAddressFields[choice.data('address-kind')];
             const form = $(fields.form);
@@ -133,13 +141,19 @@
             $(fields.name).val(address?.contact_person_name ?? '');
             $(fields.phone).val(address?.phone ?? '');
             $(fields.email).val(address?.email ?? '');
-            $(fields.type).val(address?.address_type ?? 'permanent');
+            $(fields.type).val(address?.address_type ?? 'home');
             $(fields.city).val(address?.city ?? '');
             $(fields.zip).val(address?.zip ?? '');
             $(fields.address).val(address?.address ?? '');
             if (address?.latitude) {
                 $(fields.latitude).val(address.latitude);
                 $(fields.longitude).val(address.longitude);
+            }
+            if (choice.data('address-kind') === 'shipping') {
+                showSeafoodPickedLocation(address?.address ?? '');
+                if (address?.latitude && seafoodShippingLocationSetter) {
+                    seafoodShippingLocationSetter({lat: parseFloat(address.latitude), lng: parseFloat(address.longitude)}, {keepAddress: true});
+                }
             }
             form.find('.sf-address-method-id').val(address?.id ?? 0);
             form.find('.is-invalid').removeClass('is-invalid');
@@ -171,72 +185,144 @@
         function deliveryRestrictedCountriesCheck(countryName, areaSelector, addressSelector) {
             const isDeliverable = deliveryRestrictedCountries.some((country) => country.toLowerCase() === String(countryName).toLowerCase());
             $(areaSelector).toggleClass('map-area-alert-danger', !isDeliverable);
-            $(addressSelector).closest('div').find('.map-address-alert').toggleClass('is-visible', !isDeliverable);
+            $(areaSelector).find('.map-address-alert').toggleClass('is-visible', !isDeliverable);
             if (!isDeliverable) {
                 $(addressSelector).val('');
+                showSeafoodPickedLocation('');
             }
         }
 
-        function findCountryObject(addressComponents) {
-            return (addressComponents || []).find((component) => component.types.includes('country')) || {long_name: ''};
+        function findAddressComponent(addressComponents, type) {
+            return (addressComponents || []).find((component) => component.types.includes(type)) || {long_name: ''};
         }
 
-        async function initSeafoodAddressMap(kind) {
-            const canvas = document.getElementById(kind === 'billing' ? 'location_map_canvas_billing' : 'location_map_canvas');
+        async function initSeafoodShippingMap() {
+            const canvas = document.getElementById('location_map_canvas');
             if (!canvas) {
                 return;
             }
-            const fields = seafoodAddressFields[kind];
+            const fields = seafoodAddressFields.shipping;
             const {AdvancedMarkerElement} = await google.maps.importLibrary('marker');
-            const map = new google.maps.Map(canvas, {center: seafoodDefaultLocation, zoom: 13, mapId: 'roadmap'});
+            const map = new google.maps.Map(canvas, {
+                center: seafoodDefaultLocation, zoom: 13, mapId: 'roadmap',
+                streetViewControl: false, mapTypeControl: false, fullscreenControl: false, clickableIcons: false,
+            });
             const marker = new AdvancedMarkerElement({position: seafoodDefaultLocation, map: map});
             const geocoder = new google.maps.Geocoder();
 
-            map.addListener('click', function (mapsMouseEvent) {
-                const coordinates = mapsMouseEvent.latLng.toJSON();
+            // A rejected key or project shows Google's error dialog over an unusable map.
+            new MutationObserver(function (mutations, observer) {
+                if (canvas.querySelector('.gm-err-container, .dismissButton')) {
+                    observer.disconnect();
+                    switchSeafoodToTypedAddress();
+                }
+            }).observe(canvas, {childList: true, subtree: true});
+
+            function setDeliveryLocation(coordinates, options = {}) {
                 marker.position = coordinates;
                 map.panTo(coordinates);
+                if (options.zoom) {
+                    map.setZoom(options.zoom);
+                }
                 $(fields.latitude).val(coordinates.lat);
                 $(fields.longitude).val(coordinates.lng);
-
-                geocoder.geocode({latLng: mapsMouseEvent.latLng}, function (results, status) {
-                    if (status === google.maps.GeocoderStatus.OK && results[1]) {
-                        $(fields.address).val(results[1].formatted_address);
-                        if ($('#system-country-restrict-status').data('value')) {
-                            deliveryRestrictedCountriesCheck(findCountryObject(results[1].address_components).long_name,
-                                kind === 'billing' ? '.location-map-billing-canvas-area' : '.location-map-canvas-area', fields.address);
-                        }
-                    }
-                });
-            });
-
-            const searchInput = document.getElementById(kind === 'billing' ? 'pac-input-billing' : 'pac-input');
-            const searchBox = new google.maps.places.SearchBox(searchInput);
-            map.addListener('bounds_changed', () => searchBox.setBounds(map.getBounds()));
-            searchBox.addListener('places_changed', () => {
-                const places = searchBox.getPlaces().filter((place) => place.geometry && place.geometry.location);
-                if (!places.length) {
+                if (options.keepAddress) {
                     return;
                 }
-                const bounds = new google.maps.LatLngBounds();
-                places.forEach((place) => {
-                    place.geometry.viewport ? bounds.union(place.geometry.viewport) : bounds.extend(place.geometry.location);
+
+                // The coordinates are a usable address until the geocoder answers.
+                const coordinatesText = coordinates.lat.toFixed(6) + ', ' + coordinates.lng.toFixed(6);
+                $(fields.address).val(coordinatesText);
+                showSeafoodPickedLocation(coordinatesText);
+
+                geocoder.geocode({location: coordinates}, function (results, status) {
+                    if (status !== google.maps.GeocoderStatus.OK || !results[0]) {
+                        return;
+                    }
+                    const components = results[0].address_components;
+                    $(fields.address).val(results[0].formatted_address);
+                    $(fields.city).val(findAddressComponent(components, 'locality').long_name || findAddressComponent(components, 'administrative_area_level_1').long_name);
+                    showSeafoodPickedLocation(results[0].formatted_address);
+                    if ($('#system-country-restrict-status').data('value')) {
+                        deliveryRestrictedCountriesCheck(findAddressComponent(components, 'country').long_name, '.location-map-canvas-area', fields.address);
+                    }
                 });
-                const firstPlace = places[0].geometry.location;
-                marker.position = firstPlace;
-                $(fields.latitude).val(firstPlace.lat());
-                $(fields.longitude).val(firstPlace.lng());
-                map.fitBounds(bounds);
+            }
+
+            function locateSeafoodCustomer(isUserRequest) {
+                if (!navigator.geolocation) {
+                    if (isUserRequest) {
+                        toastr.warning(seafoodLocationMessages.unavailable);
+                    }
+                    return;
+                }
+                const button = $('.sf-use-my-location').prop('disabled', true).addClass('is-loading');
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    button.prop('disabled', false).removeClass('is-loading');
+                    setDeliveryLocation({lat: position.coords.latitude, lng: position.coords.longitude}, {zoom: 17});
+                }, function () {
+                    button.prop('disabled', false).removeClass('is-loading');
+                    if (isUserRequest) {
+                        toastr.warning(seafoodLocationMessages.unavailable);
+                    }
+                }, {enableHighAccuracy: true, timeout: 12000, maximumAge: 60000});
+            }
+
+            seafoodShippingLocationSetter = setDeliveryLocation;
+
+            map.addListener('click', (mapsMouseEvent) => setDeliveryLocation(mapsMouseEvent.latLng.toJSON()));
+            $(document).on('click', '.sf-use-my-location', () => locateSeafoodCustomer(true));
+
+            const searchBox = new google.maps.places.SearchBox(document.getElementById('pac-input'));
+            map.addListener('bounds_changed', () => searchBox.setBounds(map.getBounds()));
+            searchBox.addListener('places_changed', () => {
+                const place = searchBox.getPlaces().find((candidate) => candidate.geometry && candidate.geometry.location);
+                if (place) {
+                    setDeliveryLocation(place.geometry.location.toJSON(), {zoom: 17});
+                }
             });
+
+            const savedLatitude = parseFloat($(fields.latitude).val());
+            if ($(fields.address).val() && savedLatitude) {
+                setDeliveryLocation({lat: savedLatitude, lng: parseFloat($(fields.longitude).val())}, {keepAddress: true, zoom: 16});
+            } else {
+                locateSeafoodCustomer(false);
+            }
         }
 
+        /* Typing the address replaces the map: by choice, or because the map could not load. */
+        function switchSeafoodToTypedAddress() {
+            const picker = $('#sf-location-picker');
+            if (!picker.length || picker.hasClass('is-typing')) {
+                return;
+            }
+            picker.addClass('is-typing').removeClass('has-location');
+            picker.find('.sf-map-canvas, .sf-map-search, .sf-use-my-location, .sf-location-picked, .sf-type-address-instead').prop('hidden', true);
+            const typedAddress = picker.find('.sf-typed-address').prop('hidden', false);
+            typedAddress.val('');
+            $(seafoodAddressFields.shipping.address).val('');
+        }
+
+        $(document).on('click', '.sf-type-address-instead', function () {
+            switchSeafoodToTypedAddress();
+            $('.sf-typed-address').trigger('focus');
+        });
+
+        $(document).on('input', '.sf-typed-address', function () {
+            $(seafoodAddressFields.shipping.address).val(this.value.trim());
+            $('#sf-location-picker').removeClass('is-invalid');
+        });
+
+        /* Google calls this when the API key is rejected. */
+        window.gm_authFailure = switchSeafoodToTypedAddress;
+
         function mapsShopping() {
-            initSeafoodAddressMap('shipping').catch(() => {});
-            initSeafoodAddressMap('billing').catch(() => {});
+            initSeafoodShippingMap().catch(switchSeafoodToTypedAddress);
         }
     </script>
 
     @if(getWebConfig('map_api_status') == 1)
-        <script src="https://maps.googleapis.com/maps/api/js?key={{ getWebConfig('map_api_key') }}&callback=mapsShopping&loading=async&libraries=places&v=3.56" defer></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ getWebConfig('map_api_key') }}&callback=mapsShopping&loading=async&libraries=places"
+                onerror="switchSeafoodToTypedAddress()" defer></script>
     @endif
 @endpush

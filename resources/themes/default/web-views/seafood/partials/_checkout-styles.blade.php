@@ -89,12 +89,18 @@
         .sf-choice-text { font-size: 13px; line-height: 1.7; color: var(--sh-muted); overflow-wrap: anywhere; }
         .sf-choice-media { width: 32px; height: 32px; flex-shrink: 0; object-fit: contain; }
         .sf-offline-method.is-active { background: var(--sh-sea-50); border-color: var(--sh-sea); color: var(--sh-navy); }
-        .sf-map-toggle { border: 1.5px dashed var(--sh-sea-100); border-radius: 14px; padding: 0 14px; background: var(--sh-mist); }
-        .sf-map-toggle[open] { padding-bottom: 14px; background: #FFFFFF; }
-        .sf-map-toggle-summary { display: flex; align-items: center; gap: 8px; min-height: 48px; cursor: pointer; list-style: none; font-family: var(--sh-font-display); font-size: 14.5px; font-weight: 700; color: var(--sh-sea-700); }
-        .sf-map-toggle-summary::-webkit-details-marker { display: none; }
-        .sf-map-toggle-optional { font-weight: 500; color: var(--sh-muted); }
-        .sf-map-toggle .sf-map-search { margin-bottom: 10px; }
+        .sf-location-picker { display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 1.5px solid var(--sh-line); border-radius: 16px; background: var(--sh-mist); transition: border-color .2s, box-shadow .2s; }
+        .sf-location-picker.is-invalid { border-color: var(--sh-tuna); box-shadow: 0 0 0 3px rgba(var(--sh-tuna-rgb), .14); }
+        .sf-location-picker-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+        .sf-use-my-location { color: var(--sh-sea-700); }
+        .sf-use-my-location.is-loading { opacity: .6; cursor: progress; }
+        .sf-location-picker .sf-map-canvas { height: 260px; background: #FFFFFF; }
+        .sf-location-picked { display: flex; align-items: flex-start; gap: 8px; margin: 0; font-size: 13.5px; line-height: 1.7; color: var(--sh-muted); overflow-wrap: anywhere; }
+        .sf-location-picked svg { flex-shrink: 0; margin-top: 3px; }
+        .sf-location-picker.has-location .sf-location-picked { color: var(--sh-navy); font-weight: 600; }
+        .sf-location-picker.has-location .sf-location-picked svg { color: var(--sh-action); }
+        .sf-type-address-instead { align-self: flex-start; min-height: 32px; padding: 0; border: 0; background: none; font: inherit; font-size: 13.5px; font-weight: 700; color: var(--sh-sea-700); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+        .sf-location-picker [hidden] { display: none !important; }
 
         @media (max-width: 979px) {
             .sf-cart-layout, .sf-checkout-layout { grid-template-columns: minmax(0, 1fr); }

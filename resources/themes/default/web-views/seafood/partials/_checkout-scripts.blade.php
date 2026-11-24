@@ -10,7 +10,8 @@
       data-message-minimum-quantity="{{ translate('minimum_order_quantity_cannot_be_less_than_') }}"
       data-message-item-removed="{{ translate('item_has_been_removed_from_cart') }}"
       data-message-coupon-required="{{ translate('please_provide_coupon_code') }}"
-      data-message-something-wrong="{{ translate('something_went_wrong') }}"></span>
+      data-message-something-wrong="{{ translate('something_went_wrong') }}"
+      data-message-pick-location="{{ translate('please_pick_your_delivery_location_on_the_map') }}"></span>
 
 <script>
     "use strict";
@@ -194,11 +195,13 @@
         }
         let isComplete = true;
         formElement.querySelectorAll('[required]').forEach(function (field) {
-            if (!field.value) {
+            // Hidden fields (the map-picked address) flag the visible box that fills them.
+            const invalidTarget = field.dataset.invalidTarget ? $(field.dataset.invalidTarget) : $(field);
+            if (!field.value.trim()) {
                 isComplete = false;
-                $(field).addClass('is-invalid');
+                invalidTarget.addClass('is-invalid');
             } else {
-                $(field).removeClass('is-invalid');
+                invalidTarget.removeClass('is-invalid');
             }
         });
         return isComplete;
@@ -209,6 +212,9 @@
         if (firstInvalidField.length) {
             firstInvalidField[0].scrollIntoView({behavior: 'smooth', block: 'center'});
             firstInvalidField.trigger('focus');
+        }
+        if (firstInvalidField.is('#sf-location-picker')) {
+            toastr.warning(seafoodCheckoutUrl('message-pick-location'));
         }
     }
 

@@ -5,6 +5,7 @@
 @php
     $addressKind = $addressKind ?? 'shipping';
     $isBilling = $addressKind === 'billing';
+    $isLocationPicker = !$isBilling && getWebConfig('map_api_status') == 1;
     $isFirstAddress = $savedAddresses->count() === 0;
     $defaultLocation = getWebConfig(name: 'default_location');
     $fieldNames = $isBilling ? [
@@ -68,21 +69,25 @@
         <input type="tel" class="sf-filter-field" name="{{ $fieldNames['phone'] }}" id="{{ $fieldIds['phone'] }}" autocomplete="tel" dir="ltr" @required($isFirstAddress)>
     </div>
 
-    @unless(auth('customer')->check())
-        <div class="sf-form-full">
-            <label class="sf-form-label" for="{{ $fieldIds['email'] }}">{{ translate('email') }} <span class="sf-required">*</span></label>
-            <input type="email" class="sf-filter-field" name="{{ $fieldNames['email'] }}" id="{{ $fieldIds['email'] }}" autocomplete="email" dir="ltr" @required($isFirstAddress)>
-        </div>
-    @endunless
-
     <input type="hidden" name="{{ $fieldNames['type'] }}" id="{{ $fieldIds['type'] }}" value="home">
 
-    <div class="{{ $zipRestrictStatus ? '' : 'sf-form-full' }}">
-        <label class="sf-form-label" for="{{ $fieldIds['city'] }}">{{ translate('city') }} <span class="sf-required">*</span></label>
-        <input type="text" class="sf-filter-field" name="{{ $fieldNames['city'] }}" id="{{ $fieldIds['city'] }}" autocomplete="address-level2" @required($isFirstAddress)>
-    </div>
+    @if($isBilling)
+        @unless(auth('customer')->check())
+            <div class="sf-form-full">
+                <label class="sf-form-label" for="{{ $fieldIds['email'] }}">{{ translate('email') }} <span class="sf-required">*</span></label>
+                <input type="email" class="sf-filter-field" name="{{ $fieldNames['email'] }}" id="{{ $fieldIds['email'] }}" autocomplete="email" dir="ltr" @required($isFirstAddress)>
+            </div>
+        @endunless
+        <div class="sf-form-full">
+            <label class="sf-form-label" for="{{ $fieldIds['city'] }}">{{ translate('city') }} <span class="sf-required">*</span></label>
+            <input type="text" class="sf-filter-field" name="{{ $fieldNames['city'] }}" id="{{ $fieldIds['city'] }}" autocomplete="address-level2" @required($isFirstAddress)>
+        </div>
+    @else
+        <input type="hidden" name="{{ $fieldNames['city'] }}" id="{{ $fieldIds['city'] }}" value="">
+    @endif
+
     @if($zipRestrictStatus)
-        <div>
+        <div class="sf-form-full">
             <label class="sf-form-label" for="{{ $fieldIds['zip'] }}">{{ translate('zip_code') }} <span class="sf-required">*</span></label>
             <select class="sf-filter-field" name="{{ $fieldNames['zip'] }}" id="{{ $fieldIds['zip'] }}" @required(!$isBilling)>
                 @forelse($zipCodes as $zipCode)
@@ -95,24 +100,39 @@
     @else
         <input type="hidden" name="{{ $fieldNames['zip'] }}" id="{{ $fieldIds['zip'] }}" value="">
     @endif
-    <div class="sf-form-full">
-        <label class="sf-form-label" for="{{ $fieldIds['address'] }}">{{ translate('address') }} <span class="sf-required">*</span></label>
-        <textarea class="sf-filter-field" name="{{ $fieldNames['address'] }}" id="{{ $fieldIds['address'] }}" autocomplete="street-address" rows="3"
-                  placeholder="{{ translate('street_building_floor_and_apartment') }}" style="min-height: 84px;" @required($isFirstAddress)></textarea>
-        <span class="sf-map-alert map-address-alert">{{ translate('note') }}: {{ translate('you_need_to_select_address_from_your_selected_country') }}</span>
-    </div>
 
-    @if(getWebConfig('map_api_status') == 1)
-        <details class="sf-form-full sf-map-toggle {{ $isBilling ? 'location-map-billing-canvas-area' : 'location-map-canvas-area' }}">
-            <summary class="sf-map-toggle-summary">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-10a6.5 6.5 0 0 1 13 0c0 4.4-6.5 10-6.5 10Z"></path><circle cx="12" cy="11" r="2.4"></circle></svg>
-                {{ translate('pin_your_location_on_the_map') }}
-                <span class="sf-map-toggle-optional">({{ translate('optional') }})</span>
-            </summary>
-            <input id="{{ $isBilling ? 'pac-input-billing' : 'pac-input' }}" class="sf-filter-field sf-map-search" type="text"
-                   title="{{ translate('search_your_location_here') }}" placeholder="{{ translate('search_here') }}">
-            <div class="sf-map-canvas" id="{{ $isBilling ? 'location_map_canvas_billing' : 'location_map_canvas' }}"></div>
-        </details>
+    @if($isLocationPicker)
+        {{-- The delivery location is the point picked on the map; its address text is filled from the map. --}}
+        <div class="sf-form-full sf-location-picker location-map-canvas-area" id="sf-location-picker">
+            <div class="sf-location-picker-head">
+                <span class="sf-form-label" style="margin: 0;">{{ translate('delivery_location') }} <span class="sf-required">*</span></span>
+                <button type="button" class="sf-btn-sm sf-use-my-location">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>
+                    {{ translate('use_my_current_location') }}
+                </button>
+            </div>
+            <input id="pac-input" class="sf-filter-field sf-map-search" type="text"
+                   title="{{ translate('search_your_location_here') }}" placeholder="{{ translate('search_for_your_area_or_street') }}">
+            <div class="sf-map-canvas" id="location_map_canvas"></div>
+            <p class="sf-location-picked" aria-live="polite">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-10a6.5 6.5 0 0 1 13 0c0 4.4-6.5 10-6.5 10Z"></path><circle cx="12" cy="11" r="2.4"></circle></svg>
+                <span class="sf-location-picked-text" data-empty-text="{{ translate('tap_the_map_or_use_your_current_location') }}">{{ translate('tap_the_map_or_use_your_current_location') }}</span>
+            </p>
+            <button type="button" class="sf-text-link sf-type-address-instead">{{ translate('write_the_address_instead') }}</button>
+            {{-- Shown when the customer prefers typing, or when the map cannot load. --}}
+            <textarea class="sf-filter-field sf-typed-address" rows="3" hidden
+                      aria-label="{{ translate('address') }}" placeholder="{{ translate('street_building_floor_and_apartment') }}"></textarea>
+            <input type="hidden" name="{{ $fieldNames['address'] }}" id="{{ $fieldIds['address'] }}" value=""
+                   @required($isFirstAddress) data-invalid-target="#sf-location-picker">
+            <span class="sf-map-alert map-address-alert">{{ translate('note') }}: {{ translate('you_need_to_select_address_from_your_selected_country') }}</span>
+        </div>
+    @else
+        <div class="sf-form-full">
+            <label class="sf-form-label" for="{{ $fieldIds['address'] }}">{{ translate('address') }} <span class="sf-required">*</span></label>
+            <textarea class="sf-filter-field" name="{{ $fieldNames['address'] }}" id="{{ $fieldIds['address'] }}" autocomplete="street-address" rows="3"
+                      placeholder="{{ translate('street_building_floor_and_apartment') }}" style="min-height: 84px;" @required($isFirstAddress)></textarea>
+            <span class="sf-map-alert map-address-alert">{{ translate('note') }}: {{ translate('you_need_to_select_address_from_your_selected_country') }}</span>
+        </div>
     @endif
 
     <input type="hidden" name="{{ $fieldNames['latitude'] }}" id="{{ $fieldIds['latitude'] }}" value="{{ $defaultLocation ? $defaultLocation['lat'] : 0 }}">
