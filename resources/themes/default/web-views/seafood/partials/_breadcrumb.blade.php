@@ -1,6 +1,6 @@
 @php($breadcrumbItems = $breadcrumbItems ?? [])
 
-<nav aria-label="{{ translate('breadcrumb') }}"
+<nav class="sf-breadcrumb" aria-label="{{ translate('breadcrumb') }}"
      style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 13.5px; color: var(--sh-muted); margin-bottom: 18px;">
     <a href="{{ route('home') }}" class="sf-crumb-link">{{ translate('home') }}</a>
     @foreach($breadcrumbItems as $breadcrumbItem)

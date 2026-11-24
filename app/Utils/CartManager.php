@@ -178,6 +178,46 @@ class CartManager
             ->toArray();
     }
 
+    /**
+     * Gives every cart group that ships order-wise and has no shipping method yet the first
+     * available one, so customers are not stopped to pick a method before checkout.
+     */
+    public static function assignFirstShippingMethodWhereMissing(): void
+    {
+        $shippingMethodSetting = getWebConfig(name: 'shipping_method');
+        $adminShippingType = ShippingType::where('seller_id', 0)->first()?->shipping_type ?? 'order_wise';
+        $chosenCartGroupIds = CartShipping::whereIn('cart_group_id', self::get_cart_group_ids())->pluck('cart_group_id')->all();
+
+        $cartGroupsWithoutShipping = collect(self::getCartListQuery())
+            ->where('product_type', 'physical')
+            ->groupBy('cart_group_id')
+            ->except($chosenCartGroupIds);
+
+        foreach ($cartGroupsWithoutShipping as $cartGroupId => $cartGroupItems) {
+            $firstItem = $cartGroupItems->first();
+            $isInHouseShipping = $shippingMethodSetting == 'inhouse_shipping' || $firstItem['seller_is'] == 'admin';
+            $groupShippingType = $isInHouseShipping
+                ? $adminShippingType
+                : (ShippingType::where('seller_id', $firstItem['seller_id'])->first()?->shipping_type ?? 'order_wise');
+
+            if ($groupShippingType != 'order_wise') {
+                continue;
+            }
+
+            $firstShippingMethod = $isInHouseShipping
+                ? Helpers::getShippingMethods(seller_id: 1, type: 'admin')->first()
+                : Helpers::getShippingMethods(seller_id: $firstItem['seller_id'], type: $firstItem['seller_is'])->first();
+
+            if ($firstShippingMethod) {
+                CartShipping::create([
+                    'cart_group_id' => $cartGroupId,
+                    'shipping_method_id' => $firstShippingMethod->id,
+                    'shipping_cost' => $firstShippingMethod->cost,
+                ]);
+            }
+        }
+    }
+
     public static function get_shipping_cost($groupId = null, $type = null)
     {
         self::updateOrderSummaryShippingCost($groupId, $type);

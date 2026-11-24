@@ -336,6 +336,7 @@ class WebController extends Controller
             return theme_root_path() == 'default' ? redirect('customer/auth/login') : redirect('/');
         }
         ProductManager::updateProductPriceInCartList(request: $request);
+        CartManager::assignFirstShippingMethodWhereMissing();
         if ($this->forgetCouponConflictingWithLuckyWheelGift(request: $request)) {
             return redirect()->to($request->fullUrl());
         }
@@ -918,6 +919,7 @@ class WebController extends Controller
             || (getWebConfig(name: 'guest_checkout') && session()->has('guest_id') && session('guest_id'))
         ) {
             ProductManager::updateProductPriceInCartList(request: $request);
+            CartManager::assignFirstShippingMethodWhereMissing();
             if ($this->forgetCouponConflictingWithLuckyWheelGift(request: $request)) {
                 return redirect()->to($request->fullUrl());
             }

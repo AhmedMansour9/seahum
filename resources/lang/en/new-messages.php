@@ -2849,4 +2849,12 @@ ____________________________________________________on_search_engines_and_see_th
 	"coupon_requires_required_category_product_with_another_category_product" => "This coupon needs a :category product plus a product from any other category in your cart.",
 	"show_in_offers" => "Show in offers",
 	"Product_offers_status_updated_successfully" => "Product offers status updated successfully",
+	"street_building_floor_and_apartment" => "Street, building, floor and apartment",
+	"delivery_location" => "Delivery location",
+	"use_my_current_location" => "Use my current location",
+	"search_for_your_area_or_street" => "Search for your area or street",
+	"tap_the_map_or_use_your_current_location" => "Tap the map or use your current location",
+	"we_could_not_get_your_location_tap_the_map_instead" => "We could not get your location, tap your place on the map instead",
+	"please_pick_your_delivery_location_on_the_map" => "Please pick your delivery location on the map",
+	"write_the_address_instead" => "Write the address instead",
 ];

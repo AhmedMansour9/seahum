@@ -9576,4 +9576,12 @@ ____________________________________________________on_search_engines_and_see_th
 	"coupon_requires_required_category_product_with_another_category_product" => "الكوبون ده محتاج يكون في السلة منتج من :category ومعاه منتج من أي تصنيف تاني.",
 	"show_in_offers" => "يظهر في العروض",
 	"Product_offers_status_updated_successfully" => "تم تحديث ظهور المنتج في العروض",
+	"street_building_floor_and_apartment" => "الشارع، رقم العمارة، الدور والشقة",
+	"delivery_location" => "موقع التوصيل",
+	"use_my_current_location" => "استخدم موقعي الحالي",
+	"search_for_your_area_or_street" => "ابحث عن منطقتك أو شارعك",
+	"tap_the_map_or_use_your_current_location" => "اضغط على مكانك في الخريطة أو استخدم موقعك الحالي",
+	"we_could_not_get_your_location_tap_the_map_instead" => "مقدرناش نحدد موقعك، اضغط على مكانك في الخريطة",
+	"please_pick_your_delivery_location_on_the_map" => "حدد موقع التوصيل على الخريطة",
+	"write_the_address_instead" => "اكتب العنوان بدل الخريطة",
 ];

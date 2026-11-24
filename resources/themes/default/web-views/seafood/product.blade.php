@@ -227,7 +227,7 @@
         <div class="sf-sticky-buy">
             <span style="display: flex; flex-direction: column; line-height: 1.3; min-width: 0;">
                 <span style="font-size: 11.5px; color: var(--sh-muted);">{{ translate('total_price') }}</span>
-                <strong class="product-details-chosen-price-amount" style="font-family: var(--sh-font-display); font-size: 17px; font-weight: 800; color: var(--sh-sea-700); letter-spacing: -.4px;">
+                <strong class="product-details-chosen-price-amount" style="font-family: var(--sh-font-display); font-size: 17px; font-weight: 800; color: var(--sh-navy); letter-spacing: -.4px;">
                     @include('web-views.seafood.partials._price', ['amount' => $initialProductConfig['total_quantity_price'], 'symbolSize' => '12px'])
                 </strong>
             </span>

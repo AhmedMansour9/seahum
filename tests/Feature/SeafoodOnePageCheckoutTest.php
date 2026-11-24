@@ -94,6 +94,82 @@ class SeafoodOnePageCheckoutTest extends TestCase
         $this->assertStringNotContainsString("seafoodCheckoutUrl('checkout-payment-url')", $scripts, 'The address step must not redirect to a separate payment page.');
     }
 
+    public function test_delivery_address_asks_only_for_name_phone_and_a_map_location(): void
+    {
+        $addressFields = $this->viewSource('partials/_checkout-address-fields');
+
+        $this->assertStringContainsString('<input type="hidden" name="{{ $fieldNames[\'type\'] }}" id="{{ $fieldIds[\'type\'] }}" value="home">', $addressFields);
+        $this->assertStringContainsString('<input type="hidden" name="{{ $fieldNames[\'zip\'] }}" id="{{ $fieldIds[\'zip\'] }}" value="">', $addressFields, 'The zip code is only asked for when delivery is restricted by zip.');
+        $this->assertStringContainsString('<input type="hidden" name="{{ $fieldNames[\'city\'] }}" id="{{ $fieldIds[\'city\'] }}" value="">', $addressFields, 'The city comes from the map, not a field.');
+        $this->assertStringContainsString('$isLocationPicker = !$isBilling && getWebConfig(\'map_api_status\') == 1;', $addressFields);
+        $this->assertStringContainsString('data-invalid-target="#sf-location-picker"', $addressFields, 'The map-picked address is required.');
+        $this->assertSame(1, substr_count($this->viewSource('checkout-shipping'), '_checkout-guest-account'), 'Only digital-only carts still offer account creation; delivery orders do not ask for an email.');
+    }
+
+    public function test_the_address_can_be_typed_when_the_map_is_unavailable(): void
+    {
+        $checkoutPage = $this->viewSource('checkout-shipping');
+
+        $this->assertStringContainsString('window.gm_authFailure = switchSeafoodToTypedAddress;', $checkoutPage);
+        $this->assertStringContainsString('onerror="switchSeafoodToTypedAddress()"', $checkoutPage);
+        $this->assertStringContainsString("canvas.querySelector('.gm-err-container, .dismissButton')", $checkoutPage);
+        $this->assertStringContainsString('class="sf-filter-field sf-typed-address"', $this->viewSource('partials/_checkout-address-fields'));
+    }
+
+    public function test_map_opens_on_the_customers_current_location(): void
+    {
+        $checkoutPage = $this->viewSource('checkout-shipping');
+
+        $this->assertStringContainsString('navigator.geolocation.getCurrentPosition(', $checkoutPage);
+        $this->assertStringContainsString('locateSeafoodCustomer(false);', $checkoutPage);
+        $this->assertStringNotContainsString('v=3.56', $checkoutPage, 'Pinned Maps versions are retired.');
+    }
+
+    public function test_guests_can_order_without_an_email_or_a_city(): void
+    {
+        $checkoutController = file_get_contents(base_path('app/Http/Controllers/Customer/SystemController.php'));
+        $orderManager = file_get_contents(base_path('app/Utils/OrderManager.php'));
+
+        $this->assertStringNotContainsString("translate('Shipping email is required.')", $checkoutController);
+        $this->assertStringContainsString("\$shipping['address'] == null || (\$zipRestrictStatus && empty(\$shipping['zip']))", $checkoutController, 'The city is not required.');
+        $this->assertStringNotContainsString("(\$isGuestCustomer && \$shipping['email'] == null)", $checkoutController);
+        $this->assertStringContainsString("'email' => auth('customer')->check() ? null : (\$shipping['email'] ?? null),", $checkoutController);
+        $this->assertStringContainsString('if (! empty($email)) {', $orderManager, 'No customer mail is queued without an email.');
+    }
+
+    public function test_checkout_requires_a_zip_code_only_when_delivery_is_restricted_by_zip(): void
+    {
+        $checkoutController = file_get_contents(base_path('app/Http/Controllers/Customer/SystemController.php'));
+
+        $this->assertStringContainsString("|| (\$zipRestrictStatus && empty(\$shipping['zip']))", $checkoutController);
+        $this->assertStringContainsString("|| (\$zipRestrictStatus && empty(\$billing['billing_zip']))", $checkoutController);
+    }
+
+    public function test_cart_and_checkout_preselect_the_first_shipping_method(): void
+    {
+        $webController = file_get_contents(base_path('app/Http/Controllers/Web/WebController.php'));
+        $cartManager = file_get_contents(base_path('app/Utils/CartManager.php'));
+
+        $this->assertSame(2, substr_count($webController, 'CartManager::assignFirstShippingMethodWhereMissing();'));
+        $this->assertStringContainsString('public static function assignFirstShippingMethodWhereMissing(): void', $cartManager);
+        $this->assertStringContainsString("if (\$groupShippingType != 'order_wise') {", $cartManager, 'Only order-wise groups have a method to pick.');
+    }
+
+    public function test_mobile_bar_offers_only_the_cart_and_stays_off_cart_and_checkout(): void
+    {
+        $this->assertStringNotContainsString('wa.me', $this->viewSource('partials/_mobile-bar'));
+
+        foreach (['cart', 'checkout-shipping', 'checkout-payment'] as $template) {
+            $this->assertStringNotContainsString('_mobile-bar', $this->viewSource($template), "{$template} would stack the mobile bar under the order bar.");
+        }
+    }
+
+    public function test_home_hero_is_hidden_on_phones(): void
+    {
+        $this->assertStringContainsString('<section id="home" class="sf-hero"', $this->viewSource('home'));
+        $this->assertStringContainsString('.sf-hero { display: none !important; }', $this->viewSource('partials/_styles'));
+    }
+
     public function test_cash_on_delivery_is_offered_when_every_vendor_group_ships_a_physical_item(): void
     {
         $this->setBusinessSettings(['cash_on_delivery' => ['status' => 1]]);

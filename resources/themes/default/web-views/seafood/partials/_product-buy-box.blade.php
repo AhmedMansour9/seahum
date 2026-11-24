@@ -35,7 +35,7 @@
         <input type="hidden" name="id" value="{{ $product['id'] }}">
 
         <div style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px;">
-            <strong class="discounted-unit-price" style="font-family: var(--sh-font-display); font-size: clamp(26px, 3.4vw, 34px); font-weight: 800; color: var(--sh-sea-700); letter-spacing: -.4px;">
+            <strong class="discounted-unit-price" style="font-family: var(--sh-font-display); font-size: clamp(26px, 3.4vw, 34px); font-weight: 800; color: var(--sh-navy); letter-spacing: -.4px;">
                 @include('web-views.seafood.partials._price', ['amount' => getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value'), 'symbolSize' => '16px'])
             </strong>
             <span class="product-total-unit-price" style="font-size: 16px; color: var(--sh-muted-2); text-decoration: line-through;" @if($discountValue <= 0) hidden @endif>
@@ -116,7 +116,7 @@
 
             <div class="product-details-chosen-price-section" style="display: flex; align-items: baseline; gap: 8px;">
                 <span style="font-family: var(--sh-font-display); font-size: 14.5px; font-weight: 700; color: var(--sh-ink-2);">{{ translate('total_price') }}</span>
-                <strong class="product-details-chosen-price-amount" style="font-family: var(--sh-font-display); font-size: 22px; font-weight: 800; color: var(--sh-sea-700); letter-spacing: -.4px;">
+                <strong class="product-details-chosen-price-amount" style="font-family: var(--sh-font-display); font-size: 22px; font-weight: 800; color: var(--sh-navy); letter-spacing: -.4px;">
                     @include('web-views.seafood.partials._price', ['amount' => $initialProductConfig['total_quantity_price']])
                 </strong>
             </div>

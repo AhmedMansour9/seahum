@@ -78,7 +78,7 @@ class SeafoodCustomerLoginViewTest extends TestCase
             $compiledFile = tempnam(sys_get_temp_dir(), 'blade').'.php';
             file_put_contents($compiledFile, Blade::compileString(file_get_contents(base_path($template))));
 
-            exec('php -l '.escapeshellarg($compiledFile).' 2>&1', $output, $exitCode);
+            exec('"'.PHP_BINARY.'" -l '.escapeshellarg($compiledFile).' 2>&1', $output, $exitCode);
             unlink($compiledFile);
 
             $this->assertSame(0, $exitCode, $template.' does not compile: '.implode("\n", $output));

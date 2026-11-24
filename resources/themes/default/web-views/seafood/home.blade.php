@@ -59,7 +59,7 @@
 
         @include('web-views.seafood.partials._header', ['isHomePage' => true, 'activeNavKey' => 'home'])
 
-        <section id="home" style="position: relative; background: var(--sh-abyss); color: #FFFFFF; overflow: hidden;">
+        <section id="home" class="sf-hero" style="position: relative; background: var(--sh-abyss); color: #FFFFFF; overflow: hidden;">
             <img src="{{ dynamicAsset(path: 'public/assets/front-end/img/seafood/hero-bg.jpg') }}"
                  alt="{{ translate('fresh_fish_and_seafood') }}"
                  style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; filter: saturate(1.25) contrast(1.12) brightness(1.04);">
