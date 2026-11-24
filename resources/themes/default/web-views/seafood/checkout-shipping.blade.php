@@ -91,7 +91,6 @@
 
         @include('web-views.seafood.partials._footer')
 
-        @include('web-views.seafood.partials._mobile-bar')
     </div>
 
     <span id="system-country-restrict-status" data-value="{{ $country_restrict_status }}"></span>

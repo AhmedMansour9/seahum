@@ -147,8 +147,8 @@
         .sf-segment input:focus-visible + label { box-shadow: 0 0 0 3px rgba(var(--sh-sea-rgb), .25); }
 
         .sf-map-canvas { height: 240px; width: 100%; border-radius: 14px; overflow: hidden; border: 1px solid var(--sh-line); background: var(--sh-mist); }
-        .sf-map-alert { display: block; font-size: 12.5px; line-height: 1.7; color: var(--sh-tuna); margin-top: 8px; opacity: 0; transition: opacity .2s; }
-        .sf-map-alert.is-visible { opacity: 1; }
+        .sf-map-alert { display: none; font-size: 12.5px; line-height: 1.7; color: var(--sh-tuna); margin-top: 8px; }
+        .sf-map-alert.is-visible { display: block; }
         .location-map-address-canvas-area.map-area-alert-danger .sf-map-canvas { border-color: var(--sh-tuna); }
 
         /* ---- Chat ----
@@ -594,7 +594,8 @@
             .sf-page-head-actions { width: 100%; }
             .sf-page-head-actions > .sf-btn-sm, .sf-page-head-actions > form { flex: 1 1 auto; }
             .sf-mobile-bar { display: grid; }
-            .sf-mobile-bar-spacer { display: block; height: calc(70px + env(safe-area-inset-bottom)); }
+            .sf-mobile-bar-spacer { display: block; height: calc(74px + env(safe-area-inset-bottom)); }
+            .sf-hero { display: none !important; }
         }
 
         @media (max-width: 699px) {

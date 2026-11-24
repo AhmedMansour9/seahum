@@ -94,6 +94,38 @@ class SeafoodOnePageCheckoutTest extends TestCase
         $this->assertStringNotContainsString("seafoodCheckoutUrl('checkout-payment-url')", $scripts, 'The address step must not redirect to a separate payment page.');
     }
 
+    public function test_checkout_address_asks_only_for_name_phone_email_city_and_address(): void
+    {
+        $addressFields = $this->viewSource('partials/_checkout-address-fields');
+
+        $this->assertStringContainsString('<input type="hidden" name="{{ $fieldNames[\'type\'] }}" id="{{ $fieldIds[\'type\'] }}" value="home">', $addressFields);
+        $this->assertStringContainsString('<input type="hidden" name="{{ $fieldNames[\'zip\'] }}" id="{{ $fieldIds[\'zip\'] }}" value="">', $addressFields, 'The zip code is only asked for when delivery is restricted by zip.');
+        $this->assertStringContainsString('<details class="sf-form-full sf-map-toggle', $addressFields, 'The map is optional and collapsed.');
+    }
+
+    public function test_checkout_requires_a_zip_code_only_when_delivery_is_restricted_by_zip(): void
+    {
+        $checkoutController = file_get_contents(base_path('app/Http/Controllers/Customer/SystemController.php'));
+
+        $this->assertStringContainsString("|| (\$zipRestrictStatus && empty(\$shipping['zip']))", $checkoutController);
+        $this->assertStringContainsString("|| (\$zipRestrictStatus && empty(\$billing['billing_zip']))", $checkoutController);
+    }
+
+    public function test_mobile_bar_offers_only_the_cart_and_stays_off_cart_and_checkout(): void
+    {
+        $this->assertStringNotContainsString('wa.me', $this->viewSource('partials/_mobile-bar'));
+
+        foreach (['cart', 'checkout-shipping', 'checkout-payment'] as $template) {
+            $this->assertStringNotContainsString('_mobile-bar', $this->viewSource($template), "{$template} would stack the mobile bar under the order bar.");
+        }
+    }
+
+    public function test_home_hero_is_hidden_on_phones(): void
+    {
+        $this->assertStringContainsString('<section id="home" class="sf-hero"', $this->viewSource('home'));
+        $this->assertStringContainsString('.sf-hero { display: none !important; }', $this->viewSource('partials/_styles'));
+    }
+
     public function test_cash_on_delivery_is_offered_when_every_vendor_group_ships_a_physical_item(): void
     {
         $this->setBusinessSettings(['cash_on_delivery' => ['status' => 1]]);

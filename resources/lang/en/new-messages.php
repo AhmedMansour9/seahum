@@ -2849,4 +2849,6 @@ ____________________________________________________on_search_engines_and_see_th
 	"coupon_requires_required_category_product_with_another_category_product" => "This coupon needs a :category product plus a product from any other category in your cart.",
 	"show_in_offers" => "Show in offers",
 	"Product_offers_status_updated_successfully" => "Product offers status updated successfully",
+	"pin_your_location_on_the_map" => "Pin your location on the map",
+	"street_building_floor_and_apartment" => "Street, building, floor and apartment",
 ];

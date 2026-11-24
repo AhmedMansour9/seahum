@@ -75,21 +75,15 @@
         </div>
     @endunless
 
-    <div>
-        <label class="sf-form-label" for="{{ $fieldIds['type'] }}">{{ translate('address_type') }}</label>
-        <select class="sf-filter-field" name="{{ $fieldNames['type'] }}" id="{{ $fieldIds['type'] }}">
-            <option value="permanent">{{ translate('permanent') }}</option>
-            <option value="home">{{ translate('home') }}</option>
-            <option value="office">{{ translate('office') }}</option>
-        </select>
-    </div>
-    <div>
+    <input type="hidden" name="{{ $fieldNames['type'] }}" id="{{ $fieldIds['type'] }}" value="home">
+
+    <div class="{{ $zipRestrictStatus ? '' : 'sf-form-full' }}">
         <label class="sf-form-label" for="{{ $fieldIds['city'] }}">{{ translate('city') }} <span class="sf-required">*</span></label>
         <input type="text" class="sf-filter-field" name="{{ $fieldNames['city'] }}" id="{{ $fieldIds['city'] }}" autocomplete="address-level2" @required($isFirstAddress)>
     </div>
-    <div>
-        <label class="sf-form-label" for="{{ $fieldIds['zip'] }}">{{ translate('zip_code') }} <span class="sf-required">*</span></label>
-        @if($zipRestrictStatus)
+    @if($zipRestrictStatus)
+        <div>
+            <label class="sf-form-label" for="{{ $fieldIds['zip'] }}">{{ translate('zip_code') }} <span class="sf-required">*</span></label>
             <select class="sf-filter-field" name="{{ $fieldNames['zip'] }}" id="{{ $fieldIds['zip'] }}" @required(!$isBilling)>
                 @forelse($zipCodes as $zipCode)
                     <option value="{{ $zipCode->zipcode }}">{{ $zipCode->zipcode }}</option>
@@ -97,22 +91,28 @@
                     <option value="">{{ translate('no_zip_to_deliver') }}</option>
                 @endforelse
             </select>
-        @else
-            <input type="text" class="sf-filter-field" name="{{ $fieldNames['zip'] }}" id="{{ $fieldIds['zip'] }}" autocomplete="postal-code" dir="ltr" @required($isFirstAddress)>
-        @endif
-    </div>
+        </div>
+    @else
+        <input type="hidden" name="{{ $fieldNames['zip'] }}" id="{{ $fieldIds['zip'] }}" value="">
+    @endif
     <div class="sf-form-full">
         <label class="sf-form-label" for="{{ $fieldIds['address'] }}">{{ translate('address') }} <span class="sf-required">*</span></label>
-        <textarea class="sf-filter-field" name="{{ $fieldNames['address'] }}" id="{{ $fieldIds['address'] }}" autocomplete="street-address" style="min-height: 96px;" @required($isFirstAddress)></textarea>
+        <textarea class="sf-filter-field" name="{{ $fieldNames['address'] }}" id="{{ $fieldIds['address'] }}" autocomplete="street-address" rows="3"
+                  placeholder="{{ translate('street_building_floor_and_apartment') }}" style="min-height: 84px;" @required($isFirstAddress)></textarea>
         <span class="sf-map-alert map-address-alert">{{ translate('note') }}: {{ translate('you_need_to_select_address_from_your_selected_country') }}</span>
     </div>
 
     @if(getWebConfig('map_api_status') == 1)
-        <div class="sf-form-full {{ $isBilling ? 'location-map-billing-canvas-area' : 'location-map-canvas-area' }}">
+        <details class="sf-form-full sf-map-toggle {{ $isBilling ? 'location-map-billing-canvas-area' : 'location-map-canvas-area' }}">
+            <summary class="sf-map-toggle-summary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-10a6.5 6.5 0 0 1 13 0c0 4.4-6.5 10-6.5 10Z"></path><circle cx="12" cy="11" r="2.4"></circle></svg>
+                {{ translate('pin_your_location_on_the_map') }}
+                <span class="sf-map-toggle-optional">({{ translate('optional') }})</span>
+            </summary>
             <input id="{{ $isBilling ? 'pac-input-billing' : 'pac-input' }}" class="sf-filter-field sf-map-search" type="text"
                    title="{{ translate('search_your_location_here') }}" placeholder="{{ translate('search_here') }}">
             <div class="sf-map-canvas" id="{{ $isBilling ? 'location_map_canvas_billing' : 'location_map_canvas' }}"></div>
-        </div>
+        </details>
     @endif
 
     <input type="hidden" name="{{ $fieldNames['latitude'] }}" id="{{ $fieldIds['latitude'] }}" value="{{ $defaultLocation ? $defaultLocation['lat'] : 0 }}">

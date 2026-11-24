@@ -28,7 +28,7 @@ class SeafoodAuthAndPageViewTest extends TestCase
             $compiledFile = tempnam(sys_get_temp_dir(), 'blade').'.php';
             file_put_contents($compiledFile, Blade::compileString(file_get_contents($templatePath)));
 
-            exec('php -l '.escapeshellarg($compiledFile).' 2>&1', $output, $exitCode);
+            exec('"'.PHP_BINARY.'" -l '.escapeshellarg($compiledFile).' 2>&1', $output, $exitCode);
             unlink($compiledFile);
 
             $this->assertSame(0, $exitCode, $templatePath.' does not compile: '.implode("\n", $output));
@@ -119,7 +119,7 @@ class SeafoodAuthAndPageViewTest extends TestCase
         $sharedStyles = file_get_contents($this->templatePath('web-views.seafood.partials._styles'));
 
         foreach ([
-            '.sf-prose { color: #34586B; font-size: 15.5px; line-height: 1.9; overflow-wrap: anywhere; }',
+            '.sf-prose { color: var(--sh-ink-2); font-size: 15.5px; line-height: 1.9; overflow-wrap: anywhere; }',
             '.sf-prose img { max-width: 100%; height: auto; border-radius: 14px; }',
             '.sf-prose pre { overflow-x: auto; max-width: 100%;',
             '.sf-prose table { display: block; width: max-content; max-width: 100%; overflow-x: auto;',

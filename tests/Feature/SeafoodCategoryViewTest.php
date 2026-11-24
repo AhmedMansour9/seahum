@@ -30,7 +30,7 @@ class SeafoodCategoryViewTest extends TestCase
             $compiledFile = tempnam(sys_get_temp_dir(), 'blade').'.php';
             file_put_contents($compiledFile, Blade::compileString(file_get_contents($templatePath)));
 
-            exec('php -l '.escapeshellarg($compiledFile).' 2>&1', $output, $exitCode);
+            exec('"'.PHP_BINARY.'" -l '.escapeshellarg($compiledFile).' 2>&1', $output, $exitCode);
             unlink($compiledFile);
 
             $this->assertSame(0, $exitCode, $templatePath.' does not compile: '.implode("\n", $output));
@@ -112,9 +112,9 @@ class SeafoodCategoryViewTest extends TestCase
         $this->assertStringContainsString('class="sf-price-amount"', file_get_contents($this->templatePath('web-views.seafood.partials._price')));
 
         $productCard = file_get_contents($this->templatePath('web-views.seafood.partials._product-card'));
-        $this->assertMatchesRegularExpression('/class="sf-product-price" style="[^"]*color: #0E8E88;/', $productCard);
-        $this->assertSame(2, preg_match_all('/class="(?:discounted-unit-price|product-details-chosen-price-amount)" style="[^"]*color: #0E8E88;/', $buyBox));
-        $this->assertMatchesRegularExpression('/class="product-details-chosen-price-amount" style="[^"]*color: #0E8E88;/', $productPage);
+        $this->assertMatchesRegularExpression('/class="sf-product-price" style="[^"]*color: var\(--sh-navy\);/', $productCard);
+        $this->assertSame(2, preg_match_all('/class="(?:discounted-unit-price|product-details-chosen-price-amount)" style="[^"]*color: var\(--sh-navy\);/', $buyBox));
+        $this->assertMatchesRegularExpression('/class="product-details-chosen-price-amount" style="[^"]*color: var\(--sh-navy\);/', $productPage);
 
         foreach (['price_digits', 'discounted_unit_price_digits', 'total_unit_price_digits'] as $responseKey) {
             $this->assertStringContainsString("response?.{$responseKey}", $productScripts);

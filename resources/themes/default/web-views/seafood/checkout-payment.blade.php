@@ -46,7 +46,6 @@
 
         @include('web-views.seafood.partials._footer')
 
-        @include('web-views.seafood.partials._mobile-bar')
     </div>
 
 @endsection

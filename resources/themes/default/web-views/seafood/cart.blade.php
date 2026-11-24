@@ -21,7 +21,7 @@
         @include('web-views.seafood.partials._header', ['activeNavKey' => 'products'])
 
         <main>
-            <section class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(24px, 3.5vw, 36px) 20px clamp(44px, 7vw, 86px);">
+            <section class="sf-gutter sf-checkout-page" style="max-width: 1240px; margin: 0 auto; padding: clamp(24px, 3.5vw, 36px) 20px clamp(44px, 7vw, 86px);">
 
                 @include('web-views.seafood.partials._breadcrumb', [
                     'breadcrumbItems' => [['label' => translate('shopping_cart')]],
@@ -37,7 +37,6 @@
 
         @include('web-views.seafood.partials._footer')
 
-        @include('web-views.seafood.partials._mobile-bar')
     </div>
 @endsection
 
