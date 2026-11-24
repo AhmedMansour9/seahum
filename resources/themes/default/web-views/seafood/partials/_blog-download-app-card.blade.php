@@ -15,12 +15,12 @@
 @endphp
 
 @if($isAppCardVisible)
-    <div class="sf-app-card" @isset($appCardBackground['path']) style="background-image: linear-gradient(rgba(11,44,63,.72), rgba(11,44,63,.72)), url('{{ $appCardBackground['path'] }}');" @endisset>
+    <div class="sf-app-card" @isset($appCardBackground['path']) style="background-image: linear-gradient(rgba(var(--sh-navy-rgb), .72), rgba(var(--sh-navy-rgb), .72)), url('{{ $appCardBackground['path'] }}');" @endisset>
         @isset($appCardIcon['path'])
             <img src="{{ $appCardIcon['path'] }}" alt="" width="56" height="56" style="border-radius: 14px; object-fit: cover; margin-bottom: 14px;">
         @endisset
         @if($appCardTitle)
-            <h2 style="font-family: Cairo, sans-serif; font-size: 19px; font-weight: 800; margin: 0 0 8px; color: #FFFFFF;">{{ $appCardTitle }}</h2>
+            <h2 style="font-family: var(--sh-font-display); font-size: 19px; font-weight: 800; margin: 0 0 8px; color: #FFFFFF;">{{ $appCardTitle }}</h2>
         @endif
         @if($appCardSubtitle)
             <p style="font-size: 14px; line-height: 1.8; margin: 0 0 18px; color: rgba(255,255,255,.85);">{!! $appCardSubtitle !!}</p>

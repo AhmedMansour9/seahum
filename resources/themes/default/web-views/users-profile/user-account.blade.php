@@ -28,7 +28,7 @@
     <form class="sf-panel" action="{{ route('user-update') }}" method="post" id="profile_form" enctype="multipart/form-data">
         @csrf
 
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding-bottom: clamp(20px, 3vw, 28px); border-bottom: 1px solid #EDF5F6; margin-bottom: clamp(20px, 3vw, 28px);">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding-bottom: clamp(20px, 3vw, 28px); border-bottom: 1px solid var(--sh-navy-50); margin-bottom: clamp(20px, 3vw, 28px);">
             <label class="sf-avatar-upload" for="files">
                 <img id="blah" alt="{{ translate('profile_photo') }}"
                      src="{{ getStorageImages(path: $customerDetail->image_full_url, type: 'avatar') }}">
@@ -40,7 +40,7 @@
                        data-max-size="{{ getFileUploadMaxSize() }}">
                 <span class="sr-only">{{ translate('change_profile_photo') }}</span>
             </label>
-            <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 700; color: #0B2C3F; text-align: center; overflow-wrap: anywhere;">
+            <strong style="font-family: var(--sh-font-display); font-size: 17px; font-weight: 700; color: var(--sh-navy); text-align: center; overflow-wrap: anywhere;">
                 {{ $customerDetail['f_name'].' '.$customerDetail['l_name'] }}
             </strong>
         </div>
@@ -72,7 +72,7 @@
                        {{ $customerDetail['is_phone_verified'] ? 'disabled' : '' }}>
                 @if($customerDetail['phone'] && getLoginConfig(key: 'phone_verification'))
                     @if($customerDetail['is_phone_verified'])
-                        <span class="sf-field-hint" style="color: #1E8A5B;">{{ translate('Your_phone_is_verified') }}</span>
+                        <span class="sf-field-hint" style="color: var(--sh-success);">{{ translate('Your_phone_is_verified') }}</span>
                     @else
                         <span class="sf-field-hint">{{ translate('Phone_not_verified.') }} {{ translate('Please_verify_through_the_user_app') }}</span>
                     @endif
@@ -86,7 +86,7 @@
                        placeholder="{{ translate('enter_email_address') }}">
                 @if($customerDetail['email'] && getLoginConfig(key: 'email_verification'))
                     @if($customerDetail['is_email_verified'])
-                        <span class="sf-field-hint" style="color: #1E8A5B;">{{ translate('Your_email_is_verified') }}</span>
+                        <span class="sf-field-hint" style="color: var(--sh-success);">{{ translate('Your_email_is_verified') }}</span>
                     @else
                         <span class="sf-field-hint">{{ translate('Email_not_verified.') }} {{ translate('Please_verify_through_the_user_app.') }}</span>
                     @endif

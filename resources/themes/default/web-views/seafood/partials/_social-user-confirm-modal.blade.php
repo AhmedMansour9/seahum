@@ -20,10 +20,10 @@
                 </button>
             </div>
             <div class="sf-modal-body" style="text-align: center;">
-                <img alt="" width="84" height="84" style="border-radius: 50%; object-fit: cover; border: 1px solid #E4EFF1;"
+                <img alt="" width="84" height="84" style="border-radius: 50%; object-fit: cover; border: 1px solid var(--sh-line);"
                      src="{{ getStorageImages(path: $user?->image_full_url ?? '', type: 'avatar') }}">
-                <p style="font-family: Cairo, sans-serif; font-weight: 700; color: #0B2C3F; margin: 10px 0 0; overflow-wrap: anywhere;">{{ $user?->f_name }} {{ $user?->l_name }}</p>
-                <p style="font-size: 14.5px; line-height: 1.85; color: #55747F; margin: 12px 0 20px; overflow-wrap: anywhere;">
+                <p style="font-family: var(--sh-font-display); font-weight: 700; color: var(--sh-navy); margin: 10px 0 0; overflow-wrap: anywhere;">{{ $user?->f_name }} {{ $user?->l_name }}</p>
+                <p style="font-size: 14.5px; line-height: 1.85; color: var(--sh-muted); margin: 12px 0 20px; overflow-wrap: anywhere;">
                     {{ translate('it_looks_like_the_email') }}
                     <bdi dir="ltr" class="sf-text-link">{{ $maskedIdentity }}</bdi>
                     {{ translate('you_entered_has_already_been_used_and_has_an_existing_account') }}

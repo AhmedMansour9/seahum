@@ -24,7 +24,7 @@
         <div class="sf-stack">
             @foreach($supportTickets as $ticket)
                 <article class="sf-row-card">
-                    <span class="sf-row-media" style="display: grid; place-items: center; color: #0E8E88; background: #ECF8F8;" aria-hidden="true">
+                    <span class="sf-row-media" style="display: grid; place-items: center; color: var(--sh-sea-700); background: var(--sh-sea-50);" aria-hidden="true">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9V6.5A1.5 1.5 0 0 1 5 5h14a1.5 1.5 0 0 1 1.5 1.5V9a3 3 0 0 0 0 6v2.5A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5V15a3 3 0 0 0 0-6z"></path><path d="M14 5v14" stroke-dasharray="2 2.5"></path></svg>
                     </span>
 

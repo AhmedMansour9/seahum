@@ -20,10 +20,10 @@
 
     <style>
         .sf-contact-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 32px); align-items: start; }
-        .sf-contact-method { display: flex; align-items: flex-start; gap: 14px; padding: 16px; border: 1px solid #E4EFF1; border-radius: 16px; background: #FFFFFF; }
-        .sf-contact-method-icon { width: 44px; height: 44px; flex-shrink: 0; border-radius: 14px; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center; }
-        .sf-contact-method-label { display: block; font-family: Cairo, sans-serif; font-size: 13.5px; font-weight: 700; color: #0B2C3F; margin-bottom: 4px; }
-        .sf-contact-method-value { display: block; font-size: 14.5px; line-height: 1.75; color: #55747F; overflow-wrap: anywhere; }
+        .sf-contact-method { display: flex; align-items: flex-start; gap: 14px; padding: 16px; border: 1px solid var(--sh-line); border-radius: 16px; background: #FFFFFF; }
+        .sf-contact-method-icon { width: 44px; height: 44px; flex-shrink: 0; border-radius: 14px; background: var(--sh-sea-50); color: var(--sh-sea-700); display: grid; place-items: center; }
+        .sf-contact-method-label { display: block; font-family: var(--sh-font-display); font-size: 13.5px; font-weight: 700; color: var(--sh-navy); margin-bottom: 4px; }
+        .sf-contact-method-value { display: block; font-size: 14.5px; line-height: 1.75; color: var(--sh-muted); overflow-wrap: anywhere; }
 
         @media (max-width: 979px) {
             .sf-contact-grid { grid-template-columns: 1fr; }
@@ -59,14 +59,14 @@
 
                 <div class="sf-page-hero">
                     <div class="sf-page-hero-body" style="text-align: center;">
-                        <span style="display: inline-flex; align-items: center; gap: 9px; padding: 7px 14px; border-radius: 999px; background: rgba(23,176,167,.22); border: 1px solid rgba(127,227,220,.4); color: #7FE3DC; font-family: Cairo, sans-serif; font-size: 12.5px; font-weight: 700;">
+                        <span style="display: inline-flex; align-items: center; gap: 9px; padding: 7px 14px; border-radius: 999px; background: rgba(var(--sh-sea-rgb), .22); border: 1px solid rgba(var(--sh-sea-300-rgb), .4); color: var(--sh-sea-300); font-family: var(--sh-font-display); font-size: 12.5px; font-weight: 700;">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 16 0"></path><path d="M4 12v4a2 2 0 0 0 2 2h1v-6H6a2 2 0 0 0-2 2Z"></path><path d="M20 12v4a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2Z"></path></svg>
                             {{ translate('We_are_Here_to_Help') }}
                         </span>
-                        <h1 style="font-family: Cairo, sans-serif; font-size: clamp(24px, 4vw, 38px); font-weight: 900; line-height: 1.25; margin: 14px 0 0; color: #FFFFFF; overflow-wrap: anywhere; text-wrap: pretty;">
+                        <h1 style="font-family: var(--sh-font-display); font-size: clamp(24px, 4vw, 38px); font-weight: 900; line-height: 1.25; margin: 14px 0 0; color: #FFFFFF; overflow-wrap: anywhere; text-wrap: pretty;">
                             {{ translate('contact_us') }}
                         </h1>
-                        <p style="font-size: 15px; line-height: 1.85; color: #C6DDE6; margin: 12px auto 0; max-width: 520px; text-wrap: pretty;">
+                        <p style="font-size: 15px; line-height: 1.85; color: var(--sh-on-dark); margin: 12px auto 0; max-width: 520px; text-wrap: pretty;">
                             {{ translate('send_us_your_question_or_order_details_and_our_team_will_get_back_to_you') }}
                         </p>
                     </div>
@@ -75,10 +75,10 @@
                 <div class="sf-contact-grid" style="margin-top: 24px;">
 
                     <div class="sf-card" style="padding: clamp(20px, 3.5vw, 34px); min-width: 0;">
-                        <h2 style="font-family: Cairo, sans-serif; font-size: clamp(19px, 2.4vw, 23px); font-weight: 800; line-height: 1.4; margin: 0 0 6px; color: #0B2C3F;">
+                        <h2 style="font-family: var(--sh-font-display); font-size: clamp(19px, 2.4vw, 23px); font-weight: 800; line-height: 1.4; margin: 0 0 6px; color: var(--sh-navy);">
                             {{ translate('send_us_a_message') }}
                         </h2>
-                        <p style="font-size: 14.5px; line-height: 1.8; color: #6E8C99; margin: 0 0 clamp(20px, 3vw, 28px);">
+                        <p style="font-size: 14.5px; line-height: 1.8; color: var(--sh-muted); margin: 0 0 clamp(20px, 3vw, 28px);">
                             {{ translate('all_fields_marked_with_an_asterisk_are_required') }}
                         </p>
 
@@ -221,7 +221,7 @@
             </section>
         </main>
 
-        <div style="background: #F4FAFB; border-top: 1px solid #E4EFF1; padding-top: clamp(44px, 7vw, 76px);">
+        <div style="background: var(--sh-mist); border-top: 1px solid var(--sh-line); padding-top: clamp(44px, 7vw, 76px);">
             @include('web-views.seafood.partials._help-links')
         </div>
 

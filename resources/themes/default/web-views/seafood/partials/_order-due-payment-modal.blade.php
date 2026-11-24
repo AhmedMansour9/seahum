@@ -14,7 +14,7 @@
         <div class="sf-modal-head">
             <div style="min-width: 0;">
                 <h2 class="sf-modal-title" id="due-payment-title-{{ $order['id'] }}">{{ translate('Choose_Payment_Method') }}</h2>
-                <p class="sf-field-hint" style="margin: 4px 0 0;">{{ translate('Due Bill') }}: <strong style="color: #0B2C3F;">@include('web-views.seafood.partials._price', ['amount' => $dueAmount])</strong></p>
+                <p class="sf-field-hint" style="margin: 4px 0 0;">{{ translate('Due Bill') }}: <strong style="color: var(--sh-navy);">@include('web-views.seafood.partials._price', ['amount' => $dueAmount])</strong></p>
             </div>
             <button type="button" class="sf-icon-btn" data-sf-modal-close aria-label="{{ translate('close') }}">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"></path></svg>
@@ -44,7 +44,7 @@
                             <span class="sf-choice-dot" aria-hidden="true"></span>
                             <span class="sf-choice-body">
                                 <span class="sf-choice-title">{{ translate('Pay_via_Wallet') }}</span>
-                                <span class="sf-choice-text" @if($isWalletInsufficient) style="color: #E4574F;" @endif>
+                                <span class="sf-choice-text" @if($isWalletInsufficient) style="color: var(--sh-tuna);" @endif>
                                     {{ $isWalletInsufficient ? translate('Insufficient wallet balance') : translate('Remaining wallet balance') }}:
                                     @include('web-views.seafood.partials._price', ['amount' => $walletBalance - $dueAmount])
                                 </span>
@@ -67,7 +67,7 @@
             </ul>
 
             <div class="sf-due-change-amount">
-                <label class="sf-form-label" for="due-bring-change-{{ $order['id'] }}">{{ translate('Change Amount') }} <span style="font-weight: 500; color: #6E8C99;">({{ translate('optional') }})</span></label>
+                <label class="sf-form-label" for="due-bring-change-{{ $order['id'] }}">{{ translate('Change Amount') }} <span style="font-weight: 500; color: var(--sh-muted);">({{ translate('optional') }})</span></label>
                 <input type="text" inputmode="numeric" class="sf-filter-field" id="due-bring-change-{{ $order['id'] }}" name="bring_change_amount_input" dir="ltr" style="max-width: 260px;">
                 <span class="sf-field-hint">{{ translate('insert_amount_of_you_need_deliveryman_to_bring') }}</span>
             </div>
@@ -76,7 +76,7 @@
         </form>
 
         @if($isOfflinePaymentEnabled)
-            <form class="sf-modal-body" action="{{ route('customer.customer-order-edit-pay-amount') }}" method="post" style="border-top: 1px solid #EDF5F6;">
+            <form class="sf-modal-body" action="{{ route('customer.customer-order-edit-pay-amount') }}" method="post" style="border-top: 1px solid var(--sh-navy-50);">
                 @csrf
                 <input type="hidden" name="payment_method" value="offline">
                 <input type="hidden" name="order_id" value="{{ $order['id'] }}">

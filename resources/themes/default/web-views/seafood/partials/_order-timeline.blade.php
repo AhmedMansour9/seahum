@@ -36,7 +36,7 @@
                     <span class="sf-row-meta">{{ translate('Your deliveryman is coming') }}</span>
                 @endif
                 @if($isTerminalStep && $statusData['status'])
-                    <span class="sf-row-meta" style="color: #C63F38;">{{ $terminalMessages[$statusKey] }}</span>
+                    <span class="sf-row-meta" style="color: var(--sh-tuna-700);">{{ $terminalMessages[$statusKey] }}</span>
                 @endif
             </div>
         </li>

@@ -71,7 +71,7 @@
 
                     <span class="sf-meta-item">
                         <span class="sf-meta-label">{{ translate('address') }}</span>
-                        <span class="sf-meta-value" style="font-weight: 400; font-family: Tajawal, sans-serif; line-height: 1.8; color: #34586B;">
+                        <span class="sf-meta-value" style="font-weight: 400; font-family: var(--sh-font-body); line-height: 1.8; color: var(--sh-ink-2);">
                             {{ $shippingAddress['address'] }}
                         </span>
                     </span>

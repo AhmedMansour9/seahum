@@ -9,7 +9,7 @@
         $wheelRewards = $wheelStatus['rewards'];
         $segmentCount = max($wheelRewards->count(), 1);
         $segmentAngle = 360 / $segmentCount;
-        $segmentColors = ['#0E8E88', '#0B2C3F', '#14A8A0', '#1F4A63'];
+        $segmentColors = ['var(--sh-sea-700)', 'var(--sh-navy)', '#14A8A0', '#1F4A63'];
         $wheelRadius = 96;
         $pointOnWheel = fn (float $angle, float $radius) => [
             round($radius * sin(deg2rad($angle)), 3),
@@ -62,7 +62,7 @@
                             @foreach($wheelRewards as $rewardIndex => $wheelReward)
                                 @php
                                     $isNoPrize = $wheelReward->type === \App\Enums\LuckyWheel\LuckyWheelRewardType::NoPrize;
-                                    $segmentFill = $isNoPrize ? '#E4EFF1' : $segmentColors[$rewardIndex % count($segmentColors)];
+                                    $segmentFill = $isNoPrize ? 'var(--sh-line)' : $segmentColors[$rewardIndex % count($segmentColors)];
                                     [$startX, $startY] = $pointOnWheel($rewardIndex * $segmentAngle, $wheelRadius);
                                     [$endX, $endY] = $pointOnWheel(($rewardIndex + 1) * $segmentAngle, $wheelRadius);
                                     $rewardImage = $wheelReward->image_full_url['status'] == 200 ? $wheelReward->image_full_url['path'] : null;
@@ -81,7 +81,7 @@
                                         <image href="{{ $rewardImage }}" x="-11" y="-85" width="22" height="22" preserveAspectRatio="xMidYMid slice"
                                                clip-path="url(#sf-wheel-image-clip-{{ $rewardIndex }})"></image>
                                     @endif
-                                    <text x="0" y="{{ $rewardImage ? -52 : -64 }}" text-anchor="middle" class="sf-wheel-label" fill="{{ $isNoPrize ? '#0B2C3F' : '#FFFFFF' }}">
+                                    <text x="0" y="{{ $rewardImage ? -52 : -64 }}" text-anchor="middle" class="sf-wheel-label" fill="{{ $isNoPrize ? '#082B49' : '#FFFFFF' }}">
                                         @foreach($labelLines as $lineIndex => $labelLine)
                                             <tspan x="0" dy="{{ $lineIndex === 0 ? 0 : 9 }}">{{ $labelLine }}</tspan>
                                         @endforeach
@@ -89,8 +89,8 @@
                                 </g>
                             @endforeach
                         </g>
-                        <circle r="15" fill="#FFFFFF" stroke="#E4EFF1" stroke-width="2"></circle>
-                        <circle r="6" fill="#0E8E88"></circle>
+                        <circle r="15" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"></circle>
+                        <circle r="6" fill="#066A93"></circle>
                     </svg>
                 </div>
 
@@ -153,19 +153,19 @@
         .sf-wheel-panel { display: flex; flex-direction: column; align-items: center; text-align: center; }
         .sf-wheel-intro { margin: 0 0 18px; max-width: 420px; }
         .sf-wheel-stage { position: relative; width: min(100%, 360px); aspect-ratio: 1; margin: 6px auto 20px; }
-        .sf-wheel { width: 100%; height: 100%; display: block; filter: drop-shadow(0 18px 26px rgba(11,44,63,.22)); }
+        .sf-wheel { width: 100%; height: 100%; display: block; filter: drop-shadow(0 18px 26px rgba(var(--sh-navy-rgb), .22)); }
         .sf-wheel-rotor { transform-origin: 0 0; transform-box: view-box; transition: transform 5.2s cubic-bezier(.12,.68,.1,1); }
-        .sf-wheel-pointer { position: absolute; top: -6px; left: 50%; width: 34px; height: 40px; transform: translateX(-50%); z-index: 1; filter: drop-shadow(0 4px 6px rgba(11,44,63,.3)); }
-        .sf-wheel-label { font-family: Cairo, sans-serif; font-size: 8px; font-weight: 700; direction: inherit; unicode-bidi: plaintext; }
+        .sf-wheel-pointer { position: absolute; top: -6px; left: 50%; width: 34px; height: 40px; transform: translateX(-50%); z-index: 1; filter: drop-shadow(0 4px 6px rgba(var(--sh-navy-rgb), .3)); }
+        .sf-wheel-label { font-family: var(--sh-font-display); font-size: 8px; font-weight: 700; direction: inherit; unicode-bidi: plaintext; }
         .sf-wheel-spin { max-width: 320px; }
         .sf-wheel-spin:disabled { opacity: .55; cursor: not-allowed; }
-        .sf-wheel-note { margin: 12px 0 0; font-size: 13.5px; color: #6E8C99; overflow-wrap: anywhere; }
+        .sf-wheel-note { margin: 12px 0 0; font-size: 13.5px; color: var(--sh-muted); overflow-wrap: anywhere; }
         .sf-wheel-prizes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
         .sf-wheel-prize { display: flex; align-items: center; gap: 12px; min-width: 0; }
         .sf-wheel-prize .sf-row-media { width: 48px; height: 48px; border-radius: 12px; }
         .sf-wheel-prize .sf-row-title { margin: 0; font-size: 14.5px; }
         .sf-wheel-result { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; }
-        .sf-wheel-result-image { width: 96px; height: 96px; border-radius: 22px; object-fit: cover; background: #ECF8F8; }
+        .sf-wheel-result-image { width: 96px; height: 96px; border-radius: 22px; object-fit: cover; background: var(--sh-sea-50); }
         .sf-wheel-result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 8px; }
         @media (max-width: 991px) {
             .sf-wheel-layout { grid-template-columns: minmax(0, 1fr); }

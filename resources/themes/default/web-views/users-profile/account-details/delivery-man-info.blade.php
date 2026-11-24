@@ -13,7 +13,7 @@
         <section class="sf-panel">
             <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
                 <img src="{{ getStorageImages(path: $deliveryMan->image_full_url, type: 'avatar') }}" alt=""
-                     style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 1px solid #E4EFF1; flex-shrink: 0;">
+                     style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 1px solid var(--sh-line); flex-shrink: 0;">
                 <div class="sf-shop-body">
                     <h2 class="sf-shop-name" style="font-size: 19px;">{{ $deliveryMan->f_name }} {{ $deliveryMan->l_name }}</h2>
                     <div class="sf-row-meta">

@@ -270,7 +270,7 @@
                     const isWishlisted = response.value === 1;
                     button.attr('data-wishlisted', isWishlisted ? 'true' : 'false')
                         .attr('aria-label', isWishlisted ? button.data('remove-label') : button.data('add-label'));
-                    $('.wishlist_icon_' + productId).attr('fill', isWishlisted ? '#E4574F' : 'none');
+                    $('.wishlist_icon_' + productId).attr('fill', isWishlisted ? '#D92F45' : 'none');
                     $('.countWishlist-' + productId).text(response.product_count);
                     $('.seafood-wishlist-count').text(response.count);
                     toastr.success(isWishlisted ? response.success : response.error);

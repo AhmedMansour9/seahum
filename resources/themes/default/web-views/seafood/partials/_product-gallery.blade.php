@@ -11,9 +11,9 @@
 @php($discountValue = getProductPriceByType(product: $product, type: 'discount', result: 'value'))
 
 <div class="sf-gallery">
-    <div class="sf-gallery-stage" style="position: relative; border: 1px solid #E4EFF1; border-radius: 20px; overflow: hidden; background: #EAF4F5;">
+    <div class="sf-gallery-stage" style="position: relative; border: 1px solid var(--sh-line); border-radius: 20px; overflow: hidden; background: var(--sh-navy-50);">
         @if($discountValue > 0)
-            <span class="sf-gallery-badge" style="position: absolute; top: 14px; inset-inline-start: 14px; z-index: 2; display: inline-flex; align-items: center; padding: 6px 12px; border-radius: 999px; background: #F2A43A; color: #3A2400; font-family: Cairo, sans-serif; font-size: 12.5px; font-weight: 800;">
+            <span class="sf-gallery-badge" style="position: absolute; top: 14px; inset-inline-start: 14px; z-index: 2; display: inline-flex; align-items: center; padding: 6px 12px; border-radius: 999px; background: var(--sh-gold); color: #3A2400; font-family: var(--sh-font-display); font-size: 12.5px; font-weight: 800;">
                 <span style="direction: ltr;">-{{ getProductPriceByType(product: $product, type: 'discount', result: 'string') }}</span>
             </span>
         @endif

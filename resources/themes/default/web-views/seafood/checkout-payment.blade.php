@@ -93,7 +93,7 @@
                                                     <span class="sf-choice-title">{{ translate('pay_via_Wallet') }}</span>
                                                     <span class="sf-choice-text">{{ translate('your_current_balance') }}: @include('web-views.seafood.partials._price', ['amount' => $walletBalance])</span>
                                                     @if($walletRemainingBalance < 0)
-                                                        <span class="sf-choice-text" style="color: #E4574F;">{{ translate('you_do_not_have_sufficient_balance_for_pay_this_order!!') }}</span>
+                                                        <span class="sf-choice-text" style="color: var(--sh-tuna);">{{ translate('you_do_not_have_sufficient_balance_for_pay_this_order!!') }}</span>
                                                     @else
                                                         <span class="sf-choice-text">{{ translate('remaining_balance') }}: @include('web-views.seafood.partials._price', ['amount' => $walletRemainingBalance])</span>
                                                     @endif

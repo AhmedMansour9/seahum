@@ -36,10 +36,10 @@
                             @endif
                         </h1>
 
-                        <p style="font-size: 15px; line-height: 1.9; color: #55747F; margin: 12px auto 0; max-width: 460px; overflow-wrap: anywhere;">
+                        <p style="font-size: 15px; line-height: 1.9; color: var(--sh-muted); margin: 12px auto 0; max-width: 460px; overflow-wrap: anywhere;">
                             @if(!empty($order_ids))
                                 {{ translate('your_payment_has_been_successfully_processed_and_your_order') }}
-                                <strong style="color: #0E8E88;"><bdi dir="ltr">{{ implode(', ', $order_ids) }}</bdi></strong>
+                                <strong style="color: var(--sh-sea-700);"><bdi dir="ltr">{{ implode(', ', $order_ids) }}</bdi></strong>
                                 {{ translate('has_been_placed.') }}
                             @else
                                 {{ translate('your_order_is_being_processed_and_will_be_completed.') }}

@@ -34,9 +34,9 @@
                                 @endif
                             </svg>
                         </span>
-                        <h1 style="font-family: Cairo, sans-serif; font-size: clamp(21px, 3vw, 26px); font-weight: 800; line-height: 1.35; margin: 14px 0 6px; color: #0B2C3F; text-wrap: pretty;">@yield('auth_heading')</h1>
+                        <h1 style="font-family: var(--sh-font-display); font-size: clamp(21px, 3vw, 26px); font-weight: 800; line-height: 1.35; margin: 14px 0 6px; color: var(--sh-navy); text-wrap: pretty;">@yield('auth_heading')</h1>
                         @hasSection('auth_intro')
-                            <p style="font-size: 14.5px; line-height: 1.8; color: #6E8C99; margin: 0 auto; max-width: 440px; overflow-wrap: anywhere;">@yield('auth_intro')</p>
+                            <p style="font-size: 14.5px; line-height: 1.8; color: var(--sh-muted); margin: 0 auto; max-width: 440px; overflow-wrap: anywhere;">@yield('auth_intro')</p>
                         @endif
                     </header>
 
@@ -45,7 +45,7 @@
             </section>
         </main>
 
-        <div style="background: #F4FAFB; border-top: 1px solid #E4EFF1; padding-top: clamp(44px, 7vw, 76px);">
+        <div style="background: var(--sh-mist); border-top: 1px solid var(--sh-line); padding-top: clamp(44px, 7vw, 76px);">
             @include('web-views.seafood.partials._help-links')
         </div>
 

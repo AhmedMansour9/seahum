@@ -56,8 +56,8 @@
             @if(session()->has('coupon_discount'))
                 <div class="sf-coupon-applied">
                     <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0;">
-                        <strong style="font-family: Cairo, sans-serif; color: #0B2C3F; overflow-wrap: anywhere;"><bdi dir="ltr">{{ session('coupon_code') }}</bdi></strong>
-                        <span style="font-size: 12.5px; color: #0E8E88;">{{ translate('coupon_applied') }}</span>
+                        <strong style="font-family: var(--sh-font-display); color: var(--sh-navy); overflow-wrap: anywhere;"><bdi dir="ltr">{{ session('coupon_code') }}</bdi></strong>
+                        <span style="font-size: 12.5px; color: var(--sh-sea-700);">{{ translate('coupon_applied') }}</span>
                     </span>
                     <a href="{{ route('coupon.remove') }}" class="sf-icon-btn sf-icon-btn-danger" aria-label="{{ translate('remove_coupon') }}">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"></path></svg>
@@ -135,7 +135,7 @@
                 <dt>
                     {{ translate('total') }}
                     @if($systemTaxConfig['SystemTaxVat']['is_active'] && $systemTaxConfig['is_included'])
-                        <span style="font-size: 12px; font-weight: 600; color: #6E8C99;">({{ translate('Tax_:_Inc.') }})</span>
+                        <span style="font-size: 12px; font-weight: 600; color: var(--sh-muted);">({{ translate('Tax_:_Inc.') }})</span>
                     @endif
                 </dt>
                 <dd class="sf-summary-total">@include('web-views.seafood.partials._price', ['amount' => $totalAmount - $referralAmount, 'symbolSize' => '15px'])</dd>
@@ -168,7 +168,7 @@
 
 <div class="sf-summary-bar">
     <span style="display: flex; flex-direction: column; min-width: 0;">
-        <span style="font-size: 12.5px; color: #6E8C99;">{{ translate('total_price') }}</span>
+        <span style="font-size: 12.5px; color: var(--sh-muted);">{{ translate('total_price') }}</span>
         <strong class="sf-summary-total">@include('web-views.seafood.partials._price', ['amount' => $totalAmount - $referralAmount, 'symbolSize' => '13px'])</strong>
     </span>
     <button type="button" class="sf-btn-sm sf-btn-sm-primary sf-checkout-proceed" data-step="{{ $summaryStep }}"

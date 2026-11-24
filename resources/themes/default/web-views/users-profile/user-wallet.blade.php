@@ -49,7 +49,7 @@
     <div class="sf-balance-grid">
         <section class="sf-balance-card">
             <span class="sf-balance-label">{{ translate('wallet') }} {{ translate('amount') }}</span>
-            <strong class="sf-balance-value">@include('web-views.seafood.partials._price', ['amount' => $totalWalletBalance ?? 0, 'symbolColor' => '#7FE3DC', 'symbolSize' => '.5em'])</strong>
+            <strong class="sf-balance-value">@include('web-views.seafood.partials._price', ['amount' => $totalWalletBalance ?? 0, 'symbolColor' => 'var(--sh-sea-300)', 'symbolSize' => '.5em'])</strong>
             @if($addFundsToWalletStatus)
                 <p class="sf-balance-hint">{{ translate('If_you_want_to_add_fund_to_your_wallet_then_click_add_fund_button') }}</p>
                 <button type="button" class="sf-btn-sm" data-sf-modal-open="addFundToWallet" style="align-self: flex-start;">
@@ -63,7 +63,7 @@
             <div class="sf-bonus-list">
                 @foreach($addFundBonusList as $addFundBonus)
                     <article class="sf-panel sf-bonus-card">
-                        <h2 class="sf-panel-title" style="margin-bottom: 6px; color: #0E8E88;">{{ $addFundBonus->title }}</h2>
+                        <h2 class="sf-panel-title" style="margin-bottom: 6px; color: var(--sh-sea-700);">{{ $addFundBonus->title }}</h2>
                         <p class="sf-step-text" style="margin: 0;">
                             {{ translate('add_fund_to_wallet') }} @include('web-views.seafood.partials._price', ['amount' => $addFundBonus->min_add_money_amount])
                             {{ translate('and_enjoy') }}

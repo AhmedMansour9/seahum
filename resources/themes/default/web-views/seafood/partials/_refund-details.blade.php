@@ -49,7 +49,7 @@
                 </span>
                 <span class="sf-meta-item" style="grid-column: 1 / -1;">
                     <span class="sf-meta-label">{{ translate('refund_reason') }}</span>
-                    <span class="sf-meta-value" style="font-weight: 400; font-family: Tajawal, sans-serif; line-height: 1.8; color: #34586B;">{{ $refund->refund_reason }}</span>
+                    <span class="sf-meta-value" style="font-weight: 400; font-family: var(--sh-font-body); line-height: 1.8; color: var(--sh-ink-2);">{{ $refund->refund_reason }}</span>
                 </span>
             </div>
 

@@ -1,9 +1,9 @@
 @php($isRtl = (session('direction') ?? 'rtl') === 'rtl')
 @php($previousArrowPath = $isRtl ? 'm10 6 6 6-6 6' : 'M14 6 8 12l6 6')
 @php($nextArrowPath = $isRtl ? 'M14 6 8 12l6 6' : 'm10 6 6 6-6 6')
-@php($itemStyle = 'min-width: 44px; min-height: 44px; padding: 0 10px; border-radius: 12px; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #E4EFF1; background: #FFFFFF; color: #45677A;')
-@php($activeItemStyle = 'min-width: 44px; min-height: 44px; padding: 0 10px; border-radius: 12px; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #17B0A7; background: #17B0A7; color: #FFFFFF;')
-@php($disabledItemStyle = 'min-width: 44px; min-height: 44px; padding: 0 10px; border-radius: 12px; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #E4EFF1; background: #F4FAFB; color: #A8B9C1;')
+@php($itemStyle = 'min-width: 44px; min-height: 44px; padding: 0 10px; border-radius: 12px; font-family: var(--sh-font-display); font-size: 14.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--sh-line); background: #FFFFFF; color: var(--sh-ink-2);')
+@php($activeItemStyle = 'min-width: 44px; min-height: 44px; padding: 0 10px; border-radius: 12px; font-family: var(--sh-font-display); font-size: 14.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--sh-sea); background: var(--sh-sea); color: #FFFFFF;')
+@php($disabledItemStyle = 'min-width: 44px; min-height: 44px; padding: 0 10px; border-radius: 12px; font-family: var(--sh-font-display); font-size: 14.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--sh-line); background: var(--sh-mist); color: var(--sh-muted-2);')
 
 @if($paginator->hasPages())
     <nav class="sf-pagination" aria-label="{{ translate('pagination') }}"
