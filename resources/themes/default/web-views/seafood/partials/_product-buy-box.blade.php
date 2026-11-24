@@ -5,28 +5,28 @@
 @php($isVacationMode = !$isTemporaryClose ? checkVendorAbility(type: $authorType, status: 'vacation_status', vendor: $vendorShop) : false)
 @php($isShopUnavailable = $isTemporaryClose || $isVacationMode)
 @php($isInStock = $product['product_type'] === 'digital' || $firstVariationQuantity > 0)
-@php($stockColor = $isInStock ? '#0E8E88' : '#C9821B')
+@php($stockColor = $isInStock ? 'var(--sh-sea-700)' : '#C9821B')
 
 <div class="sf-buy-box product-cart-option-container" style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
 
     <div style="display: flex; flex-direction: column; gap: 12px;">
-        <span class="sf-stock-badge" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: #ECF8F8; color: {{ $stockColor }}; font-size: 12.5px; font-weight: 700;">
+        <span class="sf-stock-badge" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: var(--sh-sea-50); color: {{ $stockColor }}; font-size: 12.5px; font-weight: 700;">
             <span style="width: 6px; height: 6px; border-radius: 50%; background: {{ $stockColor }};"></span>
             {{ $isInStock ? translate('in_stock') : translate('out_of_stock') }}
         </span>
 
-        <h1 style="font-family: Cairo, sans-serif; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.35; margin: 0; color: #0B2C3F; text-wrap: pretty; overflow-wrap: anywhere;">{{ $product['name'] }}</h1>
+        <h1 style="font-family: var(--sh-font-display); font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.35; margin: 0; color: var(--sh-navy); text-wrap: pretty; overflow-wrap: anywhere;">{{ $product['name'] }}</h1>
 
-        <div class="sf-product-meta" style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; font-size: 13.5px; color: #6E8C99;">
+        <div class="sf-product-meta" style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; font-size: 13.5px; color: var(--sh-muted);">
             @if($overallRating[1] > 0)
                 <span style="display: inline-flex; align-items: center; gap: 6px;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2A43A" stroke="none"><path d="m12 3.6 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"></path></svg>
-                    <strong style="font-family: Cairo, sans-serif; color: #0B2C3F;">{{ $overallRating[0] }}</strong>
-                    <a href="#reviews" class="sf-jump-to-reviews" style="color: #0E8E88;">({{ $overallRating[1] }} {{ translate('reviews') }})</a>
+                    <strong style="font-family: var(--sh-font-display); color: var(--sh-navy);">{{ $overallRating[0] }}</strong>
+                    <a href="#reviews" class="sf-jump-to-reviews" style="color: var(--sh-sea-700);">({{ $overallRating[1] }} {{ translate('reviews') }})</a>
                 </span>
             @endif
-            <span><strong style="font-family: Cairo, sans-serif; color: #0B2C3F;">{{ $countOrder }}</strong> {{ translate('orders') }}</span>
-            <span><strong class="countWishlist-{{ $product['id'] }}" style="font-family: Cairo, sans-serif; color: #0B2C3F;">{{ $countWishlist }}</strong> {{ translate('wish_listed') }}</span>
+            <span><strong style="font-family: var(--sh-font-display); color: var(--sh-navy);">{{ $countOrder }}</strong> {{ translate('orders') }}</span>
+            <span><strong class="countWishlist-{{ $product['id'] }}" style="font-family: var(--sh-font-display); color: var(--sh-navy);">{{ $countWishlist }}</strong> {{ translate('wish_listed') }}</span>
         </div>
     </div>
 
@@ -35,11 +35,11 @@
         <input type="hidden" name="id" value="{{ $product['id'] }}">
 
         <div style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px;">
-            <strong class="discounted-unit-price" style="font-family: Cairo, sans-serif; font-size: clamp(26px, 3.4vw, 34px); font-weight: 800; color: #0E8E88; letter-spacing: -.4px;">
+            <strong class="discounted-unit-price" style="font-family: var(--sh-font-display); font-size: clamp(26px, 3.4vw, 34px); font-weight: 800; color: var(--sh-sea-700); letter-spacing: -.4px;">
                 @include('web-views.seafood.partials._price', ['amount' => getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value'), 'symbolSize' => '16px'])
             </strong>
-            <span class="product-total-unit-price" style="font-size: 16px; color: #A8B9C1; text-decoration: line-through;" @if($discountValue <= 0) hidden @endif>
-                @include('web-views.seafood.partials._price', ['amount' => $product->unit_price, 'symbolSize' => '13px', 'symbolColor' => '#A8B9C1'])
+            <span class="product-total-unit-price" style="font-size: 16px; color: var(--sh-muted-2); text-decoration: line-through;" @if($discountValue <= 0) hidden @endif>
+                @include('web-views.seafood.partials._price', ['amount' => $product->unit_price, 'symbolSize' => '13px', 'symbolColor' => 'var(--sh-muted-2)'])
             </span>
         </div>
 
@@ -115,8 +115,8 @@
             </div>
 
             <div class="product-details-chosen-price-section" style="display: flex; align-items: baseline; gap: 8px;">
-                <span style="font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 700; color: #45677A;">{{ translate('total_price') }}</span>
-                <strong class="product-details-chosen-price-amount" style="font-family: Cairo, sans-serif; font-size: 22px; font-weight: 800; color: #0E8E88; letter-spacing: -.4px;">
+                <span style="font-family: var(--sh-font-display); font-size: 14.5px; font-weight: 700; color: var(--sh-ink-2);">{{ translate('total_price') }}</span>
+                <strong class="product-details-chosen-price-amount" style="font-family: var(--sh-font-display); font-size: 22px; font-weight: 800; color: var(--sh-sea-700); letter-spacing: -.4px;">
                     @include('web-views.seafood.partials._price', ['amount' => $initialProductConfig['total_quantity_price']])
                 </strong>
             </div>
@@ -150,7 +150,7 @@
                         data-add-label="{{ translate('add_to_wishlist') }}" data-remove-label="{{ translate('remove_from_wishlist') }}"
                         aria-label="{{ $wishlistStatus == 1 ? translate('remove_from_wishlist') : translate('add_to_wishlist') }}">
                     <svg class="wishlist_icon_{{ $product['id'] }}" width="20" height="20" viewBox="0 0 24 24"
-                         fill="{{ $wishlistStatus == 1 ? '#E4574F' : 'none' }}" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                         fill="{{ $wishlistStatus == 1 ? '#D92F45' : 'none' }}" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 20s-7-4.4-7-9.3A4 4 0 0 1 12 8a4 4 0 0 1 7 2.7c0 4.9-7 9.3-7 9.3Z"></path>
                     </svg>
                 </button>

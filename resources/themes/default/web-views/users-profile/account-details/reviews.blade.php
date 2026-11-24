@@ -51,7 +51,7 @@
             @if($reviewReply)
                 <div class="sf-review-reply">
                     <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
-                        <strong style="font-family: Cairo, sans-serif; color: #0B2C3F;">{{ translate('Reply_by_Seller') }}</strong>
+                        <strong style="font-family: var(--sh-font-display); color: var(--sh-navy);">{{ translate('Reply_by_Seller') }}</strong>
                         <span class="sf-row-meta"><bdi dir="ltr">{{ $reviewReply->created_at?->format('M d, Y') }}</bdi></span>
                     </div>
                     <div class="sf-step-text" style="margin-top: 8px;">{!! $reviewReply->reply_text !!}</div>

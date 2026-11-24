@@ -58,7 +58,7 @@
                     <section class="sf-panel">
                         <div class="sf-track-result-head">
                             <div style="display: flex; flex-direction: column; gap: 8px; min-width: 0;">
-                                <h1 style="font-family: Cairo, sans-serif; font-size: clamp(20px, 2.6vw, 24px); font-weight: 800; margin: 0; color: #0B2C3F;">
+                                <h1 style="font-family: var(--sh-font-display); font-size: clamp(20px, 2.6vw, 24px); font-weight: 800; margin: 0; color: var(--sh-navy);">
                                     {{ translate('your_order') }} <bdi dir="ltr">#{{ $order->id }}</bdi>
                                 </h1>
                                 <div class="sf-order-meta" style="margin: 0;">
@@ -125,16 +125,16 @@
                                         <span class="sf-meta-item"><span class="sf-meta-label">{{ translate('Due_amount') }}</span><span class="sf-meta-value">@include('web-views.seafood.partials._price', ['amount' => $latestEditHistory?->order_due_amount ?? 0])</span></span>
                                     </div>
                                 @elseif($isDuePaymentPending)
-                                    <h2 class="sf-panel-title" style="color: #C63F38;">{{ translate('Pay Due Bill') }}</h2>
+                                    <h2 class="sf-panel-title" style="color: var(--sh-tuna-700);">{{ translate('Pay Due Bill') }}</h2>
                                     <p class="sf-step-text" style="margin: 0 0 14px;">
                                         {{ translate('after_editing_your_product_list,_the_order_total_has_increased._please_pay_the_amount_to_continue_processing_the_order.') }}
-                                        <strong style="color: #0B2C3F;">@include('web-views.seafood.partials._price', ['amount' => $order['edit_due_amount']])</strong>
+                                        <strong style="color: var(--sh-navy);">@include('web-views.seafood.partials._price', ['amount' => $order['edit_due_amount']])</strong>
                                     </p>
                                     <button type="button" class="sf-btn-sm sf-btn-sm-primary" data-sf-modal-open="choosePaymentMethodModal-{{ $order['id'] }}">{{ translate('Pay_Now') }}</button>
                                 @elseif($latestEditHistory?->order_return_payment_status === 'pending')
-                                    <h2 class="sf-panel-title" style="color: #0E8E88;">{{ translate('Amount_to_Be_Returned') }}</h2>
+                                    <h2 class="sf-panel-title" style="color: var(--sh-sea-700);">{{ translate('Amount_to_Be_Returned') }}</h2>
                                     <p class="sf-step-text" style="margin: 0;">
-                                        <strong style="color: #0B2C3F;">@include('web-views.seafood.partials._price', ['amount' => $order['edit_return_amount']])</strong>
+                                        <strong style="color: var(--sh-navy);">@include('web-views.seafood.partials._price', ['amount' => $order['edit_return_amount']])</strong>
                                         {{ translate('after_editing_your_product_list,_you_will_receive_this_amount._please_wait_for_the_admin_to_process_the_returned.') }}
                                     </p>
                                 @elseif($latestEditHistory?->order_return_payment_status == 'returned')
@@ -192,7 +192,7 @@
             @include('web-views.seafood.partials._order-due-payment-modal', ['order' => $order])
         @endif
 
-        <div style="background: #F4FAFB; border-top: 1px solid #E4EFF1; padding-top: clamp(44px, 7vw, 76px);">
+        <div style="background: var(--sh-mist); border-top: 1px solid var(--sh-line); padding-top: clamp(44px, 7vw, 76px);">
             @include('web-views.seafood.partials._help-links')
         </div>
 

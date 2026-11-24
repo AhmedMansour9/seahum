@@ -37,13 +37,13 @@
                 <div class="sf-page-hero" style="background-image: url('{{ $dealBannerUrl }}'); margin-bottom: 24px;">
                     <div class="sf-page-hero-body sf-deal-hero">
                         <div style="min-width: 0;">
-                            <span style="display: inline-block; background: #F2A43A; color: #3A2400; font-family: Cairo, sans-serif; font-weight: 800; font-size: 13px; padding: 6px 14px; border-radius: 999px; white-space: nowrap;">
+                            <span style="display: inline-block; background: var(--sh-gold); color: #3A2400; font-family: var(--sh-font-display); font-weight: 800; font-size: 13px; padding: 6px 14px; border-radius: 999px; white-space: nowrap;">
                                 {{ translate('flash_deal') }}
                             </span>
-                            <h1 style="font-family: Cairo, sans-serif; font-size: clamp(24px, 4vw, 38px); font-weight: 900; line-height: 1.25; margin: 14px 0 0; color: #FFFFFF; overflow-wrap: anywhere; text-wrap: balance;">
+                            <h1 style="font-family: var(--sh-font-display); font-size: clamp(24px, 4vw, 38px); font-weight: 900; line-height: 1.25; margin: 14px 0 0; color: #FFFFFF; overflow-wrap: anywhere; text-wrap: balance;">
                                 {{ $deal['title'] }}
                             </h1>
-                            <p style="color: #C6DDE6; font-size: 15.5px; line-height: 1.9; margin: 10px 0 0;">
+                            <p style="color: var(--sh-on-dark); font-size: 15.5px; line-height: 1.9; margin: 10px 0 0;">
                                 {{ translate('offer_ends_on') }} <bdi dir="ltr">{{ $dealEndsAt->format('d M, Y') }}</bdi>
                             </p>
                         </div>
@@ -53,8 +53,8 @@
                              style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; min-width: 0;">
                             @foreach(['days' => translate('day'), 'hours' => translate('hour'), 'minutes' => translate('minute'), 'seconds' => translate('second')] as $unit => $label)
                                 <div style="background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); border-radius: 14px; padding: 10px 6px; text-align: center; min-width: 0;">
-                                    <div data-countdown-unit="{{ $unit }}" style="font-family: Cairo, sans-serif; font-size: clamp(20px, 3vw, 26px); font-weight: 800; color: #FFFFFF; direction: ltr;">00</div>
-                                    <div style="font-size: 12px; color: #A9C7D3; margin-top: 2px;">{{ $label }}</div>
+                                    <div data-countdown-unit="{{ $unit }}" style="font-family: var(--sh-font-display); font-size: clamp(20px, 3vw, 26px); font-weight: 800; color: #FFFFFF; direction: ltr;">00</div>
+                                    <div style="font-size: 12px; color: var(--sh-on-dark-2); margin-top: 2px;">{{ $label }}</div>
                                 </div>
                             @endforeach
                         </div>
@@ -79,7 +79,7 @@
             </section>
         </main>
 
-        <div style="background: #F4FAFB; border-top: 1px solid #E4EFF1; padding-top: clamp(44px, 7vw, 76px);">
+        <div style="background: var(--sh-mist); border-top: 1px solid var(--sh-line); padding-top: clamp(44px, 7vw, 76px);">
             @include('web-views.seafood.partials._help-links')
         </div>
 

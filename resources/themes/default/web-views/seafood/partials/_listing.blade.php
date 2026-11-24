@@ -22,11 +22,11 @@
 
 <form class="product-list-filter" method="GET" action="{{ url()->current() }}" onsubmit="return false;">
     <div class="sf-listing-toolbar"
-         style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding: 16px 18px; background: #F4FAFB; border: 1px solid #E4EFF1; border-radius: 16px;">
+         style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding: 16px 18px; background: var(--sh-mist); border: 1px solid var(--sh-line); border-radius: 16px;">
         <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
-            <{{ $listingHeadingTag }} style="font-family: Cairo, sans-serif; font-size: 20px; font-weight: 800; line-height: 1.4; margin: 0; color: #0B2C3F; text-wrap: pretty; overflow-wrap: anywhere;">{{ $listingTitle }}</{{ $listingHeadingTag }}>
-            <span style="font-size: 14px; color: #45677A;">
-                <strong class="view-page-item-count" style="font-family: Cairo, sans-serif; font-weight: 700; color: #0B2C3F;">{{ $listingProducts->total() }}</strong>
+            <{{ $listingHeadingTag }} style="font-family: var(--sh-font-display); font-size: 20px; font-weight: 800; line-height: 1.4; margin: 0; color: var(--sh-navy); text-wrap: pretty; overflow-wrap: anywhere;">{{ $listingTitle }}</{{ $listingHeadingTag }}>
+            <span style="font-size: 14px; color: var(--sh-ink-2);">
+                <strong class="view-page-item-count" style="font-family: var(--sh-font-display); font-weight: 700; color: var(--sh-navy);">{{ $listingProducts->total() }}</strong>
                 {{ translate('items_found') }}
             </span>
         </div>
@@ -44,7 +44,7 @@
             </span>
 
             <label class="sf-sort-field" style="display: flex; align-items: center; gap: 8px; margin: 0;">
-                <span style="font-family: Cairo, sans-serif; font-size: 14px; font-weight: 700; color: #45677A; white-space: nowrap;">{{ translate('sort_by') }}</span>
+                <span style="font-family: var(--sh-font-display); font-size: 14px; font-weight: 700; color: var(--sh-ink-2); white-space: nowrap;">{{ translate('sort_by') }}</span>
                 <select class="sf-filter-field sf-filter-input" name="sort_by" style="width: auto; min-width: 170px;">
                     <option value="latest" {{ request('sort_by') == 'latest' ? 'selected' : '' }}>{{ translate('Default') }}</option>
                     <option value="low-high" {{ request('sort_by') == 'low-high' ? 'selected' : '' }}>{{ translate('Price') }} ({{ translate('Low_to_High') }})</option>
@@ -58,7 +58,7 @@
 
             @if($listingDataFromOptions)
                 <label class="sf-data-from-field" style="display: flex; align-items: center; gap: 8px; margin: 0;">
-                    <span style="font-family: Cairo, sans-serif; font-size: 14px; font-weight: 700; color: #45677A; white-space: nowrap;">{{ translate('Filter_By') }}</span>
+                    <span style="font-family: var(--sh-font-display); font-size: 14px; font-weight: 700; color: var(--sh-ink-2); white-space: nowrap;">{{ translate('Filter_By') }}</span>
                     <select class="sf-filter-field sf-filter-input" name="data_from" style="width: auto; min-width: 160px;">
                         @foreach($listingDataFromOptions as $dataFromValue => $dataFromLabel)
                             <option value="{{ $dataFromValue }}" {{ (request('data_from') ?: $listingDefaultDataFrom) == $dataFromValue ? 'selected' : '' }}>{{ $dataFromLabel }}</option>
@@ -81,10 +81,10 @@
         <aside class="sf-filter-panel" id="seafood-filter-panel" data-open="false">
             <div class="sf-filter-sheet-head">
                 <div style="display: grid; place-items: center; padding-bottom: 12px;">
-                    <span style="width: 44px; height: 4px; border-radius: 999px; background: #E4EFF1; display: block;"></span>
+                    <span style="width: 44px; height: 4px; border-radius: 999px; background: var(--sh-line); display: block;"></span>
                 </div>
                 <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-                    <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 800; color: #0B2C3F;">{{ translate('filters') }}</strong>
+                    <strong style="font-family: var(--sh-font-display); font-size: 17px; font-weight: 800; color: var(--sh-navy);">{{ translate('filters') }}</strong>
                     <button type="button" class="sf-icon-button" id="seafood-filter-close" aria-label="{{ translate('close') }}">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
                     </button>
@@ -96,12 +96,12 @@
                     <span class="sf-filter-group-title">{{ translate('price') }}</span>
                     <div style="display: flex; align-items: flex-end; gap: 10px;">
                         <label style="flex: 1; margin: 0;">
-                            <span style="display: block; font-size: 12.5px; font-weight: 600; color: #6E8C99; margin-bottom: 6px;">{{ translate('Min') }}</span>
+                            <span style="display: block; font-size: 12.5px; font-weight: 600; color: var(--sh-muted); margin-bottom: 6px;">{{ translate('Min') }}</span>
                             <input type="number" min="0" id="min_price" name="min_price" class="sf-filter-field"
                                    value="{{ request('min_price') }}" placeholder="0">
                         </label>
                         <label style="flex: 1; margin: 0;">
-                            <span style="display: block; font-size: 12.5px; font-weight: 600; color: #6E8C99; margin-bottom: 6px;">{{ translate('Max') }}</span>
+                            <span style="display: block; font-size: 12.5px; font-weight: 600; color: var(--sh-muted); margin-bottom: 6px;">{{ translate('Max') }}</span>
                             <input type="number" min="0" id="max_price" name="max_price" class="sf-filter-field"
                                    value="{{ request('max_price') }}" placeholder="{{ $listingMaxUnitPrice }}">
                         </label>
@@ -140,7 +140,7 @@
                                         data-category-id="{{ $filterCategory['id'] }}" aria-pressed="{{ $isFilterCategoryActive ? 'true' : 'false' }}">
                                     <span style="min-width: 0; overflow: hidden; text-overflow: ellipsis;">{{ $filterCategory['name'] }}</span>
                                     @if(isset($filterCategory['product_count']))
-                                        <span style="flex-shrink: 0; padding: 2px 9px; border-radius: 999px; background: #ECF8F8; color: #0E8E88; font-size: 11.5px; font-weight: 700;"><bdi dir="ltr">{{ $filterCategory['product_count'] }}</bdi></span>
+                                        <span style="flex-shrink: 0; padding: 2px 9px; border-radius: 999px; background: var(--sh-sea-50); color: var(--sh-sea-700); font-size: 11.5px; font-weight: 700;"><bdi dir="ltr">{{ $filterCategory['product_count'] }}</bdi></span>
                                     @endif
                                 </button>
                             @endforeach
@@ -157,7 +157,7 @@
                                    aria-label="{{ translate('search_by_brands') }}"
                                    style="height: 44px; padding-inline-end: 42px;">
                             <span aria-hidden="true"
-                                  style="position: absolute; inset-inline-end: 14px; color: #7B98A4; display: grid; place-items: center;">
+                                  style="position: absolute; inset-inline-end: 14px; color: var(--sh-muted-2); display: grid; place-items: center;">
                                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg>
                             </span>
                         </span>
@@ -166,11 +166,11 @@
                                 <a href="{{ route('brand-products', ['slug' => $brand['slug']]) }}"
                                    class="sf-filter-nav-link sf-brand-item{{ request('brand_id') == $brand['id'] ? ' active' : '' }}">
                                     <span style="min-width: 0; overflow: hidden; text-overflow: ellipsis;">{{ $brand['name'] }}</span>
-                                    <span style="flex-shrink: 0; padding: 2px 9px; border-radius: 999px; background: #ECF8F8; color: #0E8E88; font-size: 11.5px; font-weight: 700;">{{ $brand['brand_products_count'] }}</span>
+                                    <span style="flex-shrink: 0; padding: 2px 9px; border-radius: 999px; background: var(--sh-sea-50); color: var(--sh-sea-700); font-size: 11.5px; font-weight: 700;">{{ $brand['brand_products_count'] }}</span>
                                 </a>
                             @endforeach
                             <span class="sf-brand-empty" hidden
-                                  style="padding: 12px 2px; font-size: 14px; color: #6E8C99;">{{ translate('No_Data_Found') }}</span>
+                                  style="padding: 12px 2px; font-size: 14px; color: var(--sh-muted);">{{ translate('No_Data_Found') }}</span>
                         </div>
                     </div>
                 @endif

@@ -73,11 +73,11 @@
                         </div>
 
                         <div class="sf-row-meta">
-                            <span><strong style="color: #0B2C3F;"><bdi dir="ltr">{{ $order->order_details_sum_qty }}</bdi></strong> {{ translate('Products') }}</span>
+                            <span><strong style="color: var(--sh-navy);"><bdi dir="ltr">{{ $order->order_details_sum_qty }}</bdi></strong> {{ translate('Products') }}</span>
                             <span><bdi dir="ltr">{{ date('d M, Y h:i A', strtotime($order['created_at'])) }}</bdi></span>
                         </div>
 
-                        <strong style="font-family: Cairo, sans-serif; font-size: 18px; font-weight: 800; color: #0E8E88;">
+                        <strong style="font-family: var(--sh-font-display); font-size: 18px; font-weight: 800; color: var(--sh-sea-700);">
                             {{ webCurrencyConverter(amount: $orderTotalPriceSummary['totalAmount']) }}
                         </strong>
                     </div>
@@ -143,7 +143,7 @@
                     <span class="sf-empty-icon" style="display: inline-grid; margin-bottom: 16px;">
                         <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8.2 12.4 2.6 2.6 5-5.4"></path></svg>
                     </span>
-                    <p style="font-size: 14.5px; line-height: 1.9; color: #55747F; margin: 0 0 22px; overflow-wrap: anywhere;">
+                    <p style="font-size: 14.5px; line-height: 1.9; color: var(--sh-muted); margin: 0 0 22px; overflow-wrap: anywhere;">
                         {{ translate('we_have_received_your_order_and_will_ship_it_shortly') }}
                         {{ translate($isPlural ? 'your_order_ids' : 'your_order_id') }}
                         <bdi dir="ltr">{{ implode(', ', $orderSuccessIds) }}</bdi>

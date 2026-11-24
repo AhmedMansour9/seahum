@@ -35,7 +35,7 @@
                         <span class="sf-empty-icon" style="display: inline-grid; margin: 0;" aria-hidden="true">
                             <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4"></path><path d="M5 19h14"></path></svg>
                         </span>
-                        <h1 style="font-family: Cairo, sans-serif; font-size: clamp(21px, 3vw, 26px); font-weight: 800; line-height: 1.35; margin: 14px 0 0; color: #0B2C3F;">{{ translate('download_your_product') }}</h1>
+                        <h1 style="font-family: var(--sh-font-display); font-size: clamp(21px, 3vw, 26px); font-weight: 800; line-height: 1.35; margin: 14px 0 0; color: var(--sh-navy);">{{ translate('download_your_product') }}</h1>
                     </header>
 
                     <form action="{{ route('digital-product-download-pos.index') }}" method="get" class="sf-track-form">
@@ -110,7 +110,7 @@
             </section>
         </main>
 
-        <div style="background: #F4FAFB; border-top: 1px solid #E4EFF1; padding-top: clamp(44px, 7vw, 76px);">
+        <div style="background: var(--sh-mist); border-top: 1px solid var(--sh-line); padding-top: clamp(44px, 7vw, 76px);">
             @include('web-views.seafood.partials._help-links')
         </div>
 

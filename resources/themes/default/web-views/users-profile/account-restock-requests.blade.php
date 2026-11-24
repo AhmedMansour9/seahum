@@ -46,21 +46,21 @@
 
                         <div class="sf-row-meta">
                             @if($restockProduct['variant'])
-                                <span>{{ translate('variant') }}: <strong style="color: #0B2C3F;">{{ $restockProduct['variant'] }}</strong></span>
+                                <span>{{ translate('variant') }}: <strong style="color: var(--sh-navy);">{{ $restockProduct['variant'] }}</strong></span>
                             @elseif(getWebConfig(name: 'product_brand') && $restockedProduct?->brand?->name)
-                                <span>{{ translate('brand') }}: <strong style="color: #0B2C3F;">{{ $restockedProduct->brand->name }}</strong></span>
+                                <span>{{ translate('brand') }}: <strong style="color: var(--sh-navy);">{{ $restockedProduct->brand->name }}</strong></span>
                             @endif
                             <span class="sf-badge sf-badge-warning">{{ translate('out_of_stock') }}</span>
                         </div>
 
                         <span style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 8px;">
-                            <strong style="font-family: Cairo, sans-serif; font-size: 18px; font-weight: 800; color: #0B2C3F;">
+                            <strong style="font-family: var(--sh-font-display); font-size: 18px; font-weight: 800; color: var(--sh-navy);">
                                 {{ $restockHasDiscount
                                     ? getProductPriceByType(product: $restockedProduct, type: 'discounted_unit_price', result: 'string', price: $restockUnitPrice)
                                     : webCurrencyConverter(amount: $restockUnitPrice) }}
                             </strong>
                             @if($restockHasDiscount)
-                                <del style="font-size: 13px; color: #A8B9C1;">{{ webCurrencyConverter(amount: $restockUnitPrice) }}</del>
+                                <del style="font-size: 13px; color: var(--sh-muted-2);">{{ webCurrencyConverter(amount: $restockUnitPrice) }}</del>
                             @endif
                         </span>
                     </div>

@@ -26,17 +26,17 @@
     </div>
 
     <style>
-        .sf-lw-popup { position: fixed; inset: 0; z-index: 1060; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(11,44,63,.55); }
+        .sf-lw-popup { position: fixed; inset: 0; z-index: 1060; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(var(--sh-navy-rgb), .55); }
         .sf-lw-popup[hidden] { display: none; }
-        .sf-lw-popup-dialog { position: relative; width: 100%; max-width: 400px; background: #FFFFFF; border-radius: 24px; padding: 34px 24px 24px; text-align: center; box-shadow: 0 30px 60px -30px rgba(11,44,63,.9); }
-        .sf-lw-popup-close { position: absolute; top: 12px; inset-inline-end: 12px; width: 40px; height: 40px; border: none; border-radius: 12px; background: #F4FAFB; color: #0B2C3F; display: grid; place-items: center; cursor: pointer; }
-        .sf-lw-popup-icon { width: 84px; height: 84px; margin: 0 auto 14px; border-radius: 50%; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center; animation: pulseRing 2s infinite; }
-        .sf-lw-popup-title { font-family: Cairo, sans-serif; font-size: 21px; font-weight: 800; color: #0B2C3F; margin: 0 0 8px; overflow-wrap: anywhere; }
-        .sf-lw-popup-text { font-size: 15px; line-height: 1.8; color: #4F6E7B; margin: 0 0 20px; overflow-wrap: anywhere; }
+        .sf-lw-popup-dialog { position: relative; width: 100%; max-width: 400px; background: #FFFFFF; border-radius: 24px; padding: 34px 24px 24px; text-align: center; box-shadow: 0 30px 60px -30px rgba(var(--sh-navy-rgb), .9); }
+        .sf-lw-popup-close { position: absolute; top: 12px; inset-inline-end: 12px; width: 40px; height: 40px; border: none; border-radius: 12px; background: var(--sh-mist); color: var(--sh-navy); display: grid; place-items: center; cursor: pointer; }
+        .sf-lw-popup-icon { width: 84px; height: 84px; margin: 0 auto 14px; border-radius: 50%; background: var(--sh-sea-50); color: var(--sh-sea-700); display: grid; place-items: center; animation: pulseRing 2s infinite; }
+        .sf-lw-popup-title { font-family: var(--sh-font-display); font-size: 21px; font-weight: 800; color: var(--sh-navy); margin: 0 0 8px; overflow-wrap: anywhere; }
+        .sf-lw-popup-text { font-size: 15px; line-height: 1.8; color: var(--sh-muted); margin: 0 0 20px; overflow-wrap: anywhere; }
         .sf-lw-popup-actions { display: flex; flex-direction: column; gap: 10px; }
-        .sf-lw-popup-cta { display: flex; align-items: center; justify-content: center; min-height: 50px; border-radius: 14px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-size: 16px; font-weight: 700; }
-        .sf-lw-popup-cta:hover { background: #0E8E88; color: #FFFFFF; }
-        .sf-lw-popup-later { min-height: 44px; border: none; background: none; color: #6E8C99; font-family: Cairo, sans-serif; font-size: 14.5px; font-weight: 600; cursor: pointer; }
+        .sf-lw-popup-cta { display: flex; align-items: center; justify-content: center; min-height: 50px; border-radius: 14px; background: var(--sh-sea); color: #FFFFFF; font-family: var(--sh-font-display); font-size: 16px; font-weight: 700; }
+        .sf-lw-popup-cta:hover { background: var(--sh-sea-700); color: #FFFFFF; }
+        .sf-lw-popup-later { min-height: 44px; border: none; background: none; color: var(--sh-muted); font-family: var(--sh-font-display); font-size: 14.5px; font-weight: 600; cursor: pointer; }
         @media (prefers-reduced-motion: reduce) { .sf-lw-popup-icon { animation: none; } }
     </style>
 

@@ -73,7 +73,7 @@
     function setSeafoodWishlistState(button, isWishlisted) {
         button.attr('data-wishlisted', isWishlisted ? 'true' : 'false');
         button.attr('aria-label', isWishlisted ? button.data('remove-label') : button.data('add-label'));
-        button.find('svg').attr('fill', isWishlisted ? '#E4574F' : 'none').attr('stroke', isWishlisted ? '#E4574F' : '#0B2C3F');
+        button.find('svg').attr('fill', isWishlisted ? '#D92F45' : 'none').attr('stroke', isWishlisted ? '#D92F45' : '#082B49');
     }
 
     function setSeafoodWishlistCount(count) {
@@ -104,7 +104,7 @@
                 }).each(function () {
                     setSeafoodWishlistState($(this), isWishlisted);
                 });
-                $('.wishlist_icon_' + productId).attr('fill', isWishlisted ? '#E4574F' : 'none');
+                $('.wishlist_icon_' + productId).attr('fill', isWishlisted ? '#D92F45' : 'none');
                 $('.countWishlist-' + productId).text(response.product_count);
                 setSeafoodWishlistCount(response.count);
                 toastr.success(isWishlisted ? response.success : response.error);
@@ -331,7 +331,7 @@
             </button>
         </div>
         <div class="sf-modal-body">
-            <p id="sf-confirm-message" style="font-size: 14.5px; line-height: 1.85; color: #55747F; margin: 0 0 20px; overflow-wrap: anywhere;"></p>
+            <p id="sf-confirm-message" style="font-size: 14.5px; line-height: 1.85; color: var(--sh-muted); margin: 0 0 20px; overflow-wrap: anywhere;"></p>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                 <button type="button" class="sf-btn-sm sf-btn-sm-primary" id="sf-confirm-accept" style="flex: 1 1 120px;">{{ translate('yes') }}</button>
                 <button type="button" class="sf-btn-sm" data-sf-modal-close style="flex: 1 1 120px;">{{ translate('no') }}</button>

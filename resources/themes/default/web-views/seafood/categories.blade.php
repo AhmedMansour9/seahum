@@ -39,11 +39,11 @@
                 ])
 
                 <form method="GET" action="{{ route('categories') }}" class="sf-page-head"
-                      style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding: 16px 18px; background: #F4FAFB; border: 1px solid #E4EFF1; border-radius: 16px;">
+                      style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding: 16px 18px; background: var(--sh-mist); border: 1px solid var(--sh-line); border-radius: 16px;">
                     <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
-                        <h1 style="font-family: Cairo, sans-serif; font-size: 20px; font-weight: 800; line-height: 1.4; margin: 0; color: #0B2C3F; text-wrap: pretty;">{{ translate('all_categories') }}</h1>
-                        <span style="font-size: 14px; color: #45677A;">
-                            <strong style="font-family: Cairo, sans-serif; font-weight: 700; color: #0B2C3F;">{{ count($categories) }}</strong>
+                        <h1 style="font-family: var(--sh-font-display); font-size: 20px; font-weight: 800; line-height: 1.4; margin: 0; color: var(--sh-navy); text-wrap: pretty;">{{ translate('all_categories') }}</h1>
+                        <span style="font-size: 14px; color: var(--sh-ink-2);">
+                            <strong style="font-family: var(--sh-font-display); font-weight: 700; color: var(--sh-navy);">{{ count($categories) }}</strong>
                             {{ translate('categories_found') }}
                         </span>
                     </div>
@@ -66,14 +66,14 @@
                         @endforeach
                     </div>
                 @else
-                    <div class="sf-empty-state" style="background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 44px 22px; text-align: center; margin-top: 24px;">
-                        <span style="width: 60px; height: 60px; border-radius: 20px; background: #ECF8F8; color: #0E8E88; display: inline-grid; place-items: center;">
+                    <div class="sf-empty-state" style="background: #FFFFFF; border: 1px solid var(--sh-line); border-radius: 20px; padding: 44px 22px; text-align: center; margin-top: 24px;">
+                        <span style="width: 60px; height: 60px; border-radius: 20px; background: var(--sh-sea-50); color: var(--sh-sea-700); display: inline-grid; place-items: center;">
                             <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg>
                         </span>
-                        <h4 style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 700; margin: 16px 0 8px; color: #0B2C3F;">
+                        <h4 style="font-family: var(--sh-font-display); font-size: 17px; font-weight: 700; margin: 16px 0 8px; color: var(--sh-navy);">
                             {{ filled($searchedCategoryName) ? translate('no_results_found') : translate('there_is_no_category') }}
                         </h4>
-                        <p style="font-size: 14px; color: #6E8C99; line-height: 1.8; margin: 0 auto 18px; max-width: 420px;">
+                        <p style="font-size: 14px; color: var(--sh-muted); line-height: 1.8; margin: 0 auto 18px; max-width: 420px;">
                             {{ filled($searchedCategoryName) ? translate('no_category_matches_this_name_try_a_shorter_word') : translate('categories_will_appear_here_once_they_are_added') }}
                         </p>
                         @if(filled($searchedCategoryName))
@@ -90,7 +90,7 @@
             </section>
         </main>
 
-        <div style="background: #F4FAFB; border-top: 1px solid #E4EFF1; padding-top: clamp(44px, 7vw, 76px);">
+        <div style="background: var(--sh-mist); border-top: 1px solid var(--sh-line); padding-top: clamp(44px, 7vw, 76px);">
             @include('web-views.seafood.partials._help-links')
         </div>
 

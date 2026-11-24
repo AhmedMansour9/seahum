@@ -28,17 +28,17 @@
                 <div class="sf-card" style="max-width: 620px; margin: 0 auto; padding: clamp(22px, 4vw, 34px);">
 
                     <header style="text-align: center; margin-bottom: 26px;">
-                        <span style="width: 60px; height: 60px; border-radius: 20px; background: #ECF8F8; color: #0E8E88; display: inline-grid; place-items: center;">
+                        <span style="width: 60px; height: 60px; border-radius: 20px; background: var(--sh-sea-50); color: var(--sh-sea-700); display: inline-grid; place-items: center;">
                             <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10" rx="3"></rect><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"></path></svg>
                         </span>
-                        <h1 style="font-family: Cairo, sans-serif; font-size: clamp(21px, 3vw, 26px); font-weight: 800; line-height: 1.35; margin: 14px 0 6px; color: #0B2C3F; text-wrap: pretty;">{{ translate('forgot_your_password_question') }}</h1>
-                        <p style="font-size: 14.5px; line-height: 1.8; color: #6E8C99; margin: 0 auto; max-width: 440px;">
+                        <h1 style="font-family: var(--sh-font-display); font-size: clamp(21px, 3vw, 26px); font-weight: 800; line-height: 1.35; margin: 14px 0 6px; color: var(--sh-navy); text-wrap: pretty;">{{ translate('forgot_your_password_question') }}</h1>
+                        <p style="font-size: 14.5px; line-height: 1.8; color: var(--sh-muted); margin: 0 auto; max-width: 440px;">
                             {{ translate('change_your_password_in_three_easy_steps.') }}
                             {{ translate('this_helps_to_keep_your_new_password_secure.') }}
                         </p>
                     </header>
 
-                    <ol style="list-style: none; display: flex; flex-direction: column; gap: 14px; margin: 0 0 26px; padding: 18px; background: #F4FAFB; border: 1px solid #E4EFF1; border-radius: 16px;">
+                    <ol style="list-style: none; display: flex; flex-direction: column; gap: 14px; margin: 0 0 26px; padding: 18px; background: var(--sh-mist); border: 1px solid var(--sh-line); border-radius: 16px;">
                         <li class="sf-step">
                             <span class="sf-step-num" aria-hidden="true">1</span>
                             <span class="sf-step-text">{{ translate('use_your_registered_phone.') }}</span>
@@ -73,7 +73,7 @@
                         </button>
                     </form>
 
-                    <p style="text-align: center; font-size: 14.5px; color: #6E8C99; margin: 24px 0 0;">
+                    <p style="text-align: center; font-size: 14.5px; color: var(--sh-muted); margin: 24px 0 0;">
                         {{ translate('already_have_an_account_question') }}
                         <a class="sf-text-link" href="{{ route('customer.auth.login') }}">{{ translate('sign_in') }}</a>
                     </p>
@@ -81,7 +81,7 @@
             </section>
         </main>
 
-        <div style="background: #F4FAFB; border-top: 1px solid #E4EFF1; padding-top: clamp(44px, 7vw, 76px);">
+        <div style="background: var(--sh-mist); border-top: 1px solid var(--sh-line); padding-top: clamp(44px, 7vw, 76px);">
             @include('web-views.seafood.partials._help-links')
         </div>
 

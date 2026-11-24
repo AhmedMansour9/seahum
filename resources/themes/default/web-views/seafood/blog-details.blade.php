@@ -61,7 +61,7 @@
                                 </div>
                             @endif
 
-                            <h1 style="font-family: Cairo, sans-serif; font-size: clamp(24px, 3.4vw, 34px); font-weight: 800; line-height: 1.4; margin: 0 0 14px; color: #0B2C3F; text-wrap: pretty; overflow-wrap: anywhere;">
+                            <h1 style="font-family: var(--sh-font-display); font-size: clamp(24px, 3.4vw, 34px); font-weight: 800; line-height: 1.4; margin: 0 0 14px; color: var(--sh-navy); text-wrap: pretty; overflow-wrap: anywhere;">
                                 {{ $blogData['title'] ?? null }}
                             </h1>
 
@@ -82,8 +82,8 @@
                             {!! $updatedDescription !!}
                         </div>
 
-                        <footer style="margin-top: 36px; padding-top: 24px; border-top: 1px solid #E4EFF1; text-align: center;">
-                            <h2 style="font-family: Cairo, sans-serif; font-size: 16px; font-weight: 800; margin: 0 0 14px; color: #0B2C3F;">{{ translate('Share_this_article') }}</h2>
+                        <footer style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--sh-line); text-align: center;">
+                            <h2 style="font-family: var(--sh-font-display); font-size: 16px; font-weight: 800; margin: 0 0 14px; color: var(--sh-navy);">{{ translate('Share_this_article') }}</h2>
                             @include('web-views.seafood.partials._blog-share', ['blogShareUrl' => $blogShareUrl])
                         </footer>
 
@@ -96,7 +96,7 @@
                 @if(count($popularBlogList) > 0)
                     <section style="margin-top: clamp(44px, 6vw, 72px);" aria-labelledby="sf-popular-articles-title">
                         <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 20px;">
-                            <h2 id="sf-popular-articles-title" style="font-family: Cairo, sans-serif; font-size: clamp(19px, 2.4vw, 24px); font-weight: 800; margin: 0; color: #0B2C3F;">{{ translate('Popular_articles') }}</h2>
+                            <h2 id="sf-popular-articles-title" style="font-family: var(--sh-font-display); font-size: clamp(19px, 2.4vw, 24px); font-weight: 800; margin: 0; color: var(--sh-navy);">{{ translate('Popular_articles') }}</h2>
                             <a href="{{ route('frontend.blog.popular-blog') }}" class="sf-text-link" style="display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;">
                                 {{ translate('See_more') }}
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -114,7 +114,7 @@
             </section>
         </main>
 
-        <div style="background: #F4FAFB; border-top: 1px solid #E4EFF1; padding-top: clamp(44px, 7vw, 76px);">
+        <div style="background: var(--sh-mist); border-top: 1px solid var(--sh-line); padding-top: clamp(44px, 7vw, 76px);">
             @include('web-views.seafood.partials._help-links')
         </div>
 

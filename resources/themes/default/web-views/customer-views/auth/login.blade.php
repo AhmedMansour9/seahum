@@ -49,13 +49,13 @@
                      style="max-width: {{ $multiColumn ? '900px' : '520px' }}; margin: 0 auto; padding: clamp(24px, 4vw, 40px);">
 
                     <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; margin-bottom: clamp(24px, 3vw, 32px);">
-                        <span style="width: 60px; height: 60px; border-radius: 20px; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center;">
+                        <span style="width: 60px; height: 60px; border-radius: 20px; background: var(--sh-sea-50); color: var(--sh-sea-700); display: grid; place-items: center;">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                         </span>
-                        <h1 style="font-family: Cairo, sans-serif; font-size: clamp(21px, 2.6vw, 26px); font-weight: 800; line-height: 1.4; margin: 6px 0 0; color: #0B2C3F;">
+                        <h1 style="font-family: var(--sh-font-display); font-size: clamp(21px, 2.6vw, 26px); font-weight: 800; line-height: 1.4; margin: 6px 0 0; color: var(--sh-navy);">
                             {{ translate('sign_in') }}
                         </h1>
-                        <p style="font-size: 14.5px; line-height: 1.8; color: #6E8C99; margin: 0; max-width: 380px; text-wrap: pretty;">
+                        <p style="font-size: 14.5px; line-height: 1.8; color: var(--sh-muted); margin: 0; max-width: 380px; text-wrap: pretty;">
                             {{ translate('sign_in_to_track_your_orders_and_check_out_faster') }}
                         </p>
                     </div>
@@ -149,10 +149,10 @@
 
                         @if ($multiColumn)
                             <div style="display: flex; flex-direction: column; gap: 14px; min-width: 0;">
-                                <div style="display: flex; align-items: center; gap: 12px; color: #6E8C99; font-size: 13.5px;">
-                                    <span style="height: 1px; background: #E4EFF1; flex: 1;"></span>
+                                <div style="display: flex; align-items: center; gap: 12px; color: var(--sh-muted); font-size: 13.5px;">
+                                    <span style="height: 1px; background: var(--sh-line); flex: 1;"></span>
                                     <span>{{ translate('Or Sign in with') }}</span>
-                                    <span style="height: 1px; background: #E4EFF1; flex: 1;"></span>
+                                    <span style="height: 1px; background: var(--sh-line); flex: 1;"></span>
                                 </div>
 
                                 @if ($customerSocialLogin)
@@ -183,7 +183,7 @@
                         @endif
                     </div>
 
-                    <p style="text-align: center; font-size: 14.5px; color: #6E8C99; margin: clamp(22px, 3vw, 30px) 0 0;">
+                    <p style="text-align: center; font-size: 14.5px; color: var(--sh-muted); margin: clamp(22px, 3vw, 30px) 0 0;">
                         {{ translate('Enjoy_New_experience') }}
                         <a class="sf-text-link" href="{{ route('customer.auth.sign-up') }}">{{ translate('sign_up') }}</a>
                     </p>

@@ -34,21 +34,21 @@
 
         @if($orderSuccessIds)
             <div style="max-width: 1240px; margin: 0 auto; padding: 20px 20px 0;">
-                <div style="border-radius: 20px; background: #ECF8F8; border: 1px solid #CFE9EA; padding: 22px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-                    <span style="width: 46px; height: 46px; border-radius: 50%; background: #17B0A7; color: #FFFFFF; display: grid; place-items: center; flex-shrink: 0;">
+                <div style="border-radius: 20px; background: var(--sh-sea-50); border: 1px solid var(--sh-sea-100); padding: 22px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+                    <span style="width: 46px; height: 46px; border-radius: 50%; background: var(--sh-sea); color: #FFFFFF; display: grid; place-items: center; flex-shrink: 0;">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
                     </span>
                     <span style="display: flex; flex-direction: column; gap: 6px;">
-                        <strong style="font-family: Cairo, sans-serif; font-size: 18px; color: #0B2C3F;">
+                        <strong style="font-family: var(--sh-font-display); font-size: 18px; color: var(--sh-navy);">
                             {{ $isNewCustomerInSession ? translate('Order_placed_&_Account_Created_Successfully') : translate('thank_you_for_your_purchase') }}
                         </strong>
-                        <span style="font-size: 14.5px; color: #45677A;">
+                        <span style="font-size: 14.5px; color: var(--sh-ink-2);">
                             {{ count($orderSuccessIds) > 1 ? translate('Order IDs') : translate('Order ID') }}:
                             <span style="direction: ltr; font-weight: 700;">{{ implode(', ', $orderSuccessIds) }}</span>
                         </span>
                     </span>
                     <a href="{{ auth('customer')->check() ? route('account-oder') : route('track-order.index') }}" class="sf-btn-primary"
-                       style="margin-inline-start: auto; display: inline-flex; align-items: center; height: 44px; padding: 0 22px; border-radius: 13px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 700; font-size: 15px;">
+                       style="margin-inline-start: auto; display: inline-flex; align-items: center; height: 44px; padding: 0 22px; border-radius: 13px; background: var(--sh-action); color: #FFFFFF; font-family: var(--sh-font-display); font-weight: 700; font-size: 15px;">
                         {{ translate('track_your_order') }}
                     </a>
                 </div>
@@ -59,37 +59,37 @@
 
         @include('web-views.seafood.partials._header', ['isHomePage' => true, 'activeNavKey' => 'home'])
 
-        <section id="home" style="position: relative; background: #04202F; color: #FFFFFF; overflow: hidden;">
+        <section id="home" style="position: relative; background: var(--sh-abyss); color: #FFFFFF; overflow: hidden;">
             <img src="{{ dynamicAsset(path: 'public/assets/front-end/img/seafood/hero-bg.jpg') }}"
                  alt="{{ translate('fresh_fish_and_seafood') }}"
                  style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; filter: saturate(1.25) contrast(1.12) brightness(1.04);">
-            <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 46%, rgba(4,26,38,.62) 0%, rgba(4,26,38,.34) 48%, rgba(4,26,38,.1) 100%);"></div>
-            <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 44%, rgba(4,26,38,.5) 0%, transparent 58%); mix-blend-mode: multiply;"></div>
+            <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 46%, rgba(var(--sh-abyss-rgb), .62) 0%, rgba(var(--sh-abyss-rgb), .34) 48%, rgba(var(--sh-abyss-rgb), .1) 100%);"></div>
+            <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 44%, rgba(var(--sh-abyss-rgb), .5) 0%, transparent 58%); mix-blend-mode: multiply;"></div>
 
             <div class="sf-hero-inner" style="position: relative; max-width: 1240px; margin: 0 auto; padding: clamp(64px, 9vw, 140px) 20px; display: flex; justify-content: center;">
                 <div style="max-width: 700px; text-align: center; display: flex; flex-direction: column; align-items: center;">
-                    <span style="display: inline-flex; align-items: center; gap: 8px; background: rgba(23,176,167,.18); border: 1px solid rgba(127,227,220,.4); color: #9FEEE7; padding: 7px 15px; border-radius: 999px; font-size: 13.5px; font-weight: 700;">
-                        <span style="width: 7px; height: 7px; border-radius: 50%; background: #7FE3DC; display: inline-block;"></span>
+                    <span style="display: inline-flex; align-items: center; gap: 8px; background: rgba(var(--sh-sea-rgb), .18); border: 1px solid rgba(var(--sh-sea-300-rgb), .4); color: var(--sh-sea-200); padding: 7px 15px; border-radius: 999px; font-size: 13.5px; font-weight: 700;">
+                        <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--sh-grad-catch); display: inline-block;"></span>
                         {{ translate('todays_catch_delivered_to_your_door_tomorrow') }}
                     </span>
 
-                    <h1 style="font-family: Cairo, sans-serif; font-weight: 900; font-size: clamp(29px, 5.4vw, 60px); line-height: 1.2; margin: 18px 0 0; letter-spacing: -.5px; text-wrap: balance;">
+                    <h1 style="font-family: var(--sh-font-display); font-weight: 900; font-size: clamp(29px, 5.4vw, 60px); line-height: 1.2; margin: 18px 0 0; letter-spacing: -.5px; text-wrap: balance;">
                         {{ translate('fresh_from_the_sea') }}<br>
-                        <span style="color: #7FE3DC;">{{ translate('to_your_doorstep') }}</span>
+                        <span style="color: var(--sh-salmon);">{{ translate('to_your_doorstep') }}</span>
                     </h1>
 
-                    <p style="font-size: clamp(15.5px, 1.5vw, 18.5px); line-height: 1.95; color: #C6DDE6; margin: 18px auto 0; max-width: 600px; text-wrap: pretty;">
+                    <p style="font-size: clamp(15.5px, 1.5vw, 18.5px); line-height: 1.95; color: var(--sh-on-dark); margin: 18px auto 0; max-width: 600px; text-wrap: pretty;">
                         {{ translate('we_pick_the_finest_fish_shrimp_and_crab_from_the_boats_every_morning_and_deliver_them_to_you_just_as_they_are_chilled_and_tightly_sealed_the_next_day') }}
                     </p>
 
                     <div class="sf-hero-actions" style="display: flex; align-self: stretch; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 28px;">
                         <a href="#products" class="sf-btn-primary"
-                           style="display: inline-flex; align-items: center; justify-content: center; gap: 9px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 800; font-size: 16px; padding: 16px 30px; border-radius: 14px; box-shadow: 0 16px 32px -14px rgba(23,176,167,1);">
+                           style="display: inline-flex; align-items: center; justify-content: center; gap: 9px; background: var(--sh-action); color: #FFFFFF; font-family: var(--sh-font-display); font-weight: 800; font-size: 16px; padding: 16px 30px; border-radius: 14px; box-shadow: var(--sh-shadow-cta);">
                             {{ translate('shop_now') }}
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6 8 12l6 6"></path></svg>
                         </a>
                         <a href="#deal" class="sf-btn-ghost"
-                           style="display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 1.5px solid rgba(255,255,255,.32); color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 700; font-size: 16px; padding: 16px 28px; border-radius: 14px;">
+                           style="display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 1.5px solid rgba(255,255,255,.32); color: #FFFFFF; font-family: var(--sh-font-display); font-weight: 700; font-size: 16px; padding: 16px 28px; border-radius: 14px;">
                             {{ translate('see_todays_offers') }}
                         </a>
                     </div>
@@ -121,21 +121,21 @@
 
                     <div class="sf-hero-facts" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 12px; margin-top: 32px; width: 100%;">
                         <div style="display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.2); border-radius: 16px; padding: 13px 18px; backdrop-filter: blur(8px);">
-                            <span style="flex-shrink: 0; width: 38px; height: 38px; border-radius: 11px; background: rgba(23,176,167,.24); display: grid; place-items: center; color: #7FE3DC;">
+                            <span style="flex-shrink: 0; width: 38px; height: 38px; border-radius: 11px; background: rgba(var(--sh-sea-rgb), .24); display: grid; place-items: center; color: var(--sh-sea-300);">
                                 <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h11v9H2z"></path><path d="M13 10h4l3 3v3h-7z"></path><circle cx="6" cy="18" r="1.6"></circle><circle cx="17" cy="18" r="1.6"></circle></svg>
                             </span>
                             <span style="display: flex; flex-direction: column; gap: 2px; line-height: 1.35; text-align: start;">
-                                <strong style="font-family: Cairo, sans-serif; font-size: 15px; color: #FFFFFF;">{{ translate('next_day_delivery') }}</strong>
-                                <span style="font-size: 12.5px; color: #A9C7D3;">{{ translate('order_today_receive_tomorrow') }}</span>
+                                <strong style="font-family: var(--sh-font-display); font-size: 15px; color: #FFFFFF;">{{ translate('next_day_delivery') }}</strong>
+                                <span style="font-size: 12.5px; color: var(--sh-on-dark-2);">{{ translate('order_today_receive_tomorrow') }}</span>
                             </span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.2); border-radius: 16px; padding: 13px 18px; backdrop-filter: blur(8px);">
-                            <span style="flex-shrink: 0; width: 38px; height: 38px; border-radius: 11px; background: rgba(23,176,167,.24); display: grid; place-items: center; color: #7FE3DC;">
+                            <span style="flex-shrink: 0; width: 38px; height: 38px; border-radius: 11px; background: rgba(var(--sh-sea-rgb), .24); display: grid; place-items: center; color: var(--sh-sea-300);">
                                 <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13a8 8 0 1 1-8-8"></path><path d="M12 5V2"></path><path d="m8.5 12.5 3 2.5 4-5"></path></svg>
                             </span>
                             <span style="display: flex; flex-direction: column; gap: 2px; line-height: 1.35; text-align: start;">
-                                <strong style="font-family: Cairo, sans-serif; font-size: 15px; color: #FFFFFF;">{{ translate('chilled_and_tightly_sealed') }}</strong>
-                                <span style="font-size: 12.5px; color: #A9C7D3;">{{ translate('full_cold_chain_to_your_door') }}</span>
+                                <strong style="font-family: var(--sh-font-display); font-size: 15px; color: #FFFFFF;">{{ translate('chilled_and_tightly_sealed') }}</strong>
+                                <span style="font-size: 12.5px; color: var(--sh-on-dark-2);">{{ translate('full_cold_chain_to_your_door') }}</span>
                             </span>
                         </div>
                     </div>
@@ -144,14 +144,14 @@
         </section>
 
         @if($shopProducts->count() > 0)
-            <div style="background: #17B0A7; color: #FFFFFF; overflow: hidden; padding: 13px 0; position: relative;">
+            <div style="background: var(--sh-sea); color: #FFFFFF; overflow: hidden; padding: 13px 0; position: relative;">
                 <div class="sf-ticker-track" style="display: flex; width: max-content;">
                     @for($tickerPass = 0; $tickerPass < 2; $tickerPass++)
                         <div style="display: flex; align-items: center; flex-shrink: 0;">
                             @foreach($tickerProducts as $product)
                                 <div class="sf-ticker-item" style="display: flex; align-items: center; gap: 9px; padding: 0 26px; border-inline-end: 1px solid rgba(255,255,255,.32); white-space: nowrap;">
-                                    <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 800;">{{ Str::limit($product['name'], 28) }}</strong>
-                                    <strong style="font-family: Cairo, sans-serif; font-size: 17px; font-weight: 800;">@include('web-views.seafood.partials._price', ['amount' => getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value'), 'symbolSize' => '13px', 'symbolColor' => 'rgba(255,255,255,.78)'])</strong>
+                                    <strong style="font-family: var(--sh-font-display); font-size: 17px; font-weight: 800;">{{ Str::limit($product['name'], 28) }}</strong>
+                                    <strong style="font-family: var(--sh-font-display); font-size: 17px; font-weight: 800;">@include('web-views.seafood.partials._price', ['amount' => getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value'), 'symbolSize' => '13px', 'symbolColor' => 'rgba(255,255,255,.78)'])</strong>
                                 </div>
                             @endforeach
                         </div>
@@ -163,8 +163,8 @@
         @if($categories->count() > 0)
             <section id="categories" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(30px, 4.5vw, 54px) 20px 0;">
                 <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
-                    <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(24px, 3vw, 32px); margin: 0; color: #0B2C3F;">{{ translate('categories') }}</h2>
-                    <a href="{{ route('categories') }}" class="sf-section-link" style="font-family: Cairo, sans-serif; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; gap: 7px;">
+                    <h2 style="font-family: var(--sh-font-display); font-weight: 800; font-size: clamp(24px, 3vw, 32px); margin: 0; color: var(--sh-navy);">{{ translate('categories') }}</h2>
+                    <a href="{{ route('categories') }}" class="sf-section-link" style="font-family: var(--sh-font-display); font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; gap: 7px;">
                         {{ translate('view_all_categories') }}
                         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6 8 12l6 6"></path></svg>
                     </a>
@@ -182,10 +182,10 @@
             <section id="products" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(44px, 7vw, 86px) 20px 0;">
                 <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 30px;">
                     <div>
-                        <span style="font-size: 13.5px; font-weight: 700; color: #0E8E88; letter-spacing: .6px;">{{ translate('our_customers_picks') }}</span>
-                        <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(26px, 3.4vw, 38px); margin: 8px 0 0; color: #0B2C3F;">{{ translate('best_selling_this_week') }}</h2>
+                        <span style="font-size: 13.5px; font-weight: 700; color: var(--sh-sea-700); letter-spacing: .6px;">{{ translate('our_customers_picks') }}</span>
+                        <h2 style="font-family: var(--sh-font-display); font-weight: 800; font-size: clamp(26px, 3.4vw, 38px); margin: 8px 0 0; color: var(--sh-navy);">{{ translate('best_selling_this_week') }}</h2>
                     </div>
-                    <span style="font-size: 14px; color: #6E8C99; max-width: 380px; line-height: 1.8;">{{ translate('prices_are_updated_daily_and_weight_is_calculated_when_the_order_is_packed') }}</span>
+                    <span style="font-size: 14px; color: var(--sh-muted); max-width: 380px; line-height: 1.8;">{{ translate('prices_are_updated_daily_and_weight_is_calculated_when_the_order_is_packed') }}</span>
                 </div>
 
                 <div class="sf-product-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px;">
@@ -200,11 +200,11 @@
             <section id="shop" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(44px, 7vw, 86px) 20px 0;">
                 <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 22px;">
                     <div>
-                        <span style="font-size: 13.5px; font-weight: 700; color: #0E8E88; letter-spacing: .6px;">{{ translate('shop_by_category') }}</span>
-                        <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(26px, 3.4vw, 38px); margin: 8px 0 0; color: #0B2C3F;">{{ translate('all_products') }}</h2>
+                        <span style="font-size: 13.5px; font-weight: 700; color: var(--sh-sea-700); letter-spacing: .6px;">{{ translate('shop_by_category') }}</span>
+                        <h2 style="font-family: var(--sh-font-display); font-weight: 800; font-size: clamp(26px, 3.4vw, 38px); margin: 8px 0 0; color: var(--sh-navy);">{{ translate('all_products') }}</h2>
                     </div>
                     @php($activeShopProductsCount = $shopProducts->where('category_id', $activeShopCategoryId)->count())
-                    <span id="seafood-shop-count" style="font-size: 14px; color: #6E8C99;"
+                    <span id="seafood-shop-count" style="font-size: 14px; color: var(--sh-muted);"
                           data-showing-label="{{ translate('showing') }}" data-of-label="{{ translate('of') }}" data-products-label="{{ translate('products') }}">
                         {{ translate('showing') }} {{ min($shopInitialVisibleProducts, $activeShopProductsCount) }} {{ translate('of') }} {{ $activeShopProductsCount }} {{ translate('products') }}
                     </span>
@@ -241,18 +241,18 @@
 
         @if(isset($dealOfTheDay->product))
             <section id="deal" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(44px, 7vw, 86px) 20px 0;">
-                <div style="position: relative; overflow: hidden; border-radius: 26px; background: linear-gradient(215deg, #0D3B58, #062A3E 55%, #0E6B72); color: #FFFFFF;">
-                    <div style="position: absolute; inset-inline-start: -120px; top: -140px; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(23,176,167,.35), transparent 70%);"></div>
+                <div style="position: relative; overflow: hidden; border-radius: 26px; background: var(--sh-grad-deep); color: #FFFFFF;">
+                    <div style="position: absolute; inset-inline-start: -120px; top: -140px; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(var(--sh-sea-rgb), .35), transparent 70%);"></div>
                     <div style="position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); align-items: stretch;">
                         <div style="padding: clamp(30px, 4vw, 52px);">
-                            <span style="display: inline-block; background: #F2A43A; color: #3A2400; font-family: Cairo, sans-serif; font-weight: 800; font-size: 13px; padding: 6px 14px; border-radius: 999px; white-space: nowrap;">
+                            <span style="display: inline-block; background: var(--sh-gold); color: #3A2400; font-family: var(--sh-font-display); font-weight: 800; font-size: 13px; padding: 6px 14px; border-radius: 999px; white-space: nowrap;">
                                 {{ translate('deal_of_the_day') }}
                             </span>
-                            <h2 style="font-family: Cairo, sans-serif; font-weight: 900; font-size: clamp(27px, 3.8vw, 42px); line-height: 1.3; margin: 18px 0 0; text-wrap: balance;">
+                            <h2 style="font-family: var(--sh-font-display); font-weight: 900; font-size: clamp(27px, 3.8vw, 42px); line-height: 1.3; margin: 18px 0 0; text-wrap: balance;">
                                 {{ Str::limit($dealOfTheDay->product['name'], 60) }}<br>
-                                <span style="color: #7FE3DC;">@include('web-views.seafood.partials._price', ['amount' => getProductPriceByType(product: $dealOfTheDay->product, type: 'discounted_unit_price', result: 'value'), 'symbolSize' => '.55em', 'symbolColor' => 'rgba(127,227,220,.8)'])</span>
+                                <span style="color: var(--sh-salmon);">@include('web-views.seafood.partials._price', ['amount' => getProductPriceByType(product: $dealOfTheDay->product, type: 'discounted_unit_price', result: 'value'), 'symbolSize' => '.55em', 'symbolColor' => 'rgba(var(--sh-salmon-rgb), .8)'])</span>
                             </h2>
-                            <p style="color: #C6DDE6; font-size: 16px; line-height: 1.95; margin: 14px 0 0; max-width: 460px;">
+                            <p style="color: var(--sh-on-dark); font-size: 16px; line-height: 1.95; margin: 14px 0 0; max-width: 460px;">
                                 {{ translate('fresh_from_todays_catch_available_while_todays_stock_lasts') }}
                             </p>
 
@@ -260,15 +260,15 @@
                                 <div id="seafood-countdown" data-end-date="{{ $flashDealEndDate }}" style="display: flex; gap: 10px; margin-top: 26px;">
                                     @foreach(['hours' => translate('hour'), 'minutes' => translate('minute'), 'seconds' => translate('second')] as $unit => $label)
                                         <div class="sf-countdown-box" style="flex: 1 1 74px; min-width: 0; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); border-radius: 14px; padding: 10px 6px; text-align: center;">
-                                            <div data-countdown-unit="{{ $unit }}" style="font-family: Cairo, sans-serif; font-size: 25px; font-weight: 800; color: #FFFFFF; direction: ltr;">00</div>
-                                            <div style="font-size: 12px; color: #A9C7D3; margin-top: 2px;">{{ $label }}</div>
+                                            <div data-countdown-unit="{{ $unit }}" style="font-family: var(--sh-font-display); font-size: 25px; font-weight: 800; color: #FFFFFF; direction: ltr;">00</div>
+                                            <div style="font-size: 12px; color: var(--sh-on-dark-2); margin-top: 2px;">{{ $label }}</div>
                                         </div>
                                     @endforeach
                                 </div>
                             @endif
 
                             <a href="{{ route('product', $dealOfTheDay->product['slug']) }}" class="sf-btn-primary"
-                               style="display: inline-flex; align-items: center; gap: 9px; margin-top: 28px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 800; font-size: 16px; padding: 15px 32px; border-radius: 14px; box-shadow: 0 16px 32px -14px rgba(23,176,167,1);">
+                               style="display: inline-flex; align-items: center; gap: 9px; margin-top: 28px; background: var(--sh-action); color: #FFFFFF; font-family: var(--sh-font-display); font-weight: 800; font-size: 16px; padding: 15px 32px; border-radius: 14px; box-shadow: var(--sh-shadow-cta);">
                                 {{ translate('order_this_offer_now') }}
                             </a>
                         </div>
@@ -283,7 +283,7 @@
         @endif
 
         <section id="about" style="margin-top: clamp(52px, 7vw, 86px);">
-            <div style="background: #062A3E; padding: clamp(42px, 6.5vw, 84px) 0;">
+            <div style="background: var(--sh-abyss); padding: clamp(42px, 6.5vw, 84px) 0;">
                 <div class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: clamp(30px, 4.5vw, 62px); align-items: start;">
                     <div style="position: relative;">
                         <div style="border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 34px 60px -30px rgba(0,0,0,.7);">
@@ -292,17 +292,17 @@
                                  style="width: 100%; height: clamp(340px, 44vw, 560px); object-fit: cover; display: block;">
                         </div>
                         <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-top: 14px;">
-                            <span style="font-size: 13px; font-weight: 700; color: #9FBDCB;">{{ translate('from_this_mornings_catch') }}</span>
-                            <span style="width: 7px; height: 7px; border-radius: 50%; background: #17B0A7; display: inline-block; animation: pulseRing 2.4s infinite;"></span>
+                            <span style="font-size: 13px; font-weight: 700; color: var(--sh-on-dark-3);">{{ translate('from_this_mornings_catch') }}</span>
+                            <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--sh-salmon); display: inline-block; animation: pulseRing 2.4s infinite;"></span>
                         </div>
                     </div>
 
                     <div>
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <span style="font-size: 13.5px; font-weight: 800; color: #7FE3DC; letter-spacing: .5px; white-space: nowrap;">{{ translate('why_us') }}</span>
-                            <span style="height: 2px; width: 46px; background: #17B0A7; display: inline-block;"></span>
+                            <span style="font-size: 13.5px; font-weight: 800; color: var(--sh-sea-300); letter-spacing: .5px; white-space: nowrap;">{{ translate('why_us') }}</span>
+                            <span class="sh-wave" aria-hidden="true"></span>
                         </div>
-                        <h2 style="font-family: Cairo, sans-serif; font-weight: 900; font-size: clamp(26px, 3.6vw, 42px); line-height: 1.3; margin: 14px 0 0; color: #FFFFFF; text-wrap: balance;">
+                        <h2 style="font-family: var(--sh-font-display); font-weight: 900; font-size: clamp(26px, 3.6vw, 42px); line-height: 1.3; margin: 14px 0 0; color: #FFFFFF; text-wrap: balance;">
                             {{ translate('everything_we_do_is_about_freshness_and_trust') }}
                         </h2>
 
@@ -313,10 +313,10 @@
                                 ['title' => translate('not_happy_we_make_it_right'), 'text' => translate('if_your_order_arrives_below_the_expected_quality_message_us_on_whatsapp_and_we_will_make_up_for_it_on_your_next_order')],
                             ] as $index => $promise)
                                 <div style="display: flex; align-items: flex-start; gap: 18px; padding: 24px 0; border-top: 1px solid rgba(255,255,255,.1);">
-                                    <span style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; background: #17B0A7; color: #062A3E; display: grid; place-items: center; font-family: Cairo, sans-serif; font-size: 19px; font-weight: 800; box-shadow: 0 12px 26px -12px rgba(23,176,167,.9);">{{ $index + 1 }}</span>
+                                    <span style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; background: var(--sh-salmon); color: var(--sh-abyss); display: grid; place-items: center; font-family: var(--sh-font-display); font-size: 19px; font-weight: 800; box-shadow: 0 12px 26px -12px rgba(var(--sh-salmon-rgb), .9);">{{ $index + 1 }}</span>
                                     <span style="display: flex; flex-direction: column; gap: 8px;">
-                                        <strong style="font-family: Cairo, sans-serif; font-size: clamp(18px, 2vw, 21px); font-weight: 800; color: #FFFFFF;">{{ $promise['title'] }}</strong>
-                                        <span style="font-size: 15px; line-height: 1.9; color: #A9C7D3; text-wrap: pretty;">{{ $promise['text'] }}</span>
+                                        <strong style="font-family: var(--sh-font-display); font-size: clamp(18px, 2vw, 21px); font-weight: 800; color: #FFFFFF;">{{ $promise['title'] }}</strong>
+                                        <span style="font-size: 15px; line-height: 1.9; color: var(--sh-on-dark-2); text-wrap: pretty;">{{ $promise['text'] }}</span>
                                     </span>
                                 </div>
                             @endforeach
@@ -330,12 +330,12 @@
             <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-bottom: 40px;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 11px;">
-                        <span style="height: 2px; width: 40px; background: #17B0A7; display: inline-block;"></span>
-                        <span style="font-size: 13.5px; font-weight: 800; color: #0E8E88; letter-spacing: .5px;">{{ translate('easy_and_fast') }}</span>
+                        <span class="sh-wave" aria-hidden="true"></span>
+                        <span style="font-size: 13.5px; font-weight: 800; color: var(--sh-sea-700); letter-spacing: .5px;">{{ translate('easy_and_fast') }}</span>
                     </div>
-                    <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(26px, 3.4vw, 38px); margin: 12px 0 0; color: #0B2C3F;">{{ translate('how_to_order_in_4_steps') }}</h2>
+                    <h2 style="font-family: var(--sh-font-display); font-weight: 800; font-size: clamp(26px, 3.4vw, 38px); margin: 12px 0 0; color: var(--sh-navy);">{{ translate('how_to_order_in_4_steps') }}</h2>
                 </div>
-                <span style="display: inline-flex; align-items: center; gap: 9px; background: #ECF8F8; color: #0E8E88; font-family: Cairo, sans-serif; font-weight: 700; font-size: 14px; padding: 10px 18px; border-radius: 999px; white-space: nowrap;">
+                <span style="display: inline-flex; align-items: center; gap: 9px; background: var(--sh-sea-50); color: var(--sh-sea-700); font-family: var(--sh-font-display); font-weight: 700; font-size: 14px; padding: 10px 18px; border-radius: 999px; white-space: nowrap;">
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5V12l3 2"></path></svg>
                     {{ translate('from_order_to_delivery_the_next_day') }}
                 </span>
@@ -349,26 +349,26 @@
                     ['title' => translate('receive_your_order_fresh'), 'text' => translate('your_order_arrives_chilled_and_tightly_packed_the_next_day'), 'icon' => '<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5Z"/><path d="M3 7.5 12 12l9-4.5"/><path d="M12 12v9"/>'],
                 ] as $index => $step)
                     <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px;">
-                        <span style="width: 56px; height: 56px; border-radius: 50%; background: #FFFFFF; border: 2px solid #17B0A7; color: #0B2C3F; display: grid; place-items: center; font-family: Cairo, sans-serif; font-size: 20px; font-weight: 800; box-shadow: 0 10px 24px -14px rgba(23,176,167,.9);">{{ $index + 1 }}</span>
-                        <div class="sf-lift" style="flex: 1; width: 100%; background: #FFFFFF; border: 1px solid #E4EFF1; border-radius: 20px; padding: 24px 20px 26px; box-shadow: 0 14px 34px -28px rgba(11,44,63,.9);">
-                            <span style="width: 46px; height: 46px; border-radius: 14px; background: #ECF8F8; color: #0E8E88; display: inline-grid; place-items: center;">
+                        <span style="width: 56px; height: 56px; border-radius: 50%; background: #FFFFFF; border: 2px solid var(--sh-sea); color: var(--sh-navy); display: grid; place-items: center; font-family: var(--sh-font-display); font-size: 20px; font-weight: 800; box-shadow: 0 10px 24px -14px rgba(var(--sh-sea-rgb), .9);">{{ $index + 1 }}</span>
+                        <div class="sf-lift" style="flex: 1; width: 100%; background: #FFFFFF; border: 1px solid var(--sh-line); border-radius: 20px; padding: 24px 20px 26px; box-shadow: 0 14px 34px -28px rgba(var(--sh-navy-rgb), .9);">
+                            <span style="width: 46px; height: 46px; border-radius: 14px; background: var(--sh-sea-50); color: var(--sh-sea-700); display: inline-grid; place-items: center;">
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">{!! $step['icon'] !!}</svg>
                             </span>
-                            <h3 style="font-family: Cairo, sans-serif; font-size: 17.5px; font-weight: 700; margin: 16px 0 8px; color: #0B2C3F;">{{ $step['title'] }}</h3>
-                            <p style="font-size: 14.5px; color: #6E8C99; line-height: 1.85; margin: 0; text-wrap: pretty;">{{ $step['text'] }}</p>
+                            <h3 style="font-family: var(--sh-font-display); font-size: 17.5px; font-weight: 700; margin: 16px 0 8px; color: var(--sh-navy);">{{ $step['title'] }}</h3>
+                            <p style="font-size: 14.5px; color: var(--sh-muted); line-height: 1.85; margin: 0; text-wrap: pretty;">{{ $step['text'] }}</p>
                         </div>
                     </div>
                 @endforeach
             </div>
         </section>
 
-        <section id="faq" style="background: #062A3E; margin-top: clamp(52px, 7vw, 86px); padding: clamp(42px, 6.5vw, 84px) 0;">
+        <section id="faq" style="background: var(--sh-abyss); margin-top: clamp(52px, 7vw, 86px); padding: clamp(42px, 6.5vw, 84px) 0;">
             <div class="sf-gutter" style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
                 <div style="display: flex; align-items: center; gap: 11px;">
-                    <span style="height: 2px; width: 40px; background: #17B0A7; display: inline-block;"></span>
-                    <span style="font-size: 13.5px; font-weight: 800; color: #7FE3DC; letter-spacing: .5px;">{{ translate('faq') }}</span>
+                    <span class="sh-wave" aria-hidden="true"></span>
+                    <span style="font-size: 13.5px; font-weight: 800; color: var(--sh-sea-300); letter-spacing: .5px;">{{ translate('faq') }}</span>
                 </div>
-                <h2 style="font-family: Cairo, sans-serif; font-weight: 900; font-size: clamp(26px, 3.6vw, 40px); margin: 14px 0 34px; color: #FFFFFF;">{{ translate('questions_we_get_a_lot') }}</h2>
+                <h2 style="font-family: var(--sh-font-display); font-weight: 900; font-size: clamp(26px, 3.6vw, 40px); margin: 14px 0 34px; color: #FFFFFF;">{{ translate('questions_we_get_a_lot') }}</h2>
 
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     @foreach([
@@ -381,13 +381,13 @@
                     ] as $index => $faq)
                         <div class="sf-faq-item" style="border-radius: 16px; overflow: hidden; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.1); transition: background .25s, border-color .25s;">
                             <button type="button" class="sf-faq-toggle"
-                                    style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 14px; background: transparent; border: none; padding: 20px 22px; cursor: pointer; text-align: start; font-family: Cairo, sans-serif; font-size: clamp(16px, 1.7vw, 18px); font-weight: 700; color: #FFFFFF;">
+                                    style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 14px; background: transparent; border: none; padding: 20px 22px; cursor: pointer; text-align: start; font-family: var(--sh-font-display); font-size: clamp(16px, 1.7vw, 18px); font-weight: 700; color: #FFFFFF;">
                                 <span>{{ $faq['question'] }}</span>
-                                <span class="sf-faq-icon" style="flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,.08); color: #7FE3DC; display: grid; place-items: center; transition: transform .3s, background .25s;">
+                                <span class="sf-faq-icon" style="flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,.08); color: var(--sh-sea-300); display: grid; place-items: center; transition: transform .3s, background .25s;">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
                                 </span>
                             </button>
-                            <p class="sf-faq-answer" style="display: none; margin: 0; padding: 0 22px 22px; font-size: 15px; line-height: 1.95; color: #A9C7D3; text-wrap: pretty;">{{ $faq['answer'] }}</p>
+                            <p class="sf-faq-answer" style="display: none; margin: 0; padding: 0 22px 22px; font-size: 15px; line-height: 1.95; color: var(--sh-on-dark-2); text-wrap: pretty;">{{ $faq['answer'] }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -395,33 +395,33 @@
         </section>
 
         <section id="whatsapp" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(44px, 7vw, 86px) 20px 0;">
-            <div style="border-radius: 26px; background: linear-gradient(120deg, #ECF8F8, #E3F2F6); border: 1px solid #CFE9EA; padding: clamp(32px, 4.5vw, 58px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 28px; align-items: center;">
+            <div style="border-radius: 26px; background: var(--sh-grad-shallows); border: 1px solid var(--sh-sea-100); padding: clamp(32px, 4.5vw, 58px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 28px; align-items: center;">
                 <div>
-                    <h2 style="font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(25px, 3.2vw, 36px); margin: 0 0 12px; color: #0B2C3F; text-wrap: balance;">{{ translate('need_help_choosing_your_order') }}</h2>
-                    <p style="font-size: 16px; color: #45677A; line-height: 1.95; margin: 0; max-width: 520px;">
+                    <h2 style="font-family: var(--sh-font-display); font-weight: 800; font-size: clamp(25px, 3.2vw, 36px); margin: 0 0 12px; color: var(--sh-navy); text-wrap: balance;">{{ translate('need_help_choosing_your_order') }}</h2>
+                    <p style="font-size: 16px; color: var(--sh-ink-2); line-height: 1.95; margin: 0; max-width: 520px;">
                         {{ translate('message_us_on_whatsapp_with_the_number_of_people_and_the_occasion_and_our_team_will_recommend_the_right_types_and_weights_then_deliver_the_next_day') }}
                     </p>
                 </div>
                 <div style="display: flex; flex-wrap: wrap; gap: 12px;">
                     <a href="{{ $whatsappLink }}" target="_blank"
-                       style="display: inline-flex; align-items: center; gap: 10px; background: #0E8E88; color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 800; font-size: 16.5px; padding: 16px 32px; border-radius: 14px; box-shadow: 0 18px 34px -16px rgba(14,142,136,1);">
+                       style="display: inline-flex; align-items: center; gap: 10px; background: var(--sh-sea-700); color: #FFFFFF; font-family: var(--sh-font-display); font-weight: 800; font-size: 16.5px; padding: 16px 32px; border-radius: 14px; box-shadow: 0 18px 34px -16px rgba(var(--sh-sea-700-rgb), 1);">
                         {{ translate('contact_us_on_whatsapp') }}
                     </a>
                     <a href="tel:{{ $storePhone }}"
-                       style="display: inline-flex; align-items: center; gap: 10px; background: #FFFFFF; color: #0B2C3F; border: 1.5px solid #CFE9EA; font-family: Cairo, sans-serif; font-weight: 700; font-size: 16.5px; padding: 16px 30px; border-radius: 14px;">
+                       style="display: inline-flex; align-items: center; gap: 10px; background: #FFFFFF; color: var(--sh-navy); border: 1.5px solid var(--sh-sea-100); font-family: var(--sh-font-display); font-weight: 700; font-size: 16.5px; padding: 16px 30px; border-radius: 14px;">
                         <span style="direction: ltr;">{{ $storePhone }}</span>
                     </a>
                 </div>
             </div>
         </section>
 
-        <section class="sf-gutter" style="position: relative; overflow: hidden; margin-top: clamp(52px, 7vw, 86px); background: #08222F; padding: clamp(56px, 9vw, 130px) 20px;">
-            <div style="position: absolute; inset-inline: 0; bottom: -190px; height: 380px; background: radial-gradient(ellipse at 50% 100%, rgba(23,176,167,.3), transparent 68%); pointer-events: none;"></div>
+        <section class="sf-gutter" style="position: relative; overflow: hidden; margin-top: clamp(52px, 7vw, 86px); background: var(--sh-abyss); padding: clamp(56px, 9vw, 130px) 20px;">
+            <div style="position: absolute; inset-inline: 0; bottom: -190px; height: 380px; background: radial-gradient(ellipse at 50% 100%, rgba(var(--sh-sea-rgb), .3), transparent 68%); pointer-events: none;"></div>
             <div style="position: relative; max-width: 780px; margin: 0 auto; text-align: center;">
-                <h2 style="font-family: Cairo, sans-serif; font-weight: 900; font-size: clamp(28px, 4.4vw, 50px); line-height: 1.28; margin: 0; color: #FFFFFF; text-wrap: balance;">{{ translate('tomorrow_the_fish_is_on_your_table') }}</h2>
-                <p style="font-size: clamp(15px, 1.6vw, 17.5px); color: #9FBDCB; margin: 18px 0 0;">{{ translate('order_now_receive_tomorrow') }}</p>
+                <h2 style="font-family: var(--sh-font-display); font-weight: 900; font-size: clamp(28px, 4.4vw, 50px); line-height: 1.28; margin: 0; color: #FFFFFF; text-wrap: balance;">{{ translate('tomorrow_the_fish_is_on_your_table') }}</h2>
+                <p style="font-size: clamp(15px, 1.6vw, 17.5px); color: var(--sh-on-dark-3); margin: 18px 0 0;">{{ translate('order_now_receive_tomorrow') }}</p>
                 <a href="#products" class="sf-btn-primary"
-                   style="display: inline-flex; align-items: center; justify-content: center; margin-top: 34px; background: #17B0A7; color: #FFFFFF; font-family: Cairo, sans-serif; font-weight: 800; font-size: clamp(16px, 1.7vw, 18px); padding: 18px 44px; border-radius: 12px; box-shadow: 0 0 44px -4px rgba(23,176,167,.55);">
+                   style="display: inline-flex; align-items: center; justify-content: center; margin-top: 34px; background: var(--sh-action); color: #FFFFFF; font-family: var(--sh-font-display); font-weight: 800; font-size: clamp(16px, 1.7vw, 18px); padding: 18px 44px; border-radius: 12px; box-shadow: 0 0 44px -4px rgba(var(--sh-salmon-rgb), .55);">
                     {{ translate('order_now') }}
                 </a>
             </div>
@@ -479,7 +479,7 @@
 
             if (!isOpen) {
                 item.find('.sf-faq-answer').show();
-                item.css({'background': 'rgba(255,255,255,.07)', 'border-color': 'rgba(23,176,167,.5)'});
+                item.css({'background': 'rgba(255,255,255,.07)', 'border-color': 'rgba(var(--sh-sea-rgb), .5)'});
                 item.find('.sf-faq-icon').css('transform', 'rotate(180deg)');
             }
         });

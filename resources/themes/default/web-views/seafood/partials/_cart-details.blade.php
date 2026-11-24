@@ -85,9 +85,9 @@
                                 </span>
                             @endif
                         @elseif($isGroupPhysicalChecked && $groupShippingType != 'order_wise')
-                            <span class="sf-row-meta">{{ translate('total_shipping_cost') }}: <strong style="color: #0B2C3F;">@include('web-views.seafood.partials._price', ['amount' => $groupItemWiseShippingCost])</strong></span>
+                            <span class="sf-row-meta">{{ translate('total_shipping_cost') }}: <strong style="color: var(--sh-navy);">@include('web-views.seafood.partials._price', ['amount' => $groupItemWiseShippingCost])</strong></span>
                         @elseif($isGroupPhysicalChecked && $chosenShipping)
-                            <span class="sf-row-meta">{{ translate('total_shipping_cost') }}: <strong style="color: #0B2C3F;">@include('web-views.seafood.partials._price', ['amount' => $chosenShipping->shipping_cost])</strong></span>
+                            <span class="sf-row-meta">{{ translate('total_shipping_cost') }}: <strong style="color: var(--sh-navy);">@include('web-views.seafood.partials._price', ['amount' => $chosenShipping->shipping_cost])</strong></span>
                         @endif
                     </div>
                 </header>
@@ -193,7 +193,7 @@
                             @if($freeDeliveryStatus['amount_need'] <= 0)
                                 {{ translate('you_Get_Free_Delivery_Bonus') }}
                             @else
-                                <strong style="color: #0E8E88;">@include('web-views.seafood.partials._price', ['amount' => $freeDeliveryStatus['amount_need'], 'symbolColor' => 'currentColor'])</strong>
+                                <strong style="color: var(--sh-sea-700);">@include('web-views.seafood.partials._price', ['amount' => $freeDeliveryStatus['amount_need'], 'symbolColor' => 'currentColor'])</strong>
                                 {{ translate('add_more_for_free_delivery') }}
                             @endif
                         </span>
@@ -234,7 +234,7 @@
             <div class="sf-panel">
                 <label class="sf-form-label" for="order_note">
                     {{ translate('order_note') }}
-                    <span style="font-weight: 500; color: #6E8C99;">({{ translate('optional') }})</span>
+                    <span style="font-weight: 500; color: var(--sh-muted);">({{ translate('optional') }})</span>
                 </label>
                 <textarea class="sf-filter-field" id="order_note" name="order_note" style="min-height: 110px;"
                           placeholder="{{ translate('write_a_note_for_your_order') }}">{{ session('order_note') }}</textarea>

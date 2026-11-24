@@ -33,7 +33,7 @@
     <div class="sf-panel">
         <div style="display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap;">
             <img src="{{ getStorageImages(path: $ticketCustomer->image_full_url, type: 'avatar') }}" alt=""
-                 style="width: 52px; height: 52px; border-radius: 16px; object-fit: cover; border: 1px solid #E4EFF1; flex-shrink: 0;">
+                 style="width: 52px; height: 52px; border-radius: 16px; object-fit: cover; border: 1px solid var(--sh-line); flex-shrink: 0;">
             <div style="flex: 1 1 240px; min-width: 0; display: flex; flex-direction: column; gap: 8px;">
                 <h2 class="sf-row-title" style="-webkit-line-clamp: unset;">{{ $ticket->subject }}</h2>
                 <div class="sf-row-meta">

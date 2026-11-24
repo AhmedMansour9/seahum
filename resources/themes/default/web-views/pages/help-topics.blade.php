@@ -21,11 +21,11 @@
                 ])
 
                 <div style="text-align: center; margin-bottom: clamp(24px, 4vw, 38px);">
-                    <span style="display: inline-flex; align-items: center; gap: 9px; padding: 7px 14px; border-radius: 999px; background: #ECF8F8; border: 1px solid #BEE6E4; color: #0E8E88; font-family: Cairo, sans-serif; font-size: 12.5px; font-weight: 700;">
+                    <span style="display: inline-flex; align-items: center; gap: 9px; padding: 7px 14px; border-radius: 999px; background: var(--sh-sea-50); border: 1px solid var(--sh-sea-100); color: var(--sh-sea-700); font-family: var(--sh-font-display); font-size: 12.5px; font-weight: 700;">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9.6 9.4a2.5 2.5 0 0 1 4.8.8c0 1.7-2.4 2-2.4 3.4"></path><path d="M12 17.2h.01"></path></svg>
                         {{ translate('FAQ') }}
                     </span>
-                    <h1 style="font-family: Cairo, sans-serif; font-size: clamp(24px, 4vw, 36px); font-weight: 800; line-height: 1.3; margin: 14px 0 0; color: #0B2C3F; overflow-wrap: anywhere; text-wrap: pretty;">
+                    <h1 style="font-family: var(--sh-font-display); font-size: clamp(24px, 4vw, 36px); font-weight: 800; line-height: 1.3; margin: 14px 0 0; color: var(--sh-navy); overflow-wrap: anywhere; text-wrap: pretty;">
                         {{ translate('frequently_asked_question') }}
                     </h1>
                 </div>
@@ -56,7 +56,7 @@
             </section>
         </main>
 
-        <div style="background: #F4FAFB; border-top: 1px solid #E4EFF1; padding-top: clamp(44px, 7vw, 76px);">
+        <div style="background: var(--sh-mist); border-top: 1px solid var(--sh-line); padding-top: clamp(44px, 7vw, 76px);">
             @include('web-views.seafood.partials._help-links')
         </div>
 

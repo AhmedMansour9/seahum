@@ -14,7 +14,7 @@
 
     <section class="sf-panel">
         <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-            <span class="sf-shop-logo" style="width: 76px; height: 76px; border-width: 1px; border-color: #E4EFF1; box-shadow: none;">
+            <span class="sf-shop-logo" style="width: 76px; height: 76px; border-width: 1px; border-color: var(--sh-line); box-shadow: none;">
                 <img src="{{ getStorageImages(path: $vendorShopImage, type: 'shop') }}" alt="{{ $vendorShopName }}">
             </span>
             <div class="sf-shop-body">

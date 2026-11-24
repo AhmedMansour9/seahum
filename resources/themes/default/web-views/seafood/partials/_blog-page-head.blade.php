@@ -1,10 +1,10 @@
 {{-- Title + search box + category chips shared by the blog list and popular-blogs pages. $blogPageRouteName is the page's own route. --}}
 <form method="GET" action="{{ route($blogPageRouteName) }}" class="sf-page-head" role="search"
-      style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding: 16px 18px; background: #F4FAFB; border: 1px solid #E4EFF1; border-radius: 16px; margin-bottom: 18px;">
+      style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding: 16px 18px; background: var(--sh-mist); border: 1px solid var(--sh-line); border-radius: 16px; margin-bottom: 18px;">
     <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1 1 260px;">
-        <h1 style="font-family: Cairo, sans-serif; font-size: 20px; font-weight: 800; line-height: 1.4; margin: 0; color: #0B2C3F; text-wrap: pretty; overflow-wrap: anywhere;">{{ $blogPageTitle }}</h1>
+        <h1 style="font-family: var(--sh-font-display); font-size: 20px; font-weight: 800; line-height: 1.4; margin: 0; color: var(--sh-navy); text-wrap: pretty; overflow-wrap: anywhere;">{{ $blogPageTitle }}</h1>
         @if(!empty($blogPageSubtitle))
-            <span style="font-size: 14px; color: #45677A; overflow-wrap: anywhere;">{{ $blogPageSubtitle }}</span>
+            <span style="font-size: 14px; color: var(--sh-ink-2); overflow-wrap: anywhere;">{{ $blogPageSubtitle }}</span>
         @endif
     </div>
 
@@ -36,11 +36,11 @@
 @endif
 
 @if(request('search') || request('writer'))
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin: -6px 0 20px; font-size: 14px; color: #45677A;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin: -6px 0 20px; font-size: 14px; color: var(--sh-ink-2);">
         <span>
-            <strong style="color: #0B2C3F;"><bdi dir="ltr">{{ $blogResultTotal }}</bdi></strong> {{ translate('Search_Result_Found') }}
+            <strong style="color: var(--sh-navy);"><bdi dir="ltr">{{ $blogResultTotal }}</bdi></strong> {{ translate('Search_Result_Found') }}
             @if(request('writer'))
-                · {{ translate('By') }} <strong style="color: #0B2C3F;">{{ request('writer') }}</strong>
+                · {{ translate('By') }} <strong style="color: var(--sh-navy);">{{ request('writer') }}</strong>
             @endif
         </span>
         <a href="{{ route($blogPageRouteName, array_filter(['category' => request('category')])) }}" class="sf-text-link">{{ translate('Clear_Search') }}</a>

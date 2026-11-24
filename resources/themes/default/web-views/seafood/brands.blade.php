@@ -39,10 +39,10 @@
                 ])
 
                 <form method="GET" action="{{ route('brands') }}" class="sf-page-head"
-                      style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding: 16px 18px; background: #F4FAFB; border: 1px solid #E4EFF1; border-radius: 16px; margin-bottom: 24px;">
+                      style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding: 16px 18px; background: var(--sh-mist); border: 1px solid var(--sh-line); border-radius: 16px; margin-bottom: 24px;">
                     <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
-                        <h1 style="font-family: Cairo, sans-serif; font-size: 20px; font-weight: 800; line-height: 1.4; margin: 0; color: #0B2C3F; text-wrap: pretty;">{{ translate('brands') }}</h1>
-                        <span style="font-size: 14px; color: #45677A;">{{ translate('Find_your_favourite_brands_and_products') }}</span>
+                        <h1 style="font-family: var(--sh-font-display); font-size: 20px; font-weight: 800; line-height: 1.4; margin: 0; color: var(--sh-navy); text-wrap: pretty;">{{ translate('brands') }}</h1>
+                        <span style="font-size: 14px; color: var(--sh-ink-2);">{{ translate('Find_your_favourite_brands_and_products') }}</span>
                     </div>
 
                     <span class="sf-search-wrap sf-page-head-search" style="width: 280px;">
@@ -70,7 +70,7 @@
                                         <strong class="sf-brand-card-name">{{ $brand->name }}</strong>
                                         <span class="sf-brand-card-count"><bdi dir="ltr">{{ $brand->brand_products_count }}</bdi> {{ translate('products') }}</span>
                                     </span>
-                                    <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 10px; background: #ECF8F8; color: #0E8E88; display: grid; place-items: center; flex-shrink: 0;">
+                                    <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 10px; background: var(--sh-sea-50); color: var(--sh-sea-700); display: grid; place-items: center; flex-shrink: 0;">
                                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="{{ (session()->get('direction') ?? 'rtl') === 'rtl' ? 'M14 6 8 12l6 6' : 'M10 6l6 6-6 6' }}"></path>
                                         </svg>
@@ -93,7 +93,7 @@
             </section>
         </main>
 
-        <div style="background: #F4FAFB; border-top: 1px solid #E4EFF1; padding-top: clamp(44px, 7vw, 76px);">
+        <div style="background: var(--sh-mist); border-top: 1px solid var(--sh-line); padding-top: clamp(44px, 7vw, 76px);">
             @include('web-views.seafood.partials._help-links')
         </div>
 

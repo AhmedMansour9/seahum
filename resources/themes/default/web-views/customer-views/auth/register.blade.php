@@ -24,11 +24,11 @@
                 <div class="sf-card" style="max-width: 760px; margin: 0 auto; padding: clamp(22px, 4vw, 34px);">
 
                     <header style="text-align: center; margin-bottom: 26px;">
-                        <span style="width: 60px; height: 60px; border-radius: 20px; background: #ECF8F8; color: #0E8E88; display: inline-grid; place-items: center;">
+                        <span style="width: 60px; height: 60px; border-radius: 20px; background: var(--sh-sea-50); color: var(--sh-sea-700); display: inline-grid; place-items: center;">
                             <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20c1.4-3.4 4.2-5 7.5-5s6.1 1.6 7.5 5"></path></svg>
                         </span>
-                        <h1 style="font-family: Cairo, sans-serif; font-size: clamp(21px, 3vw, 26px); font-weight: 800; line-height: 1.35; margin: 14px 0 6px; color: #0B2C3F; text-align: center !important;">{{ translate('create_your_account') }}</h1>
-                        <p style="font-size: 14.5px; line-height: 1.8; color: #6E8C99; margin: 0 auto; max-width: 460px; text-align: center !important;">{{ translate('sign_up_to_track_your_orders_and_check_out_faster') }}</p>
+                        <h1 style="font-family: var(--sh-font-display); font-size: clamp(21px, 3vw, 26px); font-weight: 800; line-height: 1.35; margin: 14px 0 6px; color: var(--sh-navy); text-align: center !important;">{{ translate('create_your_account') }}</h1>
+                        <p style="font-size: 14.5px; line-height: 1.8; color: var(--sh-muted); margin: 0 auto; max-width: 460px; text-align: center !important;">{{ translate('sign_up_to_track_your_orders_and_check_out_faster') }}</p>
                     </header>
 
                     <form id="customer-register-form" action="{{ route('customer.auth.sign-up') }}" method="post" novalidate>
@@ -107,7 +107,7 @@
                                 <div class="sf-form-full">
                                     <label class="sf-form-label" for="referral_code">
                                         {{ translate('refer_code') }}
-                                        <span style="font-family: Tajawal, sans-serif; font-weight: 400; color: #6E8C99;">({{ translate('optional') }})</span>
+                                        <span style="font-family: var(--sh-font-body); font-weight: 400; color: var(--sh-muted);">({{ translate('optional') }})</span>
                                     </label>
                                     <input class="sf-filter-field" id="referral_code" type="text" name="referral_code"
                                            placeholder="{{ translate('use_referral_code') }}">
@@ -161,7 +161,7 @@
                         </div>
                     @endif
 
-                    <p style="text-align: center !important; font-size: 14.5px; color: #6E8C99; margin: 26px 0 0;">
+                    <p style="text-align: center !important; font-size: 14.5px; color: var(--sh-muted); margin: 26px 0 0;">
                         {{ translate('already_have_an_account_question') }}
                         <a class="sf-text-link" href="{{ route('customer.auth.login') }}">{{ translate('sign_in') }}</a>
                     </p>
@@ -169,7 +169,7 @@
             </section>
         </main>
 
-        <div style="background: #F4FAFB; border-top: 1px solid #E4EFF1; padding-top: clamp(44px, 7vw, 76px);">
+        <div style="background: var(--sh-mist); border-top: 1px solid var(--sh-line); padding-top: clamp(44px, 7vw, 76px);">
             @include('web-views.seafood.partials._help-links')
         </div>
 

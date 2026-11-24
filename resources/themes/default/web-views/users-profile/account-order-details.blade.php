@@ -83,18 +83,18 @@
                         <button type="button" class="sf-btn-sm" data-sf-modal-open="orderDuePaymentInfoModal" style="margin-top: 14px;">{{ translate('see_payment_details') }}</button>
                     @endif
                 @elseif($order->edit_due_amount > 0)
-                    <h2 class="sf-panel-title" style="color: #C63F38;">{{ translate('Pay Due Bill') }}</h2>
+                    <h2 class="sf-panel-title" style="color: var(--sh-tuna-700);">{{ translate('Pay Due Bill') }}</h2>
                     <p class="sf-step-text" style="margin: 0 0 14px;">
                         {{ translate('After editing your product list, you need to pay an additional') }}
-                        <strong style="color: #0B2C3F;">@include('web-views.seafood.partials._price', ['amount' => $order['edit_due_amount']])</strong>
+                        <strong style="color: var(--sh-navy);">@include('web-views.seafood.partials._price', ['amount' => $order['edit_due_amount']])</strong>
                         {{ translate('to continue processing this order') }}
                     </p>
                     <button type="button" class="sf-btn-sm sf-btn-sm-primary" data-sf-modal-open="choosePaymentMethodModal-{{ $order['id'] }}">{{ translate('Pay Now') }}</button>
                 @elseif($latestEditHistory?->order_return_payment_status == 'pending')
-                    <h2 class="sf-panel-title" style="color: #0E8E88;">{{ translate('Amount to Be Returned') }}</h2>
+                    <h2 class="sf-panel-title" style="color: var(--sh-sea-700);">{{ translate('Amount to Be Returned') }}</h2>
                     <p class="sf-step-text" style="margin: 0;">
                         {{ translate('After editing your product list, you will receive') }}
-                        <strong style="color: #0B2C3F;">@include('web-views.seafood.partials._price', ['amount' => $latestEditHistory?->order_return_amount ?? 0])</strong>
+                        <strong style="color: var(--sh-navy);">@include('web-views.seafood.partials._price', ['amount' => $latestEditHistory?->order_return_amount ?? 0])</strong>
                         {{ translate('Please wait for the admin to process the returned amount') }}
                     </p>
                 @elseif($latestEditHistory?->order_return_payment_status == 'returned')

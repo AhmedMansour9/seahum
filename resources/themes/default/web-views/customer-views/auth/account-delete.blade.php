@@ -12,12 +12,12 @@
 
 @push('css_or_js')
     <style>
-        .sf-account-delete-warning { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; margin-bottom: 22px; border: 1px solid #F4CFCC; border-radius: 14px; background: #FDF0EF; color: #C63F38; font-size: 14px; line-height: 1.8; }
+        .sf-account-delete-warning { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; margin-bottom: 22px; border: 1px solid var(--sh-tuna-100); border-radius: 14px; background: var(--sh-tuna-50); color: var(--sh-tuna-700); font-size: 14px; line-height: 1.8; }
         .sf-account-delete-warning > svg { flex-shrink: 0; margin-top: 3px; }
         .sf-account-delete-warning p { margin: 0; overflow-wrap: anywhere; }
-        .sf-btn-block.sf-btn-block-danger { background: #E4574F; box-shadow: 0 16px 32px -14px rgba(228,87,79,1); }
-        .sf-btn-block.sf-btn-block-danger:hover { background: #C63F38; color: #FFFFFF; box-shadow: 0 20px 36px -14px rgba(228,87,79,1); }
-        .sf-btn-block.sf-btn-block-danger:focus-visible { box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 5px #C63F38; }
+        .sf-btn-block.sf-btn-block-danger { background: var(--sh-tuna); box-shadow: 0 16px 32px -14px rgba(var(--sh-tuna-rgb), 1); }
+        .sf-btn-block.sf-btn-block-danger:hover { background: var(--sh-tuna-700); color: #FFFFFF; box-shadow: 0 20px 36px -14px rgba(var(--sh-tuna-rgb), 1); }
+        .sf-btn-block.sf-btn-block-danger:focus-visible { box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 5px var(--sh-tuna-700); }
     </style>
 @endpush
 
@@ -50,7 +50,7 @@
         @error('password')
             <span class="sf-field-note" id="account-delete-password-error" role="alert">{{ $message }}</span>
         @enderror
-        <a href="{{ route('customer.auth.recover-password') }}" class="sf-field-hint" style="display: inline-block; margin-top: 8px; color: #0E8E88;">
+        <a href="{{ route('customer.auth.recover-password') }}" class="sf-field-hint" style="display: inline-block; margin-top: 8px; color: var(--sh-sea-700);">
             {{ translate('forgot_password') }}
         </a>
 
