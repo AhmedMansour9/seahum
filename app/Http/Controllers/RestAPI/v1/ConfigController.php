@@ -225,7 +225,8 @@ class ConfigController extends Controller
             'minimum_order_amount' => getWebConfig(name: 'minimum_order_amount'),
             'minimum_order_amount_by_seller' => (int)getWebConfig(name: 'minimum_order_amount_by_seller'),
             'order_verification' => (int)getWebConfig(name: 'order_verification'),
-            'referral_customer_signup_url' => route('customer.auth.sign-up') . '?referral_code=',
+            // The app shares this link followed by the customer's code, so it must end with the parameter name.
+            'referral_customer_signup_url' => rtrim(config('deeplinks.app_download_url'), '/') . '/?referral_code=',
             'system_timezone' => getWebConfig(name: 'timezone'),
             'refund_day_limit' => getWebConfig(name: 'refund_day_limit') ?? 0,
             'map_api_status' => (int)getWebConfig(name: 'map_api_status'),

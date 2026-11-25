@@ -239,23 +239,25 @@ class SeafoodAuthAndPageViewTest extends TestCase
     }
 
     /**
-     * The home page drops the referral code, so app and web share links must land on sign-up, which prefills it.
+     * Invites send friends to the app download page. The app appends the code straight after the link,
+     * so the link must end with the parameter name or the code would merge into the domain.
      */
-    public function test_referral_share_links_land_on_the_sign_up_page_with_the_code(): void
+    public function test_referral_share_links_point_to_the_app_download_page_with_the_code(): void
     {
         $configController = file_get_contents(app_path('Http/Controllers/RestAPI/v1/ConfigController.php'));
         $referEarnPage = file_get_contents($this->templatePath('web-views.users-profile.refer-earn'));
         $registerPage = file_get_contents($this->templatePath('web-views.customer-views.auth.register'));
 
-        $this->assertStringContainsString("'referral_customer_signup_url' => route('customer.auth.sign-up') . '?referral_code=',", $configController);
+        $this->assertSame('https://app.sea-hum.store', config('deeplinks.app_download_url'));
+        $this->assertStringContainsString("'referral_customer_signup_url' => rtrim(config('deeplinks.app_download_url'), '/') . '/?referral_code=',", $configController);
         /* The app's Refer & Earn screen shows both rewards, so the config must carry them. */
         $this->assertStringContainsString("'ref_earning_exchange_rate' => (float) (getWebConfig(name: 'ref_earning_exchange_rate') ?? 0),", $configController);
         $this->assertStringContainsString("'ref_earning_customer' => \$this->getReferredCustomerDiscount(),", $configController);
         foreach (['ref_earning_discount_status', 'discount_amount', 'discount_type', 'validity', 'validity_type'] as $settingKey) {
             $this->assertStringContainsString("\$referredCustomerConfig['{$settingKey}']", $configController);
         }
-        $this->assertStringContainsString("\$referralLink = route('customer.auth.sign-up') . '?referral_code=' . \$referralCode;", $referEarnPage);
-        $this->assertSame(4, substr_count($referEarnPage, '$referralLink'), 'WhatsApp, email and copy-link must all share the sign-up link.');
+        $this->assertStringContainsString("\$referralLink = rtrim(config('deeplinks.app_download_url'), '/') . '/?referral_code=' . \$referralCode;", $referEarnPage);
+        $this->assertSame(4, substr_count($referEarnPage, '$referralLink'), 'WhatsApp, email and copy-link must all share the app download link.');
         $this->assertStringNotContainsString("url('/'))", $referEarnPage);
         $this->assertStringContainsString("new URLSearchParams(window.location.search).get('referral_code')", $registerPage);
     }
