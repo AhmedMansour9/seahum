@@ -2875,4 +2875,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"coming_soon" => "Coming soon",
 	"on_your_first_order" => "On your first order",
 	"get_the_app" => "Get the app & save",
+	"maintenance-mode" => "Maintenance mode",
 ];
