@@ -165,7 +165,9 @@ class SeafoodOnePageCheckoutTest extends TestCase
         $this->assertStringNotContainsString('wa.me', $mobileBar);
         $this->assertStringContainsString('class="sf-mobile-cart" aria-label="{{ translate(\'view_cart\') }}"', $mobileBar, 'The cart is an icon button, so it needs an accessible name.');
         $this->assertStringContainsString('class="sf-mobile-app"', $mobileBar);
-        $this->assertStringContainsString('\App\Http\Controllers\Web\HomeController::APP_PROMO_COUPON_CODE', $mobileBar);
+        /* Every page shows the same offer as the home promo section, not a hard-coded default. */
+        $this->assertStringContainsString('$appPromoOffer ?? app(\App\Services\AppPromoService::class)->getOffer()', $mobileBar);
+        $this->assertStringContainsString("{{ \$mobileBarPromoOffer['code'] }}", $mobileBar);
         $this->assertStringContainsString("\$(document).on('click', '.sf-mobile-app'", $this->viewSource('partials/_scripts'));
 
         foreach (['cart', 'checkout-shipping', 'checkout-payment'] as $template) {

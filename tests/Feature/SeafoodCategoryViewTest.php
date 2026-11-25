@@ -229,21 +229,25 @@ class SeafoodCategoryViewTest extends TestCase
     }
 
     /**
-     * The app promo always shows with the BAHR10 code; the live coupon's own discount and terms replace the defaults once it is active.
+     * The app promo always shows BAHR100 (100 off orders from 1,000); the live coupon's own amount and terms replace the defaults once it is active.
      */
     public function test_home_app_promo_always_shows_the_welcome_code_and_uses_the_active_coupon_terms(): void
     {
         $homeController = file_get_contents(app_path('Http/Controllers/Web/HomeController.php'));
+        $promoService = file_get_contents(app_path('Services/AppPromoService.php'));
         $homePage = file_get_contents($this->templatePath('web-views.seafood.home'));
         $appPromo = file_get_contents($this->templatePath('web-views.seafood.partials._app-promo'));
 
-        $this->assertStringContainsString("public const APP_PROMO_COUPON_CODE = 'BAHR10';", $homeController);
-        foreach (["Coupon::active()", "->where('code', self::APP_PROMO_COUPON_CODE)", "->whereIn('coupon_type', ['discount_on_purchase', 'first_order'])", "->whereDate('start_date', '<=', now())", "->whereDate('expire_date', '>=', now())", '$appPromoCoupon?->code ?? self::APP_PROMO_COUPON_CODE', ': self::APP_PROMO_DEFAULT_DISCOUNT_PERCENT;'] as $condition) {
-            $this->assertStringContainsString($condition, $homeController);
+        foreach (["public const COUPON_CODE = 'BAHR100';", 'private const DEFAULT_DISCOUNT_AMOUNT = 100;', 'private const DEFAULT_MINIMUM_PURCHASE = 1000;'] as $default) {
+            $this->assertStringContainsString($default, $promoService);
         }
+        foreach (["Coupon::active()", "->where('code', self::COUPON_CODE)", "->whereIn('coupon_type', ['discount_on_purchase', 'first_order'])", "->whereDate('start_date', '<=', now())", "->whereDate('expire_date', '>=', now())", "\$coupon?->code ?? self::COUPON_CODE", "\$coupon?->min_purchase ?? self::DEFAULT_MINIMUM_PURCHASE"] as $condition) {
+            $this->assertStringContainsString($condition, $promoService);
+        }
+        $this->assertStringContainsString('$appPromoOffer = $this->appPromoService->getOffer();', $homeController);
 
         $this->assertMatchesRegularExpression("/\\n        @include\\('web-views\\.seafood\\.partials\\._app-promo'/", $homePage, 'The app promo must render without a coupon or store-link condition.');
-        $this->assertStringNotContainsString('@if($appPromoCoupon)'."\n".'                <div class="sf-promo-ticket">', str_replace("\r\n", "\n", $appPromo));
+        $this->assertStringContainsString("{{ \$appPromoOffer['minimum_purchase_value'] }}", $appPromo, 'The minimum order shows even before the coupon exists.');
         $this->assertStringContainsString('@if($appPromoCoupon)', $appPromo);
         $this->assertStringContainsString('data-promo-code="{{ $appPromoCode }}"', $appPromo);
         $this->assertStringContainsString("'showComingSoon' => true", $appPromo);

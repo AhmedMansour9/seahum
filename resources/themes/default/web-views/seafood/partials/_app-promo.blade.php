@@ -1,4 +1,5 @@
-@php($promoPercentLabel = $appPromoDiscountPercent !== null ? rtrim(rtrim(number_format($appPromoDiscountPercent, 2, '.', ''), '0'), '.').'%' : null)
+@php($appPromoCoupon = $appPromoOffer['coupon'])
+@php($appPromoCode = $appPromoOffer['code'])
 @php($phonePreviewProducts = $phonePreviewProducts->take(2))
 
 <section id="app" class="sf-gutter sf-app-promo-section" aria-labelledby="sf-app-promo-title">
@@ -17,14 +18,13 @@
             <h2 class="sf-app-promo-title" id="sf-app-promo-title">{{ translate('the_whole_sea_in_your_pocket') }}</h2>
             <p class="sf-app-promo-text">{{ translate('order_your_fresh_catch_in_seconds_follow_your_order_step_by_step_and_be_the_first_to_get_app_offers') }}</p>
 
-        <div class="sf-promo-ticket">
+            <div class="sf-promo-ticket">
                 <div class="sf-promo-ticket-value">
                     <strong>
-                        @if($promoPercentLabel)
-                            <bdi dir="ltr">{{ $promoPercentLabel }}</bdi>
-                        @else
-                            @include('web-views.seafood.partials._price', ['amount' => $appPromoCoupon->discount, 'symbolSize' => '.5em', 'symbolColor' => 'currentColor'])
-                        @endif
+                        <bdi dir="ltr">{{ $appPromoOffer['discount_value'] }}</bdi>
+                        @unless($appPromoOffer['is_percentage'])
+                            <small class="sf-promo-ticket-currency">{{ $appPromoOffer['currency_symbol'] }}</small>
+                        @endunless
                     </strong>
                     <span>{{ translate('off') }}</span>
                 </div>
@@ -40,19 +40,18 @@
                             <span class="sf-promo-code-hint" data-copied-label="{{ translate('copied') }}">{{ translate('copy') }}</span>
                         </span>
                     </button>
-                    @if($appPromoCoupon)
                     <span class="sf-promo-ticket-terms">
-                        @if($appPromoCoupon->coupon_type === 'first_order')
+                        @if($appPromoCoupon?->coupon_type === 'first_order')
                             {{ translate('on_your_first_order') }}
                             ·
                         @endif
-                        @if($appPromoCoupon->min_purchase > 0)
-                            {{ translate('on_orders_from') }} @include('web-views.seafood.partials._price', ['amount' => $appPromoCoupon->min_purchase, 'symbolSize' => '11px', 'symbolColor' => 'currentColor'])
-                            ·
+                        @if($appPromoOffer['minimum_purchase'] > 0)
+                            {{ translate('on_orders_from') }} <bdi>{{ $appPromoOffer['minimum_purchase_value'] }} {{ $appPromoOffer['currency_symbol'] }}</bdi>
                         @endif
-                        {{ translate('valid_until') }} <bdi dir="ltr">{{ $appPromoCoupon->expire_date->format('d/m/Y') }}</bdi>
+                        @if($appPromoCoupon)
+                            · {{ translate('valid_until') }} <bdi dir="ltr">{{ $appPromoCoupon->expire_date->format('d/m/Y') }}</bdi>
+                        @endif
                     </span>
-                    @endif
                 </div>
             </div>
 
@@ -83,11 +82,12 @@
                     </div>
                 </div>
             </div>
-            @if($promoPercentLabel)
-                <span class="sf-app-sticker">
-                    <bdi dir="ltr">−{{ $promoPercentLabel }}</bdi>
-                </span>
-            @endif
+            <span class="sf-app-sticker">
+                <bdi dir="ltr">−{{ $appPromoOffer['discount_value'] }}</bdi>
+                @unless($appPromoOffer['is_percentage'])
+                    <small class="sf-app-sticker-unit">{{ $appPromoOffer['currency_symbol'] }}</small>
+                @endunless
+            </span>
             <span class="sf-app-chip">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h11v9H2z"></path><path d="M13 10h4l3 3v3h-7z"></path><circle cx="6" cy="18" r="1.6"></circle><circle cx="17" cy="18" r="1.6"></circle></svg>
                 {{ translate('your_order_is_on_the_way') }}

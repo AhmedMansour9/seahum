@@ -1,8 +1,7 @@
 @php($cartItemsCount = $cartItemsCount ?? \App\Utils\CartManager::getCartListQuery()->count())
 @php($mobileBarGoogleStore = getWebConfig(name: 'download_app_google_store') ?? [])
 @php($mobileBarAppleStore = getWebConfig(name: 'download_app_apple_store') ?? [])
-@php($mobileBarPromoCode = $appPromoCode ?? \App\Http\Controllers\Web\HomeController::APP_PROMO_COUPON_CODE)
-@php($mobileBarPromoPercent = isset($appPromoCode) ? $appPromoDiscountPercent : \App\Http\Controllers\Web\HomeController::APP_PROMO_DEFAULT_DISCOUNT_PERCENT)
+@php($mobileBarPromoOffer = $appPromoOffer ?? app(\App\Services\AppPromoService::class)->getOffer())
 
         <div class="sf-mobile-bar">
             {{-- Opens the store that matches the phone (see _scripts); anywhere else it scrolls to the app section on the home page. --}}
@@ -20,10 +19,9 @@
                 <span class="sf-mobile-app-text">
                     <span class="sf-mobile-app-caption">{{ translate('get_the_app') }}</span>
                     <strong class="sf-mobile-app-offer">
-                        @if($mobileBarPromoPercent !== null)
-                            <bdi dir="ltr">{{ rtrim(rtrim(number_format($mobileBarPromoPercent, 2, '.', ''), '0'), '.') }}%</bdi> {{ translate('off') }} ·
-                        @endif
-                        <bdi dir="ltr" class="sf-mobile-app-code">{{ $mobileBarPromoCode }}</bdi>
+                        {{-- The caption already says "save", so a flat amount needs no extra word. --}}
+                        <bdi>{{ $mobileBarPromoOffer['discount_value'] }}{{ $mobileBarPromoOffer['is_percentage'] ? ' '.translate('off') : ' '.$mobileBarPromoOffer['currency_symbol'] }}</bdi> ·
+                        <bdi dir="ltr" class="sf-mobile-app-code">{{ $mobileBarPromoOffer['code'] }}</bdi>
                     </strong>
                 </span>
                 <svg class="sf-mobile-app-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 6 8 12l6 6"></path></svg>
