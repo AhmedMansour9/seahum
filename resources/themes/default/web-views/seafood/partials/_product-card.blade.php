@@ -4,7 +4,6 @@
 @php($thumbnailUrl = getStorageImages(path: $product->thumbnail_full_url, type: 'product'))
 @php($isVisibleCard = $isVisibleCard ?? true)
 @php($cartItemKey = $cartItemKey ?? null)
-@php($mediaRatio = $mediaRatio ?? 'auto')
 @php($showPricingDetails = $showPricingDetails ?? false)
 @php($showRating = $showRating ?? false)
 @php($isWishlisted = $isWishlisted ?? isProductInWishList(productId: $product['id']))
@@ -18,11 +17,11 @@
 
 <article class="sf-product-card" data-category-id="{{ $product['category_id'] }}"
          style="display: {{ $isVisibleCard ? 'flex' : 'none' }}; flex-direction: column; background: #FFFFFF; border: 1px solid var(--sh-line); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 26px -24px rgba(var(--sh-navy-rgb), .9); transition: transform .28s, box-shadow .28s, border-color .28s;">
-    <div style="position: relative; background: var(--sh-navy-50); overflow: hidden;">
+    <div style="position: relative; background: #FFFFFF; border-bottom: 1px solid var(--sh-line); overflow: hidden;">
         <a href="{{ route('product', $product['slug']) }}" style="display: block;">
             <img src="{{ $thumbnailUrl }}"
                  alt="{{ $product['name'] }}" loading="lazy"
-                 style="width: 100%; {{ $mediaRatio === 'square' ? 'aspect-ratio: 1 / 1; height: auto; object-fit: cover;' : 'height: auto;' }} display: block;">
+                 class="sf-product-media" style="width: 100%; aspect-ratio: 4 / 3; height: auto; object-fit: contain; object-position: center; display: block;">
         </a>
         <span class="sf-product-badges" style="position: absolute; top: 12px; inset-inline-start: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;">
             <span class="sf-product-badge" style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; background: rgba(255,255,255,.94); color: {{ $stockColor }}; box-shadow: 0 6px 16px -8px rgba(var(--sh-navy-rgb), .6);">
@@ -47,8 +46,8 @@
         </button>
     </div>
 
-    <div style="padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1;">
-        <h3 class="sf-product-title" style="font-family: var(--sh-font-display); font-size: 18px; font-weight: 700; margin: 0; color: var(--sh-navy); line-height: 1.5; text-wrap: pretty;">
+    <div class="sf-product-body" style="padding: 12px 14px 14px; display: flex; flex-direction: column; flex: 1;">
+        <h3 class="sf-product-title" style="font-family: var(--sh-font-display); font-size: 16px; font-weight: 700; margin: 0; color: var(--sh-navy); line-height: 1.5; text-wrap: pretty; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 3em;">
             <a href="{{ route('product', $product['slug']) }}" style="color: inherit;">{{ Str::limit($product['name'], 60) }}</a>
         </h3>
 
@@ -60,7 +59,7 @@
             </span>
         @endif
 
-        <div class="sf-product-rule" style="height: 1px; background: var(--sh-navy-50); margin: 14px 0 13px;"></div>
+        <div class="sf-product-rule" style="height: 1px; background: var(--sh-navy-50); margin: 10px 0;"></div>
 
         <div class="sf-product-actions" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: auto;">
             <span style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 5px; min-width: 0;">
