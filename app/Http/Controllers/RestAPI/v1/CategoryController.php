@@ -51,6 +51,9 @@ class CategoryController extends Controller
 
         $categories = CategoryManager::getPriorityWiseCategorySortQuery(query: $categories);
 
+        /* The products are only loaded for the "most ordered" sort; the app reads product_count, so they stay out of the response. */
+        $categories->each(fn (Category $category) => $category->makeHidden('product'));
+
         return response()->json($categories->values());
     }
 
