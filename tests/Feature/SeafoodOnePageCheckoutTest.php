@@ -191,6 +191,32 @@ class SeafoodOnePageCheckoutTest extends TestCase
         $this->assertStringContainsString('class="seafood-cart-toggle-label sr-only"', $productCard, 'The icon button keeps the label the cart script updates.');
     }
 
+    public function test_adding_to_cart_offers_to_keep_shopping_or_check_out(): void
+    {
+        $scripts = $this->viewSource('partials/_scripts');
+
+        $this->assertStringContainsString('<div class="sf-modal sf-cart-sheet" id="sf-cart-added"', $scripts);
+        $this->assertStringContainsString("route('checkout-details')", $scripts, 'The sheet leads straight to checkout.');
+        $this->assertStringContainsString('<button type="button" class="sf-cart-sheet-continue" data-sf-modal-close>', $scripts);
+        $this->assertStringContainsString('openSeafoodCartSheet(button);', $scripts);
+    }
+
+    public function test_cards_in_the_cart_show_a_quantity_stepper(): void
+    {
+        $productCard = $this->viewSource('partials/_product-card');
+        $scripts = $this->viewSource('partials/_scripts');
+
+        $this->assertStringContainsString('<div class="sf-card-stepper" role="group"', $productCard);
+        $this->assertStringContainsString('data-card-qty-step="-1"', $productCard);
+        $this->assertStringContainsString('data-card-qty-step="1"', $productCard);
+        $this->assertStringContainsString("route('cart.updateQuantity.guest')", $scripts);
+        $this->assertStringContainsString("toggle.trigger('click');", $scripts, 'Going below the minimum removes the item.');
+
+        foreach (['home', 'product', 'partials/_product-grid', 'partials/_wish-list-data'] as $template) {
+            $this->assertStringContainsString('cartItemQuantitiesByProduct', $this->viewSource($template), "{$template} must pass the cart quantity to its cards.");
+        }
+    }
+
     public function test_home_hero_is_hidden_on_phones(): void
     {
         $this->assertStringContainsString('<section id="home" class="sf-hero"', $this->viewSource('home'));
