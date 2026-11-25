@@ -38,6 +38,9 @@ class HomeController extends Controller
 
     private const SHOP_TICKER_PRODUCTS_LIMIT = 12;
 
+    /** The coupon the home page advertises next to the app download badges; it is created from the admin coupon page. */
+    public const APP_PROMO_COUPON_CODE = 'BAHR10';
+
     public function __construct(
         private readonly Product $product,
         private readonly Order $order,
@@ -116,13 +119,14 @@ class HomeController extends Controller
         $activeShopCategorySlug = $activeShopCategory['slug'] ?? null;
         $shopInitialVisibleProducts = self::SHOP_INITIAL_VISIBLE_PRODUCTS;
         $tickerProducts = $shopProducts->take(self::SHOP_TICKER_PRODUCTS_LIMIT);
+        $appPromoCoupon = $this->getActiveAppPromoCoupon();
 
         return view(VIEW_FILE_NAMES['home'],
             compact(
                 'flashDeal', 'featuredProductsList', 'topRatedProducts', 'bestSellProduct', 'latestProductsList', 'categories', 'brands',
                 'dealOfTheDay', 'topVendorsList', 'homeCategories', 'bannerTypeMainBanner', 'bannerTypeMainSectionBanner',
                 'current_date', 'recommendedProduct', 'bannerTypeFooterBanner', 'newArrivalProducts', 'clearanceSaleProducts', 'robotsMetaContentData', 'auctionProducts',
-                'shopProducts', 'shopTabCategories', 'activeShopCategoryId', 'activeShopCategorySlug', 'shopInitialVisibleProducts', 'tickerProducts', 'customersPicksProducts'
+                'shopProducts', 'shopTabCategories', 'activeShopCategoryId', 'activeShopCategorySlug', 'shopInitialVisibleProducts', 'tickerProducts', 'customersPicksProducts', 'appPromoCoupon'
             )
         );
     }
@@ -139,6 +143,16 @@ class HomeController extends Controller
                 $category['id'] => $category->product->sortByDesc('id')->take($productsPerCategory)->values(),
             ])
             ->filter(fn (Collection $products) => $products->isNotEmpty());
+    }
+
+    private function getActiveAppPromoCoupon(): ?Coupon
+    {
+        return Coupon::active()
+            ->where('code', self::APP_PROMO_COUPON_CODE)
+            ->where('coupon_type', 'discount_on_purchase')
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('expire_date', '>=', now())
+            ->first();
     }
 
     public function theme_aster(): View

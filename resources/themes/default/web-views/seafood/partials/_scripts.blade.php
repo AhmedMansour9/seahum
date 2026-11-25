@@ -160,6 +160,40 @@
         }
     }
 
+    /* App promo ticket: copies the welcome code and flips the button to "copied" for a moment. */
+    function copySeafoodTextWithSelection(text) {
+        const field = $('<textarea readonly class="sr-only"></textarea>').val(text).appendTo('body');
+        field[0].select();
+        document.execCommand('copy');
+        field.remove();
+    }
+
+    function copySeafoodTextToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text).catch(function () {
+                copySeafoodTextWithSelection(text);
+            });
+        }
+        copySeafoodTextWithSelection(text);
+        return Promise.resolve();
+    }
+
+    $(document).on('click', '[data-promo-code]', function () {
+        const button = $(this);
+        const hint = button.find('.sf-promo-code-hint');
+        hint.data('copy-label', hint.data('copy-label') || hint.text());
+        copySeafoodTextToClipboard(String(button.data('promo-code'))).then(function () {
+            button.addClass('is-copied');
+            hint.text(hint.data('copied-label'));
+            toastr.success(button.data('copied-message'));
+            clearTimeout(button.data('copied-timer'));
+            button.data('copied-timer', setTimeout(function () {
+                button.removeClass('is-copied');
+                hint.text(hint.data('copy-label'));
+            }, 2200));
+        });
+    });
+
     $(document).on('click', '.seafood-wishlist-btn', function () {
         if ($('#is-customer-auth-active').data('value') !== 1) {
             location.href = $('#route-customer-login').data('url');
