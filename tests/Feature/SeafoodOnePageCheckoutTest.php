@@ -175,6 +175,15 @@ class SeafoodOnePageCheckoutTest extends TestCase
         $this->assertStringNotContainsString('$categories->take(6)', $homePage, 'A fixed count hides categories such as caviar.');
     }
 
+    public function test_product_cards_share_one_image_height(): void
+    {
+        $productCard = $this->viewSource('partials/_product-card');
+
+        $this->assertStringContainsString('class="sf-product-media" style="width: 100%; aspect-ratio: 4 / 3; height: auto; object-fit: contain;', $productCard, 'Every card image has the same box and shows the whole photo.');
+        $this->assertStringNotContainsString('mediaRatio', $productCard);
+        $this->assertStringContainsString('-webkit-line-clamp: 2;', $productCard, 'Long names must not stretch one card.');
+    }
+
     public function test_home_hero_is_hidden_on_phones(): void
     {
         $this->assertStringContainsString('<section id="home" class="sf-hero"', $this->viewSource('home'));
