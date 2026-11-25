@@ -128,6 +128,7 @@
         }
         $isPlural = count($orderSuccessIds) > 1;
         session()->forget('order_success_ids');
+        $pixelPurchase = app(\App\Services\MetaPixelService::class)->getPurchaseEvent($orderSuccessIds);
     @endphp
 
     @if($orderSuccessIds && auth('customer')->check())
@@ -157,6 +158,9 @@
 @endsection
 
 @push('script')
+    @if($pixelPurchase ?? null)
+        @include('web-views.seafood.partials._meta-pixel-event', ['pixelEvent' => 'Purchase', 'pixelData' => $pixelPurchase['data'], 'pixelEventId' => $pixelPurchase['event_id']])
+    @endif
     <script>
         "use strict";
 

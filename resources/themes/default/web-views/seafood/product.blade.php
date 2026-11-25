@@ -250,4 +250,11 @@
 @push('script')
     @include('web-views.seafood.partials._scripts')
     @include('web-views.seafood.partials._product-scripts')
+    @include('web-views.seafood.partials._meta-pixel-event', ['pixelEvent' => 'ViewContent', 'pixelData' => [
+        'content_type' => 'product',
+        'content_ids' => [(string) $product['id']],
+        'content_name' => $product['name'],
+        'value' => round((float) getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value'), 2),
+        'currency' => app(\App\Services\MetaPixelService::class)->getCurrencyCode(),
+    ]])
 @endpush

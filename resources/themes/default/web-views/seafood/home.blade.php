@@ -29,6 +29,7 @@
     $isNewCustomerInSession = session('isNewCustomerInSession');
     session()->forget('order_success_ids');
     session()->forget('isNewCustomerInSession');
+    $pixelPurchase = app(\App\Services\MetaPixelService::class)->getPurchaseEvent(is_array($orderSuccessIds) ? $orderSuccessIds : null);
     ?>
 
     <div style="background: #FFFFFF;">
@@ -418,6 +419,9 @@
 @endsection
 
 @push('script')
+    @if($pixelPurchase)
+        @include('web-views.seafood.partials._meta-pixel-event', ['pixelEvent' => 'Purchase', 'pixelData' => $pixelPurchase['data'], 'pixelEventId' => $pixelPurchase['event_id']])
+    @endif
     @include('web-views.seafood.partials._scripts')
 
     <script>
