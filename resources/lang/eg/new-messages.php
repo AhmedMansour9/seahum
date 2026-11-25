@@ -9584,4 +9584,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"we_could_not_get_your_location_tap_the_map_instead" => "مقدرناش نحدد موقعك، اضغط على مكانك في الخريطة",
 	"please_pick_your_delivery_location_on_the_map" => "حدد موقع التوصيل على الخريطة",
 	"write_the_address_instead" => "اكتب العنوان بدل الخريطة",
+	"location_access_is_blocked_allow_it_from_your_browser_settings_or_tap_your_place_on_the_map" => "الموقع مقفول في المتصفح. اسمح للموقع من إعدادات المتصفح، أو دوس على مكانك في الخريطة.",
 ];

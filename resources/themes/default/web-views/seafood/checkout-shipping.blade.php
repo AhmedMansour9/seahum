@@ -107,6 +107,7 @@
         };
         const seafoodLocationMessages = {
             unavailable: @json(translate('we_could_not_get_your_location_tap_the_map_instead')),
+            blocked: @json(translate('location_access_is_blocked_allow_it_from_your_browser_settings_or_tap_your_place_on_the_map')),
         };
 
         /* Field ids per form: they mirror the names SystemController reads. */
@@ -202,12 +203,12 @@
                 return;
             }
             const fields = seafoodAddressFields.shipping;
-            const {AdvancedMarkerElement} = await google.maps.importLibrary('marker');
             const map = new google.maps.Map(canvas, {
-                center: seafoodDefaultLocation, zoom: 13, mapId: 'roadmap',
-                streetViewControl: false, mapTypeControl: false, fullscreenControl: false, clickableIcons: false,
+                center: seafoodDefaultLocation, zoom: 13,
+                streetViewControl: false, mapTypeControl: false, fullscreenControl: false, clickableIcons: false, gestureHandling: 'greedy',
             });
-            const marker = new AdvancedMarkerElement({position: seafoodDefaultLocation, map: map});
+            // A classic draggable pin: Advanced Markers need a Map ID and stay invisible without one.
+            const marker = new google.maps.Marker({position: seafoodDefaultLocation, map: map, draggable: true});
             const geocoder = new google.maps.Geocoder();
 
             // A rejected key or project shows Google's error dialog over an unusable map.
@@ -219,14 +220,15 @@
             }).observe(canvas, {childList: true, subtree: true});
 
             function setDeliveryLocation(coordinates, options = {}) {
-                marker.position = coordinates;
+                marker.setPosition(coordinates);
                 map.panTo(coordinates);
                 if (options.zoom) {
                     map.setZoom(options.zoom);
                 }
                 $(fields.latitude).val(coordinates.lat);
                 $(fields.longitude).val(coordinates.lng);
-                if (options.keepAddress) {
+                // A typed address stays as typed; the pin only adds coordinates for the driver.
+                if (options.keepAddress || $('#sf-location-picker').hasClass('is-typing')) {
                     return;
                 }
 
@@ -249,29 +251,10 @@
                 });
             }
 
-            function locateSeafoodCustomer(isUserRequest) {
-                if (!navigator.geolocation) {
-                    if (isUserRequest) {
-                        toastr.warning(seafoodLocationMessages.unavailable);
-                    }
-                    return;
-                }
-                const button = $('.sf-use-my-location').prop('disabled', true).addClass('is-loading');
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    button.prop('disabled', false).removeClass('is-loading');
-                    setDeliveryLocation({lat: position.coords.latitude, lng: position.coords.longitude}, {zoom: 17});
-                }, function () {
-                    button.prop('disabled', false).removeClass('is-loading');
-                    if (isUserRequest) {
-                        toastr.warning(seafoodLocationMessages.unavailable);
-                    }
-                }, {enableHighAccuracy: true, timeout: 12000, maximumAge: 60000});
-            }
-
             seafoodShippingLocationSetter = setDeliveryLocation;
 
             map.addListener('click', (mapsMouseEvent) => setDeliveryLocation(mapsMouseEvent.latLng.toJSON()));
-            $(document).on('click', '.sf-use-my-location', () => locateSeafoodCustomer(true));
+            marker.addListener('dragend', () => setDeliveryLocation(marker.getPosition().toJSON()));
 
             const searchBox = new google.maps.places.SearchBox(document.getElementById('pac-input'));
             map.addListener('bounds_changed', () => searchBox.setBounds(map.getBounds()));
@@ -283,11 +266,58 @@
             });
 
             const savedLatitude = parseFloat($(fields.latitude).val());
-            if ($(fields.address).val() && savedLatitude) {
+            if (seafoodPendingDeviceLocation) {
+                setDeliveryLocation(seafoodPendingDeviceLocation, {zoom: 17});
+            } else if ($(fields.address).val() && savedLatitude) {
                 setDeliveryLocation({lat: savedLatitude, lng: parseFloat($(fields.longitude).val())}, {keepAddress: true, zoom: 16});
-            } else {
-                locateSeafoodCustomer(false);
             }
+        }
+
+        /* The device location works with or without the map: it waits for the map when needed. */
+        let seafoodPendingDeviceLocation = null;
+
+        function applySeafoodDeviceLocation(coordinates) {
+            $('.sf-location-blocked').prop('hidden', true);
+            if (seafoodShippingLocationSetter) {
+                seafoodShippingLocationSetter(coordinates, {zoom: 17});
+                return;
+            }
+            seafoodPendingDeviceLocation = coordinates;
+            const fields = seafoodAddressFields.shipping;
+            const coordinatesText = coordinates.lat.toFixed(6) + ', ' + coordinates.lng.toFixed(6);
+            $(fields.latitude).val(coordinates.lat);
+            $(fields.longitude).val(coordinates.lng);
+            if (!$('#sf-location-picker').hasClass('is-typing')) {
+                $(fields.address).val(coordinatesText);
+                showSeafoodPickedLocation(coordinatesText);
+            }
+        }
+
+        function locateSeafoodCustomer(isUserRequest) {
+            if (!navigator.geolocation || !$('#sf-location-picker').length) {
+                if (isUserRequest) {
+                    toastr.warning(seafoodLocationMessages.unavailable);
+                }
+                return;
+            }
+            const button = $('.sf-use-my-location').prop('disabled', true).addClass('is-loading');
+            navigator.geolocation.getCurrentPosition(function (position) {
+                button.prop('disabled', false).removeClass('is-loading');
+                applySeafoodDeviceLocation({lat: position.coords.latitude, lng: position.coords.longitude});
+            }, function (error) {
+                button.prop('disabled', false).removeClass('is-loading');
+                const isBlocked = error.code === error.PERMISSION_DENIED;
+                $('.sf-location-blocked').prop('hidden', !isBlocked);
+                if (isUserRequest) {
+                    toastr.warning(isBlocked ? seafoodLocationMessages.blocked : seafoodLocationMessages.unavailable);
+                }
+            }, {enableHighAccuracy: true, timeout: 15000, maximumAge: 60000});
+        }
+
+        $(document).on('click', '.sf-use-my-location', () => locateSeafoodCustomer(true));
+
+        if (!$('.sf-address-choice:checked').data('address')) {
+            locateSeafoodCustomer(false);
         }
 
         /* Typing the address replaces the map: by choice, or because the map could not load. */

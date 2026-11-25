@@ -122,6 +122,9 @@ class SeafoodOnePageCheckoutTest extends TestCase
 
         $this->assertStringContainsString('navigator.geolocation.getCurrentPosition(', $checkoutPage);
         $this->assertStringContainsString('locateSeafoodCustomer(false);', $checkoutPage);
+        $this->assertStringContainsString("\$(document).on('click', '.sf-use-my-location', () => locateSeafoodCustomer(true));", $checkoutPage, 'The button works before the map loads.');
+        $this->assertStringContainsString('new google.maps.Marker({position: seafoodDefaultLocation, map: map, draggable: true});', $checkoutPage, 'The pin must be visible without a Map ID.');
+        $this->assertStringContainsString("\$('.sf-location-blocked').prop('hidden', !isBlocked);", $checkoutPage, 'A blocked location explains how to allow it.');
         $this->assertStringNotContainsString('v=3.56', $checkoutPage, 'Pinned Maps versions are retired.');
     }
 

@@ -101,6 +101,7 @@
         .sf-location-picker.has-location .sf-location-picked svg { color: var(--sh-action); }
         .sf-type-address-instead { align-self: flex-start; min-height: 32px; padding: 0; border: 0; background: none; font: inherit; font-size: 13.5px; font-weight: 700; color: var(--sh-sea-700); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
         .sf-location-picker [hidden] { display: none !important; }
+        .sf-location-blocked { margin: 0; padding: 10px 12px; border-radius: 12px; background: var(--sh-salmon-50); color: var(--sh-salmon-800); font-size: 13px; line-height: 1.7; }
 
         @media (max-width: 979px) {
             .sf-cart-layout, .sf-checkout-layout { grid-template-columns: minmax(0, 1fr); }
