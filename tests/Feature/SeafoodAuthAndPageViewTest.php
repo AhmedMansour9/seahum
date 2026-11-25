@@ -238,6 +238,22 @@ class SeafoodAuthAndPageViewTest extends TestCase
         $this->assertStringContainsString('.sf-header-logout { display: none !important; }', file_get_contents($this->templatePath('web-views.seafood.partials._styles')));
     }
 
+    /**
+     * The home page drops the referral code, so app and web share links must land on sign-up, which prefills it.
+     */
+    public function test_referral_share_links_land_on_the_sign_up_page_with_the_code(): void
+    {
+        $configController = file_get_contents(app_path('Http/Controllers/RestAPI/v1/ConfigController.php'));
+        $referEarnPage = file_get_contents($this->templatePath('web-views.users-profile.refer-earn'));
+        $registerPage = file_get_contents($this->templatePath('web-views.customer-views.auth.register'));
+
+        $this->assertStringContainsString("'referral_customer_signup_url' => route('customer.auth.sign-up') . '?referral_code=',", $configController);
+        $this->assertStringContainsString("\$referralLink = route('customer.auth.sign-up') . '?referral_code=' . \$referralCode;", $referEarnPage);
+        $this->assertSame(4, substr_count($referEarnPage, '$referralLink'), 'WhatsApp, email and copy-link must all share the sign-up link.');
+        $this->assertStringNotContainsString("url('/'))", $referEarnPage);
+        $this->assertStringContainsString("new URLSearchParams(window.location.search).get('referral_code')", $registerPage);
+    }
+
     public function test_header_language_switchers_show_the_target_language_flag(): void
     {
         $header = file_get_contents($this->templatePath('web-views.seafood.partials._header'));

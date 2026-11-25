@@ -7,7 +7,7 @@
 @section('account_content')
     @php
         $referralCode = $customer_detail->referral_code;
-        $referralLink = route('home') . '?referral_code=' . $referralCode;
+        $referralLink = route('customer.auth.sign-up') . '?referral_code=' . $referralCode;
         $referralShareText = translate('Greetings') . ', ' . $web_config['company_name'] . ' '
             . translate('is_the_best_ecommerce_platform_in_the_country.if_you_are_new_to_this_website_dont_forget_to_use') . ' '
             . $referralCode . ' ' . translate('as_the_referral_code_while_sign_up_into.') . ' ' . $web_config['company_name'];
@@ -32,8 +32,8 @@
 
             <span class="sf-divider-text" style="margin: 20px 0 14px;">{{ translate('oR_SHARE') }}</span>
             <div class="sf-refer-share">
-                <a class="sf-btn-sm" target="_blank" rel="noopener" href="https://api.whatsapp.com/send?text={{ urlencode($referralShareText . ' ' . url('/')) }}">WhatsApp</a>
-                <a class="sf-btn-sm" href="mailto:?subject={{ rawurlencode(translate('Refer_&_Earn')) }}&body={{ rawurlencode($referralShareText . ' ' . url('/')) }}">{{ translate('email') }}</a>
+                <a class="sf-btn-sm" target="_blank" rel="noopener" href="https://api.whatsapp.com/send?text={{ urlencode($referralShareText . ' ' . $referralLink) }}">WhatsApp</a>
+                <a class="sf-btn-sm" href="mailto:?subject={{ rawurlencode(translate('Refer_&_Earn')) }}&body={{ rawurlencode($referralShareText . ' ' . $referralLink) }}">{{ translate('email') }}</a>
                 <button type="button" class="sf-btn-sm" data-sf-copy="{{ $referralLink }}">{{ translate('copy_link') }}</button>
             </div>
         </div>
