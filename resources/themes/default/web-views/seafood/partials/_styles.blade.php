@@ -683,7 +683,32 @@
         @media (prefers-reduced-motion: reduce) { .sf-cart-sheet-dialog.is-animated, .sf-cart-sheet-dialog.is-animated .sf-cart-sheet-check, .sf-cart-sheet-dialog.is-animated .sf-cart-sheet-check path { animation: none; } }
 
         .sf-burger { display: none; }
-        .sf-mobile-bar { display: none; }
+        .sf-mobile-bar { display: none; position: fixed; inset-inline: 0; bottom: 0; z-index: 80; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.97); backdrop-filter: blur(14px); border-top: 1px solid var(--sh-line); box-shadow: 0 -10px 30px -22px rgba(var(--sh-navy-rgb), .9); }
+        .sf-mobile-app { position: relative; overflow: hidden; display: flex; align-items: center; gap: 10px; min-width: 0; height: 54px; padding: 0 12px; border-radius: 16px; background: var(--sh-grad-deep); color: #FFFFFF; box-shadow: 0 12px 24px -14px rgba(var(--sh-navy-rgb), .95); }
+        .sf-mobile-app:hover, .sf-mobile-app:focus { color: #FFFFFF; }
+        .sf-mobile-app::after { content: ""; position: absolute; inset-block: 0; width: 40%; left: -60%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.16), transparent); animation: sfMobileAppShine 4.5s ease-in-out infinite; pointer-events: none; }
+        .sf-mobile-app-icons { flex-shrink: 0; display: flex; }
+        .sf-mobile-app-icon { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: #000000; border: 1.5px solid rgba(255,255,255,.22); }
+        .sf-mobile-app-icon + .sf-mobile-app-icon { margin-inline-start: -9px; transform: rotate(8deg); }
+        .sf-mobile-app-icon:first-child { transform: rotate(-8deg); }
+        .sf-mobile-app-text { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.25; }
+        .sf-mobile-app-caption { font-size: 11.5px; color: var(--sh-on-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sf-mobile-app-offer { font-family: var(--sh-font-display); font-size: 14.5px; font-weight: 800; color: #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sf-mobile-app-code { padding: 0 6px; border-radius: 6px; background: var(--sh-salmon); color: var(--sh-abyss); font-family: 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 12.5px; letter-spacing: 1px; }
+        .sf-mobile-app-arrow { flex-shrink: 0; color: var(--sh-salmon); }
+        [dir="ltr"] .sf-mobile-app-arrow { transform: scaleX(-1); }
+        .sf-mobile-cart { position: relative; width: 54px; height: 54px; border-radius: 16px; display: grid; place-items: center; background: var(--sh-action); color: #FFFFFF; box-shadow: var(--sh-shadow-cta); }
+        .sf-mobile-cart:hover, .sf-mobile-cart:focus { color: #FFFFFF; }
+        .sf-mobile-cart-count { position: absolute; top: -6px; inset-inline-end: -6px; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; display: grid; place-items: center; background: var(--sh-navy); color: #FFFFFF; border: 2px solid #FFFFFF; font-family: var(--sh-font-display); font-size: 12px; font-weight: 800; }
+        @media (max-width: 359px) {
+            .sf-mobile-bar { gap: 8px; padding-inline: 10px; }
+            .sf-mobile-app { gap: 8px; padding: 0 10px; }
+            .sf-mobile-app-arrow { display: none; }
+            .sf-mobile-app-icon { width: 28px; height: 28px; }
+            .sf-mobile-app-offer { font-size: 13px; }
+        }
+        @keyframes sfMobileAppShine { 0%, 55% { left: -60%; } 100% { left: 130%; } }
+        @media (prefers-reduced-motion: reduce) { .sf-mobile-app::after { animation: none; display: none; } }
         .sf-mobile-bar-spacer { display: none; }
         .sf-mobile-menu { display: none; }
         .sf-mobile-menu[data-open="true"] { display: flex; }
@@ -766,7 +791,7 @@
             .sf-page-head-actions { width: 100%; }
             .sf-page-head-actions > .sf-btn-sm, .sf-page-head-actions > form { flex: 1 1 auto; }
             .sf-mobile-bar { display: grid; }
-            .sf-mobile-bar-spacer { display: block; height: calc(74px + env(safe-area-inset-bottom)); }
+            .sf-mobile-bar-spacer { display: block; height: calc(76px + env(safe-area-inset-bottom)); }
             .sf-hero { display: none !important; }
         }
 

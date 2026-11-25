@@ -160,7 +160,13 @@ class SeafoodOnePageCheckoutTest extends TestCase
 
     public function test_mobile_bar_offers_only_the_cart_and_stays_off_cart_and_checkout(): void
     {
-        $this->assertStringNotContainsString('wa.me', $this->viewSource('partials/_mobile-bar'));
+        $mobileBar = $this->viewSource('partials/_mobile-bar');
+
+        $this->assertStringNotContainsString('wa.me', $mobileBar);
+        $this->assertStringContainsString('class="sf-mobile-cart" aria-label="{{ translate(\'view_cart\') }}"', $mobileBar, 'The cart is an icon button, so it needs an accessible name.');
+        $this->assertStringContainsString('class="sf-mobile-app"', $mobileBar);
+        $this->assertStringContainsString('\App\Http\Controllers\Web\HomeController::APP_PROMO_COUPON_CODE', $mobileBar);
+        $this->assertStringContainsString("\$(document).on('click', '.sf-mobile-app'", $this->viewSource('partials/_scripts'));
 
         foreach (['cart', 'checkout-shipping', 'checkout-payment'] as $template) {
             $this->assertStringNotContainsString('_mobile-bar', $this->viewSource($template), "{$template} would stack the mobile bar under the order bar.");

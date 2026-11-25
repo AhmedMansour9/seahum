@@ -2874,4 +2874,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"your_order_is_on_the_way" => "Your order is on the way",
 	"coming_soon" => "Coming soon",
 	"on_your_first_order" => "On your first order",
+	"get_the_app" => "Get the app & save",
 ];
