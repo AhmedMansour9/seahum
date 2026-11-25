@@ -21,6 +21,7 @@
     @php($cartItems = \App\Utils\CartManager::getCartListQuery())
     @php($cartItemsCount = $cartItems->count())
     @php($cartItemKeysByProduct = $cartItems->pluck('id', 'product_id'))
+    @php($cartItemQuantitiesByProduct = $cartItems->pluck('quantity', 'product_id'))
     @php($auctionActive = function_exists('getCheckAddonPublishedStatus') && getCheckAddonPublishedStatus(moduleName: 'Auction') && getWebConfig(name: 'auction_feature_status'))
 
     <?php
@@ -190,7 +191,7 @@
 
                 <div class="sf-product-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px;">
                     @foreach($customersPicksProducts->take(4) as $product)
-                        @include('web-views.seafood.partials._product-card', ['product' => $product, 'cartItemKey' => $cartItemKeysByProduct[$product['id']] ?? null])
+                        @include('web-views.seafood.partials._product-card', ['product' => $product, 'cartItemKey' => $cartItemKeysByProduct[$product['id']] ?? null, 'cartItemQuantity' => $cartItemQuantitiesByProduct[$product['id']] ?? null])
                     @endforeach
                 </div>
             </section>
@@ -224,7 +225,7 @@
                     @foreach($shopProducts as $product)
                         @php($isVisibleCard = $product['category_id'] == $activeShopCategoryId && $visibleShopProductsCount < $shopInitialVisibleProducts)
                         @php($visibleShopProductsCount += $isVisibleCard ? 1 : 0)
-                        @include('web-views.seafood.partials._product-card', ['product' => $product, 'isVisibleCard' => $isVisibleCard, 'cartItemKey' => $cartItemKeysByProduct[$product['id']] ?? null])
+                        @include('web-views.seafood.partials._product-card', ['product' => $product, 'isVisibleCard' => $isVisibleCard, 'cartItemKey' => $cartItemKeysByProduct[$product['id']] ?? null, 'cartItemQuantity' => $cartItemQuantitiesByProduct[$product['id']] ?? null])
                     @endforeach
                 </div>
 

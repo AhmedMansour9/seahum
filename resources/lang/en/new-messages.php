@@ -2858,4 +2858,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"please_pick_your_delivery_location_on_the_map" => "Please pick your delivery location on the map",
 	"write_the_address_instead" => "Write the address instead",
 	"location_access_is_blocked_allow_it_from_your_browser_settings_or_tap_your_place_on_the_map" => "Location access is blocked. Allow it from your browser settings, or tap your place on the map.",
+	"added_to_your_cart" => "Added to your cart",
+	"checkout_now" => "Checkout now",
+	"items_in_your_cart" => "Items in your cart",
 ];

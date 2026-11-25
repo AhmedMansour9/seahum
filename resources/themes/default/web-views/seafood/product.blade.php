@@ -74,6 +74,7 @@
     @php($cartItems = \App\Utils\CartManager::getCartListQuery())
     @php($cartItemsCount = $cartItems->count())
     @php($cartItemKeysByProduct = $cartItems->pluck('id', 'product_id'))
+    @php($cartItemQuantitiesByProduct = $cartItems->pluck('quantity', 'product_id'))
     @php($isMultiVendor = getWebConfig(name: 'business_mode') == 'multi')
     @php($shop = $product->added_by == 'seller' ? $product?->seller?->shop : null)
     @php($hasDetails = !empty($product['details']))
@@ -207,6 +208,7 @@
                                 @include('web-views.seafood.partials._product-card', [
                                     'product' => $relatedProduct,
                                     'cartItemKey' => $cartItemKeysByProduct[$relatedProduct['id']] ?? null,
+                                    'cartItemQuantity' => $cartItemQuantitiesByProduct[$relatedProduct['id']] ?? null,
                                     'showRating' => true,
                                 ])
                             @endforeach

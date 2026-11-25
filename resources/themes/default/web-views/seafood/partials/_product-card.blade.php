@@ -3,6 +3,7 @@
 @php($thumbnailUrl = getStorageImages(path: $product->thumbnail_full_url, type: 'product'))
 @php($isVisibleCard = $isVisibleCard ?? true)
 @php($cartItemKey = $cartItemKey ?? null)
+@php($cartItemQuantity = $cartItemQuantity ?? null)
 @php($showRating = $showRating ?? false)
 @php($isWishlisted = $isWishlisted ?? isProductInWishList(productId: $product['id']))
 @php($wishlistRemovesCard = $wishlistRemovesCard ?? false)
@@ -14,7 +15,7 @@
 @php($reviewsCount = $showRating ? (int) ($product['reviews_count'] ?? 0) : 0)
 @php($productUrl = route('product', $product['slug']))
 
-<article class="sf-product-card{{ $isInStock ? '' : ' is-sold-out' }}" data-category-id="{{ $product['category_id'] }}"
+<article class="sf-product-card{{ $isInStock ? '' : ' is-sold-out' }}{{ $cartItemKey ? ' is-in-cart' : '' }}" data-category-id="{{ $product['category_id'] }}"
          style="display: {{ $isVisibleCard ? 'flex' : 'none' }};">
     <div class="sf-product-figure">
         <a href="{{ $productUrl }}" class="sf-product-figure-link" tabindex="-1" aria-hidden="true">
@@ -74,20 +75,37 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="sf-product-cta-arrow" d="M14 6 8 12l6 6"></path></svg>
                 </a>
             @else
-                <button type="button" class="seafood-cart-toggle sf-product-cta{{ $cartItemKey ? ' in-cart' : '' }}" data-product-id="{{ $product['id'] }}"
-                        data-quantity="{{ $product['minimum_order_qty'] > 0 ? $product['minimum_order_qty'] : 1 }}"
-                        data-product-url="{{ $productUrl }}"
-                        data-cart-key="{{ $cartItemKey }}"
-                        data-add-label="{{ translate('add_to_cart') }}" data-remove-label="{{ translate('remove_from_cart') }}"
-                        title="{{ $cartItemKey ? translate('remove_from_cart') : translate('add_to_cart') }}">
-                    <svg class="sf-product-cta-add" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M3 5h2l2 10h10.5l2-7H9"></path><circle cx="9" cy="20" r="1.3"></circle><circle cx="17" cy="20" r="1.3"></circle><path d="M14 2.5v5M11.5 5h5"></path>
-                    </svg>
-                    <svg class="sf-product-cta-added" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="m5 12.5 4.5 4.5L19 7.5"></path>
-                    </svg>
-                    <span class="seafood-cart-toggle-label sr-only">{{ $cartItemKey ? translate('remove_from_cart') : translate('add_to_cart') }}</span>
-                </button>
+                @php($minimumOrderQuantity = $product['minimum_order_qty'] > 0 ? (int) $product['minimum_order_qty'] : 1)
+                <div class="sf-product-buy">
+                    <button type="button" class="seafood-cart-toggle sf-product-cta{{ $cartItemKey ? ' in-cart' : '' }}" data-product-id="{{ $product['id'] }}"
+                            data-quantity="{{ $minimumOrderQuantity }}"
+                            data-product-url="{{ $productUrl }}"
+                            data-cart-key="{{ $cartItemKey }}"
+                            data-add-label="{{ translate('add_to_cart') }}" data-remove-label="{{ translate('remove_from_cart') }}"
+                            title="{{ $cartItemKey ? translate('remove_from_cart') : translate('add_to_cart') }}">
+                        <svg class="sf-product-cta-add" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M3 5h2l2 10h10.5l2-7H9"></path><circle cx="9" cy="20" r="1.3"></circle><circle cx="17" cy="20" r="1.3"></circle><path d="M14 2.5v5M11.5 5h5"></path>
+                        </svg>
+                        <svg class="sf-product-cta-added" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m5 12.5 4.5 4.5L19 7.5"></path>
+                        </svg>
+                        <span class="seafood-cart-toggle-label sr-only">{{ $cartItemKey ? translate('remove_from_cart') : translate('add_to_cart') }}</span>
+                    </button>
+
+                    {{-- Shown instead of the add button once the product is in the cart. --}}
+                    <div class="sf-card-stepper" role="group" aria-label="{{ translate('quantity') }}"
+                         data-product-id="{{ $product['id'] }}" data-min="{{ $minimumOrderQuantity }}">
+                        <button type="button" class="sf-card-stepper-btn" data-card-qty-step="-1"
+                                aria-label="{{ translate('decrease_quantity') }}" data-decrease-label="{{ translate('decrease_quantity') }}" data-remove-label="{{ translate('remove_from_cart') }}">
+                            <svg class="sf-card-stepper-minus" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg>
+                            <svg class="sf-card-stepper-trash" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"></path></svg>
+                        </button>
+                        <output class="sf-card-stepper-value" aria-live="polite">{{ $cartItemQuantity ?? $minimumOrderQuantity }}</output>
+                        <button type="button" class="sf-card-stepper-btn" data-card-qty-step="1" aria-label="{{ translate('increase_quantity') }}">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+                        </button>
+                    </div>
+                </div>
             @endif
         </div>
     </div>

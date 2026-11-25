@@ -7,6 +7,7 @@
                 @include('web-views.seafood.partials._product-card', [
                     'product' => $wishlist->productFullInfo,
                     'cartItemKey' => $cartItemKeysByProduct[$wishlist->productFullInfo['id']] ?? null,
+                    'cartItemQuantity' => $cartItemQuantitiesByProduct[$wishlist->productFullInfo['id']] ?? null,
                     'showRating' => true,
                     'isWishlisted' => true,
                     'wishlistRemovesCard' => true,

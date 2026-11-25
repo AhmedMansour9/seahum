@@ -22,13 +22,89 @@
         }
     });
 
-    function setSeafoodCartToggleState(button, cartKey) {
+    function setSeafoodCardQuantity(productId, quantity) {
+        $('.sf-card-stepper').filter(function () {
+            return String($(this).data('product-id')) === String(productId);
+        }).each(function () {
+            const stepper = $(this);
+            const minimumQuantity = parseInt(stepper.data('min'), 10) || 1;
+            const decreaseButton = stepper.find('[data-card-qty-step="-1"]');
+            stepper.find('.sf-card-stepper-value').text(quantity);
+            stepper.toggleClass('is-at-min', quantity <= minimumQuantity);
+            decreaseButton.attr('aria-label', quantity <= minimumQuantity ? decreaseButton.data('remove-label') : decreaseButton.data('decrease-label'));
+        });
+    }
+
+    function setSeafoodCartToggleState(button, cartKey, quantity) {
         button.data('cart-key', cartKey || '');
         button.toggleClass('in-cart', !!cartKey);
+        button.closest('.sf-product-card').toggleClass('is-in-cart', !!cartKey);
         const cartToggleLabel = cartKey ? button.data('remove-label') : button.data('add-label');
         button.find('.seafood-cart-toggle-label').text(cartToggleLabel);
         button.attr('title', cartToggleLabel);
+        if (cartKey && quantity) {
+            setSeafoodCardQuantity(button.data('product-id'), quantity);
+        }
     }
+
+    /* "Added to cart" sheet: keep shopping, or go straight to checkout. */
+    function openSeafoodCartSheet(button) {
+        const sheet = $('#sf-cart-added');
+        const card = button.closest('.sf-product-card');
+        if (!sheet.length || !card.length) {
+            return;
+        }
+        sheet.find('.sf-cart-sheet-image').attr('src', card.find('.sf-product-media').attr('src'));
+        sheet.find('.sf-cart-sheet-name').text(card.find('.sf-product-title').text().trim());
+        sheet.find('.sf-cart-sheet-price').html(card.find('.sf-product-price').html());
+        const dialog = sheet.find('.sf-cart-sheet-dialog');
+        dialog.removeClass('is-animated');
+        openSeafoodModal('sf-cart-added');
+        void dialog[0].offsetWidth; // restarts the check animation on every add
+        dialog.addClass('is-animated');
+        sheet.find('.sf-cart-sheet-checkout').trigger('focus');
+    }
+
+    $('.sf-card-stepper').each(function () {
+        const stepper = $(this);
+        setSeafoodCardQuantity(stepper.data('product-id'), parseInt(stepper.find('.sf-card-stepper-value').text(), 10) || 1);
+    });
+
+    $(document).on('click', '[data-card-qty-step]', function () {
+        const stepper = $(this).closest('.sf-card-stepper');
+        const toggle = stepper.closest('.sf-product-card').find('.seafood-cart-toggle');
+        const cartKey = toggle.data('cart-key');
+        if (!cartKey || stepper.hasClass('is-busy')) {
+            return;
+        }
+        const minimumQuantity = parseInt(stepper.data('min'), 10) || 1;
+        const currentQuantity = parseInt(stepper.find('.sf-card-stepper-value').text(), 10) || minimumQuantity;
+        const nextQuantity = currentQuantity + parseInt($(this).data('card-qty-step'), 10);
+
+        if (nextQuantity < minimumQuantity) {
+            toggle.trigger('click');
+            return;
+        }
+
+        stepper.addClass('is-busy');
+        $.post({
+            url: $('#sf-cart-added').data('update-url'),
+            data: {key: cartKey, quantity: nextQuantity},
+            success: function (response) {
+                if (response.status === 0) {
+                    toastr.warning(response.message);
+                    return;
+                }
+                setSeafoodCardQuantity(stepper.data('product-id'), nextQuantity);
+            },
+            error: function () {
+                toastr.error($('#sf-cart-added').data('error-message'));
+            },
+            complete: function () {
+                stepper.removeClass('is-busy');
+            },
+        });
+    });
 
     $(document).on('click', '.seafood-cart-toggle', function () {
         const button = $(this);
@@ -56,13 +132,13 @@
             data: {id: button.data('product-id'), quantity: button.data('quantity')},
             success: function (response) {
                 if (response.status === 1) {
-                    toastr.success(response.message);
                     $('.seafood-cart-count').text(response.cart_items_count);
                     $('.seafood-cart-toggle').filter(function () {
                         return String($(this).data('product-id')) === String(button.data('product-id'));
                     }).each(function () {
-                        setSeafoodCartToggleState($(this), response.in_cart_key || (response.cart && response.cart.id));
+                        setSeafoodCartToggleState($(this), response.in_cart_key || (response.cart && response.cart.id), parseInt(button.data('quantity'), 10) || 1);
                     });
+                    openSeafoodCartSheet(button);
                 } else if (response.status === 2) {
                     location.href = button.data('product-url');
                 } else {
@@ -338,6 +414,40 @@
                 <button type="button" class="sf-btn-sm sf-btn-sm-primary" id="sf-confirm-accept" style="flex: 1 1 120px;">{{ translate('yes') }}</button>
                 <button type="button" class="sf-btn-sm" data-sf-modal-close style="flex: 1 1 120px;">{{ translate('no') }}</button>
             </div>
+        </div>
+    </div>
+</div>
+
+@php($cartSheetCheckoutUrl = ($web_config['guest_checkout_status'] ?? false) || auth('customer')->check() ? route('checkout-details') : route('customer.auth.login'))
+<div class="sf-modal sf-cart-sheet" id="sf-cart-added" role="dialog" aria-modal="true" aria-labelledby="sf-cart-added-title" hidden
+     data-update-url="{{ route('cart.updateQuantity.guest') }}" data-error-message="{{ translate('something_went_wrong') }}">
+    <div class="sf-modal-dialog sf-cart-sheet-dialog">
+        <span class="sf-cart-sheet-handle" aria-hidden="true"></span>
+        <div class="sf-cart-sheet-status">
+            <span class="sf-cart-sheet-check" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+            </span>
+            <h2 class="sf-cart-sheet-title" id="sf-cart-added-title">{{ translate('added_to_your_cart') }}</h2>
+            <button type="button" class="sf-icon-btn" data-sf-modal-close aria-label="{{ translate('close') }}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+            </button>
+        </div>
+        <div class="sf-cart-sheet-product">
+            <img class="sf-cart-sheet-image" src="data:," alt="">
+            <div class="sf-cart-sheet-info">
+                <strong class="sf-cart-sheet-name"></strong>
+                <span class="sf-cart-sheet-price"></span>
+            </div>
+        </div>
+        <p class="sf-cart-sheet-count">
+            {{ translate('items_in_your_cart') }}: <strong class="seafood-cart-count"></strong>
+        </p>
+        <div class="sf-cart-sheet-actions">
+            <a href="{{ $cartSheetCheckoutUrl }}" class="sf-btn-block sf-cart-sheet-checkout">
+                {{ translate('checkout_now') }}
+                <svg class="sf-cart-sheet-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 6 8 12l6 6"></path></svg>
+            </a>
+            <button type="button" class="sf-cart-sheet-continue" data-sf-modal-close>{{ translate('continue_shopping') }}</button>
         </div>
     </div>
 </div>

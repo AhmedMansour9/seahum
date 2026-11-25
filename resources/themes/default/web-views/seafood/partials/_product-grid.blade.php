@@ -11,6 +11,7 @@
                 @include('web-views.seafood.partials._product-card', [
                     'product' => $listedProduct,
                     'cartItemKey' => $cartItemKeysByProduct[$listedProduct['id']] ?? null,
+                    'cartItemQuantity' => $cartItemQuantitiesByProduct[$listedProduct['id']] ?? null,
                     'showRating' => true,
                 ])
             @endif
