@@ -167,6 +167,14 @@ class SeafoodOnePageCheckoutTest extends TestCase
         }
     }
 
+    public function test_home_lists_every_category_that_has_products(): void
+    {
+        $homePage = $this->viewSource('home');
+
+        $this->assertStringContainsString('@php($shopCategories = $categories->filter(fn ($category) => ($category->product_count ?? $category->product?->count() ?? 0) > 0))', $homePage);
+        $this->assertStringNotContainsString('$categories->take(6)', $homePage, 'A fixed count hides categories such as caviar.');
+    }
+
     public function test_home_hero_is_hidden_on_phones(): void
     {
         $this->assertStringContainsString('<section id="home" class="sf-hero"', $this->viewSource('home'));
