@@ -4,13 +4,12 @@
 @php($thumbnailUrl = getStorageImages(path: $product->thumbnail_full_url, type: 'product'))
 @php($isVisibleCard = $isVisibleCard ?? true)
 @php($cartItemKey = $cartItemKey ?? null)
-@php($showPricingDetails = $showPricingDetails ?? false)
 @php($showRating = $showRating ?? false)
 @php($isWishlisted = $isWishlisted ?? isProductInWishList(productId: $product['id']))
 @php($wishlistRemovesCard = $wishlistRemovesCard ?? false)
 @php($unitPrice = (float) $product['unit_price'])
 @php($discountedUnitPrice = (float) getProductPriceByType(product: $product, type: 'discounted_unit_price', result: 'value'))
-@php($hasDiscount = $showPricingDetails && $discountedUnitPrice > 0 && $discountedUnitPrice < $unitPrice)
+@php($hasDiscount = $discountedUnitPrice > 0 && $discountedUnitPrice < $unitPrice)
 @php($discountPercentage = $hasDiscount ? (int) round((($unitPrice - $discountedUnitPrice) / $unitPrice) * 100) : 0)
 @php($averageRating = $showRating ? round((float) ($product['reviews_avg_rating'] ?? 0), 1) : 0)
 @php($reviewsCount = $showRating ? (int) ($product['reviews_count'] ?? 0) : 0)
@@ -21,7 +20,7 @@
         <a href="{{ route('product', $product['slug']) }}" style="display: block;">
             <img src="{{ $thumbnailUrl }}"
                  alt="{{ $product['name'] }}" loading="lazy"
-                 class="sf-product-media" style="width: 100%; aspect-ratio: 4 / 3; height: auto; object-fit: contain; object-position: center; display: block;">
+                 class="sf-product-media" style="width: 100%; aspect-ratio: 1 / 1; height: auto; object-fit: cover; object-position: center; display: block;">
         </a>
         <span class="sf-product-badges" style="position: absolute; top: 12px; inset-inline-start: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;">
             <span class="sf-product-badge" style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; background: rgba(255,255,255,.94); color: {{ $stockColor }}; box-shadow: 0 6px 16px -8px rgba(var(--sh-navy-rgb), .6);">
