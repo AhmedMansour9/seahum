@@ -2857,4 +2857,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"we_could_not_get_your_location_tap_the_map_instead" => "We could not get your location, tap your place on the map instead",
 	"please_pick_your_delivery_location_on_the_map" => "Please pick your delivery location on the map",
 	"write_the_address_instead" => "Write the address instead",
+	"location_access_is_blocked_allow_it_from_your_browser_settings_or_tap_your_place_on_the_map" => "Location access is blocked. Allow it from your browser settings, or tap your place on the map.",
 ];

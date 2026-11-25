@@ -111,6 +111,9 @@
                     {{ translate('use_my_current_location') }}
                 </button>
             </div>
+            <p class="sf-location-blocked" role="status" hidden>
+                {{ translate('location_access_is_blocked_allow_it_from_your_browser_settings_or_tap_your_place_on_the_map') }}
+            </p>
             <input id="pac-input" class="sf-filter-field sf-map-search" type="text"
                    title="{{ translate('search_your_location_here') }}" placeholder="{{ translate('search_for_your_area_or_street') }}">
             <div class="sf-map-canvas" id="location_map_canvas"></div>
