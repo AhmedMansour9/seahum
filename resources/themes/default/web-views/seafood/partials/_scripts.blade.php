@@ -3,6 +3,19 @@
 
     $.ajaxSetup({headers: {"X-CSRF-TOKEN": $('meta[name="_token"]').attr("content")}});
 
+    /* Meta Pixel AddToCart; does nothing until a Pixel ID is set in admin (Third party > Analytics). */
+    window.trackSeafoodAddToCart = function (productId, quantity) {
+        if (typeof window.fbq !== 'function' || !productId) {
+            return;
+        }
+        fbq('track', 'AddToCart', {
+            content_type: 'product',
+            content_ids: [String(productId)],
+            num_items: parseInt(quantity, 10) || 1,
+            currency: @json(app(\App\Services\MetaPixelService::class)->getCurrencyCode()),
+        });
+    };
+
     $(document).on('click', '#seafood-menu-toggle', function () {
         const menu = $('#seafood-mobile-menu');
         const willOpen = menu.attr('data-open') !== 'true';
@@ -139,6 +152,7 @@
                         setSeafoodCartToggleState($(this), response.in_cart_key || (response.cart && response.cart.id), parseInt(button.data('quantity'), 10) || 1);
                     });
                     openSeafoodCartSheet(button);
+                    trackSeafoodAddToCart(button.data('product-id'), button.data('quantity'));
                 } else if (response.status === 2) {
                     location.href = button.data('product-url');
                 } else {

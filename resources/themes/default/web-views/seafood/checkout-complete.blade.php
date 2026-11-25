@@ -70,4 +70,8 @@
 
 @push('script')
     @include('web-views.seafood.partials._scripts')
+    @php($pixelPurchase = app(\App\Services\MetaPixelService::class)->getPurchaseEvent($order_ids ?? null))
+    @if($pixelPurchase)
+        @include('web-views.seafood.partials._meta-pixel-event', ['pixelEvent' => 'Purchase', 'pixelData' => $pixelPurchase['data'], 'pixelEventId' => $pixelPurchase['event_id']])
+    @endif
 @endpush

@@ -208,6 +208,9 @@
                 success: function (response) {
                     if (response.status === 1) {
                         toastr.success(response.message);
+                        if (!existingCartKey || redirectToCheckout) {
+                            trackSeafoodAddToCart(detailsForm.find('[name="id"]').val(), detailsForm.find('[name="quantity"]').val());
+                        }
                         $('.seafood-cart-count').text(response.cart_items_count ?? $('.seafood-cart-count').text());
                         detailsForm.find('.product-exist-in-cart-list').val(response.in_cart_key);
 

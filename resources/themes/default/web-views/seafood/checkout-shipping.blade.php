@@ -96,6 +96,14 @@
     @include('web-views.seafood.partials._scripts')
 
     @include('web-views.seafood.partials._checkout-scripts')
+    @php($pixelCartItems = \App\Utils\CartManager::getCartListQuery(type: 'checked'))
+    @include('web-views.seafood.partials._meta-pixel-event', ['pixelEvent' => 'InitiateCheckout', 'pixelData' => [
+        'content_type' => 'product',
+        'content_ids' => $pixelCartItems->pluck('product_id')->unique()->map(fn ($productId) => (string) $productId)->values()->all(),
+        'num_items' => (int) $pixelCartItems->sum('quantity'),
+        'value' => round((float) $pixelCartItems->sum(fn ($cartItem) => ($cartItem['price'] - $cartItem['discount']) * $cartItem['quantity']), 2),
+        'currency' => app(\App\Services\MetaPixelService::class)->getCurrencyCode(),
+    ]])
 
     <script>
         "use strict";
