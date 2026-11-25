@@ -7,7 +7,8 @@
 @section('account_content')
     @php
         $referralCode = $customer_detail->referral_code;
-        $referralLink = route('customer.auth.sign-up') . '?referral_code=' . $referralCode;
+        // Invites send friends to the app download page; the code travels in the message and the link.
+        $referralLink = rtrim(config('deeplinks.app_download_url'), '/') . '/?referral_code=' . $referralCode;
         $referralShareText = translate('Greetings') . ', ' . $web_config['company_name'] . ' '
             . translate('is_the_best_ecommerce_platform_in_the_country.if_you_are_new_to_this_website_dont_forget_to_use') . ' '
             . $referralCode . ' ' . translate('as_the_referral_code_while_sign_up_into.') . ' ' . $web_config['company_name'];
