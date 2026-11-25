@@ -22,4 +22,23 @@ class CustomerApiPayloadTest extends TestCase
             'The "most ordered" sort reads the loaded products, so they are hidden only after sorting.'
         );
     }
+
+    public function test_tables_read_on_every_app_launch_get_lookup_indexes_safely(): void
+    {
+        $migration = file_get_contents(database_path('migrations/2026_11_26_003145_add_indexes_to_hot_storefront_tables.php'));
+
+        foreach ([
+            "'carts_customer_id_is_guest_index' => ['customer_id', 'is_guest']",
+            "'cart_shippings_cart_group_id_index' => ['cart_group_id']",
+            "'wishlists_customer_id_product_id_index' => ['customer_id', 'product_id']",
+            "'shipping_addresses_customer_id_is_guest_index' => ['customer_id', 'is_guest']",
+            "'translations_translationable_locale_index' => ['translationable_type', 'translationable_id', 'locale']",
+        ] as $index) {
+            $this->assertStringContainsString($index, $migration);
+        }
+
+        /* Re-running on a server where an index or column differs must not fail the deploy. */
+        $this->assertStringContainsString('&& ! Schema::hasIndex($table, $indexName);', $migration);
+        $this->assertStringContainsString('&& Schema::hasColumns($table, $columns)', $migration);
+    }
 }
