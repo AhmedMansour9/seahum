@@ -248,6 +248,12 @@ class SeafoodAuthAndPageViewTest extends TestCase
         $registerPage = file_get_contents($this->templatePath('web-views.customer-views.auth.register'));
 
         $this->assertStringContainsString("'referral_customer_signup_url' => route('customer.auth.sign-up') . '?referral_code=',", $configController);
+        /* The app's Refer & Earn screen shows both rewards, so the config must carry them. */
+        $this->assertStringContainsString("'ref_earning_exchange_rate' => (float) (getWebConfig(name: 'ref_earning_exchange_rate') ?? 0),", $configController);
+        $this->assertStringContainsString("'ref_earning_customer' => \$this->getReferredCustomerDiscount(),", $configController);
+        foreach (['ref_earning_discount_status', 'discount_amount', 'discount_type', 'validity', 'validity_type'] as $settingKey) {
+            $this->assertStringContainsString("\$referredCustomerConfig['{$settingKey}']", $configController);
+        }
         $this->assertStringContainsString("\$referralLink = route('customer.auth.sign-up') . '?referral_code=' . \$referralCode;", $referEarnPage);
         $this->assertSame(4, substr_count($referEarnPage, '$referralLink'), 'WhatsApp, email and copy-link must all share the sign-up link.');
         $this->assertStringNotContainsString("url('/'))", $referEarnPage);

@@ -202,6 +202,8 @@ class ConfigController extends Controller
             'offline_payment' => $offlinePayment,
             'payment_method_image_path' => dynamicStorage(path: 'storage/app/public/payment_modules/gateway_image'),
             'ref_earning_status' => getWebConfig(name: 'ref_earning_status') ?? 0,
+            'ref_earning_exchange_rate' => (float) (getWebConfig(name: 'ref_earning_exchange_rate') ?? 0),
+            'ref_earning_customer' => $this->getReferredCustomerDiscount(),
             'active_theme' => theme_root_path(),
             'theme_comfortable_panel_version' => $themeComfortablePanelVersion,
             'popular_tags' => $this->cacheTagTable(),
@@ -275,5 +277,24 @@ class ConfigController extends Controller
             $businessPages = $businessPages?->where('default_status', 0);
         }
         return $businessPages->values();
+    }
+
+    /**
+     * The first-order discount a customer gets for signing up with a referral code, so the app can advertise it.
+     *
+     * @return array{status: int, discount_amount: float, discount_type: string, validity: int, validity_type: string}
+     */
+    private function getReferredCustomerDiscount(): array
+    {
+        $referredCustomerConfig = getWebConfig(name: 'ref_earning_customer');
+        $referredCustomerConfig = is_array($referredCustomerConfig) ? $referredCustomerConfig : (json_decode((string) $referredCustomerConfig, true) ?? []);
+
+        return [
+            'status' => (int) ($referredCustomerConfig['ref_earning_discount_status'] ?? 0),
+            'discount_amount' => (float) ($referredCustomerConfig['discount_amount'] ?? 0),
+            'discount_type' => (string) ($referredCustomerConfig['discount_type'] ?? 'percentage'),
+            'validity' => (int) ($referredCustomerConfig['validity'] ?? 0),
+            'validity_type' => (string) ($referredCustomerConfig['validity_type'] ?? 'day'),
+        ];
     }
 }
