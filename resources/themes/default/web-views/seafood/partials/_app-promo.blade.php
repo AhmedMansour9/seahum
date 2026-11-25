@@ -1,4 +1,4 @@
-@php($promoPercentLabel = $appPromoCoupon && $appPromoCoupon->discount_type === 'percentage' ? rtrim(rtrim(number_format($appPromoCoupon->discount, 2, '.', ''), '0'), '.').'%' : null)
+@php($promoPercentLabel = $appPromoDiscountPercent !== null ? rtrim(rtrim(number_format($appPromoDiscountPercent, 2, '.', ''), '0'), '.').'%' : null)
 @php($phonePreviewProducts = $phonePreviewProducts->take(2))
 
 <section id="app" class="sf-gutter sf-app-promo-section" aria-labelledby="sf-app-promo-title">
@@ -17,40 +17,44 @@
             <h2 class="sf-app-promo-title" id="sf-app-promo-title">{{ translate('the_whole_sea_in_your_pocket') }}</h2>
             <p class="sf-app-promo-text">{{ translate('order_your_fresh_catch_in_seconds_follow_your_order_step_by_step_and_be_the_first_to_get_app_offers') }}</p>
 
-            @if($appPromoCoupon)
-                <div class="sf-promo-ticket">
-                    <div class="sf-promo-ticket-value">
-                        <strong>
-                            @if($promoPercentLabel)
-                                <bdi dir="ltr">{{ $promoPercentLabel }}</bdi>
-                            @else
-                                @include('web-views.seafood.partials._price', ['amount' => $appPromoCoupon->discount, 'symbolSize' => '.5em', 'symbolColor' => 'currentColor'])
-                            @endif
-                        </strong>
-                        <span>{{ translate('off') }}</span>
-                    </div>
-                    <div class="sf-promo-ticket-body">
-                        <span class="sf-promo-ticket-label">{{ translate('your_welcome_code_from_the_sea') }}</span>
-                        <button type="button" class="sf-promo-code" data-promo-code="{{ $appPromoCoupon->code }}"
-                                data-copied-message="{{ translate('code_copied_use_it_at_checkout') }}"
-                                aria-label="{{ translate('copy_the_code') }} {{ $appPromoCoupon->code }}">
-                            <bdi dir="ltr" class="sf-promo-code-value">{{ $appPromoCoupon->code }}</bdi>
-                            <span class="sf-promo-code-action">
-                                <svg class="sf-promo-code-copy" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h10"></path></svg>
-                                <svg class="sf-promo-code-done" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
-                                <span class="sf-promo-code-hint" data-copied-label="{{ translate('copied') }}">{{ translate('copy') }}</span>
-                            </span>
-                        </button>
-                        <span class="sf-promo-ticket-terms">
-                            @if($appPromoCoupon->min_purchase > 0)
-                                {{ translate('on_orders_from') }} @include('web-views.seafood.partials._price', ['amount' => $appPromoCoupon->min_purchase, 'symbolSize' => '11px', 'symbolColor' => 'currentColor'])
-                                ·
-                            @endif
-                            {{ translate('valid_until') }} <bdi dir="ltr">{{ $appPromoCoupon->expire_date->format('d/m/Y') }}</bdi>
-                        </span>
-                    </div>
+        <div class="sf-promo-ticket">
+                <div class="sf-promo-ticket-value">
+                    <strong>
+                        @if($promoPercentLabel)
+                            <bdi dir="ltr">{{ $promoPercentLabel }}</bdi>
+                        @else
+                            @include('web-views.seafood.partials._price', ['amount' => $appPromoCoupon->discount, 'symbolSize' => '.5em', 'symbolColor' => 'currentColor'])
+                        @endif
+                    </strong>
+                    <span>{{ translate('off') }}</span>
                 </div>
-            @endif
+                <div class="sf-promo-ticket-body">
+                    <span class="sf-promo-ticket-label">{{ translate('your_welcome_code_from_the_sea') }}</span>
+                    <button type="button" class="sf-promo-code" data-promo-code="{{ $appPromoCode }}"
+                            data-copied-message="{{ translate('code_copied_use_it_at_checkout') }}"
+                            aria-label="{{ translate('copy_the_code') }} {{ $appPromoCode }}">
+                        <bdi dir="ltr" class="sf-promo-code-value">{{ $appPromoCode }}</bdi>
+                        <span class="sf-promo-code-action">
+                            <svg class="sf-promo-code-copy" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h10"></path></svg>
+                            <svg class="sf-promo-code-done" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+                            <span class="sf-promo-code-hint" data-copied-label="{{ translate('copied') }}">{{ translate('copy') }}</span>
+                        </span>
+                    </button>
+                    @if($appPromoCoupon)
+                    <span class="sf-promo-ticket-terms">
+                        @if($appPromoCoupon->coupon_type === 'first_order')
+                            {{ translate('on_your_first_order') }}
+                            ·
+                        @endif
+                        @if($appPromoCoupon->min_purchase > 0)
+                            {{ translate('on_orders_from') }} @include('web-views.seafood.partials._price', ['amount' => $appPromoCoupon->min_purchase, 'symbolSize' => '11px', 'symbolColor' => 'currentColor'])
+                            ·
+                        @endif
+                        {{ translate('valid_until') }} <bdi dir="ltr">{{ $appPromoCoupon->expire_date->format('d/m/Y') }}</bdi>
+                    </span>
+                    @endif
+                </div>
+            </div>
 
             @include('web-views.seafood.partials._store-badges', ['googlePlayUrl' => $googlePlayUrl, 'appStoreUrl' => $appStoreUrl, 'showComingSoon' => true])
         </div>
@@ -66,9 +70,7 @@
                     <span class="sf-app-phone-search"></span>
                     <div class="sf-app-phone-banner">
                         <span>{{ translate('fresh_today') }}</span>
-                        @if($appPromoCoupon)
-                            <bdi dir="ltr">{{ $appPromoCoupon->code }}</bdi>
-                        @endif
+                        <bdi dir="ltr">{{ $appPromoCode }}</bdi>
                     </div>
                     <div class="sf-app-phone-grid">
                         @foreach($phonePreviewProducts as $previewProduct)

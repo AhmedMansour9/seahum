@@ -2873,4 +2873,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"fresh_today" => "Fresh today",
 	"your_order_is_on_the_way" => "Your order is on the way",
 	"coming_soon" => "Coming soon",
+	"on_your_first_order" => "On your first order",
 ];
