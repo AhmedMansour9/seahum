@@ -25,7 +25,9 @@
     function setSeafoodCartToggleState(button, cartKey) {
         button.data('cart-key', cartKey || '');
         button.toggleClass('in-cart', !!cartKey);
-        button.find('.seafood-cart-toggle-label').text(cartKey ? button.data('remove-label') : button.data('add-label'));
+        const cartToggleLabel = cartKey ? button.data('remove-label') : button.data('add-label');
+        button.find('.seafood-cart-toggle-label').text(cartToggleLabel);
+        button.attr('title', cartToggleLabel);
     }
 
     $(document).on('click', '.seafood-cart-toggle', function () {

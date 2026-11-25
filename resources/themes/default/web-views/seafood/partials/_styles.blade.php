@@ -511,7 +511,40 @@
         .sf-see-more:hover { background: var(--sh-sea-50); border-color: var(--sh-sea); transform: translateY(-2px); }
         .sf-see-more-icon { width: 24px; height: 24px; border-radius: 50%; background: var(--sh-sea-50); color: var(--sh-sea-700); display: grid; place-items: center; }
 
-        .sf-product-title { overflow-wrap: anywhere; }
+        /* ---- Product card ---- */
+        .sf-product-card { position: relative; flex-direction: column; min-width: 0; padding: 8px; background: #FFFFFF; border: 1px solid var(--sh-line); border-radius: 22px; box-shadow: var(--sh-shadow-card); transition: transform .3s, box-shadow .3s, border-color .3s; }
+        .sf-product-card:hover { transform: translateY(-4px); border-color: var(--sh-sea-100); box-shadow: 0 24px 44px -30px rgba(var(--sh-navy-rgb), .6); }
+        .sf-product-figure { position: relative; overflow: hidden; border-radius: 16px; background: var(--sh-mist); isolation: isolate; }
+        .sf-product-figure-link { display: block; }
+        .sf-product-media { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+        .sf-product-card:hover .sf-product-media { transform: scale(1.06); }
+        .sf-product-discount { position: absolute; top: 10px; inset-inline-start: 10px; z-index: 1; padding: 6px 10px; border-radius: 999px; background: var(--sh-grad-catch); color: #FFFFFF; font-family: var(--sh-font-display); font-size: 12.5px; font-weight: 800; line-height: 1; box-shadow: 0 8px 18px -8px rgba(var(--sh-tuna-rgb), .9); }
+        .sf-product-wish { position: absolute; top: 8px; inset-inline-end: 8px; z-index: 1; width: 38px; height: 38px; border: 0; border-radius: 50%; background: rgba(255,255,255,.94); backdrop-filter: blur(6px); display: grid; place-items: center; cursor: pointer; box-shadow: 0 6px 16px -8px rgba(var(--sh-navy-rgb), .7); transition: transform .2s; }
+        .sf-product-wish:hover { transform: scale(1.08); }
+        .sf-product-wish:focus-visible, .sf-product-cta:focus-visible { outline: none; box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 5px var(--sh-sea); }
+        .sf-product-card.is-sold-out .sf-product-media { filter: grayscale(.7); opacity: .7; }
+        .sf-product-soldout { position: absolute; inset-inline: 10px; bottom: 10px; z-index: 1; padding: 8px; border-radius: 12px; background: rgba(var(--sh-navy-rgb), .86); color: #FFFFFF; text-align: center; font-family: var(--sh-font-display); font-size: 12.5px; font-weight: 700; }
+        .sf-product-body { display: flex; flex-direction: column; flex: 1; gap: 8px; padding: 12px 6px 4px; }
+        .sf-product-title { margin: 0; min-height: 3em; font-family: var(--sh-font-display); font-size: 15.5px; font-weight: 700; line-height: 1.5; color: var(--sh-navy); overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .sf-product-title a { color: inherit; }
+        .sf-product-title a:hover { color: var(--sh-sea-700); }
+        .sf-product-rating { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #B47B12; }
+        .sf-product-rating-stars { color: var(--sh-gold); font-size: 14px; letter-spacing: 1px; }
+        .sf-product-rating-count { color: var(--sh-muted-2); font-weight: 400; }
+        .sf-product-footer { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; margin-top: auto; }
+        .sf-product-pricing { display: flex; flex-direction: column; min-width: 0; }
+        .sf-product-old-price { min-height: 18px; font-size: 12.5px; line-height: 18px; color: var(--sh-muted-2); text-decoration: line-through; white-space: nowrap; }
+        .sf-product-price { font-family: var(--sh-font-display); font-size: 20px; font-weight: 800; line-height: 1.25; color: var(--sh-navy); letter-spacing: -.3px; white-space: nowrap; }
+        .sf-product-cta { flex-shrink: 0; width: 46px; height: 46px; padding: 0; border: 0; border-radius: 14px; display: grid; place-items: center; cursor: pointer; transition: background .22s, color .22s, transform .22s, box-shadow .22s; }
+        .sf-product-card .seafood-cart-toggle.sf-product-cta { height: 46px; padding: 0; background: var(--sh-action); color: #FFFFFF; box-shadow: var(--sh-shadow-cta); }
+        .sf-product-card .seafood-cart-toggle.sf-product-cta:hover { background: var(--sh-action-hover); color: var(--sh-on-action-hover); transform: translateY(-2px); }
+        .sf-product-card .seafood-cart-toggle.sf-product-cta.in-cart { background: var(--sh-navy); color: #FFFFFF; box-shadow: 0 12px 24px -14px rgba(var(--sh-navy-rgb), .9); }
+        .sf-product-cta-added, .sf-product-cta.in-cart .sf-product-cta-add { display: none; }
+        .sf-product-cta.in-cart .sf-product-cta-added { display: block; }
+        .sf-product-card .sf-product-action.sf-product-cta { background: var(--sh-sea-50); color: var(--sh-sea-700); }
+        .sf-product-card .sf-product-action.sf-product-cta:hover { background: var(--sh-sea); color: #FFFFFF; }
+        [dir="ltr"] .sf-product-action.sf-product-cta svg { transform: scaleX(-1); }
+        @media (prefers-reduced-motion: reduce) { .sf-product-card, .sf-product-media { transition: none; } .sf-product-card:hover, .sf-product-card:hover .sf-product-media { transform: none; } }
 
         .sf-burger { display: none; }
         .sf-mobile-bar { display: none; }
@@ -569,12 +602,15 @@
             .sf-search-wrap { flex: 1 1 100%; }
             .sf-search-field { width: 100% !important; }
             .sf-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; }
-            .sf-product-title { font-size: 15px !important; line-height: 1.45 !important; }
-            .sf-product-rule { margin: 10px 0 !important; }
-            .sf-product-price { font-size: 19px !important; }
-            .sf-product-badge { font-size: 10.5px !important; }
-            .sf-product-actions { flex-direction: column !important; align-items: stretch !important; }
-            .sf-product-actions .seafood-cart-toggle, .sf-product-actions .sf-product-action { width: 100%; padding: 0 14px; font-size: 13px; }
+            .sf-product-card { padding: 6px; border-radius: 18px; }
+            .sf-product-figure { border-radius: 13px; }
+            .sf-product-body { padding: 10px 4px 2px; gap: 6px; }
+            .sf-product-title { font-size: 14px; }
+            .sf-product-price { font-size: 17px; }
+            .sf-product-old-price { font-size: 11.5px; }
+            .sf-product-cta, .sf-product-card .seafood-cart-toggle.sf-product-cta { width: 40px; height: 40px; border-radius: 12px; }
+            .sf-product-discount { top: 8px; inset-inline-start: 8px; padding: 5px 8px; font-size: 11.5px; }
+            .sf-product-wish { width: 34px; height: 34px; top: 6px; inset-inline-end: 6px; }
             .sf-tabs { flex-wrap: nowrap !important; }
             .sf-form-grid { grid-template-columns: 1fr !important; }
             .sf-chat { grid-template-columns: minmax(0, 1fr) !important; }
