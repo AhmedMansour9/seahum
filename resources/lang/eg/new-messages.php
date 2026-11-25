@@ -9601,4 +9601,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"fresh_today" => "طازة النهارده",
 	"your_order_is_on_the_way" => "طلبك في الطريق",
 	"coming_soon" => "قريبًا",
+	"on_your_first_order" => "على أول طلب",
 ];

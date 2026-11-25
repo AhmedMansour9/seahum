@@ -229,22 +229,23 @@ class SeafoodCategoryViewTest extends TestCase
     }
 
     /**
-     * The app promo only advertises the welcome code while that coupon is live, and renders whenever there is a code or a store link to show.
+     * The app promo always shows with the BAHR10 code; the live coupon's own discount and terms replace the defaults once it is active.
      */
-    public function test_home_app_promo_advertises_the_welcome_code_only_while_its_coupon_is_active(): void
+    public function test_home_app_promo_always_shows_the_welcome_code_and_uses_the_active_coupon_terms(): void
     {
         $homeController = file_get_contents(app_path('Http/Controllers/Web/HomeController.php'));
         $homePage = file_get_contents($this->templatePath('web-views.seafood.home'));
         $appPromo = file_get_contents($this->templatePath('web-views.seafood.partials._app-promo'));
 
         $this->assertStringContainsString("public const APP_PROMO_COUPON_CODE = 'BAHR10';", $homeController);
-        foreach (["Coupon::active()", "->where('code', self::APP_PROMO_COUPON_CODE)", "->whereDate('start_date', '<=', now())", "->whereDate('expire_date', '>=', now())"] as $condition) {
+        foreach (["Coupon::active()", "->where('code', self::APP_PROMO_COUPON_CODE)", "->whereIn('coupon_type', ['discount_on_purchase', 'first_order'])", "->whereDate('start_date', '<=', now())", "->whereDate('expire_date', '>=', now())", '$appPromoCoupon?->code ?? self::APP_PROMO_COUPON_CODE', ': self::APP_PROMO_DEFAULT_DISCOUNT_PERCENT;'] as $condition) {
             $this->assertStringContainsString($condition, $homeController);
         }
 
-        $this->assertStringContainsString('@if($appPromoCoupon || $googlePlayUrl || $appStoreUrl)', $homePage);
+        $this->assertMatchesRegularExpression("/\\n        @include\\('web-views\\.seafood\\.partials\\._app-promo'/", $homePage, 'The app promo must render without a coupon or store-link condition.');
+        $this->assertStringNotContainsString('@if($appPromoCoupon)'."\n".'                <div class="sf-promo-ticket">', str_replace("\r\n", "\n", $appPromo));
         $this->assertStringContainsString('@if($appPromoCoupon)', $appPromo);
-        $this->assertStringContainsString('data-promo-code="{{ $appPromoCoupon->code }}"', $appPromo);
+        $this->assertStringContainsString('data-promo-code="{{ $appPromoCode }}"', $appPromo);
         $this->assertStringContainsString("'showComingSoon' => true", $appPromo);
         $this->assertStringContainsString("\$(document).on('click', '[data-promo-code]'", file_get_contents($this->templatePath('web-views.seafood.partials._scripts')));
 

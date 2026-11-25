@@ -38,8 +38,13 @@ class HomeController extends Controller
 
     private const SHOP_TICKER_PRODUCTS_LIMIT = 12;
 
-    /** The coupon the home page advertises next to the app download badges; it is created from the admin coupon page. */
+    /**
+     * The code the home page app promo always advertises. When the admin coupon with this code is active,
+     * its own discount and dates are shown instead of the default percentage.
+     */
     public const APP_PROMO_COUPON_CODE = 'BAHR10';
+
+    private const APP_PROMO_DEFAULT_DISCOUNT_PERCENT = 10;
 
     public function __construct(
         private readonly Product $product,
@@ -120,13 +125,17 @@ class HomeController extends Controller
         $shopInitialVisibleProducts = self::SHOP_INITIAL_VISIBLE_PRODUCTS;
         $tickerProducts = $shopProducts->take(self::SHOP_TICKER_PRODUCTS_LIMIT);
         $appPromoCoupon = $this->getActiveAppPromoCoupon();
+        $appPromoCode = $appPromoCoupon?->code ?? self::APP_PROMO_COUPON_CODE;
+        $appPromoDiscountPercent = $appPromoCoupon
+            ? ($appPromoCoupon->discount_type === 'percentage' ? (float) $appPromoCoupon->discount : null)
+            : self::APP_PROMO_DEFAULT_DISCOUNT_PERCENT;
 
         return view(VIEW_FILE_NAMES['home'],
             compact(
                 'flashDeal', 'featuredProductsList', 'topRatedProducts', 'bestSellProduct', 'latestProductsList', 'categories', 'brands',
                 'dealOfTheDay', 'topVendorsList', 'homeCategories', 'bannerTypeMainBanner', 'bannerTypeMainSectionBanner',
                 'current_date', 'recommendedProduct', 'bannerTypeFooterBanner', 'newArrivalProducts', 'clearanceSaleProducts', 'robotsMetaContentData', 'auctionProducts',
-                'shopProducts', 'shopTabCategories', 'activeShopCategoryId', 'activeShopCategorySlug', 'shopInitialVisibleProducts', 'tickerProducts', 'customersPicksProducts', 'appPromoCoupon'
+                'shopProducts', 'shopTabCategories', 'activeShopCategoryId', 'activeShopCategorySlug', 'shopInitialVisibleProducts', 'tickerProducts', 'customersPicksProducts', 'appPromoCoupon', 'appPromoCode', 'appPromoDiscountPercent'
             )
         );
     }
@@ -149,7 +158,7 @@ class HomeController extends Controller
     {
         return Coupon::active()
             ->where('code', self::APP_PROMO_COUPON_CODE)
-            ->where('coupon_type', 'discount_on_purchase')
+            ->whereIn('coupon_type', ['discount_on_purchase', 'first_order'])
             ->whereDate('start_date', '<=', now())
             ->whereDate('expire_date', '>=', now())
             ->first();

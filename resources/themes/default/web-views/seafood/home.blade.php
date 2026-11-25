@@ -221,9 +221,7 @@
             </section>
         @endif
 
-        @if($appPromoCoupon || $googlePlayUrl || $appStoreUrl)
-            @include('web-views.seafood.partials._app-promo', ['phonePreviewProducts' => $tickerProducts])
-        @endif
+        @include('web-views.seafood.partials._app-promo', ['phonePreviewProducts' => $tickerProducts])
 
         @if(isset($dealOfTheDay->product))
             <section id="deal" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(44px, 7vw, 86px) 20px 0;">
