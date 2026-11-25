@@ -207,7 +207,6 @@
                                 @include('web-views.seafood.partials._product-card', [
                                     'product' => $relatedProduct,
                                     'cartItemKey' => $cartItemKeysByProduct[$relatedProduct['id']] ?? null,
-                                    'showPricingDetails' => true,
                                     'showRating' => true,
                                 ])
                             @endforeach

@@ -179,8 +179,10 @@ class SeafoodOnePageCheckoutTest extends TestCase
     {
         $productCard = $this->viewSource('partials/_product-card');
 
-        $this->assertStringContainsString('class="sf-product-media" style="width: 100%; aspect-ratio: 4 / 3; height: auto; object-fit: contain;', $productCard, 'Every card image has the same box and shows the whole photo.');
+        $this->assertStringContainsString('class="sf-product-media" style="width: 100%; aspect-ratio: 1 / 1; height: auto; object-fit: cover;', $productCard, 'Every card image fills one square box edge to edge.');
         $this->assertStringNotContainsString('mediaRatio', $productCard);
+        $this->assertStringContainsString('@php($hasDiscount = $discountedUnitPrice > 0 && $discountedUnitPrice < $unitPrice)', $productCard, 'The price before discount shows on every card, home included.');
+        $this->assertStringNotContainsString('showPricingDetails', $productCard);
         $this->assertStringContainsString('-webkit-line-clamp: 2;', $productCard, 'Long names must not stretch one card.');
     }
 
