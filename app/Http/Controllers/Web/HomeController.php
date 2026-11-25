@@ -44,7 +44,7 @@ class HomeController extends Controller
      */
     public const APP_PROMO_COUPON_CODE = 'BAHR10';
 
-    private const APP_PROMO_DEFAULT_DISCOUNT_PERCENT = 10;
+    public const APP_PROMO_DEFAULT_DISCOUNT_PERCENT = 10;
 
     public function __construct(
         private readonly Product $product,

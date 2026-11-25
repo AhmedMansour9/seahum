@@ -160,6 +160,17 @@
         }
     }
 
+    /* Mobile bar app pill: phones go straight to their own store when its link is set; otherwise the link scrolls to the home app section. */
+    $(document).on('click', '.sf-mobile-app', function (event) {
+        const userAgent = navigator.userAgent || '';
+        const isApplePhone = /iPhone|iPad|iPod/i.test(userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const storeUrl = isApplePhone ? $(this).data('app-store-url') : (/Android/i.test(userAgent) ? $(this).data('google-play-url') : '');
+        if (storeUrl) {
+            event.preventDefault();
+            window.open(storeUrl, '_blank', 'noopener');
+        }
+    });
+
     /* App promo ticket: copies the welcome code and flips the button to "copied" for a moment. */
     function copySeafoodTextWithSelection(text) {
         const field = $('<textarea readonly class="sr-only"></textarea>').val(text).appendTo('body');
