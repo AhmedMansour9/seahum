@@ -168,7 +168,14 @@ class SeafoodOnePageCheckoutTest extends TestCase
         /* Every page shows the same offer as the home promo section, not a hard-coded default. */
         $this->assertStringContainsString('$appPromoOffer ?? app(\App\Services\AppPromoService::class)->getOffer()', $mobileBar);
         $this->assertStringContainsString("{{ \$mobileBarPromoOffer['code'] }}", $mobileBar);
+        $this->assertStringContainsString("{{ translate('on_orders_from') }} <bdi>{{ \$mobileBarPromoOffer['minimum_purchase_value'] }}", $mobileBar, 'The bar states the minimum order the code needs.');
         $this->assertStringContainsString("\$(document).on('click', '.sf-mobile-app'", $this->viewSource('partials/_scripts'));
+
+        /* The FAQ section was removed from the home page, so nothing may still link to it. */
+        foreach (['home', 'partials/_header', 'partials/_footer'] as $template) {
+            $this->assertStringNotContainsString('#faq', $this->viewSource($template));
+        }
+        $this->assertStringNotContainsString('sf-faq', $this->viewSource('home'));
 
         foreach (['cart', 'checkout-shipping', 'checkout-payment'] as $template) {
             $this->assertStringNotContainsString('_mobile-bar', $this->viewSource($template), "{$template} would stack the mobile bar under the order bar.");
