@@ -99,7 +99,6 @@
                 <a href="{{ $homeSectionUrl }}#categories" style="padding: 13px 12px; border-radius: 10px; {{ $navLinkStyle('categories') }}">{{ translate('categories') }}</a>
                 <a href="{{ $homeSectionUrl }}#deal" style="padding: 13px 12px; border-radius: 10px; {{ $navLinkStyle('offers') }}">{{ translate('offers') }}</a>
                 <a href="{{ $homeSectionUrl }}#about" style="padding: 13px 12px; border-radius: 10px; {{ $navLinkStyle('about') }}">{{ translate('about_us') }}</a>
-                <a href="{{ $homeSectionUrl }}#faq" style="padding: 13px 12px; border-radius: 10px; color: var(--sh-ink-2);">{{ translate('faq') }}</a>
                 <a href="{{ route('contacts') }}" style="padding: 13px 12px; border-radius: 10px; color: var(--sh-ink-2);">{{ translate('contact_us') }}</a>
                 @if($auctionActive && Route::has('auction.index'))
                     <a href="{{ route('auction.index') }}" style="padding: 13px 12px; border-radius: 10px; color: var(--sh-ink-2);">{{ translate('auction') }}</a>

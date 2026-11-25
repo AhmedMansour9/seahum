@@ -347,38 +347,6 @@
             </div>
         </section>
 
-        <section id="faq" style="background: var(--sh-abyss); margin-top: clamp(52px, 7vw, 86px); padding: clamp(42px, 6.5vw, 84px) 0;">
-            <div class="sf-gutter" style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
-                <div style="display: flex; align-items: center; gap: 11px;">
-                    <span style="height: 2px; width: 40px; background: var(--sh-salmon); display: inline-block;"></span>
-                    <span style="font-size: 13.5px; font-weight: 800; color: var(--sh-sea-300); letter-spacing: .5px;">{{ translate('faq') }}</span>
-                </div>
-                <h2 style="font-family: var(--sh-font-display); font-weight: 900; font-size: clamp(26px, 3.6vw, 40px); margin: 14px 0 34px; color: #FFFFFF;">{{ translate('questions_we_get_a_lot') }}</h2>
-
-                <div style="display: flex; flex-direction: column; gap: 12px;">
-                    @foreach([
-                        ['question' => translate('is_the_fish_fresh_or_frozen'), 'answer' => translate('all_fish_shrimp_and_crab_come_from_the_same_mornings_catch_imported_items_only_are_chilled_and_clearly_marked_on_the_product_page')],
-                        ['question' => translate('when_will_my_order_arrive'), 'answer' => translate('delivery_is_next_day_inside_the_city_and_we_contact_you_on_whatsapp_to_agree_on_the_time_slot_before_dispatch')],
-                        ['question' => translate('how_can_i_pay'), 'answer' => translate('cash_on_delivery_credit_cards_and_digital_wallets_are_all_available_at_checkout')],
-                        ['question' => translate('how_is_the_weight_calculated'), 'answer' => translate('weight_is_calculated_when_the_order_is_packed_like_any_fish_market_and_the_listed_price_per_kilo_is_final_with_no_extras')],
-                        ['question' => translate('what_if_an_item_is_not_available_today'), 'answer' => translate('items_we_are_not_happy_with_are_removed_from_the_site_the_same_day_what_you_see_available_is_what_can_actually_be_ordered')],
-                        ['question' => translate('where_do_you_deliver'), 'answer' => translate('message_us_on_whatsapp_to_confirm_that_we_cover_your_area')],
-                    ] as $index => $faq)
-                        <div class="sf-faq-item" style="border-radius: 16px; overflow: hidden; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.1); transition: background .25s, border-color .25s;">
-                            <button type="button" class="sf-faq-toggle"
-                                    style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 14px; background: transparent; border: none; padding: 20px 22px; cursor: pointer; text-align: start; font-family: var(--sh-font-display); font-size: clamp(16px, 1.7vw, 18px); font-weight: 700; color: #FFFFFF;">
-                                <span>{{ $faq['question'] }}</span>
-                                <span class="sf-faq-icon" style="flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,.08); color: var(--sh-sea-300); display: grid; place-items: center; transition: transform .3s, background .25s;">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
-                                </span>
-                            </button>
-                            <p class="sf-faq-answer" style="display: none; margin: 0; padding: 0 22px 22px; font-size: 15px; line-height: 1.95; color: var(--sh-on-dark-2); text-wrap: pretty;">{{ $faq['answer'] }}</p>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-
         <section id="whatsapp" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(44px, 7vw, 86px) 20px 0;">
             <div style="border-radius: 26px; background: var(--sh-grad-shallows); border: 1px solid var(--sh-sea-100); padding: clamp(32px, 4.5vw, 58px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 28px; align-items: center;">
                 <div>
@@ -456,21 +424,6 @@
         });
 
         renderSeafoodShopGrid();
-
-        $(document).on('click', '.sf-faq-toggle', function () {
-            const item = $(this).closest('.sf-faq-item');
-            const isOpen = item.find('.sf-faq-answer').is(':visible');
-
-            $('.sf-faq-answer').hide();
-            $('.sf-faq-item').css({'background': 'rgba(255,255,255,.035)', 'border-color': 'rgba(255,255,255,.1)'});
-            $('.sf-faq-icon').css('transform', 'rotate(0deg)');
-
-            if (!isOpen) {
-                item.find('.sf-faq-answer').show();
-                item.css({'background': 'rgba(255,255,255,.07)', 'border-color': 'rgba(var(--sh-sea-rgb), .5)'});
-                item.find('.sf-faq-icon').css('transform', 'rotate(180deg)');
-            }
-        });
 
         const countdownElement = document.getElementById('seafood-countdown');
         if (countdownElement) {

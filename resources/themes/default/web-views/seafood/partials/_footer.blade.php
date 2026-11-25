@@ -48,7 +48,6 @@
                                 {{ Str::limit($businessPage['title'], 25) }}
                             </a>
                         @endforeach
-                        <a href="{{ $homeSectionUrl }}#faq" class="sf-footer-link">{{ translate('faq') }}</a>
                         <a href="{{ route('track-order.index') }}" class="sf-footer-link">{{ translate('track_your_order') }}</a>
                     </div>
                 </div>

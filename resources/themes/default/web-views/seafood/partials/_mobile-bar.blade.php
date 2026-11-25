@@ -5,7 +5,7 @@
 
         <div class="sf-mobile-bar">
             {{-- Opens the store that matches the phone (see _scripts); anywhere else it scrolls to the app section on the home page. --}}
-            <a href="{{ route('home') }}#app" class="sf-mobile-app"
+            <a href="{{ route('home') }}#app" class="sf-mobile-app" title="{{ translate('get_the_app') }}"
                data-google-play-url="{{ !empty($mobileBarGoogleStore['status']) ? ($mobileBarGoogleStore['link'] ?? '') : '' }}"
                data-app-store-url="{{ !empty($mobileBarAppleStore['status']) ? ($mobileBarAppleStore['link'] ?? '') : '' }}">
                 <span class="sf-mobile-app-icons" aria-hidden="true">
@@ -17,9 +17,15 @@
                     </span>
                 </span>
                 <span class="sf-mobile-app-text">
-                    <span class="sf-mobile-app-caption">{{ translate('get_the_app') }}</span>
+                    {{-- The store icons already say "app"; the caption carries the minimum order the code needs. --}}
+                    <span class="sf-mobile-app-caption">
+                        @if($mobileBarPromoOffer['minimum_purchase'] > 0)
+                            {{ translate('on_orders_from') }} <bdi>{{ $mobileBarPromoOffer['minimum_purchase_value'] }} {{ $mobileBarPromoOffer['currency_symbol'] }}</bdi>
+                        @else
+                            {{ translate('get_the_app') }}
+                        @endif
+                    </span>
                     <strong class="sf-mobile-app-offer">
-                        {{-- The caption already says "save", so a flat amount needs no extra word. --}}
                         <bdi>{{ $mobileBarPromoOffer['discount_value'] }}{{ $mobileBarPromoOffer['is_percentage'] ? ' '.translate('off') : ' '.$mobileBarPromoOffer['currency_symbol'] }}</bdi> ·
                         <bdi dir="ltr" class="sf-mobile-app-code">{{ $mobileBarPromoOffer['code'] }}</bdi>
                     </strong>
