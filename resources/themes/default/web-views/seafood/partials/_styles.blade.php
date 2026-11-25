@@ -516,6 +516,7 @@
         .sf-promo-ticket-value { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 112px; padding: 16px 14px; border-start-start-radius: 18px; border-end-start-radius: 18px; background: var(--sh-grad-catch); color: #FFFFFF; border-inline-end: 2px dashed rgba(255,255,255,.55); }
         .sf-promo-ticket-value strong { font-family: var(--sh-font-display); font-size: 34px; font-weight: 900; line-height: 1; }
         .sf-promo-ticket-value span { font-family: var(--sh-font-display); font-size: 14px; font-weight: 800; letter-spacing: .4px; }
+        .sf-promo-ticket-value .sf-promo-ticket-currency { font-family: var(--sh-font-display); font-size: 13px; font-weight: 800; }
         .sf-promo-ticket::before, .sf-promo-ticket::after { content: ""; position: absolute; inset-inline-start: calc(112px - var(--sf-ticket-notch) / 2); width: var(--sf-ticket-notch); height: var(--sf-ticket-notch); border-radius: 50%; background: var(--sh-abyss); }
         .sf-promo-ticket::before { top: calc(var(--sf-ticket-notch) / -2); }
         .sf-promo-ticket::after { bottom: calc(var(--sf-ticket-notch) / -2); }
@@ -550,6 +551,8 @@
         .sf-app-phone-line { height: 5px; border-radius: 3px; background: var(--sh-line); }
         .sf-app-phone-line.is-short { width: 55%; background: rgba(var(--sh-salmon-rgb), .55); }
         .sf-app-sticker { position: absolute; top: 18px; inset-inline-start: calc(50% + 62px); width: 78px; height: 78px; border-radius: 50%; display: grid; place-items: center; background: var(--sh-salmon); color: var(--sh-abyss); font-family: 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 900; box-shadow: 0 0 0 6px rgba(var(--sh-salmon-rgb), .22), 0 16px 30px -12px rgba(0,0,0,.6); transform: rotate(12deg); }
+        .sf-app-sticker { grid-auto-rows: min-content; align-content: center; line-height: 1; }
+        .sf-app-sticker-unit { font-family: var(--sh-font-display); font-size: 11px; font-weight: 800; margin-top: 2px; }
         .sf-app-chip { position: absolute; bottom: 34px; inset-inline-end: calc(50% + 50px); display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px; border-radius: 14px; background: #FFFFFF; color: var(--sh-navy); font-family: var(--sh-font-display); font-size: 12.5px; font-weight: 800; white-space: nowrap; box-shadow: 0 18px 34px -16px rgba(0,0,0,.7); }
         .sf-app-chip svg { color: var(--sh-sea); }
         @keyframes sfAppPhoneFloat { 0%, 100% { transform: rotate(-6deg) translateY(0); } 50% { transform: rotate(-6deg) translateY(-10px); } }
