@@ -17,7 +17,7 @@
     @php($googlePlayUrl = !empty($googleStoreConfig['status']) ? ($googleStoreConfig['link'] ?? null) : null)
     @php($appStoreUrl = !empty($appleStoreConfig['status']) ? ($appleStoreConfig['link'] ?? null) : null)
     @php($flashDealEndDate =$web_config['flash_deals']['end_date'] ?? null)
-    @php($shopCategories = $categories->take(6))
+    @php($shopCategories = $categories->filter(fn ($category) => ($category->product_count ?? $category->product?->count() ?? 0) > 0))
     @php($cartItems = \App\Utils\CartManager::getCartListQuery())
     @php($cartItemsCount = $cartItems->count())
     @php($cartItemKeysByProduct = $cartItems->pluck('id', 'product_id'))
@@ -160,7 +160,7 @@
             </div>
         @endif
 
-        @if($categories->count() > 0)
+        @if($shopCategories->isNotEmpty())
             <section id="categories" class="sf-gutter" style="max-width: 1240px; margin: 0 auto; padding: clamp(30px, 4.5vw, 54px) 20px 0;">
                 <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
                     <h2 style="font-family: var(--sh-font-display); font-weight: 800; font-size: clamp(24px, 3vw, 32px); margin: 0; color: var(--sh-navy);">{{ translate('categories') }}</h2>
@@ -170,7 +170,7 @@
                     </a>
                 </div>
 
-                <div class="sf-cat-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(166px, 100%), 1fr)); gap: 14px;">
+                <div class="sf-cat-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 14px;">
                     @foreach($shopCategories as $category)
                         @include('web-views.seafood.partials._category-card', ['category' => $category])
                     @endforeach
