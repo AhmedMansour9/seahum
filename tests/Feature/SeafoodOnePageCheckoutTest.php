@@ -179,11 +179,16 @@ class SeafoodOnePageCheckoutTest extends TestCase
     {
         $productCard = $this->viewSource('partials/_product-card');
 
-        $this->assertStringContainsString('class="sf-product-media" style="width: 100%; aspect-ratio: 1 / 1; height: auto; object-fit: cover;', $productCard, 'Every card image fills one square box edge to edge.');
+        $sharedStyles = $this->viewSource('partials/_styles');
+
+        $this->assertStringContainsString('class="sf-product-media"', $productCard);
+        $this->assertStringContainsString('.sf-product-media { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover;', $sharedStyles, 'Every card image fills one square box edge to edge.');
         $this->assertStringNotContainsString('mediaRatio', $productCard);
         $this->assertStringContainsString('@php($hasDiscount = $discountedUnitPrice > 0 && $discountedUnitPrice < $unitPrice)', $productCard, 'The price before discount shows on every card, home included.');
         $this->assertStringNotContainsString('showPricingDetails', $productCard);
-        $this->assertStringContainsString('-webkit-line-clamp: 2;', $productCard, 'Long names must not stretch one card.');
+        $this->assertStringContainsString('-webkit-line-clamp: 2;', $sharedStyles, 'Long names must not stretch one card.');
+        $this->assertStringContainsString('<span class="sf-product-old-price" @unless($hasDiscount) aria-hidden="true" @endunless>', $productCard, 'The old-price line is always reserved so cards keep one height.');
+        $this->assertStringContainsString('class="seafood-cart-toggle-label sr-only"', $productCard, 'The icon button keeps the label the cart script updates.');
     }
 
     public function test_home_hero_is_hidden_on_phones(): void

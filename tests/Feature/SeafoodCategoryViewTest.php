@@ -112,7 +112,8 @@ class SeafoodCategoryViewTest extends TestCase
         $this->assertStringContainsString('class="sf-price-amount"', file_get_contents($this->templatePath('web-views.seafood.partials._price')));
 
         $productCard = file_get_contents($this->templatePath('web-views.seafood.partials._product-card'));
-        $this->assertMatchesRegularExpression('/class="sf-product-price" style="[^"]*color: var\(--sh-navy\);/', $productCard);
+        $this->assertStringContainsString('<strong class="sf-product-price">', $productCard);
+        $this->assertMatchesRegularExpression('/\.sf-product-price \{[^}]*color: var\(--sh-navy\);/', file_get_contents($this->templatePath('web-views.seafood.partials._styles')));
         $this->assertSame(2, preg_match_all('/class="(?:discounted-unit-price|product-details-chosen-price-amount)" style="[^"]*color: var\(--sh-navy\);/', $buyBox));
         $this->assertMatchesRegularExpression('/class="product-details-chosen-price-amount" style="[^"]*color: var\(--sh-navy\);/', $productPage);
 
@@ -166,10 +167,10 @@ class SeafoodCategoryViewTest extends TestCase
             '.sf-header-search { flex: 0 1 auto; min-width: 0; }',
             '.sf-header-search button { flex-shrink: 0; }',
             '.sf-header-tagline { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }',
-            '.sf-product-title { overflow-wrap: anywhere; }',
         ] as $rule) {
             $this->assertStringContainsString($rule, $sharedStyles);
         }
+        $this->assertMatchesRegularExpression('/\.sf-product-title \{[^}]*overflow-wrap: anywhere;/', $sharedStyles);
     }
 
     public function test_touch_target_sizing_covers_the_whole_touch_layout_range(): void
