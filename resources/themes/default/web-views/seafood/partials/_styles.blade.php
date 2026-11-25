@@ -495,6 +495,88 @@
         .sf-store-badge-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; font-family: 'Segoe UI', Helvetica, Arial, sans-serif; }
         .sf-store-badge-caption { font-size: 10.5px; letter-spacing: .3px; opacity: .85; }
         .sf-store-badge-name { font-size: 17px; font-weight: 600; }
+        .sf-store-badges { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+        .sf-hero-store-badges { margin-top: 22px; }
+        .sf-hero-store-badges .sf-store-badges { justify-content: center; }
+        .sf-store-badge.is-coming-soon { position: relative; cursor: default; opacity: .78; }
+        .sf-store-badge.is-coming-soon:hover { transform: none; border-color: rgba(255,255,255,.28); }
+        .sf-store-badge-soon { position: absolute; top: -9px; inset-inline-end: -6px; padding: 2px 8px; border-radius: 999px; background: var(--sh-salmon); color: var(--sh-abyss); font-family: var(--sh-font-display); font-size: 10.5px; font-weight: 800; line-height: 1.5; white-space: nowrap; }
+
+        /* ---- App promo: download badges + welcome code ---- */
+        .sf-app-promo-section { max-width: 1240px; margin: 0 auto; padding: clamp(44px, 7vw, 86px) 20px 0; }
+        .sf-app-promo { position: relative; overflow: hidden; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); align-items: center; gap: clamp(24px, 4vw, 56px); padding: clamp(28px, 4.5vw, 60px); border-radius: 28px; background: var(--sh-grad-deep); color: #FFFFFF; }
+        .sf-app-promo-glow { position: absolute; z-index: -1; inset-inline-end: -140px; top: -160px; width: 480px; height: 480px; border-radius: 50%; background: radial-gradient(circle, rgba(var(--sh-salmon-rgb), .32), transparent 68%); }
+        .sf-app-promo-waves { position: absolute; z-index: -1; inset-inline: 0; bottom: 0; width: 100%; height: 110px; }
+        .sf-app-promo-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; min-width: 0; }
+        .sf-app-promo-eyebrow { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px; border-radius: 999px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); color: var(--sh-sea-300); font-family: var(--sh-font-display); font-size: 13px; font-weight: 700; }
+        .sf-app-promo-title { margin: 0; font-family: var(--sh-font-display); font-size: clamp(28px, 4vw, 46px); font-weight: 900; line-height: 1.25; color: #FFFFFF; text-wrap: balance; }
+        .sf-app-promo-text { margin: 0; max-width: 520px; font-size: clamp(15px, 1.5vw, 17px); line-height: 1.9; color: var(--sh-on-dark); }
+
+        .sf-promo-ticket { --sf-ticket-notch: 14px; position: relative; display: flex; align-items: stretch; width: min(100%, 470px); border-radius: 18px; background: var(--sh-paper); color: var(--sh-navy); box-shadow: 0 22px 44px -22px rgba(0,0,0,.65); }
+        .sf-promo-ticket-value { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 112px; padding: 16px 14px; border-start-start-radius: 18px; border-end-start-radius: 18px; background: var(--sh-grad-catch); color: #FFFFFF; border-inline-end: 2px dashed rgba(255,255,255,.55); }
+        .sf-promo-ticket-value strong { font-family: var(--sh-font-display); font-size: 34px; font-weight: 900; line-height: 1; }
+        .sf-promo-ticket-value span { font-family: var(--sh-font-display); font-size: 14px; font-weight: 800; letter-spacing: .4px; }
+        .sf-promo-ticket::before, .sf-promo-ticket::after { content: ""; position: absolute; inset-inline-start: calc(112px - var(--sf-ticket-notch) / 2); width: var(--sf-ticket-notch); height: var(--sf-ticket-notch); border-radius: 50%; background: var(--sh-abyss); }
+        .sf-promo-ticket::before { top: calc(var(--sf-ticket-notch) / -2); }
+        .sf-promo-ticket::after { bottom: calc(var(--sf-ticket-notch) / -2); }
+        .sf-promo-ticket-body { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 14px 18px; }
+        .sf-promo-ticket-label { font-family: var(--sh-font-display); font-size: 14px; font-weight: 700; color: var(--sh-ink-2); }
+        .sf-promo-code { display: inline-flex; align-items: center; justify-content: space-between; gap: 10px; align-self: stretch; min-height: 46px; padding: 6px 6px 6px 14px; border: 1.5px dashed var(--sh-salmon); border-radius: 12px; background: rgba(var(--sh-salmon-rgb), .08); color: var(--sh-navy); cursor: pointer; transition: background .2s, border-color .2s; }
+        [dir="rtl"] .sf-promo-code { padding: 6px 14px 6px 6px; }
+        .sf-promo-code:hover { background: rgba(var(--sh-salmon-rgb), .16); }
+        .sf-promo-code:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(var(--sh-salmon-rgb), .45); }
+        .sf-promo-code-value { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 20px; font-weight: 800; letter-spacing: 3px; overflow-wrap: anywhere; }
+        .sf-promo-code-action { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 12px; border-radius: 9px; background: var(--sh-navy); color: #FFFFFF; font-family: var(--sh-font-display); font-size: 13px; font-weight: 700; }
+        .sf-promo-code-done, .sf-promo-code.is-copied .sf-promo-code-copy { display: none; }
+        .sf-promo-code.is-copied .sf-promo-code-done { display: block; }
+        .sf-promo-code.is-copied { border-style: solid; border-color: var(--sh-sea); background: rgba(var(--sh-sea-rgb), .08); }
+        .sf-promo-code.is-copied .sf-promo-code-action { background: var(--sh-sea-700); }
+        .sf-promo-ticket-terms { font-size: 12px; color: var(--sh-muted); }
+
+        .sf-app-promo-visual { position: relative; display: grid; place-items: center; min-height: 360px; }
+        .sf-app-phone { position: relative; width: 210px; aspect-ratio: 9 / 18.5; padding: 9px; border-radius: 36px; background: linear-gradient(160deg, #1E3B57, #04121F); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.16), 0 40px 70px -30px rgba(0,0,0,.85); transform: rotate(-6deg); animation: sfAppPhoneFloat 6s ease-in-out infinite; }
+        [dir="ltr"] .sf-app-phone { transform: rotate(6deg); animation-name: sfAppPhoneFloatLtr; }
+        .sf-app-phone-notch { position: absolute; z-index: 2; top: 15px; left: 50%; width: 62px; height: 16px; margin-left: -31px; border-radius: 999px; background: #04121F; }
+        .sf-app-phone-screen { display: flex; flex-direction: column; gap: 9px; height: 100%; padding: 34px 11px 12px; border-radius: 28px; background: var(--sh-paper); overflow: hidden; }
+        .sf-app-phone-bar { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+        .sf-app-phone-bar strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--sh-font-display); font-size: 12px; font-weight: 900; color: var(--sh-navy); }
+        .sf-app-phone-bag { flex-shrink: 0; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: var(--sh-salmon); color: #FFFFFF; }
+        .sf-app-phone-search { height: 22px; border-radius: 8px; background: var(--sh-mist); }
+        .sf-app-phone-banner { display: flex; flex-direction: column; gap: 3px; padding: 11px 10px; border-radius: 12px; background: var(--sh-grad-catch); color: #FFFFFF; font-family: var(--sh-font-display); font-size: 11px; font-weight: 800; }
+        .sf-app-phone-banner bdi { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: 1.5px; }
+        .sf-app-phone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+        .sf-app-phone-tile { display: flex; flex-direction: column; gap: 4px; padding: 4px; border-radius: 10px; background: #FFFFFF; box-shadow: 0 4px 12px -8px rgba(var(--sh-navy-rgb), .6); }
+        .sf-app-phone-tile img { width: 100%; aspect-ratio: 1; border-radius: 7px; object-fit: cover; background: var(--sh-mist); }
+        .sf-app-phone-line { height: 5px; border-radius: 3px; background: var(--sh-line); }
+        .sf-app-phone-line.is-short { width: 55%; background: rgba(var(--sh-salmon-rgb), .55); }
+        .sf-app-sticker { position: absolute; top: 18px; inset-inline-start: calc(50% + 62px); width: 78px; height: 78px; border-radius: 50%; display: grid; place-items: center; background: var(--sh-salmon); color: var(--sh-abyss); font-family: 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 900; box-shadow: 0 0 0 6px rgba(var(--sh-salmon-rgb), .22), 0 16px 30px -12px rgba(0,0,0,.6); transform: rotate(12deg); }
+        .sf-app-chip { position: absolute; bottom: 34px; inset-inline-end: calc(50% + 50px); display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px; border-radius: 14px; background: #FFFFFF; color: var(--sh-navy); font-family: var(--sh-font-display); font-size: 12.5px; font-weight: 800; white-space: nowrap; box-shadow: 0 18px 34px -16px rgba(0,0,0,.7); }
+        .sf-app-chip svg { color: var(--sh-sea); }
+        @keyframes sfAppPhoneFloat { 0%, 100% { transform: rotate(-6deg) translateY(0); } 50% { transform: rotate(-6deg) translateY(-10px); } }
+        @keyframes sfAppPhoneFloatLtr { 0%, 100% { transform: rotate(6deg) translateY(0); } 50% { transform: rotate(6deg) translateY(-10px); } }
+        @media (max-width: 859px) {
+            .sf-app-promo { grid-template-columns: minmax(0, 1fr); }
+            .sf-app-promo-visual { order: -1; min-height: 0; padding: 6px 0 10px; }
+            .sf-app-phone { width: 150px; border-radius: 28px; padding: 7px; }
+            .sf-app-phone-screen { border-radius: 22px; padding-top: 28px; }
+            .sf-app-phone-notch { top: 12px; width: 48px; height: 13px; margin-left: -24px; }
+            .sf-app-sticker { top: 4px; inset-inline-start: calc(50% + 46px); width: 62px; height: 62px; font-size: 18px; }
+            .sf-app-chip { bottom: 18px; inset-inline-end: calc(50% + 34px); }
+        }
+        @media (max-width: 479px) {
+            .sf-app-promo { border-radius: 22px; padding: 24px 18px 30px; }
+            .sf-promo-ticket { --sf-ticket-notch: 12px; }
+            .sf-promo-ticket-value { min-width: 84px; padding: 12px 8px; }
+            .sf-promo-ticket::before, .sf-promo-ticket::after { inset-inline-start: calc(84px - var(--sf-ticket-notch) / 2); }
+            .sf-promo-ticket-value strong { font-size: 26px; }
+            .sf-promo-ticket-body { padding: 12px; }
+            .sf-promo-code-value { font-size: 17px; letter-spacing: 2px; }
+            .sf-app-promo-visual { padding-bottom: 26px; }
+            .sf-app-chip { bottom: 6px; left: 50%; right: auto; transform: translateX(-50%); font-size: 11.5px; padding: 8px 11px; }
+            .sf-app-promo-copy .sf-store-badges { width: 100%; }
+            .sf-app-promo-copy .sf-store-badge { flex: 1 1 150px; justify-content: center; }
+        }
+        @media (prefers-reduced-motion: reduce) { .sf-app-phone { animation: none; } }
         .seafood-cart-toggle { flex-shrink: 0; display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 16px; border: none; border-radius: 13px; background: var(--sh-salmon-50); color: var(--sh-salmon-800); font-family: var(--sh-font-display); font-size: 14px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background .22s, color .22s, transform .22s; }
         .seafood-cart-toggle:hover { background: var(--sh-action); color: #FFFFFF; transform: translateY(-2px); }
         .seafood-cart-toggle.in-cart { background: var(--sh-navy); color: #FFFFFF; }

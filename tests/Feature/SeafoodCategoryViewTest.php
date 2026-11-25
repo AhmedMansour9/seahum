@@ -199,25 +199,65 @@ class SeafoodCategoryViewTest extends TestCase
     public function test_home_hero_store_badges_follow_the_admin_download_app_settings(): void
     {
         $homePage = file_get_contents($this->templatePath('web-views.seafood.home'));
+        $storeBadges = file_get_contents($this->templatePath('web-views.seafood.partials._store-badges'));
 
-        foreach (['download_app_google_store' => '$googlePlayUrl', 'download_app_apple_store' => '$appStoreUrl'] as $settingName => $urlVariable) {
+        foreach (['download_app_google_store', 'download_app_apple_store'] as $settingName) {
             $this->assertStringContainsString("getWebConfig(name: '{$settingName}')", $homePage);
-            $this->assertStringContainsString("@if({$urlVariable})", $homePage);
-            $this->assertStringContainsString('<a href="{{ '.$urlVariable.' }}" target="_blank" rel="noopener noreferrer"', $homePage);
         }
 
         $this->assertStringContainsString("!empty(\$googleStoreConfig['status'])", $homePage);
         $this->assertStringContainsString("!empty(\$appleStoreConfig['status'])", $homePage);
+        $this->assertStringContainsString('@if($googlePlayUrl || $appStoreUrl)', $homePage);
+        $this->assertStringContainsString("@include('web-views.seafood.partials._store-badges', ['googlePlayUrl' => \$googlePlayUrl, 'appStoreUrl' => \$appStoreUrl])", $homePage);
+
+        $this->assertStringContainsString("@if(\$storeBadge['url'])", $storeBadges);
+        $this->assertStringContainsString('<a href="{{ $storeBadge[\'url\'] }}" target="_blank" rel="noopener noreferrer"', $storeBadges);
+        $this->assertStringContainsString('@elseif($showComingSoon)', $storeBadges);
 
         foreach (['en', 'eg'] as $locale) {
             $messages = include base_path("resources/lang/{$locale}/new-messages.php");
 
-            $this->assertArrayHasKey('download_the_app_from', $messages, "resources/lang/{$locale}/new-messages.php is missing 'download_the_app_from'.");
+            foreach (['download_the_app_from', 'coming_soon'] as $key) {
+                $this->assertArrayHasKey($key, $messages, "resources/lang/{$locale}/new-messages.php is missing '{$key}'.");
+            }
         }
 
         /* Store badge artwork stays in English in every locale, per the store brand guidelines. */
         foreach (['GET IT ON', 'Google Play', 'Download on the', 'App Store'] as $badgeText) {
-            $this->assertStringContainsString(">{$badgeText}</span>", $homePage);
+            $this->assertStringContainsString("'{$badgeText}'", $storeBadges);
+        }
+    }
+
+    /**
+     * The app promo only advertises the welcome code while that coupon is live, and renders whenever there is a code or a store link to show.
+     */
+    public function test_home_app_promo_advertises_the_welcome_code_only_while_its_coupon_is_active(): void
+    {
+        $homeController = file_get_contents(app_path('Http/Controllers/Web/HomeController.php'));
+        $homePage = file_get_contents($this->templatePath('web-views.seafood.home'));
+        $appPromo = file_get_contents($this->templatePath('web-views.seafood.partials._app-promo'));
+
+        $this->assertStringContainsString("public const APP_PROMO_COUPON_CODE = 'BAHR10';", $homeController);
+        foreach (["Coupon::active()", "->where('code', self::APP_PROMO_COUPON_CODE)", "->whereDate('start_date', '<=', now())", "->whereDate('expire_date', '>=', now())"] as $condition) {
+            $this->assertStringContainsString($condition, $homeController);
+        }
+
+        $this->assertStringContainsString('@if($appPromoCoupon || $googlePlayUrl || $appStoreUrl)', $homePage);
+        $this->assertStringContainsString('@if($appPromoCoupon)', $appPromo);
+        $this->assertStringContainsString('data-promo-code="{{ $appPromoCoupon->code }}"', $appPromo);
+        $this->assertStringContainsString("'showComingSoon' => true", $appPromo);
+        $this->assertStringContainsString("\$(document).on('click', '[data-promo-code]'", file_get_contents($this->templatePath('web-views.seafood.partials._scripts')));
+
+        preg_match_all("/translate\('([a-z_]+)'\)/", $appPromo, $matches);
+        foreach (['en', 'eg'] as $locale) {
+            $messages = array_merge(
+                include base_path("resources/lang/{$locale}/messages.php"),
+                include base_path("resources/lang/{$locale}/new-messages.php")
+            );
+
+            foreach (array_unique($matches[1]) as $key) {
+                $this->assertArrayHasKey($key, $messages, "resources/lang/{$locale} is missing '{$key}'.");
+            }
         }
     }
 
