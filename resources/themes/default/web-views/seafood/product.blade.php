@@ -5,6 +5,7 @@
 @push('css_or_js')
     @include('web-views.seafood.partials._styles')
     @include(VIEW_FILE_NAMES['product_seo_meta_content_partials'], ['metaContentData' => $product?->seoInfo, 'productDetails' => $product])
+    @include('web-views.seafood.partials._product-structured-data', ['ratingValue' => $overallRating[0] ?? 0, 'ratingCount' => $overallRating[1] ?? 0])
 
     <style>
         .sf-product-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }

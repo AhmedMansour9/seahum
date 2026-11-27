@@ -1,6 +1,6 @@
 @extends('layouts.front-end.seafood')
 
-@section('title', $pageTitleContent)
+@section('title', ($robotsMetaContentData?->meta_title ?? $robotsMetaContentData?->title ?? null) ?: $pageTitleContent)
 
 @push('css_or_js')
     @include('web-views.seafood.partials._styles')
@@ -8,8 +8,6 @@
     @include('web-views.seafood.partials._listing-styles')
 
     <meta property="og:image" content="{{ $web_config['web_logo']['path'] }}"/>
-    <meta property="og:title" content="{{ $pageTitleContent }}"/>
-    <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:description" content="{{ $web_config['meta_description'] }}">
     <meta property="twitter:card" content="{{ $web_config['web_logo']['path'] }}"/>
     <meta property="twitter:title" content="{{ $pageTitleContent }}"/>
