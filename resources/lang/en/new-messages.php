@@ -2876,4 +2876,6 @@ ____________________________________________________on_search_engines_and_see_th
 	"on_your_first_order" => "On your first order",
 	"get_the_app" => "Get the app & save",
 	"maintenance-mode" => "Maintenance mode",
+	"seo_category_meta_title" => ":category online - fresh fish and seafood",
+	"seo_category_meta_description" => "Order :category from :company online: hand-picked quality, clear prices and fast delivery to your door.",
 ];

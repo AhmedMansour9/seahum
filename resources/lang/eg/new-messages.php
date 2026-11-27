@@ -9604,4 +9604,6 @@ ____________________________________________________on_search_engines_and_see_th
 	"on_your_first_order" => "على أول طلب",
 	"get_the_app" => "نزّل التطبيق ووفّر",
 	"maintenance-mode" => "وضع الصيانة",
+	"seo_category_meta_title" => ":category أونلاين - سمك ومأكولات بحرية",
+	"seo_category_meta_description" => "اطلب :category من :company أونلاين: جودة مختارة بعناية، أسعار واضحة وتوصيل سريع لحد باب البيت.",
 ];

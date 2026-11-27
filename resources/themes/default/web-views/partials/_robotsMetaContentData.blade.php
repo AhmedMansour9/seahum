@@ -1,11 +1,11 @@
 @if((!isset($productDetailsMeta) || !$productDetailsMeta) && !isset($blogData))
     @if(isset($robotsMetaContentData) && $robotsMetaContentData?->meta_title)
-        <title>{{ $robotsMetaContentData?->meta_title }}</title>
+        @unless(View::hasSection('title'))<title>{{ $robotsMetaContentData?->meta_title }}</title>@endunless
         <meta name="title" content="{{ $robotsMetaContentData?->meta_title }}">
         <meta property="og:title" content="{{ $robotsMetaContentData?->meta_title }}">
         <meta name="twitter:title" content="{{ $robotsMetaContentData?->meta_title }}">
     @elseif(isset($robotsMetaContentData) && $robotsMetaContentData?->title)
-        <title>{{ $robotsMetaContentData?->title }}</title>
+        @unless(View::hasSection('title'))<title>{{ $robotsMetaContentData?->title }}</title>@endunless
         <meta name="title" content="{{ $robotsMetaContentData?->title }}">
         <meta property="og:title" content="{{ $robotsMetaContentData?->title }}">
         <meta name="twitter:title" content="{{ $robotsMetaContentData?->title }}">
@@ -38,8 +38,8 @@
     @endif
 
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="{{ config('app.url') }}">
-    <meta name="twitter:url" content="{{ config('app.url') }}">
+    <meta property="og:url" content="{{ $seoCanonicalUrl ?? config('app.url') }}">
+    <meta name="twitter:url" content="{{ $seoCanonicalUrl ?? config('app.url') }}">
 
     @if(isset($robotsMetaContentData) && isset($robotsMetaContentData?->meta_image_full_url) && $robotsMetaContentData?->meta_image_full_url['path'])
         <meta property="og:image" content="{{ $robotsMetaContentData?->meta_image_full_url['path'] }}">

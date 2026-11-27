@@ -1,3 +1,12 @@
 User-agent: *
+Disallow: /admin/
 Disallow: /login/admin/
-Sitemap: http://delta2.test/sitemap.xml
+Disallow: /checkout
+Disallow: /shop-cart
+Disallow: /customer/
+Disallow: /account
+Disallow: /user-account
+Disallow: /track-order/result
+Disallow: /*?*search=
+
+Sitemap: https://shop.sea-hum.store/sitemap.xml

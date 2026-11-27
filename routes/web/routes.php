@@ -37,6 +37,7 @@ use App\Http\Controllers\Web\ProductListController;
 use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\Shop\ShopFollowerController;
 use App\Http\Controllers\Web\ShopViewController;
+use App\Http\Controllers\Web\SitemapController;
 use App\Http\Controllers\Web\UserLoyaltyController;
 use App\Http\Controllers\Web\UserProfileController;
 use App\Http\Controllers\Web\UserWalletController;
@@ -69,6 +70,8 @@ Route::get('/image-proxy', function () {
 Route::controller(WebController::class)->group(function () {
     Route::get('maintenance-mode', 'maintenance_mode')->name('maintenance-mode');
 });
+
+Route::get('sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.xml');
 
 Route::group(['namespace' => 'Web', 'middleware' => ['maintenance_mode', 'guestCheck']], function () {
     Route::group(['prefix' => 'product-compare', 'as' => 'product-compare.'], function () {

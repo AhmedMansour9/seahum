@@ -107,6 +107,9 @@
 
     @stack('css_or_js')
 
+    {{-- One address per page for search engines, on the main domain and without filters or tracking parameters. --}}
+    @php($seoCanonicalUrl = rtrim(config('app.url'), '/').(request()->path() === '/' ? '/' : '/'.request()->path()))
+    <link rel="canonical" href="{{ $seoCanonicalUrl }}">
     @include(VIEW_FILE_NAMES['robots_meta_content_partials'])
 
     {!! getSystemDynamicPartials(type: 'analytics_script') !!}

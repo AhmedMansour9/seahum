@@ -1,10 +1,11 @@
 @extends('layouts.front-end.seafood')
 
-@section('title', $web_config['meta_title'])
+@section('title', ($robotsMetaContentData?->meta_title ?? $robotsMetaContentData?->title ?? null) ?: $web_config['meta_title'])
 
 
 @push('css_or_js')
     @include('web-views.seafood.partials._styles')
+    @include('web-views.seafood.partials._store-structured-data')
 @endpush
 
 @section('content')
