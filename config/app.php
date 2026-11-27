@@ -55,6 +55,15 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     /*
+     * Old storefront domains. Their public pages redirect to APP_URL (see RedirectLegacyStorefrontHost);
+     * the API and app links stay reachable on them for older app versions.
+     */
+    'legacy_storefront_hosts' => array_values(array_filter(array_map(
+        fn (string $host): string => strtolower(trim($host)),
+        explode(',', (string) env('LEGACY_STOREFRONT_HOSTS', 'blue-wiish.com,www.blue-wiish.com'))
+    ))),
+
+    /*
     |--------------------------------------------------------------------------
     | Application Mode
     |--------------------------------------------------------------------------
