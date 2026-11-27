@@ -46,7 +46,10 @@ class StorefrontSeoTest extends TestCase
         $this->assertMatchesRegularExpression('/\'meta_title\' => \'Sea Hum \| سمك طازج وسالمون وكافيار وسوشي/u', $migration);
         $this->assertStringContainsString("->where('page_name', \$page['page_name'])->exists()", $migration, 'An SEO text edited in admin must never be overwritten.');
 
-        $this->assertStringContainsString('metaData: $category?->seo ?? $this->getCategoryFallbackMeta(category: $category)', $listController);
+        $this->assertStringContainsString('metaData: $this->getCategoryMeta(category: $category)', $listController);
+        /* Admin often keeps an empty SEO record; only its blank fields are filled. */
+        $this->assertStringContainsString('$seo->title = filled($seo->title) ? $seo->title : $fallbackTitle;', $listController);
+        $this->assertStringContainsString('$seo->description = filled($seo->description) ? $seo->description : $fallbackDescription;', $listController);
         foreach (['en', 'eg'] as $locale) {
             $messages = include base_path("resources/lang/{$locale}/new-messages.php");
             foreach (['seo_category_meta_title', 'seo_category_meta_description'] as $key) {
