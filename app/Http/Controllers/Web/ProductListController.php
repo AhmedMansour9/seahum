@@ -85,23 +85,31 @@ class ProductListController extends Controller
             request: $request,
             pageType: $dataForm,
             pageTitle: ucwords(str_replace(['-', '_'], ' ', $category['name'])) . ' ' . translate('products'),
-            metaData: $category?->seo ?? $this->getCategoryFallbackMeta(category: $category),
+            metaData: $this->getCategoryMeta(category: $category),
             category: $category
         );
     }
 
     /**
-     * A search-friendly title and description for a category that has no SEO set in admin, instead of
-     * falling back to the site-wide description on every category page.
+     * The category's admin SEO, with a search-friendly title and description filling whatever admin left
+     * empty (many categories have an SEO record with no text), instead of the site-wide description.
+     * The filled values are never saved, so a later edit in admin still wins.
      */
-    private function getCategoryFallbackMeta(Category $category): RobotsMetaContent
+    private function getCategoryMeta(Category $category): object
     {
         $companyName = getWebConfig(name: 'company_name') ?: config('app.name');
+        $fallbackTitle = str_replace(':category', $category['name'], translate('seo_category_meta_title')).' | '.$companyName;
+        $fallbackDescription = str_replace([':category', ':company'], [$category['name'], $companyName], translate('seo_category_meta_description'));
 
-        return new RobotsMetaContent([
-            'meta_title' => str_replace(':category', $category['name'], translate('seo_category_meta_title')).' | '.$companyName,
-            'meta_description' => str_replace([':category', ':company'], [$category['name'], $companyName], translate('seo_category_meta_description')),
-        ]);
+        $seo = $category->seo;
+        if (! $seo) {
+            return new RobotsMetaContent(['meta_title' => $fallbackTitle, 'meta_description' => $fallbackDescription]);
+        }
+
+        $seo->title = filled($seo->title) ? $seo->title : $fallbackTitle;
+        $seo->description = filled($seo->description) ? $seo->description : $fallbackDescription;
+
+        return $seo;
     }
 
     public function getFeaturedProductsView(Request $request)
