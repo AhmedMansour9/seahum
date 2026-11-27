@@ -15,10 +15,12 @@
                     <p style="font-size: 14.5px; line-height: 1.95; margin: 16px 0 0; color: var(--sh-on-dark-3);">
                         {{ translate('an_online_store_for_fresh_fish_and_seafood_daily_catch_chilled_sealed_packing_and_delivery_to_your_door') }}
                     </p>
-                    @if($web_config['social_media']->count() > 0)
+                    {{-- Only real profile links; placeholder links left from the template are not shown. --}}
+                    @php($footerSocialProfiles = app(\App\Services\StoreProfileLinksService::class)->getSocialProfiles($web_config['social_media']))
+                    @if($footerSocialProfiles->isNotEmpty())
                         <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px;">
-                            @foreach($web_config['social_media'] as $socialMedia)
-                                <a href="{{ $socialMedia['link'] }}" target="_blank" class="sf-social"
+                            @foreach($footerSocialProfiles as $socialMedia)
+                                <a href="{{ $socialMedia['link'] }}" target="_blank" rel="noopener" class="sf-social"
                                    aria-label="{{ $socialMedia['name'] }}" title="{{ $socialMedia['name'] }}"
                                    style="width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.04); display: grid; place-items: center; color: var(--sh-on-dark);">
                                     <i class="fa fa-{{ $socialMedia['name'] }}"></i>
