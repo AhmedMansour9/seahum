@@ -31,6 +31,9 @@ class RedirectLegacyStorefrontHostTest extends TestCase
             'product' => ['https://blue-wiish.com/product/smoked-salmon'],
             'category with query' => ['https://www.blue-wiish.com/category/salmon?sort=low'],
             'sitemap' => ['https://blue-wiish.com/sitemap.xml'],
+            'checkout' => ['https://blue-wiish.com/checkout-details'],
+            'account' => ['https://blue-wiish.com/user-account'],
+            'admin' => ['https://blue-wiish.com/admin/login'],
         ];
     }
 
@@ -51,11 +54,7 @@ class RedirectLegacyStorefrontHostTest extends TestCase
     public static function untouchedRequests(): array
     {
         return [
-            'app API' => ['GET', 'https://blue-wiish.com/api/v1/config'],
-            'checkout' => ['GET', 'https://blue-wiish.com/checkout-details'],
-            'payment return' => ['GET', 'https://blue-wiish.com/payment-success'],
-            'admin' => ['GET', 'https://blue-wiish.com/admin/login'],
-            'form post on a public page' => ['POST', 'https://blue-wiish.com/products'],
+            'form post' => ['POST', 'https://blue-wiish.com/products'],
             'main domain' => ['GET', 'https://shop.sea-hum.store/product/smoked-salmon'],
             'unknown domain' => ['GET', 'https://example.test/product/smoked-salmon'],
         ];
@@ -68,6 +67,19 @@ class RedirectLegacyStorefrontHostTest extends TestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('passed', $response->getContent());
+    }
+
+    /**
+     * Older installed app versions still call the API on the old domain, so the redirect must stay out of the API group.
+     */
+    public function test_the_redirect_runs_for_web_pages_only_not_the_app_api(): void
+    {
+        $bootstrap = file_get_contents(base_path('bootstrap/app.php'));
+        $webGroup = substr($bootstrap, strpos($bootstrap, "group('web'"), 200);
+        $apiGroup = substr($bootstrap, strpos($bootstrap, "group('api'"), 200);
+
+        $this->assertStringContainsString('\App\Http\Middleware\RedirectLegacyStorefrontHost::class', $webGroup);
+        $this->assertStringNotContainsString('RedirectLegacyStorefrontHost', $apiGroup);
     }
 
     private function handle(Request $request): SymfonyResponse
