@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\OrderSource;
+use App\Models\Builders\OrderQueryBuilder;
 use App\Traits\DemoMaskingTrait;
 use Carbon\Carbon;
 use DateTime;
@@ -376,5 +377,20 @@ class Order extends Model
     {
         parent::boot();
         //static::addGlobalScope(new RememberScope);
+    }
+
+    /**
+     * Updates go through OrderQueryBuilder, which logs who changed which order field.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     */
+    public function newEloquentBuilder($query): OrderQueryBuilder
+    {
+        return new OrderQueryBuilder($query);
+    }
+
+    public function activityLogs(): HasMany
+    {
+        return $this->hasMany(OrderActivityLog::class)->latest('id');
     }
 }

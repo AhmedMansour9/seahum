@@ -685,6 +685,8 @@
                                 </div>
                             </div>
                         @endif
+
+                        @include('admin-views.order.partials._activity-log', ['order' => $order])
                     </div>
                 </div>
             </div>
