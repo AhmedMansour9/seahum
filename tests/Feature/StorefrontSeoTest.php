@@ -92,6 +92,19 @@ class StorefrontSeoTest extends TestCase
         $this->assertStringContainsString("@include('web-views.seafood.partials._store-structured-data')", $this->template('web-views/seafood/home'));
     }
 
+    public function test_store_schema_links_the_official_profiles_and_the_app_and_the_footer_hides_placeholders(): void
+    {
+        $storeData = $this->template('web-views/seafood/partials/_store-structured-data');
+        $footer = $this->template('web-views/seafood/partials/_footer');
+
+        foreach (["'sameAs' => \$structuredSameAs ?: null", '...$structuredApps', '->getAppStoreLinks()', '->getSocialProfiles('] as $piece) {
+            $this->assertStringContainsString($piece, $storeData);
+        }
+        $this->assertStringContainsString("'@type' => 'MobileApplication'", $storeData);
+        $this->assertStringContainsString('@foreach($footerSocialProfiles as $socialMedia)', $footer);
+        $this->assertStringNotContainsString('@foreach($web_config[\'social_media\'] as $socialMedia)', $footer);
+    }
+
     public function test_changed_templates_compile_to_valid_php(): void
     {
         foreach ([
