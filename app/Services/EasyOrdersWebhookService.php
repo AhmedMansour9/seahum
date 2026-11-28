@@ -164,10 +164,9 @@ class EasyOrdersWebhookService
         $orderData = ['order_status' => $status];
         $orderDetailData = ['delivery_status' => $status];
 
+        // Delivering does not settle the payment; it becomes paid on its own (EasyOrders paid status or the payment action).
         if ($status === 'delivered') {
-            $orderData['payment_status'] = 'paid';
             $orderData['is_pause'] = 0;
-            $orderDetailData['payment_status'] = 'paid';
         }
 
         $order->update($orderData);

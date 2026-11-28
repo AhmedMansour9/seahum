@@ -153,6 +153,7 @@ Route::group(['namespace' => 'RestAPI\v2', 'prefix' => 'v2', 'middleware' => ['a
                 Route::put('update-order-status', 'update_order_status');
                 Route::put('update-expected-delivery', 'update_expected_delivery');
                 Route::put('update-payment-status', 'order_payment_status_update');
+                Route::put('mark-order-paid', 'markOrderPaid');
                 Route::put('order-update-is-pause', 'order_update_is_pause');
                 Route::get('order-item', 'getOrderItem');
                 Route::get('order-details', 'get_order_details');
