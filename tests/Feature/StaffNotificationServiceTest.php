@@ -8,7 +8,9 @@ use App\Models\BusinessSetting;
 use App\Models\DeliveryMan;
 use App\Models\Order;
 use App\Services\StaffNotificationService;
+use App\Utils\OrderManager;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Mockery;
@@ -99,6 +101,29 @@ class StaffNotificationServiceTest extends TestCase
 
         $this->assertSame('طلب جديد #' . $order->id, $data['title']);
         $this->assertSame('إيزي أوردرز • 810.00 ج.م • Mona Adel', $data['description']);
+    }
+
+    public function test_notification_names_website_and_app_orders(): void
+    {
+        $service = app(StaffNotificationService::class);
+
+        $this->assertStringStartsWith('الموقع • ', $service->getNewOrderNotificationData(order: $this->createOrder(source: OrderSource::Website))['description']);
+        $this->assertStringStartsWith('تطبيق • ', $service->getNewOrderNotificationData(order: $this->createOrder(source: OrderSource::App))['description']);
+    }
+
+    public function test_customer_orders_are_tagged_website_unless_they_come_from_the_app(): void
+    {
+        $this->app->instance('request', Request::create('/checkout-complete', 'POST'));
+        $this->assertSame(OrderSource::Website, OrderManager::getCustomerOrderSource());
+
+        $this->app->instance('request', Request::create('/api/v1/customer/order/place', 'GET'));
+        $this->assertSame(OrderSource::App, OrderManager::getCustomerOrderSource());
+
+        $this->app->instance('request', Request::create('/payment-success', 'GET', ['payment_request_from' => 'app']));
+        $this->assertSame(OrderSource::App, OrderManager::getCustomerOrderSource(), 'Online payments from the app return through a web callback.');
+
+        $this->app->instance('request', Request::create('/payment-success', 'GET', ['payment_request_from' => 'web']));
+        $this->assertSame(OrderSource::Website, OrderManager::getCustomerOrderSource());
     }
 
     public function test_a_failing_push_never_breaks_the_order_flow(): void

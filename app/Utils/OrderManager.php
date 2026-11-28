@@ -3,6 +3,7 @@
 namespace App\Utils;
 
 use App\Services\StaffNotificationService;
+use App\Enums\OrderSource;
 use App\Enums\PaymentMethod;
 use App\Events\OrderEditDuePaymentEvent;
 use App\Models\OrderDetailsRewards;
@@ -1141,7 +1142,19 @@ class OrderManager
             'created_at' => now(),
             'updated_at' => now(),
             'order_note' => $orderData['order_note'] ?? session('order_note'),
+            'order_source' => self::getCustomerOrderSource()->value,
         ];
+    }
+
+    /**
+     * Customer orders from the mobile app come through the API, or through the web payment
+     * callback with payment_request_from "app"; everything else was placed on the website.
+     */
+    public static function getCustomerOrderSource(): OrderSource
+    {
+        $request = request();
+
+        return $request->is('api/*') || $request->input('payment_request_from') === 'app' ? OrderSource::App : OrderSource::Website;
     }
 
     public static function addOrderDetailsData(int $orderId, object|array|null $vendorCart = []): void

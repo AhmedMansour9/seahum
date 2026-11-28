@@ -79,7 +79,7 @@ class StaffNotificationService
             $shippingAddress = json_decode($shippingAddress);
         }
 
-        $sourceLabel = $order['order_source'] === OrderSource::EasyOrders ? 'إيزي أوردرز' : 'SEA HUM';
+        $sourceLabel = ($order['order_source'] ?? OrderSource::App)->arabicLabel();
         $totalAmount = OrderManager::getOrderTotalPriceSummary(order: $order)['totalAmount'];
         $total = number_format(usdToDefaultCurrency(amount: $totalAmount), 2) . ' ' . config('order_whatsapp.currency_label');
         $customerName = $shippingAddress->contact_person_name ?? null;
