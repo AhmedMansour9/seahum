@@ -45,6 +45,10 @@
                                             <span class="badge badge-primary text-bg-primary">
                                                 {{ translate('EasyOrders') }} #{{ $order->external_order_id }}
                                             </span>
+                                        @elseif($order->order_type != 'POS' && $order->order_source)
+                                            <span class="badge badge-primary text-bg-primary">
+                                                {{ translate($order->order_source->labelKey()) }}
+                                            </span>
                                         @endif
                                     </span>
                                 </h4>
