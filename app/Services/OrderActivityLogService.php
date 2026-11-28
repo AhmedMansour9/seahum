@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\OrderActivityLog;
+use App\Models\OrderDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Throwable;
@@ -89,6 +90,65 @@ class OrderActivityLogService
                         'created_at' => $now,
                     ] + $actor;
                 }
+            }
+
+            if (! empty($rows)) {
+                OrderActivityLog::query()->insert($rows);
+            }
+        } catch (Throwable $exception) {
+            report($exception);
+        }
+    }
+
+    /**
+     * The order's items as "Name (variant) · qty × price", keyed by product (or name) and variant.
+     *
+     * @return array<string, string>
+     */
+    public function snapshotOrderItems(int $orderId): array
+    {
+        try {
+            return OrderDetail::where('order_id', $orderId)->get()
+                ->mapWithKeys(function (OrderDetail $detail): array {
+                    $productDetails = is_array($detail['product_details']) ? $detail['product_details'] : (json_decode($detail['product_details'] ?? '', true) ?? []);
+                    $name = $productDetails['name'] ?? '#'.$detail['product_id'];
+                    $label = $name.(filled($detail['variant']) ? ' ('.$detail['variant'].')' : '');
+
+                    return [($detail['product_id'] ?: $name).'|'.$detail['variant'] => $label.' · '.$this->normalize($detail['qty']).' × '.$this->normalize($detail['price'])];
+                })
+                ->all();
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return [];
+        }
+    }
+
+    /**
+     * Logs each item whose quantity or price changed, was added or was removed since $itemsBefore.
+     *
+     * @param  array<string, string>  $itemsBefore  from snapshotOrderItems() just before the edit
+     */
+    public function recordItemChanges(int $orderId, array $itemsBefore): void
+    {
+        try {
+            $itemsAfter = $this->snapshotOrderItems(orderId: $orderId);
+            $actor = $this->resolveActor();
+            $now = now();
+            $rows = [];
+            foreach (array_unique([...array_keys($itemsBefore), ...array_keys($itemsAfter)]) as $itemKey) {
+                $oldValue = $itemsBefore[$itemKey] ?? null;
+                $newValue = $itemsAfter[$itemKey] ?? null;
+                if ($oldValue === $newValue) {
+                    continue;
+                }
+                $rows[] = [
+                    'order_id' => $orderId,
+                    'field' => 'order_item',
+                    'old_value' => $oldValue,
+                    'new_value' => $newValue,
+                    'created_at' => $now,
+                ] + $actor;
             }
 
             if (! empty($rows)) {

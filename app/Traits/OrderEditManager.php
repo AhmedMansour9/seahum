@@ -23,6 +23,7 @@ use App\Models\Seller;
 use App\Models\ShippingMethod;
 use App\Models\ShippingType;
 use App\Models\User;
+use App\Services\OrderActivityLogService;
 use App\Utils\CartManager;
 use App\Utils\CustomerManager;
 use App\Utils\Helpers;
@@ -460,6 +461,8 @@ trait OrderEditManager
 
     public function generateEditOrder(object|array $request = [], object|array $order = [], object|array $editedOrder = [], object|array $data = []): array
     {
+        $orderActivityLogService = app(OrderActivityLogService::class);
+        $orderItemsBefore = $orderActivityLogService->snapshotOrderItems(orderId: (int)$order['id']);
         $editOrderSummary = $this->generateEditOrderSummary(request: $request, order: $order, editedOrder: $editedOrder, data: $data);
 
         $orderData = $editOrderSummary['order_data'];
@@ -539,6 +542,8 @@ trait OrderEditManager
                 event(new OrderEditEvent(notification: $orderEditEvent['notificationData']));
             }
         }
+
+        $orderActivityLogService->recordItemChanges(orderId: (int)$order['id'], itemsBefore: $orderItemsBefore);
 
         return [
             'status' => 'success',

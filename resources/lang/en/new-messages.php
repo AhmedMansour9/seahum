@@ -2917,6 +2917,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"order_activity_field_expected_delivery_date" => "Expected delivery date",
 	"order_activity_field_scheduled_for" => "Scheduled for",
 	"order_activity_field_order_note" => "Order note",
+	"order_activity_field_order_item" => "Item (qty × price)",
 	"order_activity_field_shipping_address_data" => "Shipping address",
 	"order_activity_field_billing_address_data" => "Billing address",
 	"order_activity_field_governorate" => "Governorate",

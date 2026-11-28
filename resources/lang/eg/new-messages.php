@@ -9645,6 +9645,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"order_activity_field_expected_delivery_date" => "تاريخ التوصيل المتوقع",
 	"order_activity_field_scheduled_for" => "موعد التوصيل",
 	"order_activity_field_order_note" => "ملاحظة الطلب",
+	"order_activity_field_order_item" => "صنف (الكمية × السعر)",
 	"order_activity_field_shipping_address_data" => "عنوان التوصيل",
 	"order_activity_field_billing_address_data" => "عنوان الفاتورة",
 	"order_activity_field_governorate" => "المحافظة",

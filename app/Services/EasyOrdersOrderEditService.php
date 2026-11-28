@@ -16,6 +16,10 @@ class EasyOrdersOrderEditService
 {
     public const LOCKED_STATUSES = ['delivered', 'canceled', 'returned', 'failed'];
 
+    public function __construct(private readonly OrderActivityLogService $orderActivityLogService)
+    {
+    }
+
     /**
      * Shared by the admin panel form and the delivery man app staff API.
      *
@@ -83,6 +87,8 @@ class EasyOrdersOrderEditService
                 return ['status' => false, 'message' => translate('The_order_must_have_at_least_one_item')];
             }
 
+            $orderItemsBefore = $this->orderActivityLogService->snapshotOrderItems(orderId: (int)$order['id']);
+
             foreach ($order->details as $detail) {
                 $item = $existingItems->get($detail['id']);
                 if (!$item) {
@@ -108,6 +114,7 @@ class EasyOrdersOrderEditService
                 ...(isset($data['shipping_cost']) ? ['shipping_cost' => currencyConverter(amount: (float)$data['shipping_cost'])] : []),
                 'order_amount' => OrderDetail::where('order_id', $order['id'])->get()->sum(fn (OrderDetail $detail) => $detail['price'] * $detail['qty']),
             ]);
+            $this->orderActivityLogService->recordItemChanges(orderId: (int)$order['id'], itemsBefore: $orderItemsBefore);
 
             return ['status' => true, 'message' => translate('Order_updated_successfully')];
         });
