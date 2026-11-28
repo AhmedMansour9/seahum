@@ -2920,6 +2920,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"order_activity_field_order_item" => "Item (qty × price)",
 	"order_source_website" => "Website",
 	"order_source_app" => "App",
+	"order_source_manual" => "Manual order",
 	"order_activity_field_shipping_address_data" => "Shipping address",
 	"order_activity_field_billing_address_data" => "Billing address",
 	"order_activity_field_governorate" => "Governorate",

@@ -63,7 +63,7 @@ class DeliveryAppStaffOrderCreateService
 
             $order = Order::create([
                 'id' => OrderManager::generateNewOrderID(),
-                'order_source' => OrderSource::App,
+                'order_source' => OrderSource::Manual,
                 'order_type' => 'default_type',
                 'customer_id' => null,
                 'is_guest' => 1,

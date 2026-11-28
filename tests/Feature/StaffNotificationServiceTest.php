@@ -109,6 +109,24 @@ class StaffNotificationServiceTest extends TestCase
 
         $this->assertStringStartsWith('الموقع • ', $service->getNewOrderNotificationData(order: $this->createOrder(source: OrderSource::Website))['description']);
         $this->assertStringStartsWith('تطبيق • ', $service->getNewOrderNotificationData(order: $this->createOrder(source: OrderSource::App))['description']);
+        $this->assertStringStartsWith('أوردر يدوي • ', $service->getNewOrderNotificationData(order: $this->createOrder(source: OrderSource::Manual))['description']);
+    }
+
+    public function test_orders_customer_service_types_in_are_manual_orders(): void
+    {
+        $this->assertStringContainsString(
+            "'order_source' => OrderSource::Manual,",
+            file_get_contents(app_path('Services/DeliveryAppStaffOrderCreateService.php')),
+        );
+
+        foreach (['en', 'eg'] as $locale) {
+            $messages = include base_path("resources/lang/{$locale}/new-messages.php");
+            foreach (OrderSource::cases() as $source) {
+                if ($source !== OrderSource::EasyOrders) {
+                    $this->assertArrayHasKey($source->labelKey(), $messages);
+                }
+            }
+        }
     }
 
     public function test_customer_orders_are_tagged_website_unless_they_come_from_the_app(): void

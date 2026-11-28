@@ -9648,6 +9648,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"order_activity_field_order_item" => "صنف (الكمية × السعر)",
 	"order_source_website" => "الموقع",
 	"order_source_app" => "تطبيق",
+	"order_source_manual" => "أوردر يدوي",
 	"order_activity_field_shipping_address_data" => "عنوان التوصيل",
 	"order_activity_field_billing_address_data" => "عنوان الفاتورة",
 	"order_activity_field_governorate" => "المحافظة",
