@@ -115,6 +115,12 @@ class OrderStatusUpdateService
 
         $this->orderRepo->update(id: $orderId, data: ['payment_status' => $paymentStatus]);
 
+        // Delivering no longer marks orders paid, so a delivered order can become paid only here:
+        // the referral reward (first delivered and paid order) is checked again at that moment.
+        if ($paymentStatus === 'paid' && $order['payment_status'] !== 'paid' && $order['order_status'] === 'delivered') {
+            OrderManager::generateReferBonusForFirstOrder(orderId: $orderId);
+        }
+
         return ['status' => 1, 'message' => translate('status_change_successfully')];
     }
 

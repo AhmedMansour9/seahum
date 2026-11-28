@@ -2924,4 +2924,5 @@ ____________________________________________________on_search_engines_and_see_th
 	"order_activity_field_delivery_service_name" => "Delivery company",
 	"order_activity_field_third_party_delivery_tracking_id" => "Tracking number",
 	"order_activity_field_verification_status" => "Delivery verified",
+	"payment_status_is_confirmed_by_admin" => "Payment status is confirmed by the admin",
 ];

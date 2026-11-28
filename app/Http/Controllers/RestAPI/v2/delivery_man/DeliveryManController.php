@@ -17,7 +17,6 @@ use App\Models\EmergencyContact;
 use App\Models\Order;
 use App\Models\OrderDeliveryVerification;
 use App\Models\OrderDetail;
-use App\Models\OrderEditHistory;
 use App\Models\Review;
 use App\Traits\CommonTrait;
 use App\Models\User;
@@ -158,17 +157,11 @@ class DeliveryManController extends Controller
         ]);
 
         if (isset($deliveryMan['id']) && $request['status'] == 'delivered') {
+            // Delivering does not settle the payment: it stays as it was until admin confirms it.
             Order::where(['id' => $request['order_id']])->update([
                 'order_amount' => $order['order_amount'] + $order['edit_due_amount'],
-                'payment_status' => 'paid',
                 'edit_due_amount' => 0,
             ]);
-            if ($order?->latestEditHistory) {
-                OrderEditHistory::where(['id' => $order?->latestEditHistory?->id])->update([
-                    'order_due_payment_status' => 'paid',
-                    'order_due_payment_note' => 'Marked as paid by Delivery Man',
-                ]);
-            }
 
             $order = Order::with(['customer', 'deliveryMan', 'latestEditHistory'])
                 ->where(['delivery_man_id' => $deliveryMan['id'], 'id' => $request['order_id']])->first();
@@ -395,24 +388,11 @@ class DeliveryManController extends Controller
         $deliveryMan = $request['delivery_man'];
         $order = Order::where(['delivery_man_id' => $deliveryMan['id'], 'id' => $request['order_id']])->first();
         if (!empty($order)) {
-            $order->payment_status = $request['payment_status'];
-            $order->save();
-
-            $order->update([
-                'order_amount' => $order['order_amount'] + $order['edit_due_amount'],
-                'payment_status' => 'paid',
-                'edit_due_amount' => 0,
-            ]);
-
-            if ($order?->latestEditHistory) {
-                OrderEditHistory::where(['id' => $order?->latestEditHistory?->id])->update([
-                    'order_due_payment_status' => 'paid',
-                    'order_due_payment_method' => $order?->latestEditHistory?->order_due_payment_method ?? 'cash_on_delivery',
-                    'order_due_transaction_ref' => '',
-                    'order_due_payment_note' => 'Marked as paid by deliveryman',
-                ]);
-            }
-            return response()->json(['message' => translate('Payment status updated')], 200);
+            /*
+             * Delivery men no longer mark orders as paid; admin confirms payments. The app sends this call
+             * right before marking the order delivered, so it still answers success to keep that flow going.
+             */
+            return response()->json(['message' => translate('payment_status_is_confirmed_by_admin')], 200);
         }
         return response()->json([
             'errors' => [
