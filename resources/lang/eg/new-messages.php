@@ -9652,4 +9652,7 @@ ____________________________________________________on_search_engines_and_see_th
 	"order_activity_field_delivery_service_name" => "شركة الشحن",
 	"order_activity_field_third_party_delivery_tracking_id" => "رقم التتبع",
 	"order_activity_field_verification_status" => "تأكيد الاستلام",
+	"payment_status_is_confirmed_by_admin" => "حالة الدفع بيأكدها الأدمن",
+	"transfer_screenshot" => "صورة التحويل",
+	"please_upload_the_transfer_screenshot" => "ارفع صورة التحويل",
 ];

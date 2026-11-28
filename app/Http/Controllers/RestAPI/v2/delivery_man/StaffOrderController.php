@@ -11,6 +11,7 @@ use App\Services\DeliveryAppStaffService;
 use App\Services\DeliveryManAssignmentService;
 use App\Services\EasyOrdersOrderEditService;
 use App\Services\EasyOrdersWebhookService;
+use App\Services\OrderPaymentProofService;
 use App\Services\OrderStatusUpdateService;
 use App\Utils\Helpers;
 use Illuminate\Http\JsonResponse;
@@ -29,6 +30,7 @@ class StaffOrderController extends Controller
         private readonly OrderStatusUpdateService     $orderStatusUpdateService,
         private readonly EasyOrdersWebhookService     $easyOrdersWebhookService,
         private readonly DeliveryManAssignmentService $deliveryManAssignmentService,
+        private readonly OrderPaymentProofService     $orderPaymentProofService,
     )
     {
     }
@@ -257,6 +259,7 @@ class StaffOrderController extends Controller
         $validator = Validator::make($request->all(), [
             'order_id' => 'required|integer',
             'payment_status' => 'required|in:paid,unpaid',
+            'payment_proof' => 'nullable|image|mimes:jpg,jpeg,png,webp,heic|max:10240',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
@@ -265,6 +268,17 @@ class StaffOrderController extends Controller
         $order = Order::where(['id' => $request['order_id'], 'order_type' => 'default_type'])->first();
         if (!$order) {
             return $this->orderNotFoundResponse();
+        }
+
+        if ($request['payment_status'] === 'paid' && $order['payment_status'] !== 'paid' && $request->hasFile('payment_proof')) {
+            $staff = $request['delivery_man'];
+            $this->orderPaymentProofService->store(
+                orderId: $order['id'],
+                image: $request->file('payment_proof'),
+                uploadedByType: 'staff',
+                uploadedById: $staff['id'] ?? null,
+                uploadedByName: trim(($staff['f_name'] ?? '').' '.($staff['l_name'] ?? '')),
+            );
         }
 
         if ($order['order_source'] === OrderSource::EasyOrders) {

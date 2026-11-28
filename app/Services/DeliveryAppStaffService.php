@@ -236,6 +236,7 @@ class DeliveryAppStaffService
 
     /**
      * Sales are the orders delivered inside the period, with shipping, which EasyOrders orders keep outside order_amount.
+     * They split into paid online (payment marked paid) and offline (still unpaid, collected in cash).
      *
      * @return array<string, mixed>
      */
@@ -257,15 +258,24 @@ class DeliveryAppStaffService
                         ->whereDate('updated_at', '<=', $dateTo));
             });
 
-        $deliveredAmount = (float)(clone $deliveredOrders)
-            ->selectRaw("sum({$orderTotalExpression}) as total", [OrderSource::EasyOrders->value])
-            ->value('total');
+        $deliveredByPayment = (clone $deliveredOrders)
+            ->selectRaw("payment_status = 'paid' as is_paid, count(*) as orders_count, sum({$orderTotalExpression}) as amount", [OrderSource::EasyOrders->value])
+            ->groupByRaw("payment_status = 'paid'")
+            ->get()
+            ->keyBy(fn ($row) => (int)$row->is_paid);
+        $onlinePaid = $deliveredByPayment->get(1);
+        $offline = $deliveredByPayment->get(0);
+        $deliveredAmount = (float)($onlinePaid?->amount ?? 0) + (float)($offline?->amount ?? 0);
 
         return [
             'total_orders' => (int)(clone $periodOrders)->count(),
             'total_amount' => $deliveredAmount,
             'delivered_amount' => $deliveredAmount,
-            'delivered_orders_count' => (int)(clone $deliveredOrders)->count(),
+            'delivered_orders_count' => (int)($onlinePaid?->orders_count ?? 0) + (int)($offline?->orders_count ?? 0),
+            'online_paid_amount' => (float)($onlinePaid?->amount ?? 0),
+            'online_paid_orders_count' => (int)($onlinePaid?->orders_count ?? 0),
+            'offline_amount' => (float)($offline?->amount ?? 0),
+            'offline_orders_count' => (int)($offline?->orders_count ?? 0),
             'easy_orders_count' => (int)(clone $periodOrders)->where('order_source', OrderSource::EasyOrders->value)->count(),
             'status_counts' => collect(getOrderStatusList())->mapWithKeys(fn (string $status) => [$status => (int)($statusCounts[$status] ?? 0)]),
             'open_orders' => (int)Order::where('order_type', 'default_type')->whereIn('order_status', self::OPEN_ORDER_STATUSES)->count(),

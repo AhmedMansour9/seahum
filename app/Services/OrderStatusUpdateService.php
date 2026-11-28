@@ -53,8 +53,9 @@ class OrderStatusUpdateService
         $this->orderRepo->updateStockOnOrderStatusChange($orderId, $status);
         $this->orderRepo->update(id: $orderId, data: ['order_status' => $status]);
         if ($status == 'delivered') {
-            $this->orderRepo->update(id: $orderId, data: ['payment_status' => 'paid', 'is_pause' => 0]);
-            $this->orderDetailRepo->updateWhere(params: ['order_id' => $order['id']], data: ['delivery_status' => $status, 'payment_status' => 'paid']);
+            // Delivering does not settle the payment; it is marked paid on its own (payment status action).
+            $this->orderRepo->update(id: $orderId, data: ['is_pause' => 0]);
+            $this->orderDetailRepo->updateWhere(params: ['order_id' => $order['id']], data: ['delivery_status' => $status]);
             $this->orderDetailRepo->updateWhere(params: ['order_id' => $order['id'], 'refund_started_at' => null], data: ['refund_started_at' => now()]);
         }
         event(new OrderStatusEvent(key: $status, type: 'customer', order: $order));
@@ -114,6 +115,12 @@ class OrderStatusUpdateService
         }
 
         $this->orderRepo->update(id: $orderId, data: ['payment_status' => $paymentStatus]);
+
+        // Delivering no longer marks orders paid, so a delivered order can become paid only here:
+        // the referral reward (first delivered and paid order) is checked again at that moment.
+        if ($paymentStatus === 'paid' && $order['payment_status'] !== 'paid' && $order['order_status'] === 'delivered') {
+            OrderManager::generateReferBonusForFirstOrder(orderId: $orderId);
+        }
 
         return ['status' => 1, 'message' => translate('status_change_successfully')];
     }

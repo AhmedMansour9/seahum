@@ -330,6 +330,12 @@ class Order extends Model
         return $this->hasMany(OrderDeliveryVerification::class, 'order_id');
     }
 
+    /** Transfer screenshots uploaded when the order was marked paid online. */
+    public function paymentProofs(): HasMany
+    {
+        return $this->hasMany(OrderPaymentProof::class, 'order_id')->latest('id');
+    }
+
     public function orderEditHistory()
     {
         return $this->hasMany(OrderEditHistory::class, 'order_id');

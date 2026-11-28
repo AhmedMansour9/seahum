@@ -22,6 +22,7 @@ use App\Models\Review;
 use App\Traits\CommonTrait;
 use App\Models\User;
 use App\Services\DeliveryManOrderDisplayService;
+use App\Services\OrderPaymentProofService;
 use App\Utils\CustomerManager;
 use App\Utils\Helpers;
 use App\Utils\ImageManager;
@@ -41,6 +42,7 @@ class DeliveryManController extends Controller
     public function __construct(
         private Order $order,
         private DeliveryManOrderDisplayService $deliveryManOrderDisplayService,
+        private OrderPaymentProofService $orderPaymentProofService,
     )
     {
 
@@ -158,17 +160,11 @@ class DeliveryManController extends Controller
         ]);
 
         if (isset($deliveryMan['id']) && $request['status'] == 'delivered') {
+            // Delivering does not settle the payment: it stays as it was until admin confirms it.
             Order::where(['id' => $request['order_id']])->update([
                 'order_amount' => $order['order_amount'] + $order['edit_due_amount'],
-                'payment_status' => 'paid',
                 'edit_due_amount' => 0,
             ]);
-            if ($order?->latestEditHistory) {
-                OrderEditHistory::where(['id' => $order?->latestEditHistory?->id])->update([
-                    'order_due_payment_status' => 'paid',
-                    'order_due_payment_note' => 'Marked as paid by Delivery Man',
-                ]);
-            }
 
             $order = Order::with(['customer', 'deliveryMan', 'latestEditHistory'])
                 ->where(['delivery_man_id' => $deliveryMan['id'], 'id' => $request['order_id']])->first();
@@ -381,6 +377,63 @@ class DeliveryManController extends Controller
         return response()->json($last_data, 200);
     }
 
+    /**
+     * The delivery man's own "paid online" button, separate from delivering: marks the order (and any amount
+     * added by an order edit) as paid, with a screenshot of the customer's transfer. Delivering never does this.
+     */
+    public function markOrderPaid(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'order_id' => 'required',
+            'payment_proof' => 'required|image|mimes:jpg,jpeg,png,webp,heic|max:10240',
+        ], [
+            'payment_proof.required' => translate('please_upload_the_transfer_screenshot'),
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::validationErrorProcessor($validator)], 403);
+        }
+
+        $deliveryMan = $request['delivery_man'];
+        $order = Order::with('latestEditHistory')->where(['delivery_man_id' => $deliveryMan['id'], 'id' => $request['order_id']])->first();
+        if (empty($order)) {
+            return response()->json(['errors' => [['code' => 'order', 'message' => translate('not found!')]]], 404);
+        }
+
+        if ($order['payment_status'] === 'paid' && ($order['edit_due_amount'] ?? 0) <= 0) {
+            return response()->json(['message' => translate('Order_already_paid')], 200);
+        }
+
+        DB::transaction(function () use ($request, $order, $deliveryMan) {
+            $this->orderPaymentProofService->store(
+                orderId: $order['id'],
+                image: $request->file('payment_proof'),
+                uploadedByType: 'delivery_man',
+                uploadedById: $deliveryMan['id'],
+                uploadedByName: trim(($deliveryMan['f_name'] ?? '').' '.($deliveryMan['l_name'] ?? '')),
+            );
+
+            Order::where('id', $order['id'])->update([
+                'order_amount' => $order['order_amount'] + $order['edit_due_amount'],
+                'payment_status' => 'paid',
+                'edit_due_amount' => 0,
+            ]);
+
+            if ($order->latestEditHistory) {
+                OrderEditHistory::where('id', $order->latestEditHistory->id)->update([
+                    'order_due_payment_status' => 'paid',
+                    'order_due_payment_method' => $order->latestEditHistory->order_due_payment_method ?? 'cash_on_delivery',
+                    'order_due_payment_note' => 'Marked as paid by deliveryman',
+                ]);
+            }
+        });
+
+        if ($order['order_status'] === 'delivered') {
+            OrderManager::generateReferBonusForFirstOrder(orderId: $order['id']);
+        }
+
+        return response()->json(['message' => translate('Payment status updated')], 200);
+    }
+
     public function order_payment_status_update(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
@@ -395,24 +448,11 @@ class DeliveryManController extends Controller
         $deliveryMan = $request['delivery_man'];
         $order = Order::where(['delivery_man_id' => $deliveryMan['id'], 'id' => $request['order_id']])->first();
         if (!empty($order)) {
-            $order->payment_status = $request['payment_status'];
-            $order->save();
-
-            $order->update([
-                'order_amount' => $order['order_amount'] + $order['edit_due_amount'],
-                'payment_status' => 'paid',
-                'edit_due_amount' => 0,
-            ]);
-
-            if ($order?->latestEditHistory) {
-                OrderEditHistory::where(['id' => $order?->latestEditHistory?->id])->update([
-                    'order_due_payment_status' => 'paid',
-                    'order_due_payment_method' => $order?->latestEditHistory?->order_due_payment_method ?? 'cash_on_delivery',
-                    'order_due_transaction_ref' => '',
-                    'order_due_payment_note' => 'Marked as paid by deliveryman',
-                ]);
-            }
-            return response()->json(['message' => translate('Payment status updated')], 200);
+            /*
+             * Delivery men no longer mark orders as paid; admin confirms payments. The app sends this call
+             * right before marking the order delivered, so it still answers success to keep that flow going.
+             */
+            return response()->json(['message' => translate('payment_status_is_confirmed_by_admin')], 200);
         }
         return response()->json([
             'errors' => [

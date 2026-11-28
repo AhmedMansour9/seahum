@@ -738,6 +738,8 @@
                         </div>
                     </div>
 
+                    @include('admin-views.order.partials._payment-proofs', ['order' => $order])
+
                     @if($order->payment_method == 'offline_payment' && isset($order->offlinePayments))
                         <div class="bg-section p-2 mt-3 rounded">
                             <h5 class="fs-12 mb-3">{{ translate('Customer_Payment_info') }}</h5>
