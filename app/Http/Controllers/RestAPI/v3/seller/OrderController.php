@@ -464,7 +464,7 @@ class OrderController extends Controller
         }
 
         if (!empty($update_data)) {
-            DB::table('orders')->where('id', $request->order_id)->update($update_data);
+            Order::where('id', $request->order_id)->update($update_data);
         }
 
         return response()->json(['message' => 'Address updated successfully'], 200);
